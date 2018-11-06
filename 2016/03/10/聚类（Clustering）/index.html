@@ -1,0 +1,288 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    聚类（Clustering） | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="聚类（Clustering）">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      聚类（Clustering）</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/03/10/聚类（Clustering）/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-03-10T12:32:00.000Z">
+          2016-03-10
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <!-- toc -->
+<ul>
+<li><a href="#unsupervised-learning-introduction">Unsupervised Learning: Introduction</a></li>
+<li><a href="#k-means-algorithm">K-Means Algorithm</a></li>
+<li><a href="#optimization-objective">Optimization Objective</a></li>
+<li><a href="#random-initialization">Random Initialization</a></li>
+<li><a href="#choosing-the-number-of-clusters">Choosing the Number of Clusters</a></li>
+</ul>
+<!-- tocstop -->
+<a id="more"></a>
+<h1><span id="unsupervised-learning-introduction">Unsupervised Learning: Introduction</span></h1>
+<p>Unsupervised learning is contrasted from supervised learning because it uses an unlabeled training set rather than a labeled one.</p>
+<p>In other words, we don't have the vector <span class="math inline">\(y\)</span> of expected results, we only have a dataset of features where we can find structure. Clustering is good for: * Market segmentation * Social network analysis * Organizing computer clusters * Astronomical data analysis</p>
+<h1><span id="k-means-algorithm">K-Means Algorithm</span></h1>
+<p>The K-Means Algorithm is the most popular and widely used algorithm for automatically grouping data into coherent subsets.</p>
+<ol type="1">
+<li>Randomly initialize two points in the dataset called the cluster centroids.</li>
+<li>Cluster assignment: assign all examples into one of two groups based on which cluster centroid the example is closest to.</li>
+<li>Move centroid: compute the averages for all the points inside each of the two cluster centroid groups, then move the cluster centroid points to those averages.</li>
+<li>Re-run (2) and (3) until we have found our clusters.</li>
+</ol>
+<p>Our main variables are: * <span class="math inline">\(K\)</span> (number of clusters) * Training set <span class="math inline">\({x^{(1)}, x^{(2)}, \dots,x^{(m)}}\)</span> * Where <span class="math inline">\(x^{(i)} \in \mathbb{R}^n\)</span></p>
+<p>Note that we <strong>will not use</strong> the <span class="math inline">\(x_0 = 1\)</span> convention.</p>
+<p><strong>The algorithm</strong>: <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Randomly initialize K cluster centroids mu(1), mu(2), ..., mu(K)</span><br><span class="line">Repeat:</span><br><span class="line">   for i = 1 to m:</span><br><span class="line">      c(i) := index (from 1 to K) of cluster centroid closest to x(i)</span><br><span class="line">   for k = 1 to K:</span><br><span class="line">      mu(k) := average (mean) of points assigned to cluster k</span><br></pre></td></tr></table></figure></p>
+<p>The <strong>first for-loop</strong> is the 'Cluster Assignment' step. We make a vector c where c(i) represents the centroid assigned to example x(i).</p>
+<p>We can write the operation of the Cluster Assignment step more mathematically as follows: <span class="math display">\[c^{(i)} = argmin_k\ ||x^{(i)} - \mu_k||^2\]</span> That is, each <span class="math inline">\(c^{(i)}\)</span> contains the index of the centroid that has minimal distance to <span class="math inline">\(x^{(i)}\)</span>.</p>
+<p>By convention, we square the right-hand-side, which makes the function we are trying to minimize more sharply increasing. It is mostly just a convention.</p>
+<p>The <strong>second for-loop</strong> is the 'Move Centroid' step where we move each centroid to the average of its group.</p>
+<p>More formally, the equation for this loop is as follows: <span class="math display">\[ \mu_k = \dfrac{1}{n}[x^{(k_1)} + x^{(k_2)} + \dots + x^{(k_n)}] \in \mathbb{R}^n\]</span> Where each of <span class="math inline">\(x^{(k_1)}, x^{(k_2)}, \dots, x^{(k_n)}\)</span> are the training examples assigned to group $ _k$.</p>
+<p>If you have a cluster centroid with 0 points assigned to it, you can randomly <strong>re-initialize</strong> that centroid to a new point. You can also simply <strong>eliminate</strong> that cluster group.</p>
+<p>After a number of iterations the algorithm will converge, where new iterations do not affect the clusters.</p>
+<p>Note on non-separated clusters: some datasets have no real inner separation or natural structure. K-means can still evenly segment your data into <span class="math inline">\(K\)</span> subsets, so can still be useful in this case.</p>
+<h1><span id="optimization-objective">Optimization Objective</span></h1>
+<p>Recall some of the parameters we used in our algorithm: * $c^{(i)} = $ index of cluster (1,2,...,K) to which example <span class="math inline">\(x^{(i)}\)</span> is currently assigned * $_k = $ cluster centroid $ k (<em>k ^n)$ * $</em>{c^{(i)}} = $ cluster centroid of cluster to which example <span class="math inline">\(x^{(i)}\)</span> has been assigned</p>
+<p>Using these variables we can define our cost function: <span class="math display">\[ \large J(c^{(i)},\dots,c^{(m)},\mu_1,\dots,\mu_K) = \dfrac{1}{m}\sum_{i=1}^m ||x^{(i)} - \mu_{c^{(i)}}||^2 \]</span> Our optimization objective is to minimize all our parameters using the above cost function: <span class="math display">\[ \large min_{c,\mu}\ J(c,\mu) \]</span></p>
+<p>That is, we are finding all the values in sets <span class="math inline">\(c\)</span>, representing all our clusters, and <span class="math inline">\(\mu\)</span>, representing all our centroids, that will minimize <strong>the average of the distances</strong> of every training example to its corresponding cluster centroid.</p>
+<p>The above cost function is often called the <strong>distortion</strong>(变形) of the training examples.</p>
+<p>In the <strong>cluster assignment</strong> step, our goal is to: Minimize <span class="math inline">\(J(\dots)\)</span> with <span class="math inline">\(c^{(1)},\dots,c^{(m)}\)</span> (holding <span class="math inline">\(\mu_1,\dots,\mu_K\)</span> fixed)</p>
+<p>In the <strong>move centroid</strong> step, our goal is to: Minimize <span class="math inline">\(J(\dots)\)</span> with <span class="math inline">\(\mu_1,\dots,\mu_K\)</span></p>
+<p>With k-means, it is <strong>not possible for the cost function to sometimes increase</strong>. It should always descend.</p>
+<h1><span id="random-initialization">Random Initialization</span></h1>
+<p>There's one particular recommended method for randomly initializing your cluster centroids.</p>
+<ol type="1">
+<li>Have <span class="math inline">\(K &lt; m\)</span>. That is, make sure the number of your clusters is less than the number of your training examples.</li>
+<li>Randomly pick <span class="math inline">\(K\)</span> training examples. (Not mentioned in the lecture, but also be sure the selected examples are <strong>unique</strong>).</li>
+<li>Set <span class="math inline">\(\mu_1,\dots,\mu_k\)</span> equal to these <span class="math inline">\(K\)</span> examples.</li>
+</ol>
+<p>K-means <strong>can get stuck in local optima</strong>. To decrease the chance of this happening, you can run the algorithm on many different random initializations. <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">for i = 1 to 100:</span><br><span class="line">   randomly initialize k-means</span><br><span class="line">   run k-means to get &apos;c&apos; and &apos;m&apos;</span><br><span class="line">   compute the cost function (distortion) J(c,m)</span><br><span class="line">pick the clustering that gave us the lowest cost</span><br></pre></td></tr></table></figure></p>
+<h1><span id="choosing-the-number-of-clusters">Choosing the Number of Clusters</span></h1>
+<p>Choosing <span class="math inline">\(K\)</span> can be quite arbitrary and ambiguous.</p>
+<p><strong>The elbow method</strong>: plot the cost <span class="math inline">\(J\)</span> and the number of clusters <span class="math inline">\(K\)</span>. The cost function should reduce as we increase the number of clusters, and then flatten out. Choose <span class="math inline">\(K\)</span> at the point where the cost function starts to flatten out.</p>
+<p>However, fairly often, the curve is very gradual, so there's no clear elbow.</p>
+<p>Note: <span class="math inline">\(J\)</span> will always decrease as <span class="math inline">\(K\)</span> is increased. The one exception is if k-means gets stuck at a bad local optimum.</p>
+<p>Another way to choose <span class="math inline">\(K\)</span> is to observe how well k-means performs on a <strong>downstream purpose</strong>. In other words, you choose <span class="math inline">\(K\)</span> that proves to be most useful for some goal you're trying to achieve from using these clusters.</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Clustering/">Clustering</a><a href="/tags/K-Means/">K-Means</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

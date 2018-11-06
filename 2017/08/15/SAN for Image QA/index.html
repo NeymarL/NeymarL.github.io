@@ -1,0 +1,320 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    Paper Reading - Stacked Attention Networks for Image QA | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="Paper Reading - Stacked Attention Networks for Image QA">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      Paper Reading - Stacked Attention Networks for Image QA</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/08/15/SAN for Image QA/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-08-15T01:30:19.000Z">
+          2017-08-15
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <blockquote>
+<p>Zichao Yang, Xiaodong He, Jianfeng Gao , Li Deng , Alex Smola <a href="https://arxiv.org/abs/1511.02274" target="_blank" rel="noopener">Stacked Attention Networks for Image Question Answering</a></p>
+</blockquote>
+<p>这篇文章发表在CVPR2016，作者把 attention 机制应用在 Visual QA，不但能理解神经网络生成答案的 multiple resoning，而且获得了当时最好的效果。</p>
+<p>SAN总共由三部分组成：</p>
+<ul>
+<li>Image Model：用来编码图片信息</li>
+<li>Question Moel：用来编码问题信息</li>
+<li>Stacked Attention Networks：通过多层 attention layer 不断优化对问题的编码</li>
+</ul>
+<a id="more"></a>
+<p><img src="/images/san.png"></p>
+<h2><span id="image-model">Image Model</span></h2>
+<p>Image model 使用 VGGNet 处理源图片，用最后一个池化层作为提取的图片特征: <span class="math display">\[
+f_I = CNN_{vgg}(I)
+\]</span> 把输入图片转化为 <span class="math inline">\(448 \times 448\)</span> 大小， 输出的特征即为 <span class="math inline">\(512 \times 14 \times 14\)</span>，其中 <span class="math inline">\(512\)</span> 为特征向量（feature vector） <span class="math inline">\(f_i\)</span> 的维度，<span class="math inline">\(14 \times 14\)</span> 是区域（特征向量）的个数，每个特征向量 <span class="math inline">\(f_i\)</span> 代表源图片中 <span class="math inline">\(32 \times 32\)</span> 大小的区域。</p>
+<p><img src="/images/vgg.png"></p>
+<p>为了后面方便处理，通过一个线性层把图片特征转化为和问题特征一样的维度： <span class="math display">\[
+v_I = \tanh(W_If_I + b_I)
+\]</span> 其中，<span class="math inline">\(v_I\)</span> 是个矩阵，它的第 <span class="math inline">\(i\)</span> 列 <span class="math inline">\(v_i\)</span> 是区域 <span class="math inline">\(i\)</span> 的特征向量（feature vector）。</p>
+<h2><span id="question-model">Question Model</span></h2>
+<p>作者采用了两种模型对问题进行编码，分别基于 LSTM 和 CNN。</p>
+<h3><span id="lstm-based-question-model">LSTM based question model</span></h3>
+<p>基于 LSTM 的模型很简单，就是用一个普通的 LSTM 对问题进行编码（没准扩展成bi-LSTM效果会更好一些），每个时刻处理一个词，把最后一个词对应的 hidden state 作为编码结果: <span class="math display">\[
+\begin{alignat}{3}
+x_t &amp;= W_eq_t, \ t\in\{1, 2, ... T\} \\
+h_t &amp;= LSTM(x_t), \ t\in\{1, 2, ... T\}\\
+v_Q &amp;= h_T
+\end{alignat}
+\]</span> 其中， <span class="math inline">\(q_t\)</span> 为词的 one-hot encoding，<span class="math inline">\(W_e\)</span> 为 embedding 矩阵，<span class="math inline">\(x_t\)</span> 就为词的 word embedding（总觉得这样的词编码太简单了），<span class="math inline">\(v_Q\)</span> 为对问题的编码。</p>
+<p><img src="/images/lstmq.png"></p>
+<h3><span id="cnn-based-question-model">CNN based question model</span></h3>
+<p><img src="/images/cnn_basedq.png"></p>
+<p>这应该算是CNN的一个变种，它的 filter 有三种，分别为 unigram, bigram, trigram，分别对应窗口大小 <span class="math inline">\(c = 1, 2, 3\)</span>。定义符号 <span class="math inline">\(x_{i:j}\)</span> 为 <span class="math inline">\(x_i, x_{i+1}, …, x_j\)</span> 的连接，所以问题向量可表示为: <span class="math display">\[
+x_{1:T} = [x1, x2, ..., x_T]
+\]</span></p>
+<p>然后对每一个 filter 分别在 <span class="math inline">\(x_{1:T}\)</span> 上进行卷积操作，第 <span class="math inline">\(t\)</span> 次卷积操作的输出为： <span class="math display">\[
+h_{c,t} = \tanh(W_cx_{t:t+c-1}+b_c)
+\]</span> 窗口大小为 <span class="math inline">\(c\)</span> 的 feature map 为： <span class="math display">\[
+h_c = [h_{c,1}, h_{c,2}, ..., h_{c,T-c+1}]
+\]</span> 然后对每个 feature map 进行 max pooling，得到最终的问题特征： <span class="math display">\[
+\hat{h}_c = \max_t(h_{c,1}, h_{c, 2} ..., h_{c,T-c+1})
+\]</span></p>
+<p><span class="math display">\[
+v_Q = h = [\hat{h}_1,\hat{h}_2,\hat{h}_3]
+\]</span></p>
+<h2><span id="stacked-attention-networks">Stacked Attention Networks</span></h2>
+<p><strong>第一层 attention network</strong></p>
+<p><img src="/images/san1st.png"></p>
+<p>首先根据图像特征矩阵 <span class="math inline">\(v_I\)</span> 和问题特征向量 <span class="math inline">\(v_Q\)</span> 计算 attention map： <span class="math display">\[
+\begin{alignat}{3}
+h_A &amp;= \tanh(W_{I,A}v_I\oplus (W_{Q,A}v_Q+b_A))\\
+p_I &amp;= softmax(W_Ph_A+b_P)
+\end{alignat}
+\]</span> 其中，<span class="math inline">\(v_I\in R^{d\times m}\)</span>, <span class="math inline">\(d\)</span> 是图像特征的维度，<span class="math inline">\(m\)</span> 是图像区域个数；<span class="math inline">\(v_Q \in R^d\)</span>；<span class="math inline">\(W_{I, A}, W_{Q,A} \in R^{k \times d}\)</span>，<span class="math inline">\(b_A \in R^{k}\)</span>；定义 <span class="math inline">\(\oplus\)</span> 为矩阵和向量的加法，其运算规则为矩阵的每一列分别和该向量相加，所以 <span class="math inline">\(h_A \in R^{k\times m}\)</span>。<span class="math inline">\(W_P \in R^{1\times k}, b_P\in R^{1\times m}\)</span>，<span class="math inline">\(p_I \in R^{1\times m}\)</span> 为 attention vector，它每一项都是一个概率，表示该问题的答案所在某个区域的概率，或者说问了回答这个问题，注意力应该集中在哪里。</p>
+<p>之后用 attention vector 计算 图像特征的加权和，然后与问题特征相加，得到<strong>优化的问题特征</strong>： <span class="math display">\[
+\begin{alignat}{3}
+\widehat{v}_I &amp;= \sum_ip_iv_i \\
+u &amp;= \hat{v}_I+v_Q
+\end{alignat}
+\]</span> 后面的每层 attention network 结构都是一样的，区别在于不再使用原始的问题特征 <span class="math inline">\(v_Q\)</span>，而是用优化后的 <span class="math inline">\(u\)</span>:</p>
+<p><img src="/images/san2nd.png"></p>
+<p><strong>第 k 层 attention network</strong> <span class="math display">\[
+\begin{alignat}{3}
+h_A^k &amp;= \tanh(W_{I,A}^kv_I\oplus (W_{Q,A}^ku_{k-1}+b_A^k))\\
+p_I^k &amp;= softmax(W_P^kh_A^k+b_P^k)\\
+\widehat{v}_I^k &amp;= \sum_ip_i^kv_i \\
+u^k &amp;= \hat{v}_I^k+u^{k-1}
+\end{alignat}
+\]</span> 作者通过实验发现，第一层 attention 可以识别问题中出现的实体，第二层则可以消除无关的，只关心与答案相关的实体，多加几层对识别效果没有明显提升。</p>
+<p><strong>输出层</strong></p>
+<p><img src="/images/vqa_out.png"></p>
+<p>由于输出只是一个词，所以可以转化为分类问题，在所有候选答案里挑一个词出来： <span class="math display">\[
+p_{ans} = softmax(W_uu^K+b_u)
+\]</span> 其中 <span class="math inline">\(K\)</span> 为 attention 的层数。</p>
+<h2><span id="可视化-attention-layer">可视化 Attention Layer</span></h2>
+<ul>
+<li>正确结果</li>
+</ul>
+<p><img src="/images/true_vqa.png"></p>
+<ul>
+<li>错误结果</li>
+</ul>
+<p><img src="/images/false_vqa.png"></p>
+<h2><span id="总结">总结</span></h2>
+<p>这篇文章的主要工作在于把 attention 机制应用在 Visual QA 问题中，效果卓群，可解释性强。但也有可改进的地方，如图片编码选择 ResNet 而不是 VGGNet；问题的 word embedding 采用 word2vec；对问题的编码采用 bi-LSTM 等，也许会进一步提高整体的表现。</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Attention/">Attention</a><a href="/tags/CV/">CV</a><a href="/tags/CNN/">CNN</a><a href="/tags/VQA/">VQA</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

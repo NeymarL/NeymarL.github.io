@@ -1,0 +1,1464 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    物联网安全概论 | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="物联网安全概论">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      物联网安全概论</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/07/06/物联网安全概论/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-07-06T02:41:47.000Z">
+          2017-07-06
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p><strong>目录</strong></p>
+<!-- toc -->
+<ul>
+<li><a href="#概论">概论</a></li>
+<li><a href="#密码学基础">密码学基础</a></li>
+<li><a href="#现代常规对称加密技术">现代常规对称加密技术</a>
+<ul>
+<li><a href="#des">DES</a></li>
+<li><a href="#triple-des">Triple DES</a></li>
+<li><a href="#aes">AES</a></li>
+</ul></li>
+<li><a href="#公钥密码">公钥密码</a>
+<ul>
+<li><a href="#随机数产生">随机数产生</a></li>
+<li><a href="#公钥密码算法">公钥密码算法</a>
+<ul>
+<li><a href="#diffie-hellman密钥交换">Diffie-Hellman密钥交换</a></li>
+<li><a href="#背包算法">背包算法</a></li>
+<li><a href="#rsa算法">RSA算法</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#hash函数-数字签名与身份认证">Hash函数、数字签名与身份认证</a>
+<ul>
+<li><a href="#hash函数">Hash函数</a></li>
+<li><a href="#数字签名">数字签名</a></li>
+<li><a href="#身份认证">身份认证</a></li>
+</ul></li>
+<li><a href="#pki">PKI</a></li>
+<li><a href="#基于身份加密体制">基于身份加密体制</a></li>
+<li><a href="#物联网安全">物联网安全</a>
+<ul>
+<li><a href="#密码学在分布式传感器网络dsn中的应用">密码学在分布式传感器网络（DSN）中的应用</a></li>
+<li><a href="#基于密码学的rfid认证">基于密码学的RFID认证</a></li>
+<li><a href="#基于pke的rfid认证">基于PKE的RFID认证</a></li>
+</ul></li>
+</ul>
+<!-- tocstop -->
+<a id="more"></a>
+<h2><span id="概论">概论</span></h2>
+<p><em>信息安全的含义</em></p>
+<blockquote>
+<p>信息安全是一门涉及计算机科学、网络技术、通信技术、密码技术、信息安全技术、应用数学、数论、信息论等多种学科的综合性科学。</p>
+</blockquote>
+<p>信息安全的整体目标</p>
+<ul>
+<li>物理安全
+<ul>
+<li>防盗、防火、防静电、防雷击、防电磁泄漏</li>
+</ul></li>
+<li><em>逻辑安全</em>
+<ul>
+<li>计算机的逻辑安全需要用口令字、文件许可、查账等方法来实现</li>
+</ul></li>
+<li>操作系统安全</li>
+<li>联网安全</li>
+</ul>
+<p><strong>安全四要素</strong></p>
+<ul>
+<li>保密性
+<ul>
+<li>保证信息为授权者享用而不泄漏给未经授权者</li>
+</ul></li>
+<li>完整性
+<ul>
+<li>数据完整性，未被未授权篡改或者损坏</li>
+<li>系统完整性，系统未被非授权操纵，按既定的功能运行</li>
+</ul></li>
+<li><em>可用性</em>
+<ul>
+<li>保证信息和信息系统随时为授权者提供服务;不要出现由于非授权者的滥用，却对授权者拒绝服务的情况</li>
+</ul></li>
+<li><em>可靠性</em>
+<ul>
+<li>特定行为和结果的一致性</li>
+<li>可靠性是指系统在规定条件下和规定时间内、完成规定功能的概率。可靠性是⽹网络安全最基本的要求之一，网络不可靠，事故不断，也就谈不上网络的安全。目前，对于⽹络可靠性的研究基本上偏重于硬件可靠性⽅面。研制⾼高可靠性元器件设备，采取合理的冗余备份措施仍是最基 本的可靠性对策，然而，有许多故障和事故，则与软件可靠性、⼈员可靠性和环境可靠性有关。</li>
+<li>区分</li>
+</ul></li>
+</ul>
+<p><em>威胁来源</em></p>
+<ul>
+<li><em>物理威胁</em>
+<ul>
+<li>偷窃、废物搜索、间谍行为、身份识别错误</li>
+</ul></li>
+<li><em>系统漏洞造成的威胁</em>
+<ul>
+<li>乘虚而入、不安全服务、配置和初始化</li>
+</ul></li>
+<li><em>身份鉴别威胁</em>
+<ul>
+<li>口令圈套（钓鱼）</li>
+<li>口令破解</li>
+<li>算法考虑不周</li>
+<li>编辑口令</li>
+<li>线缆连接威胁
+<ul>
+<li>窃听</li>
+<li>拨号进入</li>
+<li>冒名顶替</li>
+</ul></li>
+</ul></li>
+<li><em>有害程序威胁</em>
+<ul>
+<li>病毒</li>
+<li>代码炸弹</li>
+<li>特洛伊木马</li>
+<li>更新或下载</li>
+</ul></li>
+</ul>
+<p><em>安全威胁的分类</em></p>
+<ul>
+<li><em>中断</em>：系统的软、硬件资源由于各种各样的原因遭到破坏，使得程序的正常运⾏行行被中断或通信线路路 上数据的传送被中断。</li>
+<li><em>窃取</em>：未经允许的⽤用户⾮非法获得了了对系统资源的访问权，从中窃取了了对他有⽤用的数据，或者骗取计 算机为他供了了某种服务。</li>
+<li><em>篡改</em>：⾮非法⽤用户在获得了了对某项信息的访问权后，可以对它进⾏行行篡改，例例如修改程序使它完成⾮非法 操作者特定的功能，或者更更改数据，使⾃自⼰己获利利。在⽹网络上传送的信息也可能遭到篡改、添加，使 其结果对攻击者有利利，⽽而合法⽤用户⽆无法获得准确有⽤用的信息。</li>
+<li><em>伪造</em>：攻击者在未经许可的情形下，在系统中产⽣生出虚假的数据或虚假的服务，例例如在电⼦子商务中，攻击者可能希望在⽹网络通信系统上加上⼀一些假的交易易，或在数据库中增加⼀一此伪造的记录，另 外在⽹网络通信中重放以前过时的信息等，使⽹网络使⽤用者落⼊入攻击者的陷井。</li>
+<li><em>冒充</em>：假冒⽤用户身份是⼀一种常⻅见的⽹网络攻击⼿手段，例例如在甲、⼄乙双⽅方通信时，可能是丙在冒充⼄乙的 身份与甲通信，此时甲受到了了欺骗，由此引起甲受到经济甚⾄至政治上的损失。</li>
+<li><em>抵赖</em>：某些⽤用户为了了⾃自⼰己的利利益，否认⾃自⼰己曾经发出的信息(如否认他发出的转帐信息)或者否认他 ⾃自⼰己收到了了信息。</li>
+</ul>
+<p><em>威胁原因</em></p>
+<ul>
+<li><em>薄弱的认证环节</em>：网络上的认证通常是使⽤用口令来实现的，但口令有公认的薄弱性。网上口令可以通过许多方法破译，其中最常用的两种方法是把加密的口令解密和通过信道窃取口令。</li>
+<li><em>系统的易易被监视性</em>：⽤户使⽤Telnet或FTP连接他在远程 主机上的账户，在网上传的口令是没有加密的。入侵者可以通过监视携带用户名和口令的IP包获取它们，然后使⽤这些用户名和⼝令通过正常渠道登录到系统。如果被截获的是管理员的⼝令，那么获取特权级访问就变得更容易了。成千上万的系统就是被这种⽅方式侵⼊入的。</li>
+<li><em>易欺骗性</em>：TCP或UDP服务相信主机的地址。如果使⽤“IP Source Routing”，那么攻击者的主机就可以冒充一个被信任的主机或客户。</li>
+<li><em>有缺陷的网络服务和相互信任的主机</em>：主机的安全管理既困难有费时。为了降低管理要求并增强局域网，一些站点使⽤了诸如NIS和NFS之类的服务。这些服务通过允许一些数据库(如⼝令文件)以分布式⽅式管理以及允许系统共享⽂件和数据，在很⼤程度上减轻了过多的管理工作量。但这些服务带来了不不安全因素，可以被有经验闯入者利用以获得访问权。</li>
+<li><em>复杂的设置和控制</em>：主机系统的访问控制配置复杂且难于验证。因此偶然的配置错误会使闯入者获取访问权。一些主要的Unix经销商仍然把Unix配置成具有最大访问权的系统，这将导致未经许可的访问。</li>
+<li><em>无法估计主机的安全性</em>：主机系统的安全性⽆法很好的估计:随着一个站点的主机数量量的增加，确保每台主机的安全性都处在⾼⽔平的能力却在下降。只⽤管理⼀台系统的能力来管理理如此多的系统就容易犯错误。另一因素是系统管理的作⽤经常变换并行动迟缓。这导致⼀些系统的安全性⽐另一些要低。这些系统将成为薄弱环节，最终将破坏这个安全链。</li>
+</ul>
+<p><em>安全机制</em></p>
+<ul>
+<li>加密机制
+<ul>
+<li>加密是提供信息保密的核⼼方法</li>
+</ul></li>
+<li><em>访问控制机制</em>
+<ul>
+<li>访问控制可以防止未经授权的用户非法使用系统资源，这种服务不仅可以供给单个用户，也可以供给用户组的所有用户。</li>
+<li>分类
+<ul>
+<li>自主访问控制
+<ul>
+<li>⾃自主访问控制是指数据的拥有者有权决定系统中的哪些⽤用户对他的数据具有访问权，以及具有什么样的访问权。</li>
+</ul></li>
+<li>强制访问控制
+<ul>
+<li>计算机系统根据事先确定的安全策略，对⽤用户的访问权限进⾏强制性的控制</li>
+</ul></li>
+<li>基于角色的访问控制
+<ul>
+<li>为了反映实际工作中的需要，<em>可根据用户的工作职责设置若干角色</em>，不同的用户可以具有相同的角色，在系统中享有相同的权力，同一个用户又可以同时具有多个不同的角色，在系统中行使多个角色的权力。</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><em>数据完整性机制</em>
+<ul>
+<li>数据单元的完整性
+<ul>
+<li>是指组成一个单元的一段数据不被破坏和增删篡改</li>
+</ul></li>
+<li>数据序列的完整性
+<ul>
+<li>是指发出的数据分割为按序列号编排的许多单元时，在接收时还能按原来的序列把数据串联起来，而不要发生数据单元的丢失、重复、乱序、假冒等情况。</li>
+</ul></li>
+</ul></li>
+<li>数字签名机制
+<ul>
+<li>解决：否认、伪造、冒充、篡改</li>
+</ul></li>
+<li>交换鉴别机制
+<ul>
+<li>口令、密码技术、特征实物</li>
+</ul></li>
+<li>公证机制
+<ul>
+<li>为了免得事后说不清，可以找一个大家都信任的公证机构，各方的交换的信息都通过公证机构来中转。公证机构从中转的信息里 取必要的证据，日后一旦发生纠纷，就可以据此做出仲裁</li>
+</ul></li>
+<li>流量填充机制
+<ul>
+<li>流量填充机制能够保持流量基本恒定，因此观测者不能获取任何信息。流量填充的实现方法是:随机生成数据并对其加密，再通过网络发送</li>
+</ul></li>
+<li>路由控制机制
+<ul>
+<li>路由控制机制使得可以指定通过网络发送数据的路径</li>
+</ul></li>
+<li>审计
+<ul>
+<li>审计是模拟社会监察机构在计算机系统中用来监视、 记录和控制用户活动的一种机制，它使影响系统安全 的访问和访问企图留下线索，以便事后分析和追查。 现代安全计算机系统，除了要求有身份鉴别、访问控制、加密等安全措施外，还要求系统能对用户的行为进行有效的监控和记录，即要求有审计功能</li>
+</ul></li>
+</ul>
+<h2><span id="密码学基础">密码学基础</span></h2>
+<p><em>密码学背景</em></p>
+<ul>
+<li><em>通信保密</em>：60-70年代
+<ul>
+<li>信息保密</li>
+</ul></li>
+<li><em>信息安全</em>：80-90年代
+<ul>
+<li>机密性、完整性、可用性、不可否认性</li>
+</ul></li>
+<li><em>信息保障</em>：90年代-2004
+<ul>
+<li>全生命周期的保护</li>
+<li>信息保障是一种保证信息和信息系统能够安全运行的防护性行为，是信息安全在当前信息时代的新发展</li>
+<li>目的是采取技术、管理等综合性手段，使信息和信息系统具备机密性、完整性、可用性、可认证性、不可否认性，以及在遭受攻击后的可恢复性</li>
+<li><strong>可恢复性</strong>（热回滚）</li>
+</ul></li>
+<li><strong>密码学与访问控制的统一</strong>：2005-
+<ul>
+<li>基础成功：<strong>基于身份密码学</strong></li>
+<li>核心成果
+<ul>
+<li>基于属性密码学(具有特定属性可解密)</li>
+<li>代理重加密(数据拥有者可指定的解密)</li>
+<li>可搜索加密(数据拥有者可委托的密文检索)</li>
+<li>函数加密(满足特定函数可解密)</li>
+<li>同态加密/签名(可计算的密文/签名)</li>
+</ul></li>
+<li>重要应用
+<ul>
+<li>云存储安全</li>
+<li>基于密码学的访问控制</li>
+</ul></li>
+</ul></li>
+</ul>
+<p><em>密码学基本概念</em></p>
+<ul>
+<li>矛：密码编码学</li>
+<li>盾：密码分析学</li>
+</ul>
+<p><strong>密码算法分类</strong></p>
+<ul>
+<li>古典：受限制的算法
+<ul>
+<li>算法的保密性基于<em>保持算法的秘密</em></li>
+</ul></li>
+<li>现代：基于密钥（key-based）的算法
+<ul>
+<li>算法的保密性基于<em>对密钥的保密</em></li>
+<li>对称加密
+<ul>
+<li>发送方和接收方有相同的密钥
+<ul>
+<li>面对面协商-&gt;小范围</li>
+<li><strong>使用公钥密码协商</strong></li>
+</ul></li>
+</ul></li>
+<li>非对称加密
+<ul>
+<li>公钥密码算法
+<ul>
+<li>加密密钥（公钥）和解密密钥（私钥）不同</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>分组密码：一次加密一块 * 实际应用</li>
+<li>流密码；一次一位或一子节 * 多用于研究
+<ul>
+<li>为什么？
+<ul>
+<li><strong>研究很难一步到位提出分组的新型公钥密码算法</strong>，为了简化难度，先做流式的，再扩展到分组式</li>
+</ul></li>
+</ul></li>
+</ul>
+<p><em>发展</em></p>
+<ul>
+<li>1949前：艺术🎨 * <strong>密码算法的安全性没有理论依据</strong>，无法回答到底有多安全</li>
+<li>1949-1975：科学🔬 * 信息论的出现-&gt;理论依据 * 实用性？ * <strong>没有办法有效生成足够多的随机数</strong></li>
+<li><strong>1976后：公钥密码学</strong> * 基于<strong>计算复杂性理论</strong>的密码算法 * 理论上可被破解，但计算代价巨大
+<ul>
+<li>1976：<em>Diffie &amp; Hellman</em>提出公钥密码，以公钥密码实现会话密钥的协商</li>
+<li>1977：Rivest,Shamir &amp; Adleman提出了<em>RSA</em>公钥算法，因此获得图灵奖</li>
+<li>90年代逐步出现了<em>基于椭圆曲线</em>的公钥算法：比RSA更安全更高效，但实际应用依然较少</li>
+<li>2000年左右出现了<em>基于双线性映射</em>的公钥算法：<strong>基于身份密码学</strong>的重要数学基础</li>
+<li>2000年左右出现了<em>基于格代数</em>的公钥算法：后量子时代的利器</li>
+<li>2005年以后<em>公钥密码与访问控制的融合</em>：实现了基于不可信存储第三方的加密数据共享</li>
+<li>2005年以后出现了<em>全同态加密</em>：实现了密文的同态加法和乘法运算</li>
+<li>安全通讯-&gt;安全控制-&gt;安全计算</li>
+</ul></li>
+</ul>
+<p>密码分析</p>
+<ol type="1">
+<li>唯密：攻击者被动地(窃听)具有密⽂串y，但没有相应的明文x</li>
+<li>已知明文：攻击者被动地(窃听)具有明⽂x和相应的密文y.</li>
+<li>选择明文：：攻击者可获得对加密机的暂时访问，因此可主动选择明文x，并得到相应的密文y</li>
+<li>选择密文：攻击者可获得对解密机的暂时访问，因此可主动选择密⽂串y，并得到相应的明文x</li>
+</ol>
+<p>现代密码学要求：</p>
+<ol type="1">
+<li>不能破解密钥</li>
+<li>不能破解明文</li>
+<li>不能破解明文的语义</li>
+</ol>
+<p><strong>密码算法的安全性度量</strong></p>
+<ul>
+<li>无条件安全
+<ul>
+<li>无论破译者有多少密文，他也无法解出对应的明文，即使他解出了，他也无法验证结果的正确性</li>
+<li>常用于评估<em>基于信息论</em>的密码学算法</li>
+</ul></li>
+<li><em>计算上安全</em>
+<ul>
+<li>破译的代价超出信息本身的价值；<em>破译的时间超出了信息的有效期</em></li>
+<li>常用于<em>基于计算复杂性</em>的密码学算法</li>
+</ul></li>
+</ul>
+<p><em>古典密码（计算题）</em></p>
+<ul>
+<li>代替密码 * 明文空间换为密文空间
+<ul>
+<li><em>简单代替密码／单字母密码</em>
+<ul>
+<li>明文的一个字符用相对固定的一个密文字符代替</li>
+</ul></li>
+<li><em>多字母密码</em>
+<ul>
+<li>明文中的字符映射到密文空间的字符<em>还依赖于它在上下文中的位置</em></li>
+</ul></li>
+</ul></li>
+<li>同余：若整数a和b有<code>(a mod q) = (b mod q)</code>，则称a与b在mod q下同余
+<ul>
+<li><strong>移位密码</strong>
+<ul>
+<li>密钥<code>k in Z26</code></li>
+<li>加密算法：<code>e(x) = x + k mod 26</code></li>
+<li>解密算法：<code>d(y) = y - k mod 26</code></li>
+<li>注：26个英文字母与模26剩余类集合<code>{0, ..., 25}</code>一一对应</li>
+</ul></li>
+<li><strong>乘数密码</strong>（对称加密）
+<ul>
+<li>密钥<code>k</code>与26互素，即<code>K={1,3,5,7,9,11,15,17,19,21,23,25}</code></li>
+<li>加密算法：<code>e(x) = kx mod 26</code></li>
+<li>解密算法：<code>d(y) = k-1 y mod 26</code></li>
+<li>为什么K要与26互素？
+<ul>
+<li>保证加密变换是一一映射的</li>
+<li>保证K有逆元，使解密算法成立</li>
+</ul></li>
+<li><em>K逆计算</em>
+<ul>
+<li>对于整数a、p，如果存在整数b，满足<code>ab mod p =1</code>，则说，b是a的模p乘法逆元</li>
+</ul></li>
+<li>更容易受唯密文攻击</li>
+</ul></li>
+<li><strong>仿射密码</strong>
+<ul>
+<li>密钥<code>a,b in {0, 25}</code>并且<code>a</code>与26互素</li>
+<li>加密算法：<code>e(x) = ax + b mod 26</code></li>
+<li>解密算法：<code>d(y) = a-1 (y - b) mod 26</code></li>
+</ul></li>
+<li>多名代替密码
+<ul>
+<li>映射是一对多的，掩盖明文的频率差异</li>
+<li><strong>重要：加上了抛币的随机数！</strong></li>
+</ul></li>
+<li>多表代替密码
+<ul>
+<li>是以一系列代换表依此对明文消息的字母进行代换的方法</li>
+<li>非周期：所有明文字符，每个明文字符有一个不同的单表加密</li>
+<li>周期：用一定数量的单表循环加密
+<ul>
+<li>依然保留一定频率</li>
+<li>重码分析法</li>
+</ul></li>
+<li><strong>Vigenére密码</strong> <img src="/images/物联网安全概论/DraggedImage.png"></li>
+<li><strong>Vernam密码</strong>
+<ul>
+<li>加密：<code>Ci = Pi ^ Ki</code></li>
+<li>解密：<code>Pi = Ci ^ Ki</code></li>
+</ul></li>
+<li><strong>Playfair密码</strong> <img src="/images/物联网安全概论/DraggedImage-1.png"></li>
+<li><strong>Hill密码</strong> <img src="/images/物联网安全概论/DraggedImage-2.png"></li>
+</ul></li>
+</ul></li>
+<li><strong>古典密码的安全性缺陷</strong>
+<ul>
+<li>频率攻击</li>
+<li>无随机</li>
+</ul></li>
+</ul>
+<p><strong>由《风语者》看密码无处不在</strong></p>
+<ul>
+<li>语言本身也是一种密码，受限的密码算法</li>
+<li><em>加密：协商出一种只有发送方和接收方看得懂的语言</em></li>
+</ul>
+<p><strong>由“信任”看如何说明密码算法的安全性</strong></p>
+<ul>
+<li>到底什么是安全？
+<ul>
+<li>水的安全性？
+<ul>
+<li>为什么认为没毒？
+<ul>
+<li>因为喝过</li>
+<li>正规厂商</li>
+<li>正规渠道</li>
+<li>相信给你说的人不会害你</li>
+<li>相信厂家不会害你</li>
+<li>….</li>
+</ul></li>
+<li>因为相信了xxx，所以相信这瓶水是安全的</li>
+</ul></li>
+<li>不能保证绝对安全
+<ul>
+<li>如果保证绝对安全，一定要试一下</li>
+</ul></li>
+<li><strong>安全在绝大多数情况下无法实证</strong></li>
+<li>安全来源于<strong>信任</strong>，依托于已知<strong>信任源</strong>，使得某一个场景是安全的</li>
+<li><strong>信任源有信任程度的差异</strong>
+<ul>
+<li>对安全造成影响</li>
+</ul></li>
+<li>直观感觉同一瓶水安全性是常量，但通过给水的方式变了，导致水的安全性的改变。
+<ul>
+<li>因为信任源变了！</li>
+</ul></li>
+<li><strong>信任源是动态的</strong></li>
+<li>如果希望产品达到很好的安全性，则<em>信任源要信任程度高而且稳健</em></li>
+<li><em>现代密码学信任源</em>：数学公理（<strong>公认的数学难题</strong>）</li>
+<li>密码建立过程？
+<ul>
+<li>假设-证明</li>
+<li>证明如果存在攻击者能够破解我的加密算法，那么我能用它解决公认的数学难题</li>
+<li>逆否-&gt;不成立</li>
+</ul></li>
+<li>什么是求解数学问题？
+<ul>
+<li>前提：有解</li>
+<li>数学问题：解在问题中，关键在于能不能展示出来</li>
+<li>数学难题：解在问题本身，但没办法有效展示出来
+<ul>
+<li>但有时额外增加一个量，就很好解</li>
+<li>增加的量-&gt;解密密钥</li>
+<li>原始问题-&gt;加密密钥</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<h2><span id="现代常规对称加密技术">现代常规对称加密技术</span></h2>
+<ul>
+<li>DES</li>
+<li>Triple DES</li>
+<li>AES</li>
+</ul>
+<p><em>分组密码</em></p>
+<ul>
+<li>基本思想：密文的统计特性与密钥独立</li>
+<li><strong>设计原则</strong>
+<ul>
+<li><em>扩散（Diffusion）</em>
+<ul>
+<li>明文中的单个数字影响密文中的多个数字，从⽽使明文的统计特征在密文中消失，相当于明文的统计结构被扩散</li>
+<li><em>使破解明文变得困难</em></li>
+</ul></li>
+<li><em>混乱（Confusion）</em>
+<ul>
+<li>密钥与密文之间的统计信息的关系变得复杂，从⽽增加通过统计⽅法进⾏攻击的难度</li>
+<li><em>使破解密钥变得困难</em></li>
+</ul></li>
+</ul></li>
+<li>软件要求
+<ul>
+<li>使用子块（8, 16, 32bit）和简单（CPU直接支持的）的操作</li>
+</ul></li>
+<li>硬件要求
+<ul>
+<li>加密算法和解密算法尽可能一样-&gt;成本降低</li>
+</ul></li>
+</ul>
+<h3><span id="des">DES</span></h3>
+<p><strong>如何保障加解密正确性</strong></p>
+<ul>
+<li>依赖于<strong>Feistel结构</strong>实现加解密的正确性</li>
+</ul>
+<p><em>密钥长度</em></p>
+<ul>
+<li>48bit：子密钥长度</li>
+<li>56bit：真正用加密和解密的密钥长度</li>
+<li>64bit：其中有8比特不用做加解密，是用来做奇偶校验的</li>
+</ul>
+<p><em>Feistel</em>结构</p>
+<ul>
+<li>不管F函数怎么设计，一定可以保证<strong>加密过程和解密过程一模一样</strong></li>
+<li>结构 <img src="/images/物联网安全概论/DraggedImage-3.png"></li>
+</ul>
+<p><strong>S-Box</strong></p>
+<ul>
+<li>S盒无法求逆</li>
+<li>只依赖于<strong>Feistel结构</strong>实现加解密的正确性</li>
+<li><em>最⼤保障安全性</em></li>
+</ul>
+<p><em>DES缺陷</em></p>
+<ul>
+<li>弱密钥
+<ul>
+<li>导致每一轮使用相同的子密钥</li>
+</ul></li>
+<li>半弱密钥
+<ul>
+<li>使用不同密钥加密相同明文时会得到相同密文</li>
+</ul></li>
+</ul>
+<p><strong>分组密码的操作模式</strong></p>
+<ol type="1">
+<li>电子密码本（ECB） <img src="/images/物联网安全概论/DraggedImage-4.png">
+<ul>
+<li>分块，单独对每一块进行DES加解密</li>
+<li>优点
+<ul>
+<li>可并行</li>
+</ul></li>
+<li>缺点
+<ul>
+<li>安全性不够高</li>
+<li>篡改密文块位置</li>
+<li>无随机-&gt;相同明文一定得到相同密文-&gt;存在频率分析的可能性</li>
+</ul></li>
+<li><em>最直观，就是⽤用DES加密长文件，把⻓文件切块，但安全性很差</em></li>
+</ul></li>
+<li>密码分组链接（CBC） <img src="/images/物联网安全概论/DraggedImage-5.png">
+<ul>
+<li>引入随机数-&gt;初始向量-&gt;解决频率分析</li>
+<li>前一块对后一块有影响-&gt;解决篡改密文</li>
+<li>优点
+<ul>
+<li>无法篡改密文块位置</li>
+</ul></li>
+<li>缺点
+<ul>
+<li>无法并行</li>
+</ul></li>
+<li><em>引⼊入随机数，引⼊入前后块的关联关系，但不不能实现流式</em></li>
+</ul></li>
+<li>密码反馈模式（CFB） <img src="/images/物联网安全概论/DraggedImage-6.png">
+<ul>
+<li>流式加密-&gt;加密最小单位自定义</li>
+<li>优点
+<ul>
+<li>加密最小单位自定义</li>
+<li>防篡改（链接模式）</li>
+</ul></li>
+<li>缺点
+<ul>
+<li>加密速度没准达不到流失数据产生的速度</li>
+<li>无法并行</li>
+</ul></li>
+<li><em>流式加密过程，但⽆无法应对⼤大量量流式数据短时间到达</em></li>
+</ul></li>
+<li>输出反馈（OFB） <img src="/images/物联网安全概论/DraggedImage-7.png">
+<ul>
+<li>把中间结果反馈回去-&gt;<strong>可以预处理</strong>-&gt;加快速度，解决并行问题 <strong>进化原因</strong>：克服缺点</li>
+</ul></li>
+</ol>
+<h3><span id="triple-des">Triple DES</span></h3>
+<p><strong>为什么出现</strong></p>
+<ul>
+<li>因为DES的56bit的秘钥长度不足以抵御穷举攻击</li>
+<li>问题：DES安全性不高-&gt; 再现有基础上改进 or 完全做一个新的</li>
+</ul>
+<p>高安全性的必要性：<strong>多次DES加密与单次DES加密不等价</strong></p>
+<p><strong>Triple DES</strong></p>
+<ol type="1">
+<li>DES-EEE3：三个不同的密钥加密</li>
+<li>DES-EDE3：加密-解密-加密</li>
+<li>DES-EEE2：K1 = K3</li>
+<li>DES-EDE2: K1 = K3
+<ul>
+<li>兼容常规DES：若K1=K2，相当于一次DES
+<ul>
+<li>为什么要兼容：有很多已用单次DES加密的数据</li>
+</ul></li>
+<li>没有有效攻击方法</li>
+</ul></li>
+</ol>
+<h3><span id="aes">AES</span></h3>
+<p><em>（为什么会有AES）提出全新的密码算法</em> * 比三重DES快 * 至少一样安全 * 数据分组长度为128比特 * <strong>密钥长度为128/192/256比特</strong></p>
+<p><strong>Rijindeal</strong></p>
+<ul>
+<li>不属于Feistel结构-&gt;加解密算法不同</li>
+<li>有较好的数学理论作为基础</li>
+<li>结果简单、速度快</li>
+<li><em>AES需要多少轮密钥：11个</em></li>
+<li><em>AES第10轮没有列列混操作</em></li>
+</ul>
+<p><strong>AES如何保证加解密的正确性</strong></p>
+<ul>
+<li>解密是加密的<em>逆变换</em>，加密过程中不存在不可逆变换</li>
+</ul>
+<p><em>与DES的S盒比较</em></p>
+<ul>
+<li>相同点
+<ul>
+<li>非线性替代</li>
+<li>提供<em>混乱作用</em></li>
+</ul></li>
+<li>不同点
+<ul>
+<li>可逆</li>
+<li>不会丢失信息</li>
+</ul></li>
+</ul>
+<p><strong>列混合变换</strong>（具有数学特征）</p>
+<ul>
+<li>矩阵乘法，其中加法变成异或，乘法变为<strong>多项式乘法</strong></li>
+<li>代替操作，将状态的列看作有限域GF上的4维向量并被有限域GF上的一个固定可逆方阵A乘 <img src="/images/物联网安全概论/DraggedImage-8.png"> <img src="/images/物联网安全概论/DraggedImage-9.png"> <img src="/images/物联网安全概论/DraggedImage-10.png"> <img src="/images/物联网安全概论/DraggedImage-11.png"></li>
+<li>举例 <img src="/images/物联网安全概论/DraggedImage-12.png"> <img src="/images/物联网安全概论/DraggedImage-13.png"> <img src="/images/物联网安全概论/DraggedImage-14.png"></li>
+</ul>
+<p>Rijndael安全性</p>
+<ul>
+<li>没有发现弱密钥或补密钥</li>
+<li>能有效抵抗目前已知的攻击算法
+<ul>
+<li>线性攻击</li>
+<li>差分攻击</li>
+</ul></li>
+</ul>
+<h2><span id="公钥密码">公钥密码</span></h2>
+<h3><span id="随机数产生">随机数产生</span></h3>
+<p><em>随机数的基本特点</em></p>
+<ul>
+<li><em>随机性</em>
+<ul>
+<li>均匀分布</li>
+<li>独立性</li>
+</ul></li>
+<li><em>不可预测性</em></li>
+</ul>
+<p><em>伪随机数</em>：攻击者在有效时间内分辨不出是真随机的还是伪随机的</p>
+<p>把循环加密换成DES，在现代有啥问题？</p>
+<ul>
+<li>秘钥⻓度不够，易被暴力破解从而丧失不可预测性</li>
+</ul>
+<p>BBS产生器 <img src="/images/物联网安全概论/DraggedImage-15.png"></p>
+<ul>
+<li>基于大数分解</li>
+<li><em>最后一步去掉有什么问题？</em>
+<ul>
+<li><em>可预测</em>，根据前一个可预测下一个</li>
+</ul></li>
+<li><em>为什么选最后1比特？</em>
+<ul>
+<li>Xi的每个比特的随机性有差异，而<em>随机性最强的比特是最低位</em>，所以Bi取最低比特</li>
+</ul></li>
+</ul>
+<h3><span id="公钥密码算法">公钥密码算法</span></h3>
+<p><em>起源（为什么会出现公钥加密算法？）</em></p>
+<ul>
+<li>在广域网情况下，发送方如何让接收方提前知道对称密码的密钥是什么？
+<ul>
+<li><em>解决了对称加密的密钥的协商、发送问题</em></li>
+</ul></li>
+</ul>
+<p>公钥密码特征</p>
+<ul>
+<li>公钥：加密（公开的）</li>
+<li>私钥：解密</li>
+<li>不能从公钥推导出私钥</li>
+</ul>
+<p>加密过程</p>
+<ul>
+<li>发送方用<strong>接收方的公钥</strong>来加密（对称密钥）</li>
+<li>为什么不直接加密文件？
+<ul>
+<li>公钥密码开销大，速度慢</li>
+</ul></li>
+<li>发送方如何知道发送接收方的公钥？</li>
+</ul>
+<p><strong>数学定理</strong></p>
+<ul>
+<li>引理1：若<code>ac = bc mod m</code>, 且c和m互素，则<code>a = b mod m</code></li>
+<li>引理2：若a和m互素，则 <code>a, 2a, 3a, ..., (m-1)a</code>的最小剩余（<code>mod m</code>）按照某种次序排列后为：<code>1, 2, 3, ...., m-1</code></li>
+<li><em>Fermat定理</em>：<code>p</code>为素数，<code>a</code>是整数且不能被<code>p</code>整除，则 <img src="/images/物联网安全概论/DraggedImage-16.png"> <img src="/images/物联网安全概论/DraggedImage-17.png"> <img src="/images/物联网安全概论/DraggedImage-18.png"></li>
+<li><em>Euler数</em>：<code>o|o(n)</code>小于<code>n</code>且与<code>n</code>互素的正整数<em>个数</em>
+<ul>
+<li>若<code>p</code>是素数，<code>o|o(p) = p - 1</code> <img src="/images/物联网安全概论/DraggedImage-19.png"> <img src="/images/物联网安全概论/DraggedImage-20.png"></li>
+</ul></li>
+<li><em>Euler定理</em>：若<code>a</code>与<code>n</code>为互素的正整数，则： <img src="/images/物联网安全概论/DraggedImage-21.png">
+<ul>
+<li>举例 <img src="/images/物联网安全概论/DraggedImage-22.png"></li>
+<li>证明 <img src="/images/物联网安全概论/DraggedImage-23.png"> <img src="/images/物联网安全概论/DraggedImage-24.png">
+<ul>
+<li><strong>注</strong>：如果有<code>m | (a - b)</code>，即<code>m</code>是<code>a - b</code>的因子</li>
+</ul></li>
+<li>推论：若<code>n = pq, p≠q</code>都是素数，<code>k</code>是任意整数，则： <img src="/images/物联网安全概论/DraggedImage-25.png"></li>
+</ul></li>
+<li><em>原根</em> <img src="/images/物联网安全概论/DraggedImage-26.png"></li>
+<li><em>离散对数</em> <img src="/images/物联网安全概论/DraggedImage-27.png"></li>
+<li><strong>离散对数问题</strong> <img src="/images/物联网安全概论/DraggedImage-28.png">
+<ul>
+<li>给定上式，已知<code>g, y, p</code>，计算<code>x</code>！</li>
+</ul></li>
+</ul>
+<h4><span id="diffie-hellman密钥交换">Diffie-Hellman密钥交换</span></h4>
+<ul>
+<li>基于离散对数问题 <em>目的</em>：允许两个用户可以<em>安全地交换一个秘密信息</em>，用于后续的通讯过程</li>
+</ul>
+<p>算法 <img src="/images/物联网安全概论/DraggedImage-29.png"></p>
+<p><em>安全性保障</em>：“直观上”依赖于计算<em>离散对数</em>的难度</p>
+<p><em>中间人攻击</em></p>
+<ul>
+<li>攻击者必须实时截获并冒充转发 <img src="/images/物联网安全概论/DraggedImage-30.png"></li>
+</ul>
+<p>为什么选取a是<strong>原根</strong>？</p>
+<ul>
+<li>为了保证两两不相等，如果不选原根，对于攻击者破解难度降低</li>
+</ul>
+<h4><span id="背包算法">背包算法</span></h4>
+<p>MH公钥算法 <img src="/images/物联网安全概论/DraggedImage-31.png"> 公钥 = 私钥 * w mod m</p>
+<ul>
+<li>举例
+<ul>
+<li>计算公钥 <img src="/images/物联网安全概论/DraggedImage-32.png"></li>
+<li>加密 <img src="/images/物联网安全概论/DraggedImage-33.png"></li>
+<li>解密 <img src="/images/物联网安全概论/DraggedImage-34.png"></li>
+</ul></li>
+</ul>
+<p><em>背包算法问题</em></p>
+<ul>
+<li><strong>加密无随机</strong>-&gt;容易破解</li>
+<li>实际中不采用</li>
+</ul>
+<h4><span id="rsa算法">RSA算法</span></h4>
+<p>实际用的RSA算法为<em>RSA-OAEP</em> 为什么实际用的与理论用的不一样？</p>
+<ul>
+<li>教科书中讲的加密过程<em>没有用到随机数</em></li>
+</ul>
+<p>RSA安全性依据</p>
+<ul>
+<li>x的e次方mod n 是一个单向函数 -&gt; 无法求出x</li>
+<li>攻击者无法分解：n = pq</li>
+</ul>
+<p><em>RSA算法</em> <img src="/images/物联网安全概论/DraggedImage-35.png"></p>
+<p>举例 <img src="/images/物联网安全概论/DraggedImage-36.png"></p>
+<p>密钥长度</p>
+<ul>
+<li>95：512bit</li>
+<li>99：1024bit</li>
+<li>现在：2048bit</li>
+<li>趋势：使用基于椭圆曲线的加密算法
+<ul>
+<li>因为基于比大数分解难题更难的难题</li>
+</ul></li>
+<li>为什么选1024⽐比特？
+<ul>
+<li>计算复杂度<strong> 达到2^80 </strong></li>
+<li>因为现在密码学认为超过2^80就是安全的</li>
+</ul></li>
+</ul>
+<p><strong>对RSA的选择密文攻击</strong></p>
+<ul>
+<li>攻击者可以自己选择一些密文，并获得对应的明文</li>
+<li><em>选密攻击从不考虑不直接解密？</em>
+<ul>
+<li>等同于用户把自己私钥暴露出去</li>
+<li>这样所有密码体制都无法保证安全性</li>
+</ul></li>
+<li>怎么保证用户一定会提供解密服务？
+<ul>
+<li>用户如果不解密，密文也看不懂；解密完发现看不懂，就什么也不做-&gt;间接提供给攻击者明文信息</li>
+<li>这么假设<em>为了保证加密算法的安全性</em></li>
+</ul></li>
+</ul>
+<p><em>公共模攻击</em></p>
+<ul>
+<li><strong>能不能去相同的模数？</strong>
+<ul>
+<li>不可以 <em>小加密指数攻击</em> <em>小解密指数攻击</em></li>
+</ul></li>
+</ul>
+<p><strong>加密指数选择，能不能用小指数，为什么？</strong></p>
+<ul>
+<li><em>可以</em>，因为实际应用中都是RSA-OAEP，加密前将消息与随机值混合，并保证m与n有相同的长度。小加密指数攻击无法实施。实际上为了提高加密速度，通常取e为特定的整数，ISO/IEC9796中甚至允许取e=3</li>
+</ul>
+<h2><span id="hash函数-数字签名与身份认证">Hash函数、数字签名与身份认证</span></h2>
+<h3><span id="hash函数">Hash函数</span></h3>
+<p><em>Hash函数能不能直接用作数据完整性校验？</em></p>
+<ul>
+<li>不能，因为hash函数结果也易被篡改</li>
+</ul>
+<p><em>MAC</em></p>
+<ul>
+<li>如果要在不安全的信道中保证消息的完整性，可以在Hash函数中引入一个密钥，其结果被称为<em>消息验证码(MAC)</em> <img src="/images/物联网安全概论/DraggedImage-37.png"> <img src="/images/物联网安全概论/DraggedImage-38.png"></li>
+<li>Hash函数基本要求
+<ul>
+<li>快速
+<ul>
+<li>因为输入长度不固定</li>
+</ul></li>
+<li>单向
+<ul>
+<li>根据H(M)=h无法计算出M</li>
+<li>在MAC中防止解出密钥</li>
+</ul></li>
+<li>防碰撞</li>
+</ul></li>
+<li><em>安全性</em>
+<ul>
+<li><em>原像稳固</em>：给定消息摘要y，能否找到x使得<code>h(x)=y</code>
+<ul>
+<li>单向性</li>
+</ul></li>
+<li><em>第二原像稳固</em>：给定一个消息x，能否找到x’ ≠x ，使得<code>h(x)=h(x’)</code>
+<ul>
+<li>防碰撞</li>
+</ul></li>
+<li><em>碰撞稳固</em>：寻找任意x’ ≠x，使得<code>h(x)=h(x’) </code>
+<ul>
+<li>任意寻找两个不同的x，使得哈希结果相同的可能性为0</li>
+</ul></li>
+</ul></li>
+</ul>
+<h3><span id="数字签名">数字签名</span></h3>
+<p><em>数字签名是传统签名的数字化</em>,基本要求: </p>
+<ul>
+<li>能与所签文件“绑定” </li>
+<li>签名者不能否认自己的签名</li>
+<li>签名不能被伪造</li>
+<li>容易被自动验证</li>
+</ul>
+<p>与MAC的区别：<em>MAC不能保证双方自身的相互欺骗</em></p>
+<p>必须保证的性质</p>
+<ul>
+<li><em>可验证</em>:签字是可以被确认的</li>
+<li><em>防抵赖</em>:发送者事后不承认发送报文并签名;</li>
+<li><em>防假冒</em>:攻击者冒充发送者向收方发送文件;</li>
+<li><em>防篡改</em>:收方对收到的文件进行篡改;</li>
+<li><em>防伪造</em>:收方伪造对报文的签名</li>
+</ul>
+<p>三个过程</p>
+<ul>
+<li>系统的初始化过程
+<ul>
+<li>在系统的初始化过程中要产生的数字签名方案中用到的一切参数，有公开的，也有秘密的</li>
+</ul></li>
+<li>签名产生过程
+<ul>
+<li>在签名产生的过程中用户利用给定的算法对消息产生签名，这种签名过程可以公开也可以不公开</li>
+</ul></li>
+<li>签名验证过程
+<ul>
+<li>在签名验证过程中，验证者利用公开验证方法对给定消息的签名进行验证，得出签名的有效性</li>
+</ul></li>
+</ul>
+<p><em>数字签名问题</em></p>
+<ul>
+<li>签名后文件可能被重复利用
+<ul>
+<li>签字后的文件可能被B重复使用。如果签字 后的文件是一张支票，B很容易多次用该电子支 票兑换现金，为此A需要在文件中加上一些该支票的特有的凭证，如timestamp等，以防止上述情况发生</li>
+</ul></li>
+<li>公钥算法效率低</li>
+</ul>
+<p><em>RSA数字签名</em> <img src="/images/物联网安全概论/DraggedImage-39.png"></p>
+<ul>
+<li><strong>与加解密的异同？</strong>
+<ul>
+<li><em>利用私钥签名，公钥验证</em>，而RSA加密是⽤公钥加密，私钥解密</li>
+</ul></li>
+</ul>
+<h3><span id="身份认证">身份认证</span></h3>
+<p><em>身份认证是对网络中的主体进行验证的过程</em>，用户必须提供他是谁的证明，他是某个雇员，某个组织的代理、某个软件过程(如交易过程) 。</p>
+<p><em>主要方法</em></p>
+<ul>
+<li>口令认证
+<ul>
+<li>含义：用户名/口令认证</li>
+<li>优点
+<ul>
+<li>最简单、最普遍的身份识别技术</li>
+</ul></li>
+<li>缺点
+<ul>
+<li>大多数系统的口令是明文传送到验证服务器的， 容易被截获</li>
+<li>口令维护的成本较高，难于记忆</li>
+<li>口令容易在输入的时候被攻击者偷窥，而且用户无法及时发现</li>
+</ul></li>
+<li>安全性要求
+<ul>
+<li>位数&gt;6位</li>
+<li>大小写字母混合</li>
+<li>字母与数字混合</li>
+<li>口令有字母、数字以外的符号</li>
+<li>禁止使用缺省口令</li>
+<li>定期更换口令</li>
+<li>保持口令历史记录，使用户不能循环使用旧口令</li>
+<li>用口令破解程序测试口令</li>
+</ul></li>
+<li>攻击种类
+<ul>
+<li>字典攻击</li>
+<li>穷举尝试</li>
+<li>窥探</li>
+<li>社交工程</li>
+<li>垃圾搜索</li>
+<li>重放攻击</li>
+</ul></li>
+</ul></li>
+<li>智能卡认证
+<ul>
+<li>含义：<em>网络通过用户拥有什么东西来识别的方法，一般是用智能卡或其它特殊形式的标志</em>，这类标志可以从连接到计算机上的读出器读出来。访问不但需要口令，也需要使用物理智能卡（<em>询问／应答模式</em>）</li>
+<li>优点
+<ul>
+<li>存储容量大 、体积小而轻、保密性强、网络要求低、 数据可靠性高 、防磁、防静电、防潮、耐温、抗干扰能力强，一张IC卡片可重复读写十万次，卡中数据可 保存几十年，对计算机的实时性、敏感性要求降低。内部数据保密性、可靠性好，读写稳定可脱机工作，易于安装维护</li>
+</ul></li>
+<li>缺点
+<ul>
+<li><em>丢失后短时间内不好补回</em></li>
+</ul></li>
+<li>安全性要求</li>
+<li>攻击种类</li>
+</ul></li>
+<li>基于生物特征的认证
+<ul>
+<li>含义：目前已有的设备包括:视网膜扫描仪、声音验证设备、手型识别器等</li>
+<li>优点
+<ul>
+<li>安全性高</li>
+</ul></li>
+<li>缺点
+<ul>
+<li>一旦泄露，<em>生物信息不可更改！</em></li>
+</ul></li>
+<li>安全性要求</li>
+<li>攻击种类</li>
+</ul></li>
+<li>双因素认证
+<ul>
+<li>含义：所知道的内容+所拥有的物品</li>
+<li>优点</li>
+<li>缺点</li>
+<li>安全性要求</li>
+<li>攻击种类</li>
+</ul></li>
+</ul>
+<p><em>身份认证协议</em></p>
+<ul>
+<li>NSSK：通信双方A和B通过可信第三方协商会话密钥
+<ul>
+<li>基于对称密码的双向认证协议 <img src="/images/物联网安全概论/DraggedImage-40.png"></li>
+</ul>
+<ol type="1">
+<li>A向可信第三方T发送要和B勾搭的请求，加上随机数Na</li>
+<li>T给A回复相应的Na，B的信息，AB之间的密钥，和用Kbt的密钥加密的Kab与A的信息</li>
+<li>A解密之后，验证Na，然后把用Kbt的密钥加密的Kab与A的信息发给B</li>
+<li>B用Kbt解密，获取Kab，并生成随机数，用Kab加密发给A</li>
+<li>A解密后，把随机数+1，在用Kab加密发回B <strong>信任建立</strong></li>
+</ol>
+<ul>
+<li><em>A认证B</em>：第四步，因为只有真正的B才能解出BT通讯的对称密钥</li>
+<li><em>B认证A</em>：第五步，因为只有真正的A才能解出AB通讯的对称密钥</li>
+</ul></li>
+<li>NSPK：通信双方A和B通过可信第三方协商会话密钥
+<ul>
+<li>基于非对称密码的双向认证协议 <img src="/images/物联网安全概论/DraggedImage-41.png"></li>
+</ul>
+<ol type="1">
+<li>A向可信第三方T发送要和B勾搭的请求</li>
+<li>T臭不要脸的同意了，给了B的联系方式（B的公钥），怕A不相信，还在上面改了一个戳（用自己的私钥签名）</li>
+<li>A拿到B的公钥，随便选了个数，作为定情信数，然后附上自己的名片，用B的公钥加密，发送给B</li>
+<li>B收到这封信，用自己的私钥解密，知道是A这个小彪子要勾搭自己，精虫上脑，然后也向T去申请</li>
+<li>同样的T也给了B一个自己盖过章的A的公钥</li>
+<li>B拿到A的公钥，又选了一个定情信数Nb，俩数一块用A的公钥加密发给A</li>
+<li>A解密出Nb的值，再用Kb加密发回给B <strong>信任建立</strong>：</li>
+</ol>
+<ul>
+<li><em>B认证A</em>：(6)里面B发给A的是用A的公钥加密的，只有A能解开，所以，(7)里面A把正确的Nb发回给B，证明他真的是A</li>
+<li><em>A认证B</em>：(6)里面B能把A随便选的定情信数解密出来（之前是用Kb加密的），再发回给A，就证明自己是真的B</li>
+</ul></li>
+<li>基于非对称密码的单向认证协议 <img src="/images/物联网安全概论/DraggedImage-42.png"></li>
+</ul>
+<h2><span id="pki">PKI</span></h2>
+<p>概念：PKI-Public Key Infrastructure公钥基础设施。<em>是一个用公钥技术来实施和提供安全服务的具有普适性的安全基础设施</em>。</p>
+<p>功能</p>
+<ul>
+<li>签发证书</li>
+<li>签发证书撤销列列表</li>
+<li>密钥备份与恢复功能</li>
+<li>证书、密钥对的⾃自动更更新</li>
+<li>加密、签名密钥的分割 密钥历史的管理理</li>
+<li>交叉认证</li>
+</ul>
+<p><em>本质任务</em>：<strong>绑定用户和公钥</strong> <em>为什么需要PKI</em>：公钥和用户没有天然的绑定关系，所以需要KPI来完成这种绑定。 <em>密钥备份及恢复系统</em>：密钥的备份与恢复<em>只能针对解密密钥</em>，<strong>签名私钥不能备份</strong></p>
+<ul>
+<li>为什么？<em>防⽌发生发送方抵赖，说签名不是⾃己签的，因为PKI也有自⼰的私钥</em></li>
+</ul>
+<p><em>撤销方法</em>：把证书列入证书撤销列表中（CRL）来实现</p>
+<ul>
+<li>到期</li>
+<li>临时
+<ul>
+<li>用户身份改变</li>
+<li>对密钥的怀疑（丢失或泄露）</li>
+<li>用户工作的变动</li>
+<li>认为CA证书已泄露</li>
+</ul></li>
+</ul>
+<p><em>交叉认证</em></p>
+<ul>
+<li>为什么：在以前没有联系的PKI之间建立信任关系，就需要交叉认证。它能够让一个PKI团体的用户验证另一个PKI团体的用户证书，从而实现通信。</li>
+<li>分类
+<ul>
+<li>域内／间交叉认证</li>
+<li>单向／双向</li>
+<li>正／反向交叉验证</li>
+</ul></li>
+<li>验证步骤
+<ol type="1">
+<li>验证真实性（基于证书链机制）。证书是否为可信任的CA认证中心颁发？</li>
+<li>验证有效性。证书是否在有效期之内？</li>
+<li>验证可用性（基于证书撤销机制）。证书是否已废除？</li>
+</ol></li>
+</ul>
+<h2><span id="基于身份加密体制">基于身份加密体制</span></h2>
+<p>为什么会出现？</p>
+<ul>
+<li><strong>CA成为了PKI的性能瓶颈</strong></li>
+<li>公钥和用户没有天然的绑定关系，所以需要KPI来完成这种绑定</li>
+<li>如果不用KPI，那么公钥和用户要有天然的绑定关系</li>
+</ul>
+<p><em>概念</em>：一种能够让用户及其公钥有天然的绑定关系的加密体制 天然的绑定关系？</p>
+<ul>
+<li>属性</li>
+<li>身份</li>
+<li>需要从不同的角度考虑</li>
+</ul>
+<p>算法含义</p>
+<ul>
+<li><em>Setup</em>
+<ul>
+<li>系统初始化算法用于生成系统公开参数和系统秘密参数</li>
+</ul></li>
+<li><em>Extract</em>
+<ul>
+<li>根据系统秘密参数和用户的身份信息（公钥），根据系统秘密参数和用户的身份信息（公钥） 生成用户的私钥</li>
+</ul></li>
+<li><em>Enc</em>
+<ul>
+<li>发送方根据系统公开参数、接收方身份信息 （公钥），加密明文，并生成密文</li>
+</ul></li>
+<li><em>Dec</em>
+<ul>
+<li>接收方用自己的私钥解密收到的密文</li>
+</ul></li>
+</ul>
+<h2><span id="物联网安全">物联网安全</span></h2>
+<p><em>RFID威胁</em></p>
+<ul>
+<li><em>物理攻击</em>
+<ul>
+<li>针对节点本身进行<em>物理上的破坏行为</em>，导致信息泄露、恶意追踪等。</li>
+</ul></li>
+<li><em>信道堵塞</em>
+<ul>
+<li>攻击者长期占据信道导致通信<em>无法传输</em>。</li>
+</ul></li>
+<li><em>伪造攻击</em>
+<ul>
+<li><em>伪造电子标签</em>生成系统认可的“合法用户标签”（实现代价较高）。 </li>
+</ul></li>
+<li><em>假冒攻击</em>
+<ul>
+<li>截获合法用户身份信息后，截获合法用户身份信息后使用该信息<em>假冒合法用户</em>入网。使用该信息假冒合法用户入网 </li>
+</ul></li>
+<li><em>重放攻击</em>
+<ul>
+<li>利用某次合法用户的身份登陆信息或者窃听到的有效信息过一段时间后<em>重发送给接收者</em>，骗取信任，达到攻击的目的。 </li>
+</ul></li>
+<li><em>中间人攻击</em>
+<ul>
+<li>攻击者将窃听到的信息进行<em>修改之后再将信息传给</em>接收者。</li>
+</ul></li>
+</ul>
+<p><em>无线传感网络的威胁</em></p>
+<ul>
+<li><em>网关节点俘获</em>
+<ul>
+<li>控制<em>节点被俘获</em>之后，可能导致通信密钥、广播密钥、配对密钥等全部 泄露，泄露 进而威胁到整个网络的通信安全。进而威胁到<em>整个网络的通信安全</em></li>
+</ul></li>
+<li><em>普通节点俘获</em>
+<ul>
+<li>导致<em>部分通信密钥泄露</em>，对局部网络通信安全造成威胁。 </li>
+</ul></li>
+<li><em>传感信息窃听</em>
+<ul>
+<li>攻击者对通信链路间传输的信息进行窃听，从而分析并得出其中的敏感信息。</li>
+</ul></li>
+<li><em>DoS攻击（拒绝服务攻击）</em>
+<ul>
+<li>网关节点容易受到DoS攻击，耗尽节点资源，使得节点丧失运行能力。</li>
+</ul></li>
+<li><em>虚假路由信息</em>
+<ul>
+<li>通过欺骗，纂改或重发路由信息，攻击者可以创建循环路由，延长或者 屏蔽路径，屏蔽路径，增加端到端延迟，增加端到端延迟从而<em>消耗节点能源</em>。</li>
+</ul></li>
+</ul>
+<p><em>传输层安全威胁</em></p>
+<ul>
+<li>异构网络跨网认证</li>
+<li>异步攻击（传输层的重放攻击等等）</li>
+<li>合谋攻击</li>
+</ul>
+<p><em>传输层相关措施</em></p>
+<ul>
+<li><strong>点到点加密机制</strong>：在路由节点解密后再加密传输：好多密钥</li>
+<li><strong>端到端加密机制</strong>：传输过程始终保持密文传输：单一密钥</li>
+</ul>
+<p><em>应用层安全威胁</em></p>
+<ul>
+<li>在满足数据智能化处理基础之上，<em>加强数据库访问控制策略</em>。 </li>
+<li>加强不同应用场景的<em>认证机制和加密机制</em>。 </li>
+<li>加强<em>数据溯源能力和网络取证能力</em>，完善网络犯罪取证机制。</li>
+</ul>
+<h3><span id="密码学在分布式传感器网络dsn中的应用">密码学在分布式传感器网络（DSN）中的应用</span></h3>
+<p><strong>密钥分发问题</strong></p>
+<ol type="1">
+<li><em>单一密钥</em>
+<ul>
+<li>优点
+<ul>
+<li>存储少</li>
+<li>效率高</li>
+<li>增加／删除新节点容易，不会对现有节点产生问题</li>
+</ul></li>
+<li>缺点
+<ul>
+<li>单一节点被俘获，危害整个系统的安全</li>
+</ul></li>
+</ul></li>
+<li><em>每两个传感器采用不同密钥</em>
+<ul>
+<li>优点
+<ul>
+<li>安全性高</li>
+</ul></li>
+<li>缺点
+<ul>
+<li>每个传感器需要存储N-1个密钥</li>
+<li>增加／删除传感器会对现有传感器产生影响</li>
+</ul></li>
+</ul></li>
+<li><em>折中</em>方法
+<ul>
+<li>分组</li>
+</ul></li>
+</ol>
+<p>安全性 VS 效率</p>
+<ol type="1">
+<li>追求极致的效率而不考虑安全性
+<ul>
+<li>看此问题有没有有效的解决方法-&gt;如果没有，则不必向下探究</li>
+</ul></li>
+<li>追求极致的安全性而不考虑效率的开销
+<ul>
+<li>最大能达到的安全性</li>
+</ul></li>
+<li>平衡安全性和效率
+<ul>
+<li>弱化第二种方案的安全性-&gt;减少步骤</li>
+</ul></li>
+</ol>
+<h3><span id="基于密码学的rfid认证">基于密码学的RFID认证</span></h3>
+<p>安全性需求</p>
+<ul>
+<li><em>保密性</em>：即信息在Tag与Reader之间传输时需要进行保护，例如加密</li>
+<li><em>不可伪造性</em>：攻击者不能够伪装成一个合法的攻击者不能够伪装成个合法的Tag或者Reader</li>
+<li><em>位置隐私</em>：攻击者不能够获知Tag的位置信息， 即不可追踪</li>
+</ul>
+<p><em>Hash-Lock协议（最简单）</em> <img src="/images/物联网安全概论/DraggedImage-43.png"></p>
+<ul>
+<li>实现Tag与Reader的<em>互认证</em>
+<ul>
+<li>第五步，Tag认证读写器</li>
+<li>第六步，读写器认证Tag</li>
+</ul></li>
+<li>优点
+<ul>
+<li>简单</li>
+</ul></li>
+<li>问题：攻击者可以<em>劫持传输的metaID和ID</em>
+<ul>
+<li><strong>伪造RFID标签</strong></li>
+<li><strong>重放攻击</strong>（需要截获并记录以前的通讯）</li>
+</ul></li>
+</ul>
+<p><em>随机化Hash-Lock协议</em> <img src="/images/物联网安全概论/DraggedImage-44.png"></p>
+<ul>
+<li>认证
+<ul>
+<li>第五步，Tag验证读写器</li>
+<li>第四步，读写器验证Tag，因为解出一个正确的标签ID</li>
+</ul></li>
+<li>但Tag标识仍以明文形式传 输，很容易对Tag进行跟踪，且<strong>易受伪造攻击和重传攻击 </strong>
+<ul>
+<li>截获合法的IDk，放到伪造的标签里</li>
+<li>第四步传回所有的ID，通信开销很大，读取器存储开销大</li>
+</ul></li>
+</ul>
+<p><em>Hash链协议</em> <img src="/images/物联网安全概论/DraggedImage-45.png"> <img src="/images/物联网安全概论/DraggedImage-46.png"></p>
+<ul>
+<li><em>单向认证</em>
+<ul>
+<li>读写器认证Tag：第四步，因为解出一个正确的标签ID</li>
+</ul></li>
+<li>合法RFID标签的ID值是动态变化的</li>
+<li>优点
+<ul>
+<li>可防追逐</li>
+<li>可防伪造</li>
+<li>可重传攻击</li>
+</ul></li>
+<li>G、H不能相同
+<ul>
+<li>若相同则a变成下一次的状态信息</li>
+</ul></li>
+</ul>
+<h3><span id="基于pke的rfid认证">基于PKE的RFID认证</span></h3>
+<p><img src="/images/物联网安全概论/DraggedImage-47.png"></p>
+<p><em>方案1</em> <img src="/images/物联网安全概论/DraggedImage-48.png"></p>
+<ul>
+<li>安全性：引入了随机数，因此可以抵抗消息重放攻击</li>
+<li><em>读写器对Tag的单向认证</em>
+<ul>
+<li>因为只有真正的Tag才会有正确的（ID, K）和刚发的随机数 <em>方案2</em> <img src="/images/物联网安全概论/DraggedImage-49.png"></li>
+</ul></li>
+<li>安全性</li>
+<li><em>读写去和Tag的双向认证</em>
+<ul>
+<li>第三步，读写器验证Tag</li>
+<li>第四步，Tag验证读写器</li>
+</ul></li>
+</ul>
+<p>实际应⽤用中缺点：复杂、效率低、成本⾼高</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/本科课程/">本科课程</a><a href="/tags/物联网/">物联网</a><a href="/tags/信息安全/">信息安全</a><a href="/tags/RSA/">RSA</a><a href="/tags/DES/">DES</a><a href="/tags/AES/">AES</a><a href="/tags/PKI/">PKI</a><a href="/tags/HASH/">HASH</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

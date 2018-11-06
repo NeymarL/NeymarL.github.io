@@ -1,0 +1,281 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    Linear Regression with One Variable | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="Linear Regression with One Variable">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      Linear Regression with One Variable</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/01/30/Linear Regression with One Variable/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-01-30T07:27:06.000Z">
+          2016-01-30
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <h2><span id="model-representation">Model Representation</span></h2>
+<p>Recall that in <em>regression problems</em>, we are taking input variables and trying to map the output onto a <em>continuous</em> expected result function.</p>
+<p>Linear regression with one variable is also known as &quot;<strong>univariate linear regression</strong>.&quot;</p>
+<p>Univariate linear regression is used when you want to predict a <strong>single output</strong> value from a <strong>single input</strong> value. We're doing <strong>supervised learning</strong> here, so that means we already have an idea what the input/output cause and effect should be.</p>
+<a id="more"></a>
+<h2><span id="the-hypothesis-function">The Hypothesis Function</span></h2>
+<p>Our hypothesis function has the general form:</p>
+<p><span class="math inline">\(h_θ(x)=θ_0+θ_1x\)</span></p>
+<p>We give to <span class="math inline">\(h_θ\)</span> values for <span class="math inline">\(θ_0\)</span> and <span class="math inline">\(θ_1\)</span> to get our output '<span class="math inline">\(y\)</span>'. In other words, we are trying to create a function called <span class="math inline">\(h_θ\)</span> that is able to reliably map our input data (the x's) to our output data (the y's).</p>
+<p><strong>Example</strong>: | x (input) | y (output)| | :--- | :--- | | 0 | 4 | | 1 | 7 | | 2 | 7| | 3 | 8|</p>
+<p>Now we can make a random guess about our <span class="math inline">\(h_θ\)</span> function: <span class="math inline">\(θ_0=2\)</span> and <span class="math inline">\(θ_1=2\)</span>. The hypothesis function becomes <span class="math inline">\(h_θ(x)=2+2x\)</span>.</p>
+<p>So for input of 1 to our hypothesis, y will be 4. This is off by 3.</p>
+<h2><span id="cost-function">Cost Function</span></h2>
+<p>We can measure the accuracy of our hypothesis function by using a <strong>cost function</strong>. This takes an average (actually a fancier version of an average) of all the results of the hypothesis with inputs from x's compared to the actual output y's.</p>
+<p><span class="math inline">\(J(θ_0,θ_1)=\frac{1}{2m}∑_{i=1}^{m}(h_θ(x_i)−y_i)^2\)</span></p>
+<p>To break it apart, it is <span class="math inline">\(\frac{1}{2}\overline{x}\)</span> where <span class="math inline">\(\overline{x}\)</span> is the mean of the squares of <span class="math inline">\(h_θ(x_i) - y_i\)</span>, or the difference between the predicted value and the actual value.</p>
+<p>This function is otherwise called the &quot;<strong>Squared error function</strong>&quot;, or <strong>Mean squared error</strong>(均方误差). The mean is halved <span class="math inline">\((\frac{1}{2m})\)</span> as a convenience for the computation of the <em>gradient descent</em>(梯度下降), as the derivative(导数) term of the square function will cancel out the <span class="math inline">\(\frac{1}{2}\)</span> term.</p>
+<p>Now we are able to concretely measure the accuracy of our predictor function against the correct results we have so that we can predict new results we don't have.</p>
+<figure>
+<img src="/images/1454124395514.png" alt="Alt text"><figcaption>Alt text</figcaption>
+</figure>
+<h2><span id="gradient-descent">Gradient Descent</span></h2>
+<p>So we have our hypothesis function and we have a way of measuring how accurate it is. Now what we need is a way to automatically improve our hypothesis function. That's where gradient descent comes in.</p>
+<p>Imagine that we graph our hypothesis function based on its fields <span class="math inline">\(θ_0\)</span> and <span class="math inline">\(θ_1\)</span> (actually we are graphing the cost function for the combinations of parameters). This can be kind of confusing; we are moving up to a higher level of abstraction. We are not graphing x and y itself, but the guesses of our hypothesis function.</p>
+<p>We put <span class="math inline">\(θ_0\)</span> on the x axis and <span class="math inline">\(θ_1\)</span> on the z axis, with the cost function on the vertical y axis. The points on our graph will be the result of the <strong>cost function</strong> using our hypothesis with those specific theta parameters.</p>
+<p>We will know that we have succeeded when our cost function is at the very bottom of the pits in our graph, i.e. when its value is the <em>minimum</em>.</p>
+<p>The way we do this is by taking the <strong>derivative</strong> (the line tangent to a function) of our cost function. The slope of the tangent is the derivative at that point and it will give us a direction to move towards. We make steps down that derivative by the parameter <span class="math inline">\(α\)</span>, called the <strong>learning rate</strong>.</p>
+<p>The gradient descent equation is:</p>
+<p><em>repeat until convergence(收敛):</em>{ <span class="math inline">\(θ_j : = θ_j − α \frac{∂}{∂θ_j}J(θ_0,θ_1)\)</span> <code>for j=0 and j=1</code> }</p>
+<p>Intuitively, this could be thought of as:</p>
+<p>repeat until convergence:{ <span class="math inline">\(θ_j : = θ_j − α\)</span>[Slope of tangent aka derivative] }</p>
+<p><strong>Simultaneous update</strong></p>
+<p><span class="math inline">\(temp0 := \theta - \alpha\frac{\partial}{\partial\theta_0}J(\theta_0, \theta_1)\)</span> <span class="math inline">\(temp1 := \theta - \alpha\frac{\partial}{\partial\theta_1}J(\theta_0, \theta_1)\)</span> <span class="math inline">\(\theta_0 := temp0\)</span> <span class="math inline">\(\theta_1 := temp1\)</span></p>
+<p><strong>Learning rate <span class="math inline">\(\alpha\)</span></strong></p>
+<figure>
+<img src="/images/1454134071519.png" alt="Alt text"><figcaption>Alt text</figcaption>
+</figure>
+<h2><span id="gradient-descent-for-linear-regression">Gradient Descent for Linear Regression</span></h2>
+<p>When specifically applied to the case of linear regression, a new form of the gradient descent equation can be derived. We can substitute our actual cost function and our actual hypothesis function and modify the equation to (the derivation of the formulas are out of the scope of this course, but a really great one can be <a href="http://math.stackexchange.com/questions/70728/partial-derivative-in-gradient-descent-for-two-variables/189792#189792" target="_blank" rel="noopener">found here</a>:</p>
+<p><em>repeat until convergence</em>: { <span class="math inline">\(θ_0 : = θ_0 − α\frac{1}{m}∑_{i=1}^{m}(h_θ(x_i)−y_i)\)</span> <span class="math inline">\(θ_1 : = θ_1 − α\frac{1}{m}∑_{i=1}^{m}(h_θ(x_i)−y_i)x_i\)</span> }</p>
+<p>where <span class="math inline">\(m\)</span> is the size of the training set, <span class="math inline">\(θ_0\)</span> a constant that will be changing simultaneously with <span class="math inline">\(θ_1\)</span> and <span class="math inline">\(x_i,y_i\)</span> are values of the given training set.</p>
+<p>Note that we have separated out the two cases for <span class="math inline">\(θ_j\)</span> and that for <span class="math inline">\(θ_1\)</span> we are multiplying <span class="math inline">\(x_i\)</span> at the end due to the derivative.</p>
+<p>The point of all this is that if we start with a guess for our hypothesis and then repeatedly apply these gradient descent equations, our hypothesis will become more and more accurate.</p>
+<p><strong>Batch Gradient Descent</strong></p>
+<p>Batch : Each step of gradient descent uses all the training examples.</p>
+<h2><span id="whats-next">What's Next</span></h2>
+<p>Instead of using linear regression on just one input variable, we'll generalize and expand our concepts so that we can predict data with multiple input variables. Also, we'll solve for <span class="math inline">\(θ_0\)</span> and <span class="math inline">\(θ_1\)</span> exactly without needing an iterative function like gradient descent.</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Linear-Regression/">Linear Regression</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

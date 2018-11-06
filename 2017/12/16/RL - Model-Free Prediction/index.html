@@ -1,0 +1,638 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    RL - Model-Free Prediction | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="RL - Model-Free Prediction">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      RL - Model-Free Prediction</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/12/16/RL - Model-Free Prediction/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-12-16T07:00:09.000Z">
+          2017-12-16
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <h2><span id="introduction">Introduction</span></h2>
+<p>Last lecture, David taught us how to solve a <em>known</em> MDP, which is <em>planning by dynamic programming</em>. In this lecture, we will learn how to estimate the value function of an <strong>unknown</strong> MDP, which is <em>model-free prediction</em>. And in the next lecture, we will <em>optimise</em> the value function of an unknown MDP.</p>
+<a id="more"></a>
+<p>In summary:</p>
+<ul>
+<li>Planning by dynamic programming
+<ul>
+<li>Solve a <em>known MDP</em></li>
+</ul></li>
+<li><strong>Model-Free prediction</strong>
+<ul>
+<li>Estimate the value function of an <em>unknown</em> MDP</li>
+</ul></li>
+<li>Model-Free control
+<ul>
+<li>Optimise the value function of an <em>unknown</em> MDP</li>
+</ul></li>
+</ul>
+<p>We have two major methods to estimate the value function of an unknown MDP:</p>
+<ul>
+<li>Monte-Carlo Learning</li>
+<li>Temporal-Difference Learning</li>
+</ul>
+<p>We will introduce the two methods and combine them to a general method.</p>
+<p><strong>Table of Contents</strong></p>
+<!-- toc -->
+<ul>
+<li><a href="#monte-carlo-learning">Monte-Carlo Learning</a></li>
+<li><a href="#temporal-difference-learning">Temporal-Difference Learning</a>
+<ul>
+<li><a href="#unified-view">Unified View</a></li>
+</ul></li>
+<li><a href="#tdlambda">TD(<span class="math inline">\(\lambda\)</span>)</a>
+<ul>
+<li><a href="#forward-view-tdlambda">Forward View TD(<span class="math inline">\(\lambda\)</span>)</a></li>
+<li><a href="#backward-view-tdlambda">Backward View TD(<span class="math inline">\(\lambda\)</span>)</a></li>
+<li><a href="#relationship-between-forward-and-backward-td">Relationship Between Forward and Backward TD</a></li>
+</ul></li>
+</ul>
+<!-- tocstop -->
+<h2><span id="monte-carlo-learning">Monte-Carlo Learning</span></h2>
+<p>MC (Monte-Carlo) methods learn directly from <strong>episodes of experience</strong>, which means:</p>
+<ul>
+<li>MC is <em>model-free</em>: no knowledge of MDP transitions / rewards</li>
+<li>MC learns from complete episodes: no bootstrapping</li>
+<li>MC uses the simplest possible idea: value = mean return</li>
+<li>Can only apply MC to <em>episodic</em> MDPs: all episodes must terminate</li>
+</ul>
+<p><strong>Goal</strong>: learn <span class="math inline">\(v_\pi\)</span> from episodes of experience under policy <span class="math inline">\(\pi\)</span> <span class="math display">\[
+S_1, A_1, R_2, ..., S_k \sim \pi
+\]</span> Recall that the <strong>return</strong> is the total discounted reward: <span class="math display">\[
+G_t = R_{t+1}+\gamma R_{t+2} + ... + \gamma^{T-1}R_T
+\]</span> Recall that the <strong>value function</strong> is the expected return: <span class="math display">\[
+v_\pi(s) = \mathbb{E}_\pi[G_t|S_t=s]
+\]</span> Monte-Carlo policy evaluation uses <em>empirical mean</em> return instead of <em>expected</em> return.</p>
+<p><strong>First-Visit Monte-Carlo Policy Evaluation</strong></p>
+<p>To evaluate state <span class="math inline">\(s\)</span>, the <strong>first</strong> time-step <span class="math inline">\(t\)</span> that state <span class="math inline">\(s\)</span> is visited in <strong>an episode</strong>:</p>
+<ul>
+<li>Increment counter <span class="math inline">\(N(s) \leftarrow N(s) + 1\)</span></li>
+<li>Increment total return <span class="math inline">\(S(s) \leftarrow S(s) + G_t\)</span></li>
+</ul>
+<p>Value is estimated by mean return <span class="math inline">\(V(s) = S(s) / N(s)\)</span>, by <em>law of large numbers</em>, <span class="math inline">\(V(s) \rightarrow v_\pi(s)\)</span> as <span class="math inline">\(N(s) \rightarrow \infty\)</span>.</p>
+<p><strong>Every-Visit Monte-Carlo Policy Evaluation</strong></p>
+<p>To evaluate state <span class="math inline">\(s\)</span>, <strong>every</strong> time-step <span class="math inline">\(t\)</span> that state <span class="math inline">\(s\)</span> is visited in <strong>an episode</strong>:</p>
+<ul>
+<li>Increment counter <span class="math inline">\(N(s) \leftarrow N(s) + 1\)</span></li>
+<li>Increment total return <span class="math inline">\(S(s) \leftarrow S(s) + G_t\)</span></li>
+</ul>
+<p>Value is estimated by mean return <span class="math inline">\(V(s) = S(s) / N(s)\)</span>. Again, by <em>law of large numbers</em>, <span class="math inline">\(V(s) \rightarrow v_\pi(s)\)</span> as <span class="math inline">\(N(s) \rightarrow \infty\)</span>.</p>
+<p><strong>Blackjack Example</strong></p>
+<p>Please refer to https://www.wikiwand.com/en/Blackjack to learn the rule of <em>Blackjack</em>.</p>
+<p>If we build an RL agent to play blackjack, the <strong>states</strong> would have 3-dimension:</p>
+<ul>
+<li>Current sum (12 - 21)
+<ul>
+<li>We just consider this range because if the current sum is lower than 12, we will always take another card.</li>
+</ul></li>
+<li>Dealer's showing card (ace - 10)</li>
+<li>Do I have a &quot;useable&quot; ace? (yes - no)</li>
+</ul>
+<p>So there would be 200 different states.</p>
+<p>The actions are:</p>
+<ul>
+<li><strong>Stick</strong>: stop receiving cards and terminate</li>
+<li><strong>Twist</strong>: take another card (no replacement)</li>
+</ul>
+<p>And <em>reward</em> for action</p>
+<ul>
+<li><strong>Stick</strong>
+<ul>
+<li><span class="math inline">\(+1\)</span> if sum of cards <span class="math inline">\(&gt;\)</span> sum of dealer cards</li>
+<li><span class="math inline">\(0\)</span> if sum of cards <span class="math inline">\(=\)</span> sum of dealer cards</li>
+<li><span class="math inline">\(-1\)</span> if sum of cards <span class="math inline">\(&lt;\)</span> sum of dealer cards</li>
+</ul></li>
+<li><strong>Twist</strong>
+<ul>
+<li><span class="math inline">\(-1\)</span> if sum of cards <span class="math inline">\(&gt; 21\)</span> and terminate</li>
+<li><span class="math inline">\(0\)</span> otherwise</li>
+</ul></li>
+</ul>
+<p>Transitions: automatically <em>twist</em> if sum of cards &lt; 12.</p>
+<p>Policy: <strong>stick</strong> if sum of cards <span class="math inline">\(≥ 20\)</span>, otherwise <strong>twist</strong>.</p>
+<p><img src="/images/backjack.png"></p>
+<p>In the above diagrams, the height represents the value function of that point. Since it's a simple policy, the value funtion achieves high value only if player sum is higher than 20.</p>
+<p><strong>Incremental Mean</strong></p>
+<p>The mean <span class="math inline">\(\mu_1, \mu_2, …\)</span> of a sequence <span class="math inline">\(x_1, x_2, …\)</span> can be computed incrementally, <span class="math display">\[
+\begin{align}
+\mu_k &amp; = \frac{1}{k}\sum^k_{j=1}x_j \\
+&amp; = \frac{1}{k}(x_k+\sum^{k-1}_{j=1}x_j) \\
+&amp;= \frac{1}{k}(x_k+(k-1)\mu_{k-1}) \\
+&amp;= \mu_{k-1}+\frac{1}{k}(x_k-\mu_{k-1}) \\
+\end{align}
+\]</span> which means the current mean equals to previous mean plus some error. The error is <span class="math inline">\(x_k - \mu_{k-1}\)</span> and the step-size is <span class="math inline">\(\frac{1}{k}\)</span>, which is dynamic.</p>
+<p><strong>Incremental Monte-Carlo Updates</strong></p>
+<p>Update <span class="math inline">\(V(s)\)</span> incrementally after episode <span class="math inline">\(S_1, A_1, R_2, …, S_T\)</span>, for each state <span class="math inline">\(S_t\)</span> with return <span class="math inline">\(G_t\)</span>, <span class="math display">\[
+N(S_t) \leftarrow N(S_t) + 1
+\]</span></p>
+<p><span class="math display">\[
+V(S_t)\leftarrow V(S_t)+\frac{1}{N(S_t)}(G_t-V(S_t))
+\]</span></p>
+<p>In non-stationary problems, it can be useful to track a running mean, i.e. forget old episodes, <span class="math display">\[
+V(S_t)\leftarrow V(S_t) + \alpha(G_t-V(S_t))
+\]</span> So, that's the part for Monte-Carlo learning. It's a very simple idea: you run out an episode, look the complete return and update the mean value of the sample return for each state you have visited.</p>
+<h2><span id="temporal-difference-learning">Temporal-Difference Learning</span></h2>
+<p>Temporal-Difference (TD) methods learn directly from episodes of experiences, which means</p>
+<ul>
+<li>TD is <em>model-free</em>: no knowledge of MDP transitions / rewards</li>
+<li>TD learns from <strong>incomplete</strong> episodes, by <em>bootstrapping</em>. (A major difference from MC method)</li>
+<li>TD updates a guess towards a guess.</li>
+</ul>
+<p>Goal: learn <span class="math inline">\(v_\pi\)</span> online from experience under policy <span class="math inline">\(\pi\)</span>.</p>
+<p><em>Incremental every-visit Monte-Carlo</em></p>
+<ul>
+<li>Update value <span class="math inline">\(V(S_t)\)</span> toward actual return <span class="math inline">\(\color{Red}{G_t}\)</span> <span class="math display">\[
+V(S_t)\leftarrow V(S_t)+\alpha (\color{Red}{G_t}-V(S_t))
+\]</span></li>
+</ul>
+<p>Simplest temporal-difference learning algorithm: <strong>TD(0)</strong></p>
+<ul>
+<li><p>Update value <span class="math inline">\(V(S_t)\)</span> towards <em>estimated</em> return <span class="math inline">\({\color{Red}{R_{t+1}+\gamma V(S_{t+1})}}\)</span> <span class="math display">\[
+V(S_t)\leftarrow V(S_t)+ \alpha ({\color{Red}{R_{t+1}+\gamma V(S_{t+1})}}-V(S_t))
+\]</span></p></li>
+<li><p><span class="math inline">\(R_{t+1}+\gamma V(S_{t+1})​\)</span> is called the <em>TD target</em>;</p></li>
+<li><p><span class="math inline">\(\delta = R_{t+1}+\gamma V(S_{t+1})-V(S_t)\)</span> is called the <em>TD error</em>.</p></li>
+</ul>
+<p>Let's see a concret <strong>driving home example</strong>.</p>
+<p><img src="/images/dheg.png"></p>
+<p>The <em>Elapsed Time</em> shows the actual time that has spent, the <em>Predicted Time to Go</em> represents the predicted time to arrive home from current state, and the <em>Predicted Total Time</em> means the predicted time to arrive home from leaving office.</p>
+<p><strong>Advantages and Disadvantages of MC vs. TD</strong></p>
+<p>TD can learn <em>before</em> knowing the final outcome</p>
+<ul>
+<li>TD can learn online after every step</li>
+<li>MC must wait until end of episode before return is known</li>
+</ul>
+<p>TD can learn <em>without</em> the final outcome</p>
+<ul>
+<li>TD can learn from incomplete sequences</li>
+<li>MC can only learn from complete sequences</li>
+<li>TD works in continuing (non-terminating) environments</li>
+<li>MC only works for episodic (terminating) environments</li>
+</ul>
+<p>MC has high variance, zero bias</p>
+<ul>
+<li>Good convergence properties (even with function approximation)</li>
+<li>Not very sensitive to initial value</li>
+<li>Very simple to understand and use</li>
+</ul>
+<p>TD has low variance, some bias</p>
+<ul>
+<li>Usually more efficient than MC</li>
+<li>TD(0) converges to <span class="math inline">\(v_\pi(s)\)</span> (but not always with function approximation)</li>
+<li>More sensitive to initial value</li>
+</ul>
+<p><strong>Bias/Variance Trade-Off</strong></p>
+<p>Return <span class="math inline">\(G_t = R_{t+1} + \gamma R_{t+2}+…+\gamma^{T-1}R_T\)</span> is <strong>unbiased</strong> estimate of <span class="math inline">\(v_\pi(S_t)\)</span>.</p>
+<p>True TD target <span class="math inline">\(R_{t+1}+\gamma v_\pi(S_{t+1})\)</span> is <strong>unbiased</strong> estimate of <span class="math inline">\(v_\pi(S_t)\)</span></p>
+<blockquote>
+<p>Explanation of bias and variance:</p>
+<ul>
+<li>The <a href="https://www.wikiwand.com/en/Bias_of_an_estimator" target="_blank" rel="noopener">bias of an estimator</a> is the difference between an estimator's expected value and the true value of the parameter being estimated.</li>
+<li>A <strong>variance</strong> value of zero indicates that all values within a set of numbers are identical; all variances that are non-zero will be positive numbers. A large variance indicates that numbers in the set are far from the mean and each other, while a small variance indicates the opposite. Read more: <a href="https://www.investopedia.com/terms/v/variance.asp#ixzz51J8RTueh" target="_blank" rel="noopener">Variance</a></li>
+</ul>
+</blockquote>
+<p>While TD target <span class="math inline">\(R_{t+1}+\gamma V(S_{t+1})\)</span> is <strong>biased</strong> estimate of <span class="math inline">\(v_\pi(S_t)\)</span>.</p>
+<p>However, TD target is much lower <em>variance</em> than the return, since</p>
+<ul>
+<li>Return depends on <em>many</em> random actions, transitions, rewards</li>
+<li>TD target depends on <em>one</em> random actions, transition, reward</li>
+</ul>
+<p><strong>Random Walk Example</strong></p>
+<p><img src="/images/rweg.png"></p>
+<p>There are several states on a street, the black rectangles are terminate states. Each transition has 0.5 probability and the reward is marked on the line. The question is what is the value function of each state?</p>
+<p>Using <em>TD</em> to solve the problem:</p>
+<p><img src="/images/rwtd.png"></p>
+<p>The x-axis represents each state, y-axis represent the estimated value. Each line represents the result of TD algorithm that run different episodes. We can see, at the begining, all states have initial value <span class="math inline">\(0.5\)</span>. After 100 episodes, the line converges to diagonal, which is the true values.</p>
+<p>Using <em>MC</em> to solve the problem:</p>
+<p><img src="/images/rwmc.png"></p>
+<p>The x-axis represents the number of episodes that algorithm takes. The y-axis shows the error of the algorithm. The black lines shows using MC methods with different step-size, while the grey lines below represents using TD methods with different step-size. We can see TD methods are more efficient than MC methods.</p>
+<p><strong>Batch MC and TD</strong></p>
+<p>We know that MC and TD converge: <span class="math inline">\(V(s) \rightarrow v_\pi(s)\)</span> as experience <span class="math inline">\(\rightarrow \infty\)</span>. But what about batch solution for finite experience? If we <strong>repeatly</strong> train some <em>finite</em> sample episodes with MC and TD respectively, do the two algorithms give <strong>same</strong> result?</p>
+<p><em>AB Example</em></p>
+<p>To get more intuition, let's see the <em>AB</em> example.</p>
+<p>There are two states in a MDP, <span class="math inline">\(A, B\)</span> with no discounting. And we have 8 episodes of experience:</p>
+<ul>
+<li>A, 0, B, 0</li>
+<li>B, 1</li>
+<li>B, 1</li>
+<li>B, 1</li>
+<li>B, 1</li>
+<li>B, 1</li>
+<li>B, 1</li>
+<li>B, 0</li>
+</ul>
+<p>For example, the first episode means we in state <span class="math inline">\(A\)</span> and get <span class="math inline">\(0\)</span> reward, then transit to state <span class="math inline">\(B\)</span> getting <span class="math inline">\(0\)</span> reward, and then terminate.</p>
+<p>So, What is <span class="math inline">\(V(A), V(B)\)</span> ?</p>
+<p>First, let's consider <span class="math inline">\(V(B)\)</span>. <span class="math inline">\(B\)</span> state shows 8 times and 6 of them get reward <span class="math inline">\(1\)</span>, 2 of them get reward <span class="math inline">\(0\)</span>. So <span class="math inline">\(V(B) = \frac{6}{8} = 0.75\)</span> according to TD and MC.</p>
+<p>However, if we consider <span class="math inline">\(V(A)\)</span>, MC method will give <span class="math inline">\(V(A) = 0\)</span>, since <span class="math inline">\(A\)</span> just shows in one episode and the reward of that episode is <span class="math inline">\(0\)</span>. TD method will give <span class="math inline">\(V(A) = 0 + V(B) = 0.75\)</span>.</p>
+<p>The MDP of these experiences can be illustrated as</p>
+<p><img src="/images/abmdp.png"></p>
+<p><strong>Certainty Equivalence</strong></p>
+<p>As we show above,</p>
+<ul>
+<li><p><strong>MC</strong> converges to solution with <strong>minimum mean-squared error</strong></p>
+<ul>
+<li><p>Best fit to the <strong>observed returns</strong> <span class="math display">\[
+\sum^K_{k=1}\sum^{T_k}_{t=1}(G^k_t-V(s^k_t))^2
+\]</span></p></li>
+<li><p>In the AB example, <span class="math inline">\(V(A) = 0\)</span></p></li>
+</ul></li>
+<li><p><strong>TD(0)</strong> converges to solution of <strong>max likelihood Markov model</strong></p>
+<ul>
+<li><p>Solution to the <strong>MDP <span class="math inline">\(&lt;\mathcal{S, A, P, R, }\gamma&gt;\)</span> that best fits the data</strong></p>
+<p><img src="/images/cemath.png"></p>
+<p>(First, count the transitions. Then compute rewards.)</p></li>
+<li><p>In the AB example, <span class="math inline">\(V(A) = 0.75\)</span></p></li>
+</ul></li>
+</ul>
+<p><strong>Advantages and Disadvantages of MC vs. TD (2)</strong></p>
+<ul>
+<li>TD exploits <strong>Markov property</strong>
+<ul>
+<li>Usually more efficient in Markov environments</li>
+</ul></li>
+<li>MC does <strong>not</strong> exploit Markov property
+<ul>
+<li>Usually more effective in non-Markov environments</li>
+</ul></li>
+</ul>
+<h3><span id="unified-view">Unified View</span></h3>
+<p><strong>Monte-Carlo Backup</strong></p>
+<p><img src="/images/mcbackup.png"></p>
+<p>We start from <span class="math inline">\(S_t\)</span> to look-ahead and build a look-ahead tree. What Monte-Carlo do is to sample a episode until it terminates and use the episode to update the value of state <span class="math inline">\(S_t\)</span>.</p>
+<p><strong>Temporal-Difference Backup</strong></p>
+<p><img src="/images/tdbackup.png"></p>
+<p>On the contrary, TD backup just sample one-step ahead and use the value of <span class="math inline">\(S_{t+1}\)</span> to update <span class="math inline">\(S_t\)</span>.</p>
+<p><strong>Dynamic Programming Backup</strong></p>
+<p><img src="/images/dpbackup.png"></p>
+<p>In dynamic programming backup, we do not sample. Since we know the environment, we look all possible one-step ahead and weighted them to update the value of <span class="math inline">\(S_t\)</span>.</p>
+<p><strong>Bootstrapping and Sampling</strong></p>
+<ul>
+<li><strong>Bootstrapping</strong>: update involves an estimate
+<ul>
+<li>MC does not bootstrap</li>
+<li>DP bootstraps</li>
+<li>TD bootstraps</li>
+</ul></li>
+<li><strong>Sampling</strong>: update samples an expectation
+<ul>
+<li>MC samples</li>
+<li>DP does not sample</li>
+<li>TD samples</li>
+</ul></li>
+</ul>
+<p><strong>Unified View of Reinforcement Learning</strong></p>
+<p><img src="/images/uvrl.png"></p>
+<h2><span id="tdlambda">TD(<span class="math inline">\(\lambda\)</span>)</span></h2>
+<p>Let TD target look <span class="math inline">\(n\)</span> steps into the future,</p>
+<figure>
+<img src="/images/tdlam.png" alt="ds"><figcaption>ds</figcaption>
+</figure>
+<p>Consider the following <span class="math inline">\(n\)</span>-step returns for <span class="math inline">\(n = 1, 2, …, \infty\)</span>:</p>
+<p><img src="/images/tdlamret.png"></p>
+<p>Define the <span class="math inline">\(n\)</span>-step return <span class="math display">\[
+G_t^{(n)} = R_{t+1}+\gamma R_{t+2}+...+\gamma^{n-1}R_{t+n}+\gamma^n V(S_{t+n})
+\]</span> <span class="math inline">\(n\)</span>-step temporal-difference learning: <span class="math display">\[
+V(S_t)\leftarrow V(S_t)+\alpha (G_t^{(n)}-V(S_t))
+\]</span> We know that <span class="math inline">\(n \in [1, \infty)\)</span>, but which <span class="math inline">\(n\)</span> is the best?</p>
+<p>There are some experiments about that:</p>
+<p><img src="/images/rmn.png"></p>
+<p>So, you can see that the optimal <span class="math inline">\(n\)</span> changes with on-line learning and off-line leanring. If the MDP changes, the best <span class="math inline">\(n\)</span> also changes. Is there a robust algorithm to fit any different situation?</p>
+<h3><span id="forward-view-tdlambda">Forward View TD(<span class="math inline">\(\lambda\)</span>)</span></h3>
+<p><strong>Averaging n-step Returns</strong></p>
+<p>We can average n-step returns over different <span class="math inline">\(n\)</span>, e.g. average the 2-step and 4-step returns: <span class="math display">\[
+\frac{1}{2}G^{(2)}+\frac{1}{2}G^{(4)}
+\]</span> But can we efficiently combine information from all time-steps?</p>
+<p>The answer is yes.</p>
+<p><strong><span class="math inline">\(\lambda\)</span>-return</strong></p>
+<p><img src="/images/tdlambda.png"></p>
+<p>The <span class="math inline">\(\lambda\)</span>-return <span class="math inline">\(G_t^{\lambda}\)</span> combines all n-step returns <span class="math inline">\(G_t^{(n)}\)</span> using weight <span class="math inline">\((1-\lambda)\lambda^{n-1}\)</span>: <span class="math display">\[
+G_t^\lambda = (1-\lambda)\sum^\infty_{n=1}\lambda^{n-1}G_t^{(n)}
+\]</span> <strong>Forward-view</strong> <span class="math inline">\(TD(\lambda)\)</span>, <span class="math display">\[
+V(S_t) \leftarrow V(S_t) + \alpha (G_t^\lambda-V(S_t))
+\]</span> <img src="/images/tdgeo.png"></p>
+<p>We can see the weight decay geometrically and the weights sum to 1.</p>
+<p>The reason we use geometrical decay rather than other weight because it's efficient to compute, we can compute TD(<span class="math inline">\(\lambda\)</span>) as efficient as TD(0).</p>
+<p><img src="/images/forwardtd.png"></p>
+<p><strong>Forward-view</strong> <span class="math inline">\(TD(\lambda)\)</span></p>
+<ul>
+<li>Updates value function towards the <span class="math inline">\(\lambda\)</span>-return</li>
+<li>Looks into the future to compute <span class="math inline">\(G_t^\lambda\)</span></li>
+<li>Like MC, can only be computed from <strong>complete episodes</strong></li>
+</ul>
+<p><img src="/images/fortdlam.png"></p>
+<h3><span id="backward-view-tdlambda">Backward View TD(<span class="math inline">\(\lambda\)</span>)</span></h3>
+<p><strong>Eligibility Traces</strong></p>
+<p><img src="/images/bellexe.png"></p>
+<p>Recall the <a href="https://www.52coding.com.cn/index.php?/Articles/single/69#header-n50">rat example</a> in lecture 1, credit assignment problem: did bell or light cause shock?</p>
+<ul>
+<li><strong>Frequency heuristic</strong>: assign credit to most frequent states</li>
+<li><strong>Recency heuristic</strong>: assign credit to most recent states</li>
+</ul>
+<p><em>Eligibility traces</em> combine both heuristics.</p>
+<p><img src="/images/egt.png"></p>
+<p>If visit state <span class="math inline">\(s\)</span>, <span class="math inline">\(E_t(s)\)</span> plus <span class="math inline">\(1\)</span>; otherwise <span class="math inline">\(E_t(s)\)</span> decay exponentially.</p>
+<p><strong>Backward View TD(<span class="math inline">\(\lambda\)</span>)</strong></p>
+<ul>
+<li>Keep an eligibility trace for every state <span class="math inline">\(s\)</span></li>
+<li>Update value <span class="math inline">\(V(s)\)</span> for every state <span class="math inline">\(s\)</span> in proportion to TD-error <span class="math inline">\(\delta_t\)</span> and eligibility trace <span class="math inline">\(E_t(s)\)</span></li>
+</ul>
+<p><span class="math display">\[
+\delta_t=R_{t+1}+\gamma V(S_{t+1})-V(S_t)
+\]</span></p>
+<p><span class="math display">\[
+V(s)\leftarrow V(s)+\alpha \delta_tE_t(s)
+\]</span></p>
+<p><img src="/images/bvtdlam.png"></p>
+<p>When <span class="math inline">\(\lambda = 0\)</span>, only current state is updated, which is exactly equivalent to TD(0) update: <span class="math display">\[
+E_t(s) = 1(S_t = s)
+\]</span></p>
+<p><span class="math display">\[
+V(s)\leftarrow V(s)+\alpha\delta_tE_t(s) = V(S_t)+\alpha\delta_t
+\]</span></p>
+<p>When <span class="math inline">\(\lambda = 1\)</span>, credit is deferred until end of episode, total update for TD(1) is the same as total update for MC.</p>
+<h3><span id="relationship-between-forward-and-backward-td">Relationship Between Forward and Backward TD</span></h3>
+<blockquote>
+<p><strong>Theorem</strong></p>
+<p>The sum of offline updates is identical for forward-view and backward-view TD(<span class="math inline">\(\lambda\)</span>) <span class="math display">\[
+\sum^T_{t=1}\alpha\delta_tE_t(s)=\sum^T_{t=1}\alpha(G_t^\lambda-V(S_t))1(S_t=s)
+\]</span></p>
+</blockquote>
+<p><strong>MC and TD(1)</strong></p>
+<p>Consider an episode where <span class="math inline">\(s\)</span> is visited once at time-step <span class="math inline">\(k\)</span>, TD(1) eligiblity trace discounts time since visit, <span class="math display">\[
+E_t(s) = \gamma E_{t-1}(s)+1(S_t = s) = 
+\begin{cases} 
+0,  &amp; \mbox{if }t&lt;k \\
+\gamma^{t-k}, &amp; \mbox{if }t≥k
+\end{cases}
+\]</span> TD(1) updates accumulate error <em>online</em> <span class="math display">\[
+\sum^{T-1}_{t=1}\alpha\delta_tE_t(s)=\alpha\sum^{T-1}_{t=k}\gamma^{t-k}\delta_t
+\]</span> By end of episode it accumulates total error <span class="math display">\[
+\begin{align}
+\mbox{TD(1) Error}&amp;= \delta_k+\gamma\delta_{k+1}+\gamma^2\delta_{k+2}+...+\gamma^{T-1-k}\delta_{T-1} \\
+&amp; = R_{t+1}+\gamma V(S_{t+1}) -V(S_t) \\
+&amp;+ \gamma R_{t+2}+\gamma^2V(S_{t+2}) - \gamma V(S_{t+1})\\
+&amp;+ \gamma^2 R_{t+3}+\gamma^3V(S_{t+3}) - \gamma^2 V(S_{t+2})\\
+&amp;+\ ... \\
+&amp;+ \gamma^{T-1-t}R_T+\gamma^{T-t}V(S_T)-\gamma^{T-1-t}V(S_{T-1})\\
+&amp;= R_{t+1}+\gamma R_{t+2}+\gamma^2 R_{t+3} ... + \gamma^{T-1-t}R_T-V(S_t)\\
+&amp;= G_t-V(S_t)\\
+&amp;= \mbox{MC Error}
+\end{align}
+\]</span> TD(1) is roughly equivalent to every-visit Monte-Carlo, error is accumulated online, step-by-step.</p>
+<p>If value function is only updated offline at end of episode, then total update is exactly the same as MC.</p>
+<p><strong>Forward and Backward Equivalence</strong></p>
+<p>For general <span class="math inline">\(\lambda\)</span>, TD errors also telescope to <span class="math inline">\(\lambda\)</span>-error, <span class="math inline">\(G_t^\lambda-V(S_t)\)</span></p>
+<p><img src="/images/teltdlam.png"></p>
+<p>Consider an episode where <span class="math inline">\(s\)</span> is visited once at time-step <span class="math inline">\(k\)</span>, TD(<span class="math inline">\(\lambda\)</span>) eligibility trace discounts time since visit, <span class="math display">\[
+E_t(s) = \gamma\lambda E_{t-1}(s)+1(S_t = s) = 
+\begin{cases} 
+0,  &amp; \mbox{if }t&lt;k \\
+(\gamma\lambda)^{t-k}, &amp; \mbox{if }t≥k
+\end{cases}
+\]</span> Backward TD(<span class="math inline">\(\lambda\)</span>) updates accumulate error <em>online</em> <span class="math display">\[
+\sum^{T-1}_{t=1}\alpha\delta_tE_t(s)=\alpha\sum^{T-1}_{t=k}(\gamma\lambda)^{t-k}\delta_t = \alpha(G_k^\lambda-V(S_k))
+\]</span> By end of episode it accumulates total error for <span class="math inline">\(\lambda\)</span>-return.</p>
+<p>For multiple visits to <span class="math inline">\(s\)</span>, <span class="math inline">\(E_t(s)\)</span> accumulates many errors.</p>
+<p><strong>Offline</strong> Updates</p>
+<ul>
+<li>Updates are accumulated within episode but applied in batch at the end of episode</li>
+</ul>
+<p><strong>Online</strong> Updates</p>
+<ul>
+<li>TD(<span class="math inline">\(\lambda\)</span>) updates are applied online at each step within episode, forward and backward view TD(<span class="math inline">\(\lambda\)</span>) are slightly different.</li>
+</ul>
+<p>In summary,</p>
+<p><img src="/images/tdsum.png"></p>
+<ul>
+<li>Forward view provides <strong>theory</strong></li>
+<li>Backward view provids <strong>mechanism</strong>
+<ul>
+<li>update online, every step, from incomplete sequences</li>
+</ul></li>
+</ul>
+<p>This lecture just talks about how to evaluate a policy given an unknown MDP. Next lecture will introduce Model-free Control.</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Reinforcement-Learning/">Reinforcement Learning</a><a href="/tags/增强学习/">增强学习</a><a href="/tags/Model-Free/">Model-Free</a><a href="/tags/Monte-Carlo-Learning/">Monte-Carlo Learning</a><a href="/tags/TD/">TD</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

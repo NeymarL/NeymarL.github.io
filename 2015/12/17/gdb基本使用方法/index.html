@@ -1,0 +1,294 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    gdb基本使用方法 | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="gdb基本使用方法">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      gdb基本使用方法</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2015/12/17/gdb基本使用方法/" rel="bookmark">
+        <time class="entry-date published" datetime="2015-12-17T07:25:40.000Z">
+          2015-12-17
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>一个除错程序执行的流程通常是这样的：</p>
+<ol type="1">
+<li>进入除错程序并指定可执行文件。</li>
+<li>指定程序代码所在目录。</li>
+<li>设定断点后执行程序。</li>
+<li>程序于断点中断后，可以 1. 检视程序执行状态；检视变量值或变更变量值 2. 逐步执行程序，或是全速执行程序到下一个断点或是到程序结束为止。</li>
+<li>离开除错程序。</li>
+</ol>
+<a id="more"></a>
+<h3><span id="进入-gdb-及指定可执行档">进入 GDB 及指定可执行档：</span></h3>
+<p>进入 GDB 并读入可执行档 (档名为 <code>PROGRAM</code>)，准备进行除错。 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gdb PROGRAM</span><br></pre></td></tr></table></figure></p>
+<h3><span id="指定程序代码所在目录及检视程序代码">指定程序代码所在目录及检视程序代码</span></h3>
+<p>增加目录<code>DIR</code>到收寻程序代码的目录列表 (如果你的程序代码和可执行档放在同一个目录下，就不须指定程序代码所在目录。)： <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(gdb) directory DIR</span><br></pre></td></tr></table></figure></p>
+<h4><span id="检视程序代码格式计有">检视程序代码，格式计有：</span></h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(gdb) list // 显示目前执行程序代码前后各五行的程序代码；或是显示从上次 list 之后的程序代码</span><br><span class="line">(gdb) list function // 显示该程序开始处前后五行的程序代码。</span><br><span class="line">(gdb) list - //上次显示程序代码的前面的十行。</span><br></pre></td></tr></table></figure>
+<h3><span id="断点的设定与清除">断点的设定与清除</span></h3>
+<h4><span id="设定断点指令为-break可简写为-b格式计有">设定断点(指令为 <code>break</code>，可简写为 (<code>b</code>)，格式计有：</span></h4>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(gdb) <span class="keyword">break</span> filename.c:<span class="number">30</span> <span class="comment">// 在 filename.c 的第三十行处停止执行。</span></span><br><span class="line">(gdb) <span class="keyword">break</span> function <span class="comment">// 在进入 function 时中断程序的执行。</span></span><br><span class="line">(gdb) <span class="keyword">break</span> filename.c:function <span class="comment">// 在程序代码档 filename.c 中的函数 function 处设定断点。</span></span><br><span class="line">(gdb) <span class="keyword">break</span> <span class="comment">// 在下一个将被执行的命令设定断点。</span></span><br><span class="line">(gdb) <span class="keyword">break</span> ... <span class="keyword">if</span> cond <span class="comment">// 只有当 cond 成立的时候才中断。cond 须以 C 语言的语法写成。</span></span><br></pre></td></tr></table></figure>
+<h4><span id="显示各个断点的信息">显示各个断点的信息。</span></h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(gdb) info break</span><br></pre></td></tr></table></figure>
+<h4><span id="清除断点命令为-clear格式同-break-例如">清除断点(命令为 <code>clear</code>)，格式同 <code>break</code> 。例如 :</span></h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(gdb) clear filename.c:30</span><br></pre></td></tr></table></figure>
+<h4><span id="清除断点num-是在-info-break-显示出来的断点编号">清除断点，<code>NUM</code> 是在 <code>info break</code> 显示出来的断点编号</span></h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(gdb) delete NUM</span><br></pre></td></tr></table></figure>
+<h3><span id="全速及逐步执行程序">全速及逐步执行程序</span></h3>
+<h5><span id="从程序开头全速执行程序直到遇到断点或是程序执行完毕为止">从程序开头全速执行程序，直到遇到断点或是程序执行完毕为止</span></h5>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(gdb) run</span><br></pre></td></tr></table></figure>
+<h5><span id="在程序被中断后全速执行程序到下一个断点或是程序结束为止-continue-指令可简写为-c">在程序被中断后，全速执行程序到下一个断点或是程序结束为止 (<code>continue</code> 指令可简写为 <code>c</code>)</span></h5>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(gdb) continue</span><br></pre></td></tr></table></figure>
+<h5><span id="执行一行程序-若呼叫函数-则将该包含该函数程序代码视为一行程序-next-指令可简写为-n">执行一行程序. 若呼叫函数, 则将该包含该函数程序代码视为一行程序 (<code>next</code> 指令可简写为 <code>n</code>)</span></h5>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(gdb) next</span><br></pre></td></tr></table></figure>
+<h5><span id="执行一行程序-若呼叫函数-则进入函数逐行执行-step-指令可简写为-s">执行一行程序. 若呼叫函数, 则进入函数逐行执行 (<code>step</code> 指令可简写为 <code>s</code>)</span></h5>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(gdb) step</span><br></pre></td></tr></table></figure>
+<h5><span id="执行一行程序若此时程序是在-forwhiledo-loop-循环的最后一行则一直执行到循环结束后的第一行程序后停止-until-指令可简写为-u">执行一行程序，若此时程序是在 <code>for/while/do loop</code> 循环的最后一行，则一直执行到循环结束后的第一行程序后停止 (<code>until</code> 指令可简写为 <code>u</code>)</span></h5>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(gdb) until</span><br></pre></td></tr></table></figure>
+<h4><span id="执行现行程序到回到上一层程序为止">执行现行程序到回到上一层程序为止。</span></h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(gdb) finish</span><br></pre></td></tr></table></figure>
+<h3><span id="检视及更改变量值">检视及更改变量值</span></h3>
+<h5><span id="print-叙述显示该叙述执行的结果-print-指令可简写为-p如"><code>print</code> 叙述，显示该叙述执行的结果 (<code>print</code> 指令可简写为 <code>p</code>).如</span></h5>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(gdb) print a <span class="comment">// 显示 a 变量的内容.</span></span><br><span class="line">(gdb) <span class="function">print <span class="title">sizeof</span><span class="params">(a)</span> <span class="comment">// 显示 a 变量的长度.</span></span></span><br></pre></td></tr></table></figure>
+<h5><span id="display-叙述在每个断点或是每执行一步时显示该叙述值-如"><code>display</code> 叙述，在每个断点或是每执行一步时显示该叙述值。如</span></h5>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(gdb) display a</span><br></pre></td></tr></table></figure>
+<h5><span id="更改变量值">更改变量值：</span></h5>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(gdb) print (a=<span class="number">10</span>) <span class="comment">// 将变量 a 的值设定为 10.</span></span><br></pre></td></tr></table></figure>
+<h3><span id="检视程序执行状态">检视程序执行状态</span></h3>
+<h4><span id="查看程序执行到此时是经过哪些函数呼叫的程序-backtrace-指令可简写为-bt也就是查看函数呼叫堆栈">查看程序执行到此时，是经过哪些函数呼叫的程序 (<code>backtrace</code> 指令可简写为 <code>bt</code>)，也就是查看函数呼叫堆栈。</span></h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(gdb) backtrace</span><br></pre></td></tr></table></figure>
+<h3><span id="读取-core-文件信息">读取 Core 文件信息</span></h3>
+<h5><span id="读入-program-及-programcore-档可检视-core-dump-时程序变量值及程序流程状态">读入 <code>PROGRAM</code> 及 <code>PROGRAM.CORE</code> 档，可检视 Core Dump 时程序变量值及程序流程状态 。</span></h5>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gdb PROGRAM core</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>说明：<code>core</code> 档案是由 <code>PROGRAM</code> 档执行后，遇到 Core Dump 时产生的 Core 檔檔名。如果你还需要该 Core 档，我们建议你将该档案档名更改为 <code>PROGRAM.core</code>。在输入上述命令后，你可以用 GDB 提供的检视变量值以及检视程序执行状态来读取程序 Core Dump 时的状态。</p>
+</blockquote>
+<h3><span id="查看汇编代码-寄存器-内存等">查看汇编代码、寄存器、内存等</span></h3>
+<p><strong>查看汇编代码</strong></p>
+<p>查看从当前位置往后10行的代码 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x /10i $pc</span><br></pre></td></tr></table></figure></p>
+<p><strong>查看寄存器的值</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">info register</span><br><span class="line">info all-registers</span><br><span class="line">info registers &lt;regname ...&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>查看内存的值</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x /10x *&lt;addr&gt;</span><br><span class="line">x /10x $esp</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/GDB/">GDB</a><a href="/tags/Debug/">Debug</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

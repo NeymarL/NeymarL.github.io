@@ -1,0 +1,320 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    Wireshark 抓包指南 | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="Wireshark 抓包指南">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      Wireshark 抓包指南</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/01/02/Wireshark 抓包指南/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-01-02T11:42:06.000Z">
+          2016-01-02
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <!-- toc -->
+<ul>
+<li><a href="#wireshark-介绍">Wireshark 介绍</a></li>
+<li><a href="#wireshark-开始抓包">Wireshark 开始抓包</a></li>
+<li><a href="#wireshark-窗口介绍">Wireshark 窗口介绍</a></li>
+<li><a href="#wireshark-过滤器">Wireshark 过滤器</a>
+<ul>
+<li><a href="#捕捉过滤器">捕捉过滤器</a></li>
+<li><a href="#显示过滤器">显示过滤器</a></li>
+</ul></li>
+<li><a href="#封包列表">封包列表</a></li>
+<li><a href="#tcp-包解析">TCP 包解析</a></li>
+<li><a href="#tcp-三路握手分析">TCP 三路握手分析</a></li>
+<li><a href="#参考">参考</a></li>
+</ul>
+<!-- tocstop -->
+<a id="more"></a>
+<h2><span id="wireshark-介绍">Wireshark 介绍</span></h2>
+<p>Wireshark是非常流行的网络封包分析软件，功能十分强大。可以截取各种网络封包，显示网络封包的详细信息。 <a href="http://www.wireshark.org/" target="_blank" rel="noopener">官方下载地址</a></p>
+<h2><span id="wireshark-开始抓包">Wireshark 开始抓包</span></h2>
+<p>ps：在Linux上运行Wireshark抓包可能会遇到权限问题，<a href="https://wiki.wireshark.org/CaptureSetup" target="_blank" rel="noopener">解决方案可以参考这里</a></p>
+<p>开始界面： <img src="/images/1451724415086.png"></p>
+<p>选择你正在用的网卡，然后点菜单中的鲨鱼图标就可以进行抓包了！</p>
+<h2><span id="wireshark-窗口介绍">Wireshark 窗口介绍</span></h2>
+<p><img src="/images/1451724570752.png"></p>
+<p>WireShark 主要分为这几个界面</p>
+<ol type="1">
+<li><p>Display Filter(显示过滤器)， 用于过滤</p></li>
+<li><p>Packet List Pane(封包列表)， 显示捕获到的封包， 有源地址和目标地址，端口号。 颜色不同，代表</p></li>
+<li><p>Packet Details Pane(封包详细信息), 显示封包中的字段</p></li>
+<li><p>Dissector Pane(16进制数据)</p></li>
+<li><p>Miscellanous(地址栏，杂项)</p></li>
+</ol>
+<h2><span id="wireshark-过滤器">Wireshark 过滤器</span></h2>
+<p>Wireshark有两种过滤器，分别是<strong>显示过滤器</strong>与<strong>捕捉过滤器</strong>。</p>
+<p><strong>区别</strong> * 捕捉过滤器（CaptureFilters）：用于决定将什么样的信息记录在捕捉结果中。需要在开始捕捉前设置。 * 显示过滤器（DisplayFilters）：在捕捉结果中进行详细查找。他们可以在得到捕捉结果后随意修改。</p>
+<p><strong>两种过滤器的目的是不同的。</strong> * 捕捉过滤器是数据经过的第一层过滤器，它用于控制捕捉数据的数量，以避免产生过大的日志文件。 * 显示过滤器是一种更为强大（复杂）的过滤器。它允许您在日志文件中迅速准确地找到所需要的记录。</p>
+<h3><span id="捕捉过滤器">捕捉过滤器</span></h3>
+<p><img src="/images/1451724862160.png"></p>
+<ul>
+<li><p><strong>Protocol</strong>（协议）: 可能的值: <code>ether, fddi, ip, arp, rarp, decnet, lat, sca, moprc, mopdl, tcp and udp</code>. 如果没有特别指明是什么协议，则默认使用所有支持的协议。</p></li>
+<li><p><strong>Direction</strong>（方向）: 可能的值: <code>src, dst, src and dst, src or dst</code> 如果没有特别指明来源或目的地，则默认使用 <code>src or dst</code> 作为关键字。 例如， <code>host 10.2.2.2</code> 与 <code>src or dst host 10.2.2.2</code> 是一样的。</p></li>
+<li><p><strong>Host(s)</strong>: 可能的值： <code>net, port, host, portrange</code>. 如果没有指定此值，则默认使用<code>host</code>关键字。 例如，<code>src 10.1.1.1</code>与<code>src host 10.1.1.1</code>相同。</p></li>
+<li><p><strong>Logical Operations</strong>（逻辑运算）: 可能的值：<code>not, and, or</code>. 否(<code>not</code>)具有最高的优先级。或(<code>or</code>)和与(<code>and</code>)具有相同的优先级，运算时从左至右进行。 例如， <code>not tcp port 3128 and tcp port 23</code> 与 <code>(not tcp port 3128) and tcp port 23</code>相同。 <code>not tcp port 3128 and tcp port 23</code> 与 <code>not (tcp port 3128 and tcp port 23)</code>不同。</p></li>
+</ul>
+<p>例子： * <code>tcp dst port 3128</code> //捕捉目的TCP端口为<code>3128</code>的封包。 * <code>ip src host 10.1.1.1</code> //捕捉来源IP地址为<code>10.1.1.1</code>的封包。 * <code>host 10.1.2.3</code> //捕捉目的或来源IP地址为<code>10.1.2.3</code>的封包。 * <code>ether host e0-05-c5-44-b1-3c</code> //捕捉目的或来源MAC地址为<code>e0-05-c5-44-b1-3c</code>的封包。如果你想抓本机与所有外网通讯的数据包时，可以将这里的mac地址换成路由的mac地址即可。 * <code>src portrange 2000-2500</code> //捕捉来源为UDP或TCP，并且端口号在<code>2000</code>至<code>2500</code>范围内的封包。 * <code>not imcp</code> //显示除了icmp以外的所有封包。（icmp通常被ping工具使用） * <code>src host 10.7.2.12 and not dst net 10.200.0.0/16</code> //显示来源IP地址为<code>10.7.2.12</code>，但目的地不是<code>10.200.0.0/16</code>的封包。 * <code>(src host 10.4.1.12 or src net 10.6.0.0/16) and tcp dst portrange 200-10000 and dst net 10.0.0.0/8</code> //捕捉来源IP为<code>10.4.1.12</code>或者来源网络为<code>10.6.0.0/16</code>，目的地TCP端口号在<code>200</code>至<code>10000</code>之间，并且目的位于网络 <code>10.0.0.0/8</code>内的所有封包。 * <code>src net 192.168.0.0 mask 255.255.255.0</code> //捕捉源地址为<code>192.168.0.0</code>网络内的所有封包。</p>
+<h3><span id="显示过滤器">显示过滤器</span></h3>
+<p><img src="/images/1451725452855.png"></p>
+<p>实例： <img src="/images/1451725468174.png"></p>
+<p><strong>过滤表达式的规则</strong></p>
+<p>表达式规则</p>
+<ol type="1">
+<li><p><strong>协议过滤</strong> 比如TCP，只显示TCP协议。</p></li>
+<li><p><strong>IP 过滤</strong> 比如 <code>ip.src ==192.168.1.102</code> 显示源地址为192.168.1.102， <code>ip.dst==192.168.1.102</code>, 目标地址为192.168.1.102</p></li>
+<li><p><strong>端口过滤</strong> <code>tcp.port ==80</code>, 端口为80的 <code>tcp.srcport == 80</code>, 只显示TCP协议的愿端口为80的。</p></li>
+<li><p><strong>Http模式过滤</strong> http.request.method==&quot;GET&quot;, 只显示HTTP GET方法的。</p></li>
+</ol>
+<h2><span id="封包列表">封包列表</span></h2>
+<p>封包列表的面板中显示，编号，时间戳，源地址，目标地址，协议，长度，以及封包信息。 你可以看到不同的协议用了不同的颜色显示。</p>
+<p>你也可以修改这些显示颜色的规则， View -&gt;Coloring Rules.</p>
+<p><img src="/images/1451725740486.png"></p>
+<p><strong>详细信息</strong></p>
+<p>这个面板是我们最重要的，用来查看协议中的每一个字段。</p>
+<p>各行信息分别为 * <strong>Frame</strong>: 物理层的数据帧概况 * <strong>Ethernet II</strong>: 数据链路层以太网帧头部信息 * <strong>Internet Protocol Version 4</strong>: 互联网层IP包头部信息 * <strong>Transmission Control Protocol</strong>: 传输层T的数据段头部信息，此处是TCP * <strong>Hypertext Transfer Protocol</strong>: 应用层的信息，此处是HTTP协议</p>
+<p><strong>对应的OSI七层模型</strong> <img src="/images/1451725855652.png"></p>
+<h2><span id="tcp-包解析">TCP 包解析</span></h2>
+<p>从下图可以看到wireshark捕获到的TCP包中的每个字段。</p>
+<p><img src="/images/1451725951459.png"></p>
+<h2><span id="tcp-三路握手分析">TCP 三路握手分析</span></h2>
+<p>三路握手的过程为：</p>
+<p><img src="/images/1451726004003.png"></p>
+<p>我们用wireshark实际分析下三次握手的过程</p>
+<p>打开wireshark, 开始抓包后打开浏览器输入 http://www.liuhe.website</p>
+<p>在wireshark中输入http过滤， 然后选中Destination为<code>139.129.38.159</code> 且 <code>GET / HTTP/1.1</code>的那条记录，右键然后点击 “对话过滤器-&gt;TCP”.</p>
+<p>这样做的目的是为了得到与浏览器打开网站相关的数据包，将得到如下图 <img src="/images/1451726264665.png"></p>
+<p>图中可以看到wireshark截获到了三次握手的三个数据包。第四个包才是HTTP的， 这说明HTTP的确是使用TCP建立连接的。</p>
+<p><strong>第一次握手</strong> 客户端通过向服务器端发送一个<code>SYN</code>来创建一个主动打开，作为三路握手的一部分。客户端把这段连接的序号设定为随机数<strong>A</strong>。</p>
+<p><img src="/images/1451726663334.png"></p>
+<p><strong>第二次握手</strong> 服务器端应当为一个合法的<code>SYN</code>回送一个<code>SYN/ACK</code>。<code>ACK</code> 的确认码应为 <strong>A+1</strong>，<code>SYN/ACK</code> 包本身又有一个随机序号 <strong>B</strong>。</p>
+<p><img src="/images/1451726946164.png"></p>
+<p><strong>第三次握手</strong> 最后，客户端再发送一个<code>ACK</code>。当服务端受到这个<code>ACK</code>的时候，就完成了三路握手，并进入了连接创建状态。此时包序号被设定为收到的确认号 <strong>A+1</strong>，而响应则为 <strong>B+1</strong>。</p>
+<p><img src="/images/1451727158983.png"></p>
+<p>就这样通过了TCP三次握手，建立了连接。</p>
+<h2><span id="参考">参考</span></h2>
+<p><a href="http://www.cnblogs.com/tankxiao/archive/2012/10/10/2711777.html#start" target="_blank" rel="noopener">Wireshark基本介绍和学习TCP三次握手</a></p>
+<p><a href="http://fangxin.blog.51cto.com/1125131/735178" target="_blank" rel="noopener">Wireshark抓包工具使用教程以及常用抓包规则</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/计算机网络/">计算机网络</a><a href="/tags/后台开发/">后台开发</a><a href="/tags/Wireshark/">Wireshark</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

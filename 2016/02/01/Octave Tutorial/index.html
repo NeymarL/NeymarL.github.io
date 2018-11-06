@@ -1,0 +1,297 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    Octave Tutorial | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="Octave Tutorial">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      Octave Tutorial</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/02/01/Octave Tutorial/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-02-01T10:14:06.000Z">
+          2016-02-01
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <!-- toc -->
+<ul>
+<li><a href="#basic-operations">Basic Operations</a></li>
+<li><a href="#moving-data-around">Moving Data Around</a>
+<ul>
+<li><a href="#dimensions">Dimensions</a></li>
+<li><a href="#loading-data">Loading data</a></li>
+<li><a href="#indexing">Indexing</a></li>
+</ul></li>
+<li><a href="#computing-on-data">Computing on Data</a>
+<ul>
+<li><a href="#matrix-operation">Matrix operation</a></li>
+<li><a href="#useful-functions">Useful functions</a></li>
+</ul></li>
+<li><a href="#plotting-data">Plotting Data</a></li>
+<li><a href="#control-statements-for-while-if-statements">Control statements: <code>for</code>, <code>while</code>, <code>if</code> statements</a></li>
+<li><a href="#functions">Functions</a></li>
+<li><a href="#vectorization">Vectorization</a></li>
+<li><a href="#working-on-and-submitting-programming-exercises">Working on and Submitting Programming Exercises</a></li>
+</ul>
+<!-- tocstop -->
+<a id="more"></a>
+<h2><span id="basic-operations">Basic Operations</span></h2>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%% Change Octave prompt  </span></span><br><span class="line">PS1(<span class="string">'&gt;&gt; '</span>);</span><br><span class="line"><span class="comment">%% Change working directory in windows example:</span></span><br><span class="line">cd <span class="string">'c:/path/to/desired/directory name'</span></span><br><span class="line"><span class="comment">%% Note that it uses normal slashes and does not use escape characters for the empty spaces.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%% elementary operations</span></span><br><span class="line"><span class="number">5</span>+<span class="number">6</span></span><br><span class="line"><span class="number">3</span><span class="number">-2</span></span><br><span class="line"><span class="number">5</span>*<span class="number">8</span></span><br><span class="line"><span class="number">1</span>/<span class="number">2</span></span><br><span class="line"><span class="number">2</span>^<span class="number">6</span></span><br><span class="line"><span class="number">1</span> == <span class="number">2</span>  <span class="comment">% false</span></span><br><span class="line"><span class="number">1</span> ~= <span class="number">2</span>  <span class="comment">% true.  note, not "!="</span></span><br><span class="line"><span class="number">1</span> &amp;&amp; <span class="number">0</span></span><br><span class="line"><span class="number">1</span> || <span class="number">0</span></span><br><span class="line">xor(<span class="number">1</span>,<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">%% variable assignment</span></span><br><span class="line">a = <span class="number">3</span>; <span class="comment">% semicolon suppresses output</span></span><br><span class="line">b = <span class="string">'hi'</span>;</span><br><span class="line">c = <span class="number">3</span>&gt;=<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">% Displaying them:</span></span><br><span class="line">a = <span class="built_in">pi</span></span><br><span class="line"><span class="built_in">disp</span>(a)</span><br><span class="line"><span class="built_in">disp</span>(sprintf(<span class="string">'2 decimals: %0.2f'</span>, a))</span><br><span class="line"><span class="built_in">disp</span>(sprintf(<span class="string">'6 decimals: %0.6f'</span>, a))</span><br><span class="line">format long</span><br><span class="line">a</span><br><span class="line">format short</span><br><span class="line">a</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">%%  vectors and matrices</span></span><br><span class="line">A = [<span class="number">1</span> <span class="number">2</span>; <span class="number">3</span> <span class="number">4</span>; <span class="number">5</span> <span class="number">6</span>]</span><br><span class="line"></span><br><span class="line">v = [<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>]</span><br><span class="line">v = [<span class="number">1</span>; <span class="number">2</span>; <span class="number">3</span>]</span><br><span class="line">v = [<span class="number">1</span>:<span class="number">0.1</span>:<span class="number">2</span>]  <span class="comment">% from 1 to 2, with stepsize of 0.1. Useful for plot axes</span></span><br><span class="line">v = <span class="number">1</span>:<span class="number">6</span>        <span class="comment">% from 1 to 6, assumes stepsize of 1 (row vector)</span></span><br><span class="line"></span><br><span class="line">C = <span class="number">2</span> * <span class="built_in">ones</span>(<span class="number">2</span>,<span class="number">3</span>)  <span class="comment">% same as C = [2 2 2; 2 2 2]</span></span><br><span class="line">w = <span class="built_in">ones</span>(<span class="number">1</span>,<span class="number">3</span>)    <span class="comment">% 1x3 vector of ones</span></span><br><span class="line">w = <span class="built_in">zeros</span>(<span class="number">1</span>,<span class="number">3</span>)</span><br><span class="line">w = <span class="built_in">rand</span>(<span class="number">1</span>,<span class="number">3</span>)  <span class="comment">% drawn from a uniform distribution </span></span><br><span class="line">w = <span class="built_in">randn</span>(<span class="number">1</span>,<span class="number">3</span>) <span class="comment">% drawn from a normal distribution (mean=0, var=1)</span></span><br><span class="line">w = <span class="number">-6</span> + <span class="built_in">sqrt</span>(<span class="number">10</span>)*(<span class="built_in">randn</span>(<span class="number">1</span>,<span class="number">10000</span>));  <span class="comment">% (mean = -6, var = 10) - note: add the semicolon</span></span><br><span class="line">hist(w)     <span class="comment">% plot histogram using 10 bins (default)</span></span><br><span class="line">hist(w,<span class="number">50</span>)  <span class="comment">% plot histogram using 50 bins</span></span><br><span class="line"><span class="comment">% note: if hist() crashes, try "graphics_toolkit('gnu_plot')" </span></span><br><span class="line"></span><br><span class="line">I = <span class="built_in">eye</span>(<span class="number">4</span>)    <span class="comment">% 4x4 identity matrix</span></span><br><span class="line"></span><br><span class="line"><span class="comment">% help function</span></span><br><span class="line">help <span class="built_in">eye</span></span><br><span class="line">help <span class="built_in">rand</span></span><br><span class="line">help help</span><br></pre></td></tr></table></figure>
+<h2><span id="moving-data-around">Moving Data Around</span></h2>
+<h3><span id="dimensions">Dimensions</span></h3>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%% dimensions</span></span><br><span class="line">sz = <span class="built_in">size</span>(A) <span class="comment">% 1x2 matrix: [(number of rows) (number of columns)]</span></span><br><span class="line"><span class="built_in">size</span>(A,<span class="number">1</span>)  <span class="comment">% number of rows</span></span><br><span class="line"><span class="built_in">size</span>(A,<span class="number">2</span>)  <span class="comment">% number of cols</span></span><br><span class="line"><span class="built_in">length</span>(v)  <span class="comment">% size of longest dimension</span></span><br></pre></td></tr></table></figure>
+<h3><span id="loading-data">Loading data</span></h3>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%% loading data</span></span><br><span class="line">pwd    <span class="comment">% show current directory (current path)</span></span><br><span class="line">cd <span class="string">'C:\Users\ang\Octave files'</span>   <span class="comment">% change directory </span></span><br><span class="line">ls     <span class="comment">% list files in current directory </span></span><br><span class="line">load q1y.dat    <span class="comment">% alternatively, load('q1y.dat')</span></span><br><span class="line">load q1x.dat</span><br><span class="line">who    <span class="comment">% list variables in workspace</span></span><br><span class="line">whos   <span class="comment">% list variables in workspace (detailed view) </span></span><br><span class="line">clear q1y       <span class="comment">% clear w/ no argt clears all</span></span><br><span class="line">v = q1x(<span class="number">1</span>:<span class="number">10</span>);  <span class="comment">% first 10 elements of q1x (counts down the columns)</span></span><br><span class="line">save hello.mat v;   <span class="comment">% save variable v into file hello.mat</span></span><br><span class="line">save hello.txt v -ascii; <span class="comment">% save as ascii</span></span><br><span class="line"><span class="comment">% fopen, fread, fprintf, fscanf also work  [[not needed in class]]</span></span><br></pre></td></tr></table></figure>
+<h3><span id="indexing">Indexing</span></h3>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%% indexing</span></span><br><span class="line">A(<span class="number">3</span>,<span class="number">2</span>)  <span class="comment">% indexing is (row,col)</span></span><br><span class="line">A(<span class="number">2</span>,:)  <span class="comment">% get the 2nd row. </span></span><br><span class="line">        <span class="comment">% ":" means every element along that dimension</span></span><br><span class="line">A(:,<span class="number">2</span>)  <span class="comment">% get the 2nd col</span></span><br><span class="line">A([<span class="number">1</span> <span class="number">3</span>],:) <span class="comment">% print all  the elements of rows 1 and 3</span></span><br><span class="line"></span><br><span class="line">A(:,<span class="number">2</span>) = [<span class="number">10</span>; <span class="number">11</span>; <span class="number">12</span>]     <span class="comment">% change second column</span></span><br><span class="line">A = [A, [<span class="number">100</span>; <span class="number">101</span>; <span class="number">102</span>]]; <span class="comment">% append column vec</span></span><br><span class="line">A(:) <span class="comment">% Select all elements as a column vector.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">% Putting data together </span></span><br><span class="line">A = [<span class="number">1</span> <span class="number">2</span>; <span class="number">3</span> <span class="number">4</span>; <span class="number">5</span> <span class="number">6</span>]</span><br><span class="line">B = [<span class="number">11</span> <span class="number">12</span>; <span class="number">13</span> <span class="number">14</span>; <span class="number">15</span> <span class="number">16</span>] <span class="comment">% same dims as A</span></span><br><span class="line">C = [A B] or [A,B]- concatenating A and B matrices side by side</span><br><span class="line">C = [A; B] - Concatenating A and B top and bottom</span><br></pre></td></tr></table></figure>
+<h2><span id="computing-on-data">Computing on Data</span></h2>
+<h3><span id="matrix-operation">Matrix operation</span></h3>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%% initialize variables</span></span><br><span class="line">A = [<span class="number">1</span> <span class="number">2</span>;<span class="number">3</span> <span class="number">4</span>;<span class="number">5</span> <span class="number">6</span>]</span><br><span class="line">B = [<span class="number">11</span> <span class="number">12</span>;<span class="number">13</span> <span class="number">14</span>;<span class="number">15</span> <span class="number">16</span>]</span><br><span class="line">C = [<span class="number">1</span> <span class="number">1</span>;<span class="number">2</span> <span class="number">2</span>]</span><br><span class="line">v = [<span class="number">1</span>;<span class="number">2</span>;<span class="number">3</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">%% matrix operations</span></span><br><span class="line">A * C  <span class="comment">% matrix multiplication</span></span><br><span class="line">A .* B <span class="comment">% element-wise multiplication</span></span><br><span class="line"><span class="comment">% A .* C  or A * B gives error - wrong dimensions</span></span><br><span class="line">A .^ <span class="number">2</span> <span class="comment">% element-wise square of each element in A</span></span><br><span class="line"><span class="number">1.</span>/v   <span class="comment">% element-wise reciprocal</span></span><br><span class="line"><span class="built_in">log</span>(v)  <span class="comment">% functions like this operate element-wise on vecs or matrices </span></span><br><span class="line"><span class="built_in">exp</span>(v)</span><br><span class="line"><span class="built_in">abs</span>(v)</span><br><span class="line"></span><br><span class="line">-v  <span class="comment">% -1*v</span></span><br><span class="line"></span><br><span class="line">v + <span class="built_in">ones</span>(<span class="built_in">length</span>(v), <span class="number">1</span>)  </span><br><span class="line"><span class="comment">% v + 1  % same</span></span><br><span class="line"></span><br><span class="line">A'  <span class="comment">% matrix transpose</span></span><br></pre></td></tr></table></figure>
+<h3><span id="useful-functions">Useful functions</span></h3>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%% misc useful functions</span></span><br><span class="line"></span><br><span class="line"><span class="comment">% max  (or min)</span></span><br><span class="line">a = [<span class="number">1</span> <span class="number">15</span> <span class="number">2</span> <span class="number">0.5</span>]</span><br><span class="line">val = <span class="built_in">max</span>(a)</span><br><span class="line">[val,ind] = <span class="built_in">max</span>(a) <span class="comment">% val -  maximum element of the vector a and index - index value where maximum occur</span></span><br><span class="line">val = <span class="built_in">max</span>(A) <span class="comment">% if A is matrix, returns max from each column</span></span><br><span class="line"></span><br><span class="line"><span class="comment">% find</span></span><br><span class="line">a &lt; <span class="number">3</span></span><br><span class="line"><span class="built_in">find</span>(a &lt; <span class="number">3</span>)</span><br><span class="line">A = <span class="built_in">magic</span>(<span class="number">3</span>)</span><br><span class="line">[r,c] = <span class="built_in">find</span>(A&gt;=<span class="number">7</span>)  <span class="comment">% row, column indices for values matching comparison</span></span><br><span class="line"></span><br><span class="line"><span class="comment">% sum, prod</span></span><br><span class="line">sum(a)</span><br><span class="line">prod(a)</span><br><span class="line"><span class="built_in">floor</span>(a) <span class="comment">% or ceil(a)</span></span><br><span class="line"><span class="built_in">max</span>(<span class="built_in">rand</span>(<span class="number">3</span>),<span class="built_in">rand</span>(<span class="number">3</span>))</span><br><span class="line"><span class="built_in">max</span>(A,[],<span class="number">1</span>) -  maximum along columns(defaults to columns - <span class="built_in">max</span>(A,[]))</span><br><span class="line"><span class="built_in">max</span>(A,[],<span class="number">2</span>) - maximum along rows</span><br><span class="line">A = <span class="built_in">magic</span>(<span class="number">9</span>)</span><br><span class="line">sum(A,<span class="number">1</span>)</span><br><span class="line">sum(A,<span class="number">2</span>)</span><br><span class="line">sum(sum( A .* <span class="built_in">eye</span>(<span class="number">9</span>) ))</span><br><span class="line">sum(sum( A .* <span class="built_in">flipud</span>(<span class="built_in">eye</span>(<span class="number">9</span>)) ))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">% Matrix inverse (pseudo-inverse)</span></span><br><span class="line">pinv(A)        <span class="comment">% inv(A'*A)*A'</span></span><br></pre></td></tr></table></figure>
+<h2><span id="plotting-data">Plotting Data</span></h2>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%% plotting</span></span><br><span class="line">t = [<span class="number">0</span>:<span class="number">0.01</span>:<span class="number">0.98</span>];</span><br><span class="line">y1 = <span class="built_in">sin</span>(<span class="number">2</span>*<span class="built_in">pi</span>*<span class="number">4</span>*t); </span><br><span class="line"><span class="built_in">plot</span>(t,y1);</span><br><span class="line">y2 = <span class="built_in">cos</span>(<span class="number">2</span>*<span class="built_in">pi</span>*<span class="number">4</span>*t);</span><br><span class="line"><span class="built_in">hold</span> on;  <span class="comment">% "hold off" to turn off</span></span><br><span class="line"><span class="built_in">plot</span>(t,y2,<span class="string">'r'</span>);</span><br><span class="line">xlabel(<span class="string">'time'</span>);</span><br><span class="line">ylabel(<span class="string">'value'</span>);</span><br><span class="line"><span class="built_in">legend</span>(<span class="string">'sin'</span>,<span class="string">'cos'</span>);</span><br><span class="line">title(<span class="string">'my plot'</span>);</span><br><span class="line">print -dpng <span class="string">'myPlot.png'</span></span><br><span class="line">close;           <span class="comment">% or,  "close all" to close all figs</span></span><br><span class="line"><span class="built_in">figure</span>(<span class="number">1</span>); <span class="built_in">plot</span>(t, y1);</span><br><span class="line"><span class="built_in">figure</span>(<span class="number">2</span>); <span class="built_in">plot</span>(t, y2);</span><br><span class="line"><span class="built_in">figure</span>(<span class="number">2</span>), clf;  <span class="comment">% can specify the figure number</span></span><br><span class="line">subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>);  <span class="comment">% Divide plot into 1x2 grid, access 1st element</span></span><br><span class="line"><span class="built_in">plot</span>(t,y1);</span><br><span class="line">subplot(<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>);  <span class="comment">% Divide plot into 1x2 grid, access 2nd element</span></span><br><span class="line"><span class="built_in">plot</span>(t,y2);</span><br><span class="line">axis([<span class="number">0.5</span> <span class="number">1</span> <span class="number">-1</span> <span class="number">1</span>]);  <span class="comment">% change axis scale</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%% display a matrix (or image) </span></span><br><span class="line"><span class="built_in">figure</span>;</span><br><span class="line">imagesc(<span class="built_in">magic</span>(<span class="number">15</span>)), colorbar, colormap gray;</span><br><span class="line"><span class="comment">% comma-chaining function calls.  </span></span><br><span class="line">a=<span class="number">1</span>,b=<span class="number">2</span>,c=<span class="number">3</span></span><br><span class="line">a=<span class="number">1</span>;b=<span class="number">2</span>;c=<span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+<h2><span id="control-statements-for-while-if-statements">Control statements: <code>for</code>, <code>while</code>, <code>if</code> statements</span></h2>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">v = <span class="built_in">zeros</span>(<span class="number">10</span>,<span class="number">1</span>);</span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span>=<span class="number">1</span>:<span class="number">10</span>, </span><br><span class="line">    v(<span class="built_in">i</span>) = <span class="number">2</span>^<span class="built_in">i</span>;</span><br><span class="line"><span class="keyword">end</span>;</span><br><span class="line"><span class="comment">% Can also use "break" and "continue" inside for and while loops to control execution.</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">i</span> = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">while</span> <span class="built_in">i</span> &lt;= <span class="number">5</span>,</span><br><span class="line">  v(<span class="built_in">i</span>) = <span class="number">100</span>; </span><br><span class="line">  <span class="built_in">i</span> = <span class="built_in">i</span>+<span class="number">1</span>;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">i</span> = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">while</span> <span class="built_in">true</span>, </span><br><span class="line">  v(<span class="built_in">i</span>) = <span class="number">999</span>; </span><br><span class="line">  <span class="built_in">i</span> = <span class="built_in">i</span>+<span class="number">1</span>;</span><br><span class="line">  <span class="keyword">if</span> <span class="built_in">i</span> == <span class="number">6</span>,</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">  <span class="keyword">end</span>;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> v(<span class="number">1</span>)==<span class="number">1</span>,</span><br><span class="line">  <span class="built_in">disp</span>(<span class="string">'The value is one!'</span>);</span><br><span class="line"><span class="keyword">elseif</span> v(<span class="number">1</span>)==<span class="number">2</span>,</span><br><span class="line">  <span class="built_in">disp</span>(<span class="string">'The value is two!'</span>);</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">  <span class="built_in">disp</span>(<span class="string">'The value is not one or two!'</span>);</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<h2><span id="functions">Functions</span></h2>
+<p>To create a function, type the function code in a text editor (e.g. gedit or notepad), and save the file as &quot;<code>functionName.m</code>&quot;</p>
+<p>Example function: <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">y</span> = <span class="title">squareThisNumber</span><span class="params">(x)</span></span></span><br><span class="line"></span><br><span class="line">y = x^<span class="number">2</span>;</span><br></pre></td></tr></table></figure></p>
+<p>To call the function in Octave, do either:</p>
+<ol type="1">
+<li><p>Navigate to the directory of the <code>functionName.m</code> file and call the function: <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">% Navigate to directory:</span></span><br><span class="line">    cd /path/to/function</span><br><span class="line"></span><br><span class="line">    <span class="comment">% Call the function:</span></span><br><span class="line">    functionName(args)</span><br></pre></td></tr></table></figure></p></li>
+<li><p>Add the directory of the function to the load <strong>path</strong> and save it: <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">% To add the path for the current session of Octave:</span></span><br><span class="line">    addpath(<span class="string">'/path/to/function/'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">% To remember the path for future sessions of Octave, after executing addpath above, also do:</span></span><br><span class="line">    savepath</span><br></pre></td></tr></table></figure></p></li>
+</ol>
+<p>Octave's functions can return more than one value: <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="params">[y1, y2]</span> = <span class="title">squareandCubeThisNo</span><span class="params">(x)</span></span></span><br><span class="line">y1 = x^<span class="number">2</span></span><br><span class="line">y2 = x^<span class="number">3</span></span><br></pre></td></tr></table></figure></p>
+<p>Call the above function this way: <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[a,b] = squareandCubeThisNo(x)</span><br></pre></td></tr></table></figure></p>
+<h2><span id="vectorization">Vectorization</span></h2>
+<p>Vectorization is the process of taking code that relies on <strong>loops</strong> and converting it into <strong>matrix operations</strong>. It is more efficient, more elegant, and more concise.</p>
+<p>As an example, let's compute our prediction from a hypothesis. Theta is the vector of fields for the hypothesis and x is a vector of variables.</p>
+<p>With loops: <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">prediction = <span class="number">0.0</span>;</span><br><span class="line"><span class="keyword">for</span> <span class="built_in">j</span> = <span class="number">1</span>:n+<span class="number">1</span>,</span><br><span class="line">  prediction += theta(<span class="built_in">j</span>) * x(<span class="built_in">j</span>);</span><br><span class="line"><span class="keyword">end</span>;</span><br></pre></td></tr></table></figure></p>
+<p>With vectorization: <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">prediction = theta' * x;</span><br></pre></td></tr></table></figure></p>
+<p>If you recall the definition multiplying vectors, you'll see that this one operation does the element-wise multiplication and overall sum in a very concise notation.</p>
+<h2><span id="working-on-and-submitting-programming-exercises">Working on and Submitting Programming Exercises</span></h2>
+<ol type="1">
+<li>Download and extract the assignment's zip file.</li>
+<li>Edit the proper file 'a.m', where a is the name of the exercise you're working on.</li>
+<li>Run octave and cd to the assignment's extracted directory</li>
+<li>Run the 'submit' function and enter the assignment number, your email, and a password (found on the top of the &quot;Programming Exercises&quot; page on coursera)</li>
+</ol>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Octave/">Octave</a><a href="/tags/Matlab/">Matlab</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

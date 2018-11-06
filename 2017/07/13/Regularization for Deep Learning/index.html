@@ -1,0 +1,403 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    Regularization for Deep Learning | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="Regularization for Deep Learning">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      Regularization for Deep Learning</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/07/13/Regularization for Deep Learning/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-07-13T14:30:19.000Z">
+          2017-07-13
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>定义：Any modification we make to a learning algorithm that is intended to reduce its generalization error but not its training error.</p>
+<!-- toc -->
+<ul>
+<li><a href="#parameter-norm-penalties">Parameter Norm Penalties</a>
+<ul>
+<li><a href="#l2-parameter-regularzation"><span class="math inline">\(L^2\)</span> Parameter Regularzation</a></li>
+<li><a href="#l1-regularization"><span class="math inline">\(L^1\)</span> Regularization</a></li>
+</ul></li>
+<li><a href="#regularization-and-under-constrained-problems">Regularization and Under-Constrained Problems</a></li>
+<li><a href="#dataset-augmentation">Dataset Augmentation</a></li>
+<li><a href="#noise-robustness">Noise Robustness</a></li>
+<li><a href="#multi-task-learning">Multi-Task Learning</a></li>
+<li><a href="#early-stopping">Early Stopping</a></li>
+</ul>
+<!-- tocstop -->
+<a id="more"></a>
+<h2><span id="parameter-norm-penalties">Parameter Norm Penalties</span></h2>
+<p>通过限制模型的能力来正则化，通常在目标函数中加入惩罚项 <span class="math inline">\(\Omega(\theta)\)</span>: <span class="math display">\[
+\hat{J}(\theta; X, y) = J(\theta; X, y) + \alpha \Omega(\theta)
+\]</span> 这样模型在训练的时候不但会减小原来的 <span class="math inline">\(J\)</span> ，也会尽量减小惩罚项 <span class="math inline">\(\Omega\)</span>，从而达到防止过拟合的效果。</p>
+<p>需要注意的是，在神经网络中只需要正则化网络中的<strong>权重（weights）</strong>，而偏置不需要正则化，一方面是因为相对于权重，偏置很容易被拟合（使用较少的数据），也没有权重重要，权重需要观察两个变量在各种条件下的情况来进行拟合，而偏置只需考虑一个变量，所以不惩罚偏置也不会对过拟合造成多大影响；另一方面是因为如果对偏置业也进行惩罚则容易造成欠拟合。所以之后用 <span class="math inline">\(w\)</span> 表示所有权重，而 <span class="math inline">\(\theta\)</span> 表示全部参数。</p>
+<h3><span id="l2-parameter-regularzation"><span class="math inline">\(L^2\)</span> Parameter Regularzation</span></h3>
+<p><span class="math inline">\(L^2\)</span> 正则化又叫 weight decay，岭回归（ridge regression）和 Tikhonov regularization。它在目标函数后加上惩罚项 <span class="math inline">\(\Omega(\theta) = \frac{1}{2}||w||^2_2\)</span>，这使得权重趋近于向原点方向更新。</p>
+<p>我们可以从梯度更新的角度来理解正则化是怎么工作的，为了简化，假设模型里无偏置参数，即 <span class="math inline">\(\theta = w\)</span>，所以目标函数如下： <span class="math display">\[
+\hat{J}(w;X,y) = \frac{\alpha}{2}w^Tw + J(w;X,y)
+\]</span> 对 <span class="math inline">\(w\)</span> 求梯度： <span class="math display">\[
+\bigtriangledown_w\hat{J}(w; X, y) = \alpha w+\bigtriangledown_wJ(w; X,y)
+\]</span> 所以梯度更新公式为： <span class="math display">\[
+\begin{align}
+w &amp;\leftarrow w - \epsilon(\alpha w + \bigtriangledown_wJ(w;X,y)) \\
+w&amp; \leftarrow (1-\epsilon\alpha)w - \epsilon\bigtriangledown_wJ(w;X,y)
+\end{align}
+\]</span> 可以见得，每次更新梯度时都先会按照一定的因子缩小 <span class="math inline">\(w\)</span>，然后在执行正常的梯度下降。</p>
+<p>这是执行一步梯度下降发生的事情，若在整个 training 期间都执行此规则会发生什么呢？</p>
+<blockquote>
+<p>线性逼近（Linear approximation）</p>
+<blockquote>
+<p>函数 <span class="math inline">\(f(x)\)</span> 在点 <span class="math inline">\(a\)</span> 处的最佳线性逼近 <span class="math inline">\(L_a(x)\)</span> 要满足: <span class="math inline">\(L_a(a) = f(a)\)</span> 且 <span class="math inline">\(L_a&#39;(a) = f&#39;(a)\)</span>，这样可以构造出 <span class="math inline">\(L_a(x) = f(a) + f&#39;(a)(x-a)\)</span>。</p>
+</blockquote>
+<p>二次逼近（Quadratic approximation）</p>
+<blockquote>
+<p>函数 <span class="math inline">\(f(x)\)</span> 在点 <span class="math inline">\(a\)</span> 处的最佳二次逼近 <span class="math inline">\(Q_a(x)\)</span> 要满足：</p>
+<ul>
+<li><span class="math inline">\(Q_a(a) = f(a)\)</span></li>
+<li><span class="math inline">\(Q_a&#39;(a) = f&#39;(a)\)</span></li>
+<li><span class="math inline">\(Q_a&#39;&#39;(a) = f&#39;&#39;(a)\)</span></li>
+</ul>
+<p>通过这三个条件可以构造出 <span class="math inline">\(Q_a(x) = f(a) + f&#39;(a)(x-a)+\frac{1}{2}f&#39;&#39;(a)(x-a)^2\)</span></p>
+<p>也可以根据泰勒公式理解，把 <span class="math inline">\(f(x)\)</span> 在 <span class="math inline">\(a\)</span> 点进行泰勒展开，只保留到二阶导。</p>
+</blockquote>
+</blockquote>
+<p>为了简化问题，我们在最优点 <span class="math inline">\(w^* = \arg\min_wJ(w)\)</span> 用二次逼近（quadratic approximation）拟合原目标函数，得到新的近似目标函数： <span class="math display">\[
+\hat{J}(w) = J(w^*)+\frac{1}{2}(w-w^*)^TH(w-w*)
+\]</span> 其中 <span class="math inline">\(H​\)</span> 为 <span class="math inline">\(J​\)</span> 对 <span class="math inline">\(w​\)</span> 的海森矩阵（Hessian matrix），它是由二阶偏导数组成的方阵，若 <span class="math inline">\(w = [w_1, w_2, …, w_n]​\)</span>，则： <span class="math display">\[
+H = \begin{bmatrix}
+\frac{\partial^2J}{\partial w_1^2}    &amp; \frac{\partial^2J}{\partial w_1\partial w_2}  &amp; \cdots &amp; \frac{\partial^2J}{\partial w_1\partial w_n}      \\
+\vdots &amp; \ddots &amp; \vdots \\
+\frac{\partial^2J}{\partial w_n\partial w_1} &amp; \frac{\partial^2J}{\partial w_n\partial w_2}      &amp; \cdots &amp; \frac{\partial^2J}{\partial w_n^2}
+\end{bmatrix}
+\]</span> 我们发现上式中没有一阶偏导数，那是因为 <span class="math inline">\(J\)</span> 的一阶导数在最优点 <span class="math inline">\(w^*\)</span> 的值为 <span class="math inline">\(0\)</span>，即 <span class="math inline">\(J&#39;(w^*) = 0\)</span>。</p>
+<p>当 <span class="math inline">\(\hat{J}\)</span> 取得最小值时，它的梯度 <span class="math display">\[
+\bigtriangledown_w\hat{J}(w) = H(w - w^*)
+\]</span> 等于 <span class="math inline">\(0​\)</span>。</p>
+<p>为了研究正则化的影响，我们修改上式，加入 weight decay gradient，我们用 <span class="math inline">\(\hat{w}\)</span> 表示正则化后的 <span class="math inline">\(\hat{J}\)</span> 的最小值的位置，可以解得： <span class="math display">\[
+\alpha\hat{w} + H(\hat{w}-w^*) = 0
+\]</span></p>
+<p><span class="math display">\[
+(H+\alpha I)\hat{w} = Hw^*
+\]</span></p>
+<p><span class="math display">\[
+\hat{w} = (H+\alpha I)^{-1}Hw^*
+\]</span></p>
+<p>可以看出，当 <span class="math inline">\(\alpha\)</span> 趋近于 <span class="math inline">\(0\)</span> 时，<span class="math inline">\(\hat{w} \approx w^*\)</span>，那当 <span class="math inline">\(\alpha\)</span> 较大时会发生什么呢？</p>
+<p>因为 <span class="math inline">\(H\)</span> 由实数组成且对称，所以 <span class="math inline">\(H\)</span> 可以分解为一个对角阵 <span class="math inline">\(\Lambda\)</span> 和正交矩阵 <span class="math inline">\(Q\)</span> 的乘积： <span class="math display">\[
+H = Q\Lambda Q^T
+\]</span> 其中，<span class="math inline">\(\Lambda\)</span> 中对角线的元素为 <span class="math inline">\(H\)</span> 的特征值，<span class="math inline">\(Q\)</span> 的每一列为对应的特征向量。</p>
+<p>由此可以进一步化简： <span class="math display">\[
+\begin{align}
+\hat{w} &amp; = (Q\Lambda Q^T+\alpha I)^{-1}Q\Lambda Q^Tw^* \\
+&amp; = [Q(\Lambda+\alpha I)Q^T]^{-1}Q\Lambda Q^T w^* \\
+&amp; = (Q^{T})^{-1}(\Lambda+\alpha I)^{-1}Q^{-1}Q\Lambda Q^T w^* \\
+&amp; = Q(\Lambda+\alpha I)^{-1}\Lambda Q^T w^* \\
+\end{align}
+\]</span> 令 $ =Q(+I)<sup>{-1}Q</sup>T $，则 <span class="math inline">\(\hat{H}\)</span> 的任意特征值 <span class="math inline">\(\hat{\lambda_i}\)</span> 与 <span class="math inline">\(H\)</span> 里对应的特征值 <span class="math inline">\(\lambda_i\)</span> 有如下关系： <span class="math display">\[
+\hat{\lambda_i} = \frac{\lambda_i}{\lambda_i+\alpha}
+\]</span> 所以 <span class="math inline">\(L^2\)</span> 正则化的效果就是把 <span class="math inline">\(w^*\)</span> 沿着 <span class="math inline">\(H\)</span> (或 <span class="math inline">\(\hat{H}\)</span>) 的特征向量所定义的方向重新调整大小（rescale）。其中，<span class="math inline">\(w^*\)</span> 中沿着 <span class="math inline">\(H\)</span> 的第 <span class="math inline">\(i\)</span> 个特征向量方向的成分被扩大了 <span class="math inline">\(\frac{\lambda_i}{\lambda_i+\alpha}\)</span> 倍。</p>
+<blockquote>
+<p><img src="/images/f2.3.png"></p>
+</blockquote>
+<p>那些大特征值对应的特征向量的方向，<span class="math inline">\(\lambda_i\gg \alpha\)</span>，正则化的效果很小；而那些小特征值对应的方向，<span class="math inline">\(\lambda_i \ll \alpha\)</span>，<span class="math inline">\(w^*\)</span> 相应方向的成分就很容易缩小到 <span class="math inline">\(0\)</span>，正则化效果很明显。</p>
+<p>得出后面的结论还有一个前提，就是梯度大的方向对应的 <span class="math inline">\(H\)</span> 的特征值也大，由此可得：<strong>只有那些对减小目标函数梯度影响很大的方向的成分才不受正则化影响；那些对梯度下降影响不大的方向，会得到一个较小的特征值，从而使那些不重要方向的成分在训练中一直在缩小</strong>。</p>
+<p><img src="/images/f7.1.png"></p>
+<p>上面我们讨论了泛化的、通用的情况下 <span class="math inline">\(L^2\)</span> 正则化的作用，下面来看一个线性回归的具体实例。线性回归的均方误差目标函数为： <span class="math display">\[
+(Xw-y)^T(Xw-y)
+\]</span> 增加 <span class="math inline">\(L^2\)</span> 正则化之后变成： <span class="math display">\[
+(Xw-y)^T(Xw-y)+\frac{1}{2}\alpha w^Tw
+\]</span> 解出 <span class="math inline">\(w\)</span> 的正规方程也从 <span class="math display">\[
+w = (X^TX)^{-1}X^Ty
+\]</span> 变为： <span class="math display">\[
+w=(X^TX+\alpha I)^{-1}X^Ty
+\]</span> 可见，下面的式子只是把 <span class="math inline">\((X^TX)^{-1}\)</span> 换成了 <span class="math inline">\((X^TX+\alpha I)^{-1}\)</span>， 在 <span class="math inline">\(X^TX\)</span> 的对角线上多加了 <span class="math inline">\(\alpha\)</span> 。但是 <span class="math inline">\(X^TX\)</span> 对角线上的元素对应的就是输入特征的方差，也就是<span class="math inline">\(L^2\)</span>正则化增加了输入特征的方差，从而迫使模型去降低那些没有用（与输出目标的协方差很低）的特征的权重。</p>
+<h3><span id="l1-regularization"><span class="math inline">\(L^1\)</span> Regularization</span></h3>
+<p>对于 <span class="math inline">\(L^1\)</span> 正则化，它的惩罚项就是权重 <span class="math inline">\(w\)</span> 的1范数： <span class="math display">\[
+\Omega(\theta) = ||w||_1 = \sum_i|w_i|
+\]</span> 还像上面一样不考虑偏置参数，<span class="math inline">\(\alpha\)</span> 为正则化因子，则使用 <span class="math inline">\(L^1\)</span> 正则化的目标函数为： <span class="math display">\[
+\hat{J}(w;X,y) = \alpha||w||_1 + J(w;X,y)
+\]</span> 相应的梯度为： <span class="math display">\[
+\bigtriangledown_w\hat{J}(w;X,y) = \alpha sign(w) + \bigtriangledown_wJ(w;X,y)
+\]</span> 其中 <span class="math inline">\(sign\)</span> 为符号函数，大于 <span class="math inline">\(0\)</span> 值为 <span class="math inline">\(1\)</span>，小于 <span class="math inline">\(0\)</span> 值为 <span class="math inline">\(-1\)</span>，等于 <span class="math inline">\(0\)</span> 值为 <span class="math inline">\(0\)</span> 。</p>
+<p>这里可以看出，<span class="math inline">\(L^1\)</span> 正则化不是在按照一定比例来缩小参数 <span class="math inline">\(w\)</span>，而是每步增加或减少一个常量。</p>
+<p>为了观察整体训练过程中正则化的影响，我们继续用在最优点 <span class="math inline">\(w^*\)</span> 的二次逼近来拟合目标函数： <span class="math display">\[
+\hat{J}(w) = J(w^*)+\frac{1}{2}(w-w^*)^TH(w-w*)
+\]</span> 相应的梯度为： <span class="math display">\[
+\bigtriangledown_w\hat{J}(w) = H(w - w^*)
+\]</span> 这里的 <span class="math inline">\(H\)</span> 依旧是海森矩阵，由于 <span class="math inline">\(L^1\)</span> 惩罚相不保证可以用一个代数式表示（clean algebraic expression），所以假设 <span class="math inline">\(H\)</span> 是个对角阵，<span class="math inline">\(H = diag([H_{1,1}, …, H_{n,n}])\)</span>，并且每个 <span class="math inline">\(H_{i,i} &gt; 0\)</span>。只要 Linear Regression 的输入特征直接没有关联（correlation）就可以保证上述假设成立，而这一点可以通过PCA做到。</p>
+<p>加上 <span class="math inline">\(L^1\)</span> 正则化的目标函数为： <span class="math display">\[
+\hat{J}(w;X,y) = J(w^*; X,y) + \sum_i\left[ \frac{1}{2}H_{i,i}(w_i-w^*_i)^2+\alpha|w_i| \right]
+\]</span> 最小化该目标函数可得： <span class="math display">\[
+w_i = sign(w^*_i)\max\left\{|w^*_i| - \frac{\alpha}{H_{i,i}}, 0\right\}
+\]</span> 考虑所有 <span class="math inline">\(w_i^* &gt; 0\)</span>，有两种可能结果：</p>
+<ol type="1">
+<li>当 <span class="math inline">\(w_i^*≤\frac{\alpha}{H_{i,i}}\)</span> 时，<span class="math inline">\(w_i\)</span> 的最优解为 <span class="math inline">\(0\)</span>。This occurs because the contribution of <span class="math inline">\(J(w;X,y)\)</span> to the regularized objective <span class="math inline">\(\hat{J}(w;X,y)\)</span> is overwhelmed—in direction <span class="math inline">\(i\)</span> —by the <span class="math inline">\(L^1\)</span> regularization which pushes the value of <span class="math inline">\(w_i\)</span> to zero.</li>
+<li>当 <span class="math inline">\(w_i^*≥\frac{\alpha}{H_{i,i}}\)</span> 时，这是最优的 <span class="math inline">\(w_i\)</span> 不会为 <span class="math inline">\(0\)</span>，而是会向 <span class="math inline">\(0\)</span> 的方向移动 <span class="math inline">\(\frac{\alpha}{H_{i,i}}\)</span> 的距离。</li>
+</ol>
+<p>当所有 <span class="math inline">\(w^*_1 &lt; 0\)</span> 时也有类似的结果。</p>
+<p>和 <span class="math inline">\(L^2\)</span> 正则化相比，<span class="math inline">\(L^1\)</span> 正则化趋向于使权重变的稀疏（sparse），也就是说一部分参数的最优值为 <span class="math inline">\(0\)</span>。如果我们用同样的假设分析 <span class="math inline">\(L^2\)</span> 正则化，则会得到 <span class="math inline">\(\hat{w}_i = \frac{H_{i,i}}{H_{i,i}+\alpha}w^*_i\)</span>，只要 <span class="math inline">\(w_i^*\)</span> 非零，<span class="math inline">\(\hat{w}_i\)</span> 一定也非零。所以 <span class="math inline">\(L^2\)</span> 正则化不会使参数变稀疏，而 <span class="math inline">\(L^1\)</span> 正则化在 <span class="math inline">\(\alpha\)</span> 很大的情况下会。</p>
+<p><span class="math inline">\(L^1\)</span> 正则化的这个性质可以用来做<strong>特征选择（feature selection）</strong>，如果某个特征对模型收敛帮助不大，则它对应的权重会收缩到 <span class="math inline">\(0\)</span>，我们就可以去掉那些用处不大的特征。</p>
+<blockquote>
+<p>Maximum A Posteriori (MAP) Estimation <span class="math display">\[
+\theta_{MAP} = \arg\max_\theta p(\theta|x) = \arg\max_\theta \log p(x|\theta)+\log p(\theta)
+\]</span> Maximum Likelihood Estimator (MLE) <span class="math display">\[
+\theta_{ML} = \arg\max_\theta p(X;\theta)
+\]</span></p>
+</blockquote>
+<p><strong>正则化与参数估计之间的关系</strong></p>
+<p>使用均方误差的线性回归可以看作是对参数 <span class="math inline">\(w\)</span> （如果 <span class="math inline">\(w\)</span> 的先验服从 <span class="math inline">\(N(w;0,\frac{1}{\lambda}I^2)\)</span>）的最大似然估计（MLE），如果加上 <span class="math inline">\(L^2\)</span> 正则化项 <span class="math inline">\(\lambda w^T w\)</span> 的话，则变成了对参数 <span class="math inline">\(w\)</span> 的最大后验估计（MAP），因为： <span class="math display">\[
+\log p(w) = \log N(w;0,\frac{1}{\lambda}I^2)=\log\frac{\lambda}{\sqrt{2\pi}} - \frac{1}{2}\lambda w^Tw
+\]</span> 而 <span class="math inline">\(L^1​\)</span> 正则化则相当于 <span class="math inline">\(w​\)</span> 的先验估计服从各向同性拉普拉斯分布（isotropic Laplace distribution）： <span class="math display">\[
+\log p(w) = \sum_i\log Laplace(w_i; 0, \frac{1}{\alpha}) = -\alpha ||w||_1 + n\log\alpha -n\log2
+\]</span> 我们可以忽略 <span class="math inline">\(n\log\alpha -n\log2\)</span> 因为它们不依赖于 <span class="math inline">\(w\)</span>。</p>
+<h2><span id="regularization-and-under-constrained-problems">Regularization and Under-Constrained Problems</span></h2>
+<p>正则化不光可以解决过拟合问题，还可以解决其他很多问题。</p>
+<p>比如求解线性回归中，正规方程为 <span class="math inline">\(w = (X^TX)^{-1}X^Ty\)</span>，但 <span class="math inline">\(X^TX\)</span> 有可能是不可逆的，比如特征多但样本少的时候， <span class="math inline">\(X^TX\)</span> 就不可逆，这时候如果加上 <span class="math inline">\(L^2\)</span> 正则项，变成 <span class="math inline">\(X^TX+\alpha I\)</span>，这可以保证一定是可逆的。</p>
+<p>还有一种情况，在 Logistic 回归中，假设数据集是线形可分的，如果参数 <span class="math inline">\(w\)</span> 可以完美的进行分类，那么 <span class="math inline">\(2w\)</span> 一定也可以，而且会有更大的似然。这样循环更新的算法（梯度下降）就会使 <span class="math inline">\(w\)</span> 不断增大，直到发生溢出。而加上正则化可以防止这种情况的发生，比如加上 <span class="math inline">\(L^2\)</span> 正则项，当权重衰减的指数和似然的坡度持平时，就会停止增大参数。（For example, weight decay will cause gradient descent to quit increasing the magnitude of the weights when the slope of the likelihood is equal to the weight decay coeﬃcient.）</p>
+<p>再比如求 Moore-Penrose 伪逆： <span class="math display">\[
+X^+ = \lim_{\alpha\rightarrow0}(X^TX+\alpha I)^{-1}X^T
+\]</span> 我们现在可以认为上式是在求带 <span class="math inline">\(L2\)</span> 正则项的线性回归，也就可以把它解释为用正则化解决欠问题（underdetermined problems）。</p>
+<h2><span id="dataset-augmentation">Dataset Augmentation</span></h2>
+<p>数据集增强是提高机器学习模型泛化能力的一种方法，主要应用于分类算法中，操作通常包括对输入添加白噪声、对输入进行变换、对神经网络中间添加噪声等，但注意对输入变换时不要改变标签值。这种数据集增强的方法被证明在物体识别和语音识别方面很有作用。</p>
+<p>但在比较两个机器学习模型好坏时，一定要在相同的数据集和数据集增强操作的情况下进行比较。</p>
+<h2><span id="noise-robustness">Noise Robustness</span></h2>
+<p><strong>Injecting Noise at the Output Targets</strong></p>
+<p>因为大多数数据集都包含错误标签，若 <span class="math inline">\(y\)</span> 是错误的则最大化 <span class="math inline">\(\log p(y|x)\)</span> 将会带来很大危害。一个解决办法是给标签添加噪声，比如假设一个小常量 <span class="math inline">\(\epsilon\)</span> ，训练集中 <span class="math inline">\(1-\epsilon\)</span> 的概率的标签是正确的，剩下 <span class="math inline">\(\epsilon\)</span> 概率的标签则不一定。我们不用实际在样本中加入噪声，而是直接把 <span class="math inline">\(\epsilon\)</span> 嵌入到目标函数中。比如 <strong>label smoothing</strong> 技术把hard target <span class="math inline">\(0\)</span> 和 <span class="math inline">\(1\)</span> 替换成 <span class="math inline">\(\frac{\epsilon}{k-1}\)</span> 和 <span class="math inline">\(1-\epsilon\)</span>，标准的交叉熵损失就是为了处理这种 soft target。而事实上，最大似然学习 + softmax + hard target 根本不会收敛，因为 softmax 肯定不会输出绝对地 <span class="math inline">\(0\)</span> 或 <span class="math inline">\(1\)</span>。</p>
+<h2><span id="multi-task-learning">Multi-Task Learning</span></h2>
+<p>多任务学习也是一种提高模型泛化能力的方法，多个任务使用相同的输入，但输出不同，整个模型的参数分为两部分：</p>
+<ol type="1">
+<li>任务相关的参数，只从任务相关的样本中优化参数，在下图中的上层</li>
+<li>一般的参数，不与任务相关，可以从所有样本中更新参数，在下图中的底层（<span class="math inline">\(h^{(shared)}\)</span>）。</li>
+</ol>
+<p><img src="/images/f7.2.png"></p>
+<p>从深度学习的角度来说：<em>among the factors that explain the variations observed in the data associated with the diﬀerent tasks, some are shared across two or more tasks</em>.</p>
+<h2><span id="early-stopping">Early Stopping</span></h2>
+<p>如果我们的机器学习模型拟合能力过强的话，就会发生这种情况，训练误差一直减小，但交叉验证的误差先减小，然后在某个值达到最小，后来又增大，如下图所示。</p>
+<p><img src="/images/f7.3.png"></p>
+<p>这时我们可以使用 <strong>early stopping 策略</strong>，在每次计算 validation loss 之后，把该 loss 与达到的最小值比较，若它小于最小值，则更新最小值并拷贝一份当前的参数；否则继续下一轮训练。训练结束返回拷贝的参数而不是最后一轮训练的参数。</p>
+<p>Early stopping 策略是一种很常用正则化方法，因为它既有效又简单。它也可以看做是超参数选择的方法，因为训练的轮数也是个超参数，而应用 early stopping 策略就可以自动选择这个值，而不需要大量猜测。</p>
+<p><strong>How early stopping acts as a regularizer</strong></p>
+<p>Early stopping 会限制权重更新次数，即限制了权重（参数）远离初始权重的距离，如果最佳采取 <span class="math inline">\(\tau\)</span> 轮迭代，学习速率为 <span class="math inline">\(\epsilon\)</span> ，那么它俩的乘积 <span class="math inline">\(\epsilon\tau\)</span> 就类似于 <span class="math inline">\(L^2\)</span> 正则化中的系数！</p>
+<p><img src="/images/f7.4.png"></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Regularization/">Regularization</a><a href="/tags/L1-Norm/">L1 Norm</a><a href="/tags/L2-Norm/">L2 Norm</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

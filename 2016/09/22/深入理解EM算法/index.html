@@ -1,0 +1,388 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    深入理解EM算法 | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="深入理解EM算法">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      深入理解EM算法</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/09/22/深入理解EM算法/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-09-22T07:42:06.000Z">
+          2016-09-22
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <blockquote>
+<p>In statistics, an <a href="https://www.wikiwand.com/en/Expectation%E2%80%93maximization_algorithm" target="_blank" rel="noopener">expectation–maximization (EM) algorithm</a> is an iterative method for finding <strong>maximum likelihood</strong> or <strong>maximum a posteriori (MAP)</strong> estimates of parameters in statistical models, where the model depends on <strong>unobserved latent variables</strong>.</p>
+</blockquote>
+<!-- toc -->
+<ul>
+<li><a href="#直观理解高斯混合模型gmm">直观理解高斯混合模型(GMM)</a>
+<ul>
+<li><a href="#最大似然估计">最大似然估计</a></li>
+<li><a href="#问题-随机变量无法直接完全观察到">问题 : 随机变量无法直接(完全)观察到</a></li>
+</ul></li>
+<li><a href="#em算法">EM算法</a></li>
+<li><a href="#从理论公式推导gmm">从理论公式推导GMM</a></li>
+</ul>
+<!-- tocstop -->
+<a id="more"></a>
+<h2><span id="直观理解高斯混合模型gmm">直观理解高斯混合模型(GMM)</span></h2>
+<h3><span id="最大似然估计">最大似然估计</span></h3>
+<p>最大似然估计(<strong>Maximum Likelihood Estimation, MLE</strong>)是为了找出<strong>找出与样本的分布最接近的概率分布模型</strong>。</p>
+<p>ps : 熟悉最大似然估计的同学可以跳过这部分 :)</p>
+<p>举个简单的例子：10次抛硬币的结果是: 正正反正正正反反正正。假设 <span class="math inline">\(p\)</span> 是每次抛硬币结果为正的概率。则得到这样的实验结果的概率是: <span class="math display">\[P = pp(1-p)ppp(1-p)(1-p)pp = p^7(1-p)^3\]</span> 最大化 <span class="math inline">\(P\)</span> 解得最优解是 <span class="math inline">\(p = 0.7\)</span>，与直观感觉 <span class="math inline">\(p = \frac{正面次数}{抛的次数} = \frac{7}{10} = 0.7\)</span> 一致。</p>
+<p><strong>二项分布的最大似然估计</strong></p>
+<p>对上面的例子简单推广一下：投硬币试验中，进行 <span class="math inline">\(N\)</span> 次独立试验，<span class="math inline">\(n\)</span> 次朝上， <span class="math inline">\(N-n\)</span>次朝下。假定朝上的概率为 <span class="math inline">\(p\)</span>, 使用对数似然函数作为目标函数： <span class="math display">\[f(n\ |\ p) = \log(p^n(1-p)^{N-n})\]</span></p>
+<p>对 <span class="math inline">\(p\)</span> 求偏导并令其等于零，求对数似然函数最大时 <span class="math inline">\(p\)</span> 的值：</p>
+<p><span class="math display">\[\begin{array}{lcr}
+\frac{\partial f(n\ |\ p)}{\partial p} = \frac{n}{p} - \frac{N-n}{1-p} = 0 \\
+\Rightarrow p = \frac{n}{N}
+\end{array}\]</span></p>
+<p><strong>高斯分布的最大似然估计</strong></p>
+<p>进一步考虑，若给定一组样本 <span class="math inline">\(x_1,x_2...x_n\)</span>, 已知它们来自于高斯分布 <span class="math inline">\(N(μ,σ)\)</span>, 试估计参数 <span class="math inline">\(μ,σ\)</span>。</p>
+<p>高斯分布的<strong>概率密度</strong>函数 : <span class="math display">\[f(x) = \frac{1}{\sqrt{2\pi}\sigma}\exp(-\frac{(x-\mu)^2}{2\sigma^2})\]</span></p>
+<p>将 <span class="math inline">\(X_i\)</span> 的样本值 <span class="math inline">\(x_i\)</span> 带入, 得到似然函数 :</p>
+<p><span class="math display">\[L(x) = \prod_{i=1}^n\frac{1}{\sqrt{2\pi}\sigma}\exp(-\frac{(x_i-\mu)^2}{2\sigma^2})\]</span></p>
+<p>取对数并化简得：</p>
+<p><span class="math display">\[\begin{array}{lcr}
+l(x) = \log \prod_{i=1}^n\frac{1}{\sqrt{2\pi}\sigma}\exp(-\frac{(x_i-\mu)^2}{2\sigma^2}) \\
+\ \ \ \ \ = \sum_{i=1}^n\log\frac{1}{\sqrt{2\pi}\sigma}\exp(-\frac{(x_i-\mu)^2}{2\sigma^2}) \\
+\ \ \ \ \ = \sum_{i=1}^n \log\frac{1}{\sqrt{2\pi}\sigma} + \sum_{i=1}^n-\frac{(x_i-\mu)^2}{2\sigma^2} \\
+\ \ \ \ \ = -\frac{n}{2}\log(2\pi\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n(x_i-\mu)^2
+\end{array}\]</span></p>
+<p>最大化上述对数似然函数，即对 <span class="math inline">\(\mu\)</span> 和 <span class="math inline">\(\sigma\)</span> 求偏导并令其等于零，解得：</p>
+<p><span class="math display">\[\begin{cases}
+\mu = \frac{1}{n}\sum_{i=1}^nx_i \\
+\sigma^2 = \frac{1}{n}\sum_{i=1}^n(x_i - \mu)^2
+\end{cases}\]</span></p>
+<p>这两个值就是样本均值和样本方差，和矩估计的结果是一致的，并且意义非常直观：<strong>样本的均值即高斯分布的均值, 样本的伪方差即高斯分布的方差</strong>。</p>
+<h3><span id="问题-随机变量无法直接完全观察到">问题 : 随机变量无法直接(完全)观察到</span></h3>
+<p>随机挑选10000位志愿者，测量他们的身高: 若样本中存在男性和女性，身高分别服从 <span class="math inline">\(N(μ_1,σ_1)\)</span> 和 <span class="math inline">\(N(μ_2,σ_2)\)</span> 的分布，试估计 <span class="math inline">\(μ_1,σ_1,μ_2,σ_2\)</span> 。</p>
+<p>更加一般化的描述如下：随机变量 <span class="math inline">\(X\)</span> 是有 <span class="math inline">\(K\)</span> 个高斯分布混合而成，取各个高斯分布的概率（权值）为 <span class="math inline">\(π_1,π_2... π_K\)</span>，第 <span class="math inline">\(i\)</span> 个高斯分布的均值为 <span class="math inline">\(μ_i\)</span>，方差为 <span class="math inline">\(Σ_i\)</span>。若观测到随机变量 <span class="math inline">\(X\)</span> 的一系列样本 <span class="math inline">\(x_1,x_2,...,x_n\)</span>，试估计参数 <span class="math inline">\(π\)</span>，<span class="math inline">\(μ\)</span>，<span class="math inline">\(Σ\)</span>。</p>
+<p>建立目标对数似然函数：</p>
+<p><span class="math display">\[l_{\pi,\mu,\Sigma}(x) = \sum_{i=1}^N\log(\sum_{k=1}^K\pi_kN(x_i\ |\ \mu_k, \Sigma_k))\]</span></p>
+<p>由于在对数函数里面又有加和，我们<strong>没法</strong>直接用求导解方程的办法直接求得最大值。为了解决这个问题，我们分成两步。</p>
+<p><strong>第一步 : 估算数据来自哪个组份</strong></p>
+<p>估计数据由每个组份生成的概率 : 对于每个样本 <span class="math inline">\(x_i\)</span>，它由第 <span class="math inline">\(k\)</span> 个组份生成的概率为</p>
+<p><span class="math display">\[\gamma(i, k) = \frac{\pi_kN(x_i\ |\ \mu_k, \Sigma_k)}{\sum_{j=1}^K\pi_jN(x_i\ |\ \mu_j, \Sigma_j)}\]</span></p>
+<p>上式中的 <span class="math inline">\(μ\)</span> 和 <span class="math inline">\(Σ\)</span> 也是待估计的值，因此采样迭代法: 在计算 <span class="math inline">\(γ(i,k)\)</span> 时假定 <span class="math inline">\(μ\)</span> 和 <span class="math inline">\(Σ\)</span> 已知; <span class="math inline">\(γ(i,k)\)</span> 亦可看成组份 <span class="math inline">\(k\)</span> 在生成数据 <span class="math inline">\(x_i\)</span> 时所做的贡献。</p>
+<p><strong>第二步 : 估计每个组份的参数</strong></p>
+<p>对于所有的样本点，对于组份 <span class="math inline">\(k\)</span> 而言，可看做生成了 <span class="math inline">\(\{\gamma(i, k)x_i\ |\ i = 1,2,...N\}\)</span> 这些点。组份 <span class="math inline">\(k\)</span> 是一个标准的高斯分布，利用上面的结论可以得出:</p>
+<p><span class="math display">\[\begin{cases}
+N_k = \sum_{i=1}^N\gamma(i, k) \\
+\mu_k = \frac{1}{N_k}\sum_{i=1}^N\gamma(i,k)x_i \\
+\Sigma_k = \frac{1}{N_k}\sum_{i=1}^N\gamma(i,k)(x_i - \mu_k)(x_i-\mu_k)^T \\
+\pi_k = \frac{N_k}{N} = \frac{1}{N}\sum_{i=1}^N\gamma(i, k)
+\end{cases}\]</span></p>
+<p>然后就可以迭代了，我们先拍脑门给一个 <span class="math inline">\(\gamma(i, k)\)</span> ，然后在已知 <span class="math inline">\(\gamma\)</span> 的情况下计算第二步四个量，然后再代入第一步更新 <span class="math inline">\(\gamma\)</span>，然后再计算第二步 ... 如此往复，直到收敛。</p>
+<h2><span id="em算法">EM算法</span></h2>
+<p>其实上述的高斯混合模型就是EM算法的一个应用，接下来我们用公式正式推导一下EM算法。</p>
+<p><strong>EM算法的提出</strong></p>
+<p>假定有训练集 <span class="math inline">\(\{x^{(1)}, x^{(2)}, ... , x^{(m)}\}\)</span>，包含 <span class="math inline">\(m\)</span> 个独立样本，希望从中找到该组数据的模型 <span class="math inline">\(p(x,z)\)</span> 的参数，其中 <span class="math inline">\(z\)</span> 是一个隐变量。</p>
+<p><strong>通过最大似然估计建立目标函数</strong></p>
+<p><span class="math display">\[l(\theta) = \sum_{i=1}^m\log p(x\ ;\theta) = \sum_{i=1}^m\log \sum_z p(x,z;\theta)\]</span></p>
+<p>由于 <span class="math inline">\(z\)</span> 是隐随机变量，不方便直接找到参数估计。所以我们采用以下策略：计算 <span class="math inline">\(l(θ)\)</span> 下界，求该下界的最大值；重复该过程，直到收敛到<strong>局部最大值</strong>。</p>
+<p>如下图所示，<span class="math inline">\(P(x\ |\ \theta)\)</span> 是我们的目标函数，我们想在绿线那个点的下方找到一个函数 <span class="math inline">\(r(x\ |\ \theta)\)</span>，使 <span class="math inline">\(r(x\ |\ \theta)\)</span> 严格小于 <span class="math inline">\(P(x\ |\ \theta)\)</span>，并且我们希望在绿线那个点上 <span class="math inline">\(r(x\ |\ \theta) = P(x\ |\ \theta)\)</span>。找到了 <span class="math inline">\(r(x\ |\ \theta)\)</span> 之后我们可以求 <span class="math inline">\(r(x\ |\ \theta)\)</span> 的最大值，也就是红线处，然后重复以上步骤，直到收敛到局部最大值。</p>
+<p><img src="/images/1474462011618.png"></p>
+<p><strong>Jensen不等式</strong></p>
+<p>在推导如何找下界 <span class="math inline">\(r(x\ |\ \theta)\)</span> 之前，先来看一下Jensen不等式，等下要用到。</p>
+<p>若 <span class="math inline">\(f\)</span> 是凸函数，则： <span class="math display">\[f(\theta x + (1 - \theta) y) \leqslant \theta f(x) + (1-\theta)f(y) \]</span></p>
+<p>把上推广一下，若 <span class="math inline">\(\theta_1, ..., \theta_k \geqslant 0, \ \theta_1 + ... + \theta_k = 1\)</span>，则： <span class="math display">\[f(\theta_1x_1 + ... + \theta_k\theta_k) \leqslant \theta_1f(x_1) + ... + \theta_kf(x_k)\]</span></p>
+<p><span class="math inline">\(\theta_i\)</span> 也可以看作是 <span class="math inline">\(x_i\)</span> 发生的概率，这样的话就得到： <span class="math display">\[f(E(x)) \leqslant E(f(x))\]</span></p>
+<p><strong>寻找下界</strong></p>
+<p>我们继续求 <span class="math inline">\(P(x\ |\ \theta)\)</span> 的下界。</p>
+<p>令 <span class="math inline">\(Q_i\)</span> 是 <span class="math inline">\(z\)</span> 的某一个分布，<span class="math inline">\(Qi≥0\)</span>，应用Jesen不等式有:</p>
+<p><span class="math display">\[\begin{array}{lcl}
+l(\theta) = \sum_{i=1}^m\log \sum_z p(x,z;\theta) \\
+\ \ \ \ \ \ = \sum_{i=1}^m\log \sum_{z^{(i)}} p(x^{(i)},z^{(i)};\theta) \\
+\ \ \ \ \ \ = \sum_{i=1}^m\log \sum_{z^{(i)}} Q_i(z^{(i)})\frac{p(x^{(i)},z^{(i)};\theta)}{Q_i(z^{(i)})} \\
+\ \ \ \ \ \ \geqslant \sum_{i=1}^m \sum_{z^{(i)}}Q_i(z^{(i)})\log\frac{p(x^{(i)},z^{(i)};\theta)}{Q_i(z^{(i)})}
+\end{array}\]</span></p>
+<p>最后那个式子即为我们要寻找的下界，为了使等号成立，<span class="math inline">\(\frac{p(x^{(i)},z^{(i)};\theta)}{Q_i(z^{(i)})}\)</span> 需要是一个常数，即</p>
+<p><span class="math display">\[\frac{p(x^{(i)},z^{(i)};\theta)}{Q_i(z^{(i)})} = C\]</span></p>
+<p>进一步分析，为了满足Jessen不等式，还需要 <span class="math inline">\(\sum_zQ_i(z^{(i)}) = 1\)</span>，所以 <span class="math inline">\(Q_i(z^{(i)})\)</span> 应该能约掉 <span class="math inline">\(p(x^{(i)},z^{(i)}; \theta)\)</span>，并且进行归一化：</p>
+<p><span class="math display">\[\begin{array}{lcl}
+Q_i(z^{(i)}) = \frac{p(x^{(i)},z^{(i)};\theta)}{\sum_zp(x^{(i)},z^{(i)};\theta)} \\
+\ \ \ \ \ \ \ \ \ \ \ = \frac{p(x^{(i)},z^{(i)};\theta)}{p(x^{(i)};\theta)} \\
+\ \ \ \ \ \ \ \ \ \ \ = p(z^{(i)}\ |\ x^{(i)}; \theta)
+\end{array}\]</span></p>
+<p>解出来就是一个<strong>条件概率</strong>！</p>
+<p><strong>EM算法整体框架</strong></p>
+<p><img src="/images/1474470389249.png"></p>
+<p><strong>E step</strong>，求每组数据的期望（实际是条件概率），然后<strong>M setp</strong>，最大化期望，之后再翻回去更新期望，如此往复直至收敛，这就是所谓<strong>期望最大化算法（EM）</strong>。</p>
+<h2><span id="从理论公式推导gmm">从理论公式推导GMM</span></h2>
+<p>随机变量 <span class="math inline">\(X\)</span> 是有 <span class="math inline">\(K\)</span> 个高斯分布混合而成，取各个<strong>高斯分布</strong>的概率为 <span class="math inline">\(φ_1φ_2... φ_K\)</span>，第 <span class="math inline">\(i\)</span> 个高斯分布的均值为 <span class="math inline">\(μ_i\)</span>，方差为 <span class="math inline">\(Σ_i\)</span>。若观测到随机变量 <span class="math inline">\(X\)</span> 的一系列样本 <span class="math inline">\(x_1,x_2,...,x_n\)</span>，试估计参数 <span class="math inline">\(φ\)</span>，<span class="math inline">\(μ\)</span>，<span class="math inline">\(Σ\)</span>。</p>
+<p>按照EM算法的思想，我们来推导一下。</p>
+<p><strong>E-step</strong></p>
+<p><span class="math display">\[w_j^{(i)} = Q_i(z^{(i)} = j) = P(z^{(i)} = j\ |\ x^{(i)}; \phi, \mu, \Sigma)\]</span></p>
+<p><strong>M-step</strong></p>
+<p><span class="math display">\[\begin{array}{lcl}
+\ \ \ \sum_{i=1}^m \sum_{z^{(i)}}Q_i(z^{(i)})\log\frac{p(x^{(i)},z^{(i)};\phi, \mu, \Sigma)}{Q_i(z^{(i)})} \\
+= \sum_{i=1}^m \sum_{j=1}^k Q_i(z^{(i)} = j)\log\frac{p(x^{(i)}|z^{(i)}=j; \mu, \Sigma)p(z^{(i)}=j; \phi)}{Q_i(z^{(i)} = j)} \\
+= \sum_{i=1}^m \sum_{j=1}^k w_j^{(i)}\log \frac{\frac{1}{(2\pi)^{2/n}|\Sigma_j|^{1/2}}\exp(-\frac{1}{2}(x^{(i)}-\mu_j)^T\Sigma_j^{-1}(x^{(i)}-\mu_j))\cdot \phi_j}{w_j^{(i)}}
+\end{array}\]</span></p>
+<p>其中，<span class="math inline">\(p(z^{(i)}=j; \phi)\)</span> 为第 <span class="math inline">\(i\)</span> 个样本的隐变量属于 <span class="math inline">\(j\)</span> 类的概率，也就是 <span class="math inline">\(\phi_j\)</span>。</p>
+<p>把上式对均值 <span class="math inline">\(\mu_l\)</span> 求偏导得：</p>
+<p><span class="math display">\[\begin{array}{lcl}
+\ \ \ \bigtriangledown_{\mu_l} \sum_{i=1}^m \sum_{j=1}^k w_j^{(i)}\log \frac{\frac{1}{(2\pi)^{2/n}|\Sigma_j|^{1/2}}\exp(-\frac{1}{2}(x^{(i)}-\mu_j)^T\Sigma_j^{-1}(x^{(i)}-\mu_j))\cdot \phi_j}{w_j^{(i)}} \\
+= \bigtriangledown_{\mu_l} \sum_{i=1}^m \sum_{j=1}^k w_j^{(i)} (-\frac{1}{2}(x^{(i)}-\mu_j)^T\Sigma_j^{-1}(x^{(i)}-\mu_j)) \\
+= \sum_{i=1}^m w_l^{(i)}(\Sigma_l^{-1}x^{(i)}-\Sigma_l^{-1}\mu_l)
+\end{array}\]</span></p>
+<blockquote>
+<p>补充：<span class="math inline">\(\frac{\partial(x^TAx)}{\partial x} = 2Ax\)</span></p>
+</blockquote>
+<p>令上式等于 <span class="math inline">\(0\)</span>，解的均值：</p>
+<p><span class="math display">\[\mu_l = \frac{\sum_{i=1}^mw^{(i)}_lx^{(i)}}{\sum_{i=1}^mw^{(i)}_l}\]</span></p>
+<p>对 <span class="math inline">\(\Sigma_j\)</span> 求偏导并令其等于零可以得出：</p>
+<p><span class="math display">\[\Sigma_j = \frac{\sum_{i=1}^mw^{(i)}_j(x^{(i)}-\mu_j)(x^{(i)}-\mu_j)^T}{\sum_{i=1}^mw^{(i)}_j}\]</span></p>
+<p>继续对 <span class="math inline">\(\phi_j\)</span> 求偏导得到：</p>
+<p><span class="math display">\[\begin{array}{lcl}
+\ \ \ \bigtriangledown_{\phi_j} \sum_{i=1}^m \sum_{j=1}^k w_j^{(i)}\log \frac{\frac{1}{(2\pi)^{2/n}|\Sigma_j|^{1/2}}\exp(-\frac{1}{2}(x^{(i)}-\mu_j)^T\Sigma_j^{-1}(x^{(i)}-\mu_j))\cdot \phi_j}{w_j^{(i)}} \\
+= \bigtriangledown_{\phi_j} \sum_{i=1}^m \sum_{j=1}^k w_j^{(i)}\log \phi_j
+\end{array}\]</span></p>
+<p>我们发现令其等于零并不能解出 <span class="math inline">\(\phi_j\)</span>，而且 <span class="math inline">\(\phi_j\)</span> 还有一个等值约束：<span class="math inline">\(\sum_{j=1}^k\phi_j = 1\)</span>，所以我们用<strong>Lagrange乘数</strong>法来求解这个约束问题。</p>
+<p><strong>建立Lagrange函数</strong></p>
+<p><span class="math display">\[L(\phi, \beta) = \sum_{i=1}^m \sum_{j=1}^k w_j^{(i)}\log \phi_j + \beta(\sum_{j=1}^k\phi_j  - 1)\]</span></p>
+<p>对Lagrange函数求偏导：</p>
+<p><span class="math display">\[\frac{\partial}{\partial \phi_j}L(\phi,\beta) = \sum_{i=1}^m\frac{w^{(i)}_j}{\phi_j} + \beta\]</span></p>
+<p>令其等于零：</p>
+<p><span class="math display">\[\begin{array}{lcl}
+\ \ \ \ \sum_{i=1}^m\frac{w^{(i)}_j}{\phi_j} + \beta = 0 \\
+\Rightarrow \sum_{i=1}^m w^{(i)}_j + \beta\cdot \phi_j = 0 \\
+\Rightarrow \sum_{j=1}^k\sum_{i=1}^m w^{(i)}_j + \sum_{i=1}^k\beta\cdot \phi_j = 0 \\
+\Rightarrow \sum_{i=1}^m\sum_{j=1}^k w^{(i)}_j + \beta = 0 \\
+\Rightarrow \sum_{i=1}^m1 + \beta = 0 \\
+\Rightarrow \beta = -m \\
+\Rightarrow \sum_{i=1}^m\frac{w^{(i)}_j}{\phi_j} -m = 0 \\
+\Rightarrow \phi_j = \frac{1}{m}\sum_{i=1}^mw^{(i)}_j
+\end{array}\]</span></p>
+<p><strong>总结</strong></p>
+<p>对于所有的数据点，可以看作组份 <span class="math inline">\(k\)</span> 生成了这些点。组份 <span class="math inline">\(k\)</span> 是一个标准的高斯分布，总结上面的结论：</p>
+<p><span class="math display">\[\begin{cases}
+N_k = \sum_{i=1}^N\gamma(i, k) \\
+\mu_k = \frac{1}{N_k}\sum_{i=1}^N\gamma(i,k)x_i \\
+\Sigma_k = \frac{1}{N_k}\sum_{i=1}^N\gamma(i,k)(x_i - \mu_k)(x_i-\mu_k)^T \\
+\pi_k = \frac{N_k}{N} = \frac{1}{N}\sum_{i=1}^N\gamma(i, k)
+\end{cases}\]</span></p>
+<p>得到了与直观理解GMM一样的公式！</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Statistics/">Statistics</a><a href="/tags/EM/">EM</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

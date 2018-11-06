@@ -1,0 +1,663 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    Deep NLP - Speech Recognition | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="Deep NLP - Speech Recognition">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      Deep NLP - Speech Recognition</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/08/10/Deep NLP - Speech Recognition/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-08-10T13:30:19.000Z">
+          2017-08-10
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>Speech recognition (SR) is the inter-disciplinary sub-field of computational linguistics that develops methodologies and technologies that enables the recognition and translation of spoken language into text by computers. <a id="more"></a></p>
+<!-- toc -->
+<ul>
+<li><a href="#speech-recognition">Speech recognition</a>
+<ul>
+<li><a href="#acoustic-representation">Acoustic representation</a></li>
+<li><a href="#phonetic-representation">Phonetic representation</a></li>
+<li><a href="#history">History</a></li>
+<li><a href="#probabilistic-speech-recognition">Probabilistic speech recognition</a></li>
+</ul></li>
+<li><a href="#neural-network-speech-recognition">Neural network speech recognition</a>
+<ul>
+<li><a href="#hybrid-neural-networks">Hybrid neural networks</a></li>
+<li><a href="#traning-losses">Traning losses</a></li>
+<li><a href="#sequence-discriminative-training">Sequence discriminative training</a></li>
+<li><a href="#new-architectures">New architectures</a></li>
+</ul></li>
+</ul>
+<!-- tocstop -->
+<h2><span id="speech-recognition">Speech recognition</span></h2>
+<p>Speech problems</p>
+<ul>
+<li><strong>Automatic speech recognition</strong>
+<ul>
+<li>Spontaneous vs read speech</li>
+<li>Large vocabulary</li>
+<li>In noise</li>
+<li>Low resource</li>
+<li>Far-field</li>
+<li>Accent-independent</li>
+<li>Speaker-adaptive</li>
+</ul></li>
+<li>Text to speech
+<ul>
+<li>Low resource</li>
+<li>Realistic prosody</li>
+</ul></li>
+<li>Speaker identification</li>
+<li>Speech enhancement</li>
+<li>Speech separation</li>
+</ul>
+<h3><span id="acoustic-representation">Acoustic representation</span></h3>
+<p><strong>Speech physical realization</strong></p>
+<ul>
+<li>Waves of changing air pressure.</li>
+<li>Realised through excitation from the vocal cords</li>
+<li>Modulated by the vocal tract.</li>
+<li>Modulated by the articulators (tongue, teeth, lips)</li>
+<li>Converted to Voltage with a microphone</li>
+<li>Sampled with an <em>Analogue to Digital Converter</em></li>
+<li>Human hearing is 50Hz-20kHz</li>
+<li>Human speech is 85Hz–8kHz</li>
+<li>Contemporary speech processing mostly around 16kHz 16bits/sample</li>
+</ul>
+<p>We want a <strong>low-dimensionality</strong> representation, invariant to speaker, background noise, rate of speaking etc.</p>
+<ul>
+<li>Fourier analysis shows energy in diﬀerent frequency bands</li>
+<li>windowed short-term fast Fourier transform (FFT)</li>
+<li>e.g. FFT on overlapping 25ms windows (400 samples) taken every 10ms
+<ul>
+<li>Energy vs frequency [discrete] vs time [discrete]</li>
+<li>can hadle it as images</li>
+</ul></li>
+</ul>
+<p><img src="/images/NLP/fft.png"></p>
+<p><strong>Mel frequency representation</strong></p>
+<ul>
+<li><p>FFT is still too high-dimensional for conventional ASR system</p></li>
+<li><p>Downsample by local weighted averages on <a href="https://www.wikiwand.com/zh-hans/%E6%A2%85%E5%B0%94%E5%88%BB%E5%BA%A6" target="_blank" rel="noopener">mel scale</a> non-linear spacing, and take a log. <span class="math display">\[
+m = 1127\ln(1+\frac{f}{700})
+\]</span></p></li>
+<li><p>Result in log-mel features (default for neural network speech modelling.)</p></li>
+<li><p>40+ dimensional features per frame</p>
+<p><img src="/images/NLP/freq.png"></p></li>
+</ul>
+<p><strong>MFCC</strong></p>
+<p><strong>Mel Frequency Cepstral Coeﬃcients</strong> - MFCCs are the <a href="https://www.wikiwand.com/zh-hans/%E9%9B%A2%E6%95%A3%E9%A4%98%E5%BC%A6%E8%BD%89%E6%8F%9B" target="_blank" rel="noopener">discrete cosine transformation</a> of the mel ﬁlterbank energies. Whitened and low-dimensional.</p>
+<ul>
+<li>Similar to Principal Components of log spectra</li>
+<li>GMM speech recognition systems may use 13 MFCCs</li>
+</ul>
+<p><strong>Perceptual Linear Prediction</strong> – a common alternative representation.</p>
+<p><strong>Frame stacking</strong>- it’s common to concatenate several consecutive frames.</p>
+<ul>
+<li>e.g. 26 for fully-connected DNN. 8 for LSTM.</li>
+</ul>
+<p>GMMs used local diﬀerences (deltas) and second-order diﬀerences (delta-deltas) to capture dynamics. (13 + 13 + 13 dimensional). Ultimately use <strong>39 dimensional</strong> <a href="https://www.wikiwand.com/zh-hans/%E7%B7%9A%E6%80%A7%E5%88%A4%E5%88%A5%E5%88%86%E6%9E%90" target="_blank" rel="noopener">linear discriminant analysis</a> ( class-aware PCA) projection of 9 stacked MFCC vectors.</p>
+<h3><span id="phonetic-representation">Phonetic representation</span></h3>
+<p>Speech evolved as communication to convey information, consists of sentences (in ASR we usually talk about “utterances”). Sentences composed of words.</p>
+<p>Minimal unit is a “<strong>phoneme</strong>”</p>
+<ul>
+<li>Minimal unit that distinguishes one word from another</li>
+<li>Set of 40-60 distinct sounds</li>
+<li>Vary per language</li>
+<li>Universal representations
+<ul>
+<li>IPA: international phonetic alphabet</li>
+<li>X-SAMPA (ASCII)</li>
+</ul></li>
+</ul>
+<p>Homophones</p>
+<ul>
+<li>distinct words with the same pronunciation: “there” vs “their”</li>
+</ul>
+<p>Prosody</p>
+<ul>
+<li>How something is said can convey meaning.</li>
+</ul>
+<p><strong>Datasets</strong></p>
+<ul>
+<li>TIMIT
+<ul>
+<li>Hand-marked phone boundaries given</li>
+<li>630 speakers × 10 utterances</li>
+</ul></li>
+<li>Wall Street Journal (WSJ) 1986 Read speech. WSJ0 1991, 30k vocab</li>
+<li>Broadcast News (BN) 1996 104 hours</li>
+<li>Switchboard (SWB) 1992. 2000 hours spontaneous telephone speech 500 speakers</li>
+<li>Google voice search
+<ul>
+<li>anonymized live traﬃc 3M utterances 2000 hours</li>
+<li>hand-transcribed 4M vocabulary.</li>
+<li>Constantly refreshed, synthetic reverberation + additive noise</li>
+</ul></li>
+<li>DeepSpeech 5000h read (Lombard) speech + SWB with additive noise.</li>
+<li>YouTube 125,000 hours aligned captions (Soltau et al., 2016)</li>
+</ul>
+<h3><span id="history">History</span></h3>
+<ul>
+<li>1960s Dynamic Time Warping</li>
+<li>1970s Hidden Markov Models</li>
+<li>Multi-layer perceptron 1986</li>
+<li>Speech recognition with neural networks 1987–1995</li>
+<li>Superseded by GMMs 1995–2009</li>
+<li>Neural network features 2002–</li>
+<li>Deep networks 2006– (Hinton, 2002)</li>
+<li>Deep networks for speech recognition
+<ul>
+<li>Good results on TIMIT (Mohamed et al., 2009)</li>
+<li>Results on large vocabulary systems 2010 (Dahl et al., 2011)</li>
+<li>Google lunches DNN ASR product 2011</li>
+<li>Dominant paradigm for ASR 2012 (Hinton et al., 2012)</li>
+</ul></li>
+<li>Recurrent networks for speech recognition 1990, 2012-
+<ul>
+<li>New models (attention, LAS, neural transducer)</li>
+</ul></li>
+</ul>
+<h3><span id="probabilistic-speech-recognition">Probabilistic speech recognition</span></h3>
+<p>Speech signal represented as an observation sequence <span class="math inline">\(o = \{o_t\}\)</span>, we want to ﬁnd the <strong>most likely</strong> word sequence <span class="math inline">\(\hat{w}\)</span>.</p>
+<p>We model this with a <strong>Hidden Markov Model</strong>.</p>
+<ul>
+<li><p>The system has a set of discrete states, transitions from state to state according to <strong>transition probabilities</strong> (Markovian: memoryless)</p></li>
+<li><p>Acoustic observation when making a transition is conditioned on state alone. <span class="math inline">\(P(o_t|c_t)\)</span></p></li>
+<li><p>We seek to recover the <strong>state sequence</strong> and consequently the phoneme sequence and consequently the word sequence.</p>
+<p><img src="/images/NLP/hmm.png"></p></li>
+</ul>
+<p>We choose the decoder output as the most likely sequence <span class="math inline">\(\hat{w}\)</span> from all possible sequences, <span class="math inline">\(Σ∗\)</span>, for an observation sequence <span class="math inline">\(o\)</span>: <span class="math display">\[
+\begin{align}
+\hat{w} &amp; = \arg\max_{w\in\sum*}P(w|o) \\
+&amp; = \arg\max_{w\in\sum*}P(o|w)P(w) \\
+\end{align}
+\]</span> A product of <em>Acoustic model</em> and <em>Language model</em> scores. <span class="math display">\[
+P(o|w) = \sum_{d,c,p}P(o|c)P(c|p)P(p|w)
+\]</span> Where <span class="math inline">\(p\)</span> is the phone sequence and <span class="math inline">\(c\)</span> is the state sequence.</p>
+<p>We can model word sequences with a language model: <span class="math display">\[
+P(w_1, w_2, ..., w_N) = P(w_0)\prod P(w_i|w_0, ..., w_{i-1})
+\]</span> <strong>Speech recognition as transduction</strong></p>
+<p><img src="/images/NLP/tranduction.png"></p>
+<p><strong>Lexicon</strong>: phoneme to word</p>
+<p>Construct graph using <strong>Weighted Finite State Transducers (WFST)</strong>.</p>
+<p><img src="/images/NLP/lexicon.png"></p>
+<p>Compose Lexicon FST with Grammar FST <span class="math inline">\(L \circ G\)</span>.</p>
+<p><img src="/images/NLP/FST.png"></p>
+<p><em>Phonetic Unites</em></p>
+<ul>
+<li>Phonemes: “cat” → /K/, /AE/, /T/</li>
+<li>Context independent HMM states <span class="math inline">\(k1, k2...\)</span></li>
+<li>Context dependent states</li>
+<li>Context dependent phones</li>
+<li>Diphones (pairs of half-phones)</li>
+<li>Syllables</li>
+<li>Word-parts cf Machine translation (Wu et al., 2016)</li>
+<li>Characters (graphemes)</li>
+<li>Whole words Sak et al. (2014a, 2015); Soltau et al. (2016)
+<ul>
+<li>Hard to generalize to rare words</li>
+</ul></li>
+</ul>
+<p>Choice depends on language, size of dataset, task, resources available.</p>
+<p><strong>The difference between Phone and Phoneme</strong></p>
+<blockquote>
+<p>A <a href="http://en.wikipedia.org/wiki/Phoneme" target="_blank" rel="noopener"><strong>phoneme</strong></a> is the <strong>smallest structural unit</strong> that distinguishes <strong>meaning in a language</strong>. Phonemes are not the physical segments themselves, but are cognitive abstractions or categorizations of them.</p>
+<p>On the other hand, <a href="http://en.wikipedia.org/wiki/Phone_(phonetics)" target="_blank" rel="noopener"><strong>phones</strong></a> refer to the instances of phonemes in the actual <strong>utterances</strong> - i.e. the physical segments.</p>
+<p>For example:</p>
+<blockquote>
+<p>the words &quot;madder&quot; and &quot;matter&quot; obviously are composed of distinct <em>phonemes</em>; however, in american english, both words are pronounced almost identically, which means that their <em>phones</em> are the same, or at least very close in the acoustic domain.</p>
+</blockquote>
+</blockquote>
+<p><strong>Context dependent phonetic clustering</strong></p>
+<p>A phone’s realization depends on the preceding and following context, could improve discrimination if we model diﬀerent contextual realizations separately:</p>
+<ul>
+<li>AE preceded by K, followed by T: AE+T-K</li>
+</ul>
+<p>But, if we have 42 phones, and 3 states per phone, there are <span class="math inline">\(3 × 42^3\)</span> context-dependent phones, But most of these won't be observed.</p>
+<p>So <em>cluster</em> – group together similar distributions and train a joint model. Have a “back-oﬀ” rule to determine which model to use for unobserved contexts. Usually a decision tree.</p>
+<p><strong>Gaussian Mixture Models (GMM)</strong></p>
+<ul>
+<li>Dominant paradigm for ASR from 1990 to 2010</li>
+</ul>
+<p>Model the probability distribution of the acoustic features for each state: <span class="math display">\[
+P(o_t|c_i) = \sum_j w_{ij}N(o_t;\mu_{ij}, \sigma_{ij})
+\]</span> Often use <strong>diagonal covariance Gaussians</strong> to keep number of parameters under control.</p>
+<p>Train by the E-M algorithm (Dempster et al., 1977) alternating:</p>
+<ul>
+<li>M: <em>forced alignment</em> computing the maximum-likelihood state sequence for each utterance</li>
+<li>E: parameter <span class="math inline">\((µ, σ)\)</span> estimation</li>
+</ul>
+<p>Complex training procedures to incrementally ﬁt increasing numbers of components per mixture.</p>
+<ul>
+<li>More components, better ﬁt. 79 parameters / component.</li>
+</ul>
+<p>Given an alignment mapping audio frames to states, this is parallelizable by state. But hard to share parameters / data across states.</p>
+<p><em>Forced alignment</em></p>
+<p>Forced alignment uses a model to compute the <strong>maximum likelihood alignment</strong> between speech features and phonetic states. For each training utterance, construct the set of phonetic states for the ground truth transcription. Use Viterbi algorithm to ﬁnd ML monotonic state sequence under constraints such as at least one frame per state. Results in a phonetic label for each frame, which can give hard or soft segmentation.</p>
+<p><img src="/images/NLP/force.png"></p>
+<p>With a transducer with states <span class="math inline">\(ci\)</span>:</p>
+<p><img src="/images/NLP/HMM.png"></p>
+<p>Compute state likelihoods at time <span class="math inline">\(t\)</span>: <span class="math display">\[
+P(o_{1, ...., t}|c_i) = \sum_j P(o_t|c_j)P(o_{1, ..., t}|c_j)P(c_j|c_i)
+\]</span> With transition probabilities: <span class="math inline">\(P(c_i|c_j)\)</span>, find the best path: <span class="math display">\[
+P(o_{1, ..., t}|c_i) = \max_j P(o_t|c_j)P(o_{1, ..., t}|c_j)P(c_i|c_j)
+\]</span> I do not quite understand the image below actually:</p>
+<p><img src="/images/NLP/fa.png"></p>
+<p><strong>Decoding</strong></p>
+<p>Speech recognition <strong>unfolds</strong> in much the same way. Now we have a graph instead of a straight-through path.</p>
+<ul>
+<li>Optional silences between words</li>
+<li>Alternative pronunciation paths.</li>
+</ul>
+<p>Typically use max probability, and work in the log domain. Hypothesis space is huge, so we only keep a “beam” of the best paths, and can lose what would end up being the true best path.</p>
+<p><img src="/images/NLP/unfolds.png"></p>
+<h2><span id="neural-network-speech-recognition">Neural network speech recognition</span></h2>
+<p><strong>Two main paradigms</strong></p>
+<ul>
+<li>Use neural networks to compute nonlinear feature representations.
+<ul>
+<li>“Bottleneck” or “tandem” features (Hermansky et al., 2000)</li>
+<li>Low-dimensional representation is modelled conventionally with GMMs.</li>
+<li>Allows all the GMM machinery and tricks to be exploited.</li>
+</ul></li>
+<li>Use neural networks to estimate phonetic unit probabilities.</li>
+</ul>
+<p><strong>Neural network features</strong></p>
+<p>Train a neural network to <strong>discriminate classes</strong>. Use output or a low-dimensional <em>bottleneck layer</em> representation as features.</p>
+<p><img src="/images/NLP/bottn.png"></p>
+<ul>
+<li>TRAP: Concatenate PLP-HLDA features and NN features.</li>
+<li>Bottleneck outperforms posterior features (Grezl et al., 2007)</li>
+<li>Generally DNN features + GMMs reach about the same performance as hybrid DNN-HMM systems, but are much more complex.</li>
+</ul>
+<h3><span id="hybrid-neural-networks">Hybrid neural networks</span></h3>
+<p>Train the network as a classiﬁer with a softmax across the phonetic units. Train with cross-entropy. Softmax will converge to posterior across phonetic states: <span class="math inline">\(P(c_i|o_i)\)</span>.</p>
+<p>Now we model <span class="math inline">\(P(o|c)\)</span> with a Neural network instead of a Gaussian Mixture model. Everything else stays the same. <span class="math display">\[
+P(o|c) = \prod_{t}P(o_t|c_t)
+\]</span></p>
+<p><span class="math display">\[
+\begin{align}
+P(o_t|c_t) &amp; = \frac{P(c_t|o_t)P(o_t)}{P(c_t)} \\
+&amp; \varpropto  \frac{P(c_t|o_t)}{P(c_t)} \\
+\end{align}
+\]</span></p>
+<p>For observations <span class="math inline">\(o_t\)</span> at time <span class="math inline">\(t\)</span> and a CD state sequence <span class="math inline">\(c_t\)</span>. We can ignore <span class="math inline">\(P(o_t)\)</span> since it is the same for all decoding paths.</p>
+<p>The last term is called the “<strong>scaled posterior</strong>”: <span class="math display">\[
+\log P(o_t|c_t) = \log P(c_t|o_t) - \alpha \log P(c_t)
+\]</span> Empirically (by cross validation) we actually ﬁnd better results with a “<strong>prior smoothing</strong>” term <span class="math inline">\(α ≈ 0.8\)</span>.</p>
+<p><strong>Input features</strong></p>
+<p>Neural networks can handle high-dimensional features with correlated features. Use (26) stacked ﬁlterbank inputs. (40-dimensional mel-spaced ﬁlterbanks).</p>
+<p>Example ﬁlters learned in the ﬁrst layer of a fully-connected network:</p>
+<p><img src="/images/NLP/eg_inp.png"></p>
+<ul>
+<li>(33 x 8 ﬁlters. Each subimage 40 frequency vs 26 time.)</li>
+</ul>
+<p><strong>Network architectures</strong></p>
+<ul>
+<li>Fully connected</li>
+<li>CNN
+<ul>
+<li>Time delay neural networks
+<ul>
+<li>Waibel et al. (1989)</li>
+<li>Dilated convolutions</li>
+</ul></li>
+<li>CNNs in time or frequency domain. Abdel-Hamid et al. (2014); Sainath et al. (2013)</li>
+<li>Wavenet (van den Oord et al., 2016)</li>
+</ul></li>
+<li>RNN
+<ul>
+<li>RNN (Robinson and Fallside, 1991)</li>
+<li>LSTM Graves et al. (2013)</li>
+<li>Deep LSTM-P Sak et al. (2014b)</li>
+<li>CLDNN (right) (Sainath et al., 2015a)</li>
+<li>GRU. DeepSpeech 1/2 (Amodei et al., 2015)</li>
+<li>Bidirectional (Schuster and Paliwal, 1997) helps, but introduces latency.</li>
+<li>Dependencies not long at speech frame rates (100Hz).</li>
+<li>Frame stacking and down-sampling help.</li>
+</ul></li>
+</ul>
+<p><em>Human parity in speech recognition (Xiong et al., 2016)</em></p>
+<ul>
+<li>Ensemble of BLSTMs</li>
+<li>i-vectors for speaker normalization
+<ul>
+<li>i-vector is an embedding of audio trained to discriminate between speakers. (Speaker ID)</li>
+</ul></li>
+<li>Interpolated n-gram + LSTM language model.</li>
+<li>5.8% WER on SWB (vs 5.9% for human).</li>
+</ul>
+<h3><span id="traning-losses">Traning losses</span></h3>
+<p><em>Cross Entropy Training</em></p>
+<ul>
+<li><p>GMMs were trained with <em>Maximum Likelihood</em></p></li>
+<li><p>Conventional training uses Cross-Entropy loss. <span class="math display">\[
+L_{X\ ENT}(o_t, \theta) = \sum_{i=1}^Ny_t(i)\log\frac{y_t(i)}{\hat{y_t}(i)}
+\]</span></p></li>
+<li><p>With large data we can use Viterbi (binary) targets: <span class="math inline">\(y_t ∈ {0, 1}\)</span></p>
+<ul>
+<li>− i.e. a hard alignment.</li>
+</ul></li>
+<li><p>Can also use a soft (Baum-Welch) alignment (Senior and Robinson, 1994)</p></li>
+</ul>
+<p><em>Connectionist Temporal Classiﬁcation (Graves et al., 2006)</em></p>
+<p>CTC is a bundle of alternatives to conventional system:</p>
+<ul>
+<li><p>CTC introduces an optional <strong>blank symbol</strong> between the ”real” labels.</p></li>
+<li><p>Simple to implement in the FST framework</p>
+<p><img src="/images/NLP/ctc.png"></p></li>
+<li><p>Continuous realignment — no need for a bootstrap model</p></li>
+<li><p>Always use soft targets.</p></li>
+<li><p>Don’t scale by posterior.</p></li>
+<li><p>Similar results to conventional training.</p></li>
+</ul>
+<p><img src="/images/NLP/ctc_align.png"></p>
+<h3><span id="sequence-discriminative-training">Sequence discriminative training</span></h3>
+<p>Conventional training uses <em>Cross-Entropy</em> loss</p>
+<ul>
+<li>Tries to <strong>maximize probability of the true state sequence</strong> given the data.</li>
+</ul>
+<p>We care about Word Error Rate of the complete system. Design a loss that’s diﬀerentiable and closer to what we care about.</p>
+<ul>
+<li>Applied to neural networks (Kingsbury, 2009).</li>
+<li>Posterior scaling gets learnt by the network.</li>
+<li>Improves conventional training and CTC by 15% relative.</li>
+<li>bMMI, sMBR(Povey et al., 2008)</li>
+</ul>
+<p><span class="math display">\[
+P(S_r|X_r) = \frac{p(X_r, S_r)}{\sum_S p(X_r, S)} = \frac{p(X_r|S_r)P(S_r)}{\sum_Sp(X_r|S)P(S)}
+\]</span></p>
+<p><span class="math display">\[
+L_{mmi}(\theta) = -\sum_{r=1}^R\log P(S_r|X_r)
+\]</span></p>
+<p><img src="/images/NLP/new_loss.png"></p>
+<h3><span id="new-architectures">New architectures</span></h3>
+<p><strong>Seq2seq</strong></p>
+<p>Basic sequence2sequence not that good for speech</p>
+<ul>
+<li>Utterances are too long to memorize</li>
+<li>Monotonicity of audio (vs Machine Translation)</li>
+</ul>
+<p>Models</p>
+<ul>
+<li>Attention + seq2seq for speech (Chorowski et al., 2015)</li>
+<li>Listen, Attend and Spell (Chan et al., 2015)</li>
+</ul>
+<p>Output characters until EOS, incorporates language model of training set. Harder to incorporate a separately-trained language model. (e.g. trained on trillions of tokens)</p>
+<p><em>Watch, Listen, Attend and Spell (Chung et al., 2016)</em></p>
+<p>Apply LAS to audio and video streams simultaneously.</p>
+<p><img src="/images/NLP/wlas.png"></p>
+<p>Train with scheduled sampling (Bengio et al., 2015)</p>
+<p><img src="/images/NLP/sche_sam.png"></p>
+<p><em>Neural transducer (Jaitly et al., 2015)</em></p>
+<p>Seq2seq models require the whole sequence to be available. Introduce latency compared to unidirectional.</p>
+<p>Solution: Transcribe monotonic chunks at a time with attention.</p>
+<p><img src="/images/NLP/chunk.png"></p>
+<p><img src="/images/NLP/transducer.png"></p>
+<p><strong>Raw waveform speech recognition</strong></p>
+<p>We typically train on a much-reduced dimensional signal.</p>
+<ul>
+<li>Would like to train end-to-end.</li>
+<li>Learn ﬁlterbanks, instead of hand-crafting.</li>
+</ul>
+<p>A conventional RNN at audio sample rate can’t learn long-enough dependencies.</p>
+<ul>
+<li>Add a convolutional ﬁlter to a conventional system e.g. CLDNN (Sainath et al., 2015b)</li>
+<li>WaveNet-style architecture</li>
+<li>Clockwork RNN (Koutn´ık et al., 2014)
+<ul>
+<li>Run a hierarchical RNN at multiple rates.</li>
+</ul></li>
+</ul>
+<p>Frequency distribution of learned ﬁlters diﬀers from hand-initialization:</p>
+<p><img src="/images/NLP/raw_wave.png"></p>
+<p><strong>Speech recognition in noise</strong></p>
+<ul>
+<li>Multi-style training (“MTS”)
+<ul>
+<li>Collect noisy data.</li>
+<li>Or, add realistic but randomized noise to utterances during training.</li>
+<li>e.g. Through a “room simulator” to add reverberation.</li>
+<li>Optionally add a clean-reconstruction loss in training.</li>
+</ul></li>
+<li>Train a denoiser</li>
+<li>NB <em>Lombard</em> eﬀect – voice changes in noise.</li>
+</ul>
+<p><strong>Multi-microphone speech recognition</strong></p>
+<p>Multiple microphones give a richer representation, “closest to the speaker” has better SNR.</p>
+<p>Beamforming</p>
+<ul>
+<li>Given geometry of microphone array and speed of sound</li>
+<li>Compute Time Delay of Arrival at each microphone</li>
+<li>Delay-and-sum: Constructive interference of signal in chosen direction.</li>
+<li>Destructive interference depends on direction / frequency of noise.</li>
+</ul>
+<p>More features for a neural network to exploit.</p>
+<ul>
+<li>Important to preserve phase information to enable beam-forming</li>
+</ul>
+<p><em>Factored multichannel raw waveform CLDNN (Sainath et al., 2016)</em></p>
+<p><img src="/images/NLP/factor.png"></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/NLP/">NLP</a><a href="/tags/Deep-NLP/">Deep NLP</a><a href="/tags/Speech-Recognition/">Speech Recognition</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

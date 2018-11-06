@@ -1,0 +1,291 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    Random sample consensus | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="Random sample consensus">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      Random sample consensus</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/10/15/ransac/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-10-15T07:42:06.000Z">
+          2016-10-15
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>随机抽样一致（<strong>Random sample consensus</strong> ，<strong>RANSAC</strong>）是一种迭代方法，用来排除异常数据（outliers）对模型的影响。</p>
+<p>这个算法基于一个基本假设：数据集中正常的样本（inliers）可以很好地拟合给定模型，异常数据则不行，比如异常样本代入模型损失会很大。</p>
+<a id="more"></a>
+<h2><span id="algorithm">Algorithm</span></h2>
+<p>算法主要分为两步：</p>
+<ol type="1">
+<li>从全部数据集中随机抽取一小部分，我们假设这部分数据都是正常的，用这部分数据训练模型。采样集的大小是能训练模型的最小样本数。</li>
+<li>用这个模型测试其他剩余样本，如果某个样本的损失小于某个阈值，则认为它是和抽样出的样本是一致的，即也是正常样本；若某个样本的损失大于阈值，则认为它是异常样本。</li>
+</ol>
+<p>所有正常样本的集合叫做一致集（consensus set），重复上面两个步骤，直到找到一致集中包含足够多的样本或者到达最大循环次数。</p>
+<p>具体描述：</p>
+<ol type="1">
+<li>从原始数据中采样出一个子集，假设为正常样本集。</li>
+<li>用上述子集训练模型</li>
+<li>用其他样本测试该模型。对于拟合很好的样本点，可以通过损失小于某一阈值来判断，把它加入一致集。</li>
+<li>如果一致集的样本有足够多的样本，则认为该模型很好，拟合了大部分正常样本。</li>
+<li>然后，用一致集和采样集中的样本重新训练模型，这也许会进一步提升模型的效果，如果整体损失比上次迭代小，则更新最佳拟合模型。</li>
+<li>重复步骤1～5，直到一致集样本足够多或者达到最大迭代次数，返回最佳拟合模型。</li>
+</ol>
+<p>伪代码：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">Given:</span><br><span class="line">    data – a set of observed data points</span><br><span class="line">    model – a model that can be fitted to data points</span><br><span class="line">    n – the minimum number of data values required to fit the model</span><br><span class="line">    k – the maximum number of iterations allowed in the algorithm</span><br><span class="line">    t – a threshold value <span class="keyword">for</span> determining when a data point fits a model</span><br><span class="line">    d – the number of close data values required to assert that a model fits well to data</span><br><span class="line"></span><br><span class="line">Return:</span><br><span class="line">    bestfit – model parameters which best fit the data (or nul <span class="keyword">if</span> no good model is found)</span><br><span class="line"></span><br><span class="line">iterations = <span class="number">0</span></span><br><span class="line">bestfit = nul</span><br><span class="line">besterr = something really large</span><br><span class="line"><span class="keyword">while</span> iterations &lt; k &#123;</span><br><span class="line">    maybeinliers = n randomly selected values from data</span><br><span class="line">    maybemodel = model parameters fitted to maybeinliers</span><br><span class="line">    alsoinliers = empty set</span><br><span class="line">    <span class="keyword">for</span> every point in data not in maybeinliers &#123;</span><br><span class="line">        <span class="keyword">if</span> point fits maybemodel with an error smaller than t</span><br><span class="line">             add point to alsoinliers</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> the number of elements in alsoinliers is &gt; d &#123;</span><br><span class="line">        <span class="comment">% this implies that we may have found a good model</span></span><br><span class="line">        <span class="comment">% now test how good it is</span></span><br><span class="line">        bettermodel = model parameters fitted to all points in maybeinliers and alsoinliers</span><br><span class="line">        thiserr = a measure of how well model fits these points</span><br><span class="line">        <span class="keyword">if</span> thiserr &lt; besterr &#123;</span><br><span class="line">            bestfit = bettermodel</span><br><span class="line">            besterr = thiserr</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    increment iterations</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> bestfit</span><br></pre></td></tr></table></figure>
+<p>Python代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ransac</span><span class="params">(data, model, n, k, t, d)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    data – a set of observed data points</span></span><br><span class="line"><span class="string">    model – a model that can be fitted to data points</span></span><br><span class="line"><span class="string">    n – the minimum number of data values required </span></span><br><span class="line"><span class="string">    	to fit the model</span></span><br><span class="line"><span class="string">    k – the maximum number of iterations allowed </span></span><br><span class="line"><span class="string">    	in the algorithm</span></span><br><span class="line"><span class="string">    t – a threshold value for determining </span></span><br><span class="line"><span class="string">    	when a data point fits a model</span></span><br><span class="line"><span class="string">    d – the number of close data values required to </span></span><br><span class="line"><span class="string">    	assert that a model fits well to data</span></span><br><span class="line"><span class="string">    Return:</span></span><br><span class="line"><span class="string">        bestfit – model parameters which best fit the data </span></span><br><span class="line"><span class="string">        		  (or nul if no good model is found)</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    train_data_x = [[data[<span class="number">0</span>][i]] <span class="keyword">for</span> i <span class="keyword">in</span> range(len(data[<span class="number">0</span>]))]</span><br><span class="line">    train_data_y = data[<span class="number">1</span>]</span><br><span class="line">    iterations = <span class="number">0</span></span><br><span class="line">    bestfit = <span class="number">0</span></span><br><span class="line">    besterr = <span class="number">10000</span></span><br><span class="line">    <span class="keyword">while</span> iterations &lt; k:</span><br><span class="line">        indexes = [rnd.randrange(<span class="number">0</span>, len(data[<span class="number">0</span>])) </span><br><span class="line">                   		<span class="keyword">for</span> i <span class="keyword">in</span> range(n)]</span><br><span class="line">        maybeinliners_x = [train_data_x[i] <span class="keyword">for</span> i <span class="keyword">in</span> indexes]</span><br><span class="line">        maybeinliners_y = [train_data_y[i] <span class="keyword">for</span> i <span class="keyword">in</span> indexes]</span><br><span class="line">        maybemodel = model.fit(maybeinliners_x,</span><br><span class="line">                               maybeinliners_y)</span><br><span class="line">        alsoinliers = set()</span><br><span class="line">        predict = maybemodel.predict(train_data_x)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(train_data_x)):</span><br><span class="line">            points_x = train_data_x[i]</span><br><span class="line">            <span class="keyword">if</span> points_x <span class="keyword">not</span> <span class="keyword">in</span> maybeinliners_x:</span><br><span class="line">                data_loss = loss(train_data_y[i], predict[i])</span><br><span class="line">                <span class="keyword">if</span> data_loss &lt; t:</span><br><span class="line">                    alsoinliers.add((points_x[<span class="number">0</span>],</span><br><span class="line">                                     train_data_y[i]))</span><br><span class="line">        <span class="keyword">if</span> len(alsoinliers) &gt; d:</span><br><span class="line">            <span class="comment"># this implies that we may have found a good model</span></span><br><span class="line">            <span class="comment"># now test how good it is</span></span><br><span class="line">            inliers_x = [[point[<span class="number">0</span>]] <span class="keyword">for</span> point <span class="keyword">in</span> alsoinliers]</span><br><span class="line">            inliers_y = [point[<span class="number">1</span>] <span class="keyword">for</span> point <span class="keyword">in</span> alsoinliers]</span><br><span class="line">            inliers_x.extend(maybeinliners_x)</span><br><span class="line">            inliers_y.extend(maybeinliners_y)</span><br><span class="line">            bettermodel = model.fit(inliers_x, inliers_y)</span><br><span class="line">            predict = maybemodel.predict(inliers_x)</span><br><span class="line">            thiserr = np.sqrt(np.average(</span><br><span class="line">                		(inliers_y - predict) ** <span class="number">2</span>))</span><br><span class="line">            <span class="keyword">if</span> thiserr &lt; besterr:</span><br><span class="line">                besterr = thiserr</span><br><span class="line">                bestfit = bettermodel</span><br><span class="line">        iterations = iterations + <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> bestfit</span><br></pre></td></tr></table></figure>
+<h2><span id="demo">DEMO</span></h2>
+<p>生成了一部分可以用直线拟合的数据和一些随机噪声，比例为 <span class="math inline">\(1:1\)</span> ，如下图所示：</p>
+<p><img src="/images/dataset.png"></p>
+<p>用线性回归直接拟合和RANSAC算法的结果：</p>
+<p><img src="/images/good.png"></p>
+<h2><span id="parameters">Parameters</span></h2>
+<p>RANSAC算法中有几个超参数需要调试：</p>
+<ul>
+<li><p>t, d : 这两个参数需要根据应用和数据集来调节</p></li>
+<li><p>k（最大迭代次数）：可以从理论上确定。</p>
+<p>定义 <span class="math inline">\(p\)</span> 是RANSAC算法在某次迭代采样时只采样到正常样本的概率。如果这真的发生了，那么这次迭代将训练出一个很好的模型，所以 <span class="math inline">\(p\)</span> 也代表了RANSAC算法得出一个好结果的概率。再定义 <span class="math inline">\(w\)</span> 为每次采样时，采到一个正常点的概率，即 <span class="math inline">\(w\)</span> =  number of inliers in data / number of points in data。假设一次采样选取 <span class="math inline">\(n\)</span> 的样本，那么这次采样选择的样本全部都是正常样本的概率为 <span class="math inline">\(w^n\)</span>（假设为放回采样），至少选择一个异常样本的概率就为 <span class="math inline">\(1-w^n\)</span>。总共迭代 <span class="math inline">\(k\)</span> 次，那么这 <span class="math inline">\(k\)</span> 次采样都至少有一个异常样本的概率为：<span class="math inline">\((1-w^n)^k\)</span>，应该等于 <span class="math inline">\(1-p\)</span>，即 <span class="math display">\[
+1-p=(1-w^n)^k
+\]</span> 两边同时取对数得： <span class="math display">\[
+k = \frac{\log(1-p)}{\log(1-w^n)}
+\]</span> 实际上我们是不放回采样，所以还要在上面的基础上加上 <span class="math inline">\(k\)</span> 的标准差。<span class="math inline">\(k\)</span> 的标准差定义为： <span class="math display">\[
+SD(k) = \frac{\sqrt{1-w^n}}{w^n}
+\]</span></p></li>
+</ul>
+<h2><span id="advantages-and-disadvantages">Advantages and disadvantages</span></h2>
+<p>优势：</p>
+<ul>
+<li>可以做模型参数的 <a href="https://www.wikiwand.com/en/Robust_statistics" target="_blank" rel="noopener">robust estimation</a></li>
+</ul>
+<p>劣势：</p>
+<ul>
+<li><p>没有时间上界，即不会自然收敛，只能靠最大迭代次数限制。有时可能最后一次迭代才找到一个好的模型，有时可能第一次就找到了</p></li>
+<li><p>需要根据不同问题手动调试参数（一些阈值）</p></li>
+<li><p>只能同时评估一种模型</p></li>
+<li><p>不是所有时候都能找到合适的模型，尤其是在异常样本个数大于 50% 的时候，如下图所示：</p></li>
+</ul>
+<p><img src="/images/bad.png"></p>
+<p>​</p>
+<h2><span id="参考">参考</span></h2>
+<p><a href="https://www.wikiwand.com/en/Random_sample_consensus" target="_blank" rel="noopener">Random sample consensus</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Statistics/">Statistics</a><a href="/tags/RANSAC/">RANSAC</a><a href="/tags/Python/">Python</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

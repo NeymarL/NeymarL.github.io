@@ -1,0 +1,456 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    Deep NLP - Recurrent Neural Networks and Language Modelling | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="Deep NLP - Recurrent Neural Networks and Language Modelling">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      Deep NLP - Recurrent Neural Networks and Language Modelling</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/08/06/Deep NLP - RNNs and Language Modelling/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-08-06T12:30:19.000Z">
+          2017-08-06
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <!-- toc -->
+<ul>
+<li><a href="#count-based-n-gram-language-models">Count based N-Gram Language Models</a></li>
+<li><a href="#neural-n-gram-language-models">Neural N-Gram Language Models</a></li>
+<li><a href="#recurrent-neural-network-language-models">Recurrent Neural Network Language Models</a>
+<ul>
+<li><a href="#long-short-term-memory-lstm">Long Short Term Memory (LSTM)</a></li>
+<li><a href="#deep-rnn-lms">Deep RNN LMs</a></li>
+</ul></li>
+</ul>
+<!-- tocstop -->
+<a id="more"></a>
+<p>A language model assigns a <strong>probability</strong> to a sequence of words, given the observed training text, how probable is this new utterance?</p>
+<p>Most language models employ the chain rule to decompose the joint probability into a sequence of conditional probabilities: <span class="math display">\[
+p(w_1, w_2, w_3, ..., w_N) = p(w_1)p(w_2|w_1)p(w_3|w_1,w_2)*...*p(w_N|w_1,..w_{N-1})
+\]</span> <strong>Evaluating a Language Model</strong></p>
+<p>A good model assigns real utterances <span class="math inline">\(w_1^N\)</span> from a language a high probability. This can be measured with <em>cross entropy</em>: <span class="math display">\[
+H(w_1^N) = -\frac{1}{N}\log_2p(w_1^N)
+\]</span> <em>Intuition</em> : Cross entropy is a measure of how many bits are needed to encode text with our model.</p>
+<p><strong>Data</strong></p>
+<p>Language modelling is a time series prediction problem in which we must be careful to <strong>train on the past</strong> and <strong>test on the future</strong>.</p>
+<p>If the corpus is composed of articles, it is best to ensure the <strong>test data</strong> is drawn from <strong>a disjoint set of articles</strong> to the training data.</p>
+<h2><span id="count-based-n-gram-language-models">Count based N-Gram Language Models</span></h2>
+<p><strong>Markov assumption</strong></p>
+<ul>
+<li>only previous history matters</li>
+<li>limited memory: only last <span class="math inline">\(k - 1\)</span> words are included in history(older words less relevant)</li>
+<li><span class="math inline">\(k\)</span>-th order Markov model</li>
+</ul>
+<p>e.g. 2-gram language model: <span class="math display">\[
+p(w_1, w_2, ..., w_n) \approx p(w_1)p(w_2|w_1)p(w_3|w_2)...p(w_n|w_{n-1})
+\]</span> <strong>Estimating Probabilities</strong></p>
+<p>Maximum likelihood estimation for 3-grams: <span class="math display">\[
+p(w_3|w_1, w_2) = \frac{count(w_1,w_2,w_3)}{count(w_1,w_2)}
+\]</span> In our training corpus we may never observe this trigrams:</p>
+<ul>
+<li>Oxford Pimm's eater</li>
+<li>Oxford Pimm's drinker</li>
+</ul>
+<p>If both have count 0 our smoothing methods will assign the same probability to them.</p>
+<p>A better solution is to interpolate with the bigram probability.</p>
+<ul>
+<li>Pimm's eater</li>
+<li>Pimm's drinker</li>
+</ul>
+<p>A simple approach is linear interpolation: <span class="math display">\[
+p_l(w_n|w_{n-1}, w_{n-2}) = \lambda_3p(w_n|w_{n-1}, w_{n-2})+\lambda_2p(w_n|w_{n-1})+\lambda_1p(w_n)
+\]</span> where <span class="math inline">\(\lambda_3 + \lambda_2 + \lambda_1 = 1\)</span>.</p>
+<p><strong>Summary</strong></p>
+<p>Good</p>
+<ul>
+<li>Count based n-gram models are exceptionally scalable and able to be trained on trillions of words of data</li>
+<li>fast constant time evaluation of probabilities at best time</li>
+<li>sophisticated smoothing techniques match the empirical distribution of language</li>
+</ul>
+<p>Bad</p>
+<ul>
+<li>Large ngrams are sparse, so hard to capture long dependencies</li>
+<li>symbolic nature does not capture correlations between semantically similary word distributions, e.g. cat &lt;-&gt; dog.</li>
+<li>similarly morphological regularities, running &lt;-&gt; jumping, or gender.</li>
+</ul>
+<h2><span id="neural-n-gram-language-models">Neural N-Gram Language Models</span></h2>
+<p>Trigram NN language model <span class="math display">\[
+h_n = g(V[w_{n-1};w_{n-2}] + c) 
+\]</span></p>
+<p><span class="math display">\[
+\hat{p_n} = softmax(Wh_n + b)
+\]</span></p>
+<p><span class="math display">\[
+softmax(u)_i = \frac{\exp(u_i)}{\sum_j\exp u_j}
+\]</span></p>
+<p>where</p>
+<ul>
+<li><span class="math inline">\(w_i\)</span> are one hot vetors and <span class="math inline">\(\hat{p_i}\)</span> are distributions</li>
+<li><span class="math inline">\(|w_i| = |\hat{p_i}| = V\)</span> (words in the vocabulary)</li>
+<li><span class="math inline">\(V\)</span> is usually very large <span class="math inline">\(&gt; 1e5\)</span></li>
+</ul>
+<p><img src="/images/NLP/NLM1.png"></p>
+<p><strong>Training</strong></p>
+<p>The usual training objective is the cross entropy of the data given the model (MLE): <span class="math display">\[
+F = -\frac{1}{N}\sum_ncost_n(w_n,\hat{p_n})
+\]</span> The cost function is simply the model's estimated log-probability of <span class="math inline">\(w_n\)</span>: <span class="math display">\[
+cost(a, b) = a^T\log b
+\]</span> <img src="/images/NLP/NLM1T.png"></p>
+<p>Calculating the gradients is straightforward with back propagation: <span class="math display">\[
+\frac{\partial F}{\partial W} = -\frac{1}{N}\sum_n \frac{\partial cost_n}{\partial \hat{p_n}}\frac{\partial \hat{p_n}}{\partial W}
+\]</span></p>
+<p><span class="math display">\[
+\frac{\partial F}{\partial W} = -\frac{1}{N} \sum_n\frac{\partial cost_n}{\partial \hat{p_n}}\frac{\partial\hat{p_n}}{\partial h_n}\frac{\partial h_n}{\partial V}
+\]</span></p>
+<p><strong>Comparison with Count Based N-Gram LMs</strong></p>
+<p>Good</p>
+<ul>
+<li><p>Better generalisation on unseen n-grams, poorer on seen n-grams.</p>
+<p>Solution: direct (linear) ngram features</p></li>
+<li><p>Simple NLMs are often an order magnitude smaller in memory footprint than their vanilla n-gram cousins (though not if you use the linear features suggested above!)</p></li>
+</ul>
+<p>Bad</p>
+<ul>
+<li>The number of parameters in the model scales with the n-gram size and thus the length of the history captured.</li>
+<li>The n-gram history is finite and thus there is limit on the longest dependencies that an be captured.</li>
+<li>Mostly trained with Maximum Likelihood based objectives which do not encode the expected frequencies of words a priori.</li>
+</ul>
+<h2><span id="recurrent-neural-network-language-models">Recurrent Neural Network Language Models</span></h2>
+<p>The major difference between RNN and Neural N-Gram model is RNN not only forward propagate the previous input (<span class="math inline">\(y_{n-1}\)</span>) to next layer but also forward propagate the previous <strong>state</strong> (<span class="math inline">\(h_{n-1}\)</span>).</p>
+<p><img src="/images/NLP/RNN.png"></p>
+<p><strong>BPTT</strong></p>
+<p><strong>Back Propagation Through Time</strong> (BPTT) note the dependence of derivatives at time <span class="math inline">\(n\)</span> with those at time <span class="math inline">\(n + \alpha\)</span>.</p>
+<p><img src="/images/NLP/BPTT.png"></p>
+<p><strong>TBPTT</strong></p>
+<p>If we break these dependencies after a fixed number of time steps we get <strong>Truncated Back Propagation Through Time</strong> (TBPTT).</p>
+<p>![(/images/NLP/TBPTT.png)</p>
+<p><strong>Comparison with N-Gram LMs</strong></p>
+<p>Good</p>
+<ul>
+<li>RNNs can represent unbounded dependencies, unlike models with a fixed n-gram order.</li>
+<li>RNNs compress history of words into a fixed size hidden vector.</li>
+<li>The number of parameters does not grow with the length of dependencies captured, but they do grow with the amount of information stored in the hidden layer.</li>
+</ul>
+<p>Bad</p>
+<ul>
+<li>RNNs are hard to learn and often will not discover long range dependencies present in the data.</li>
+<li>Increasing the size of the hidden layer, and thus memory, increases the computation and memory quadratically.</li>
+<li>Mostly trained with Maximum Likelihood based objectives which do not encode the expected frequencies of words a priori.</li>
+</ul>
+<p><strong>Exploding and Vanishing Gradients</strong></p>
+<p>Consider the path of partial derivatives linking a change in <span class="math inline">\(cost_N\)</span> to changes in <span class="math inline">\(h_1\)</span>:</p>
+<p><img src="/images/eqq.png"></p>
+<p>where</p>
+<p><span class="math display">\[
+h_n  = g(V_xx_n + V_hh_{n-1} + c) = g(z_n)
+\]</span></p>
+<p><span class="math display">\[
+\frac{\partial h_n}{\partial z_n} = diag(g&#39;(z_n))
+\]</span></p>
+<p>The core of the recurrent product is the repeated multiplication of <span class="math inline">\(V_h\)</span>. If the <strong>largest eigenvalue</strong> of <span class="math inline">\(V_h\)</span> is:</p>
+<ul>
+<li><span class="math inline">\(1\)</span>, then gradient will <strong>propagate</strong>,</li>
+<li><span class="math inline">\(&gt;1\)</span>, the product will grow exponentially (<strong>explode</strong>),</li>
+<li><span class="math inline">\(&lt;1\)</span>, the prodcut shrinks exponentially (<strong>vanishes</strong>).</li>
+</ul>
+<p>Most of the time the spectral radius of <span class="math inline">\(V_h\)</span> is <strong>small</strong>. The result is that the gradient vanishes and <strong>long range dependencies</strong> are <strong>not</strong> learnt.</p>
+<h3><span id="long-short-term-memory-lstm">Long Short Term Memory (LSTM)</span></h3>
+<p>The original RNN is:</p>
+<p><img src="/images/NLP/origin.png"></p>
+<p>Then adding a linear layer of current input and previous state and then going through a tanh non-linearity before passing to the current state:</p>
+<p><img src="/images/NLP/2nd.png"></p>
+<p>The next step is to introduce an extra hidden layer called cell-state (<span class="math inline">\(c\)</span>), and think it as our memory. The really cool thing is that propagation is <strong>additive</strong>. The <strong>key innovation</strong> of LSTM is replacing the <strong>multiplication</strong> with <strong>sum</strong>.</p>
+<p><img src="/images/NLP/3rd.png"></p>
+<p>How to balance the grow of addition?</p>
+<p>The method is called <strong>Gating</strong>. So we are going to do is gating the input of the hidden layer, which is called <em>input gate</em>, represented by <span class="math inline">\(i\)</span>. The gate in neural network, is to compute a non-linearity, which is bound between 0 and 1. We think it like a <strong>switch</strong>, if 1, we turn on the connection and if 0, we shut off the connection. The key thing is the gate is <strong>not</strong> a <strong>decret binary</strong> function <strong>but</strong> a <strong>continuous</strong> function, thus we can differentiate and back propagation through it.</p>
+<p>If the gate is 1, the input would contribute to the current state, if the gate is 0, the input would not affect the current state, so the gate gives <strong>state</strong> ability to <strong>ignore the input</strong>.</p>
+<p><img src="/images/NLP/4th.png"></p>
+<p>We already have the ability to include or ignore the input, but we can't forget things. So next we are going to add a <strong>forget gate</strong>, represented by <span class="math inline">\(f\)</span>.</p>
+<p><img src="/images/NLP/5th.png"></p>
+<p>So given the <span class="math inline">\(i\)</span> and <span class="math inline">\(f\)</span>, our network has the ability to include something new and decide what to remember depend on the input to the next cell state.</p>
+<p>The final step is to add a <em>output gate</em>, represented by <span class="math inline">\(o\)</span>, between the cell state to the current state.</p>
+<p><img src="/images/NLP/6th.png"></p>
+<p><img src="/images/NLP/LSTM.png"></p>
+<p>The LSTM cell : <span class="math display">\[
+c_n = f_n \circ c_{n-1} + i_n \circ \hat{c_n}
+\]</span></p>
+<p><span class="math display">\[
+\begin{align}
+\hat{c_n} &amp;= \tanh (W_c[w_{n-1};h_{t-1}] + b_c)\\
+h_n &amp;= o_n \circ \tanh (W_h c_n + b_h)\\
+i_n &amp;= \sigma (W_i[w_{n-1}; h_{t-1}] + b_i)\\
+f_n &amp;= \sigma (W_f[w_{n-1}; h_{t-1}] + b_f)\\
+o_n &amp;= \sigma (W_o[w_{n-1}; h_{t-1}] + b_o)
+\end{align}
+\]</span></p>
+<p><strong>Gated Recurrent Unit (GRU)</strong></p>
+<p><img src="/images/NLP/GRU.png"></p>
+<p><strong>LSTMs and GRUs</strong></p>
+<p>Good</p>
+<ul>
+<li>Careful initialisation and optimisation of vanilla RNNs can enable then to learn long(ish) dependencies, but gated additive cells, like the LSTM and GRU, often just work.</li>
+<li>The (re)introduction of LSTMs has been key to many recent developments, e.g. Neural Machine Translation, Speech Recognition, TTS, etc.</li>
+</ul>
+<p>Bad</p>
+<ul>
+<li>LSTMs and GRUs have considerably more parameters and computation per memory cell than a vanilla RNN, as such they have less memory capacity per parameter.</li>
+</ul>
+<h3><span id="deep-rnn-lms">Deep RNN LMs</span></h3>
+<p>The memory capacity of an RNN can be increased by employing a larger hidden layer <span class="math inline">\(h_n\)</span>, but a linear increase in <span class="math inline">\(h_n\)</span> results in quadratic increase in model size and compution:</p>
+<p><img src="/images/NLP/DRNN11.png"></p>
+<p>Alternatively we can increase depth in the time dimension. This improves the representational ability, but not the memory capacity.</p>
+<p><img src="/images/NLP/DRNN2.png"></p>
+<p><strong>Regularisation : Dropout</strong></p>
+<p>Large recurrent networks often overfit their training data by memorising the sequences observed. Such models generalise poorly to novel sequences.</p>
+<p>A common approach in Deep Learning is to overparametrise a model, such that it could easily memorise the training data, and then heavily regularise it to facilitate generalisation.</p>
+<p>The regularisation method of choice is often Dropout.</p>
+<p>Dropout is ineffective when applied to recurrent connections, as repeated random masks zero all hidden units in the limit. The most common solution is to only apply dropout to <strong>non-recurrent</strong> connections.</p>
+<p><img src="/images/NLP/Dropout.png"></p>
+<p><strong>Summary</strong></p>
+<p>Long Range Dependencies</p>
+<ul>
+<li>The repeated multiplication of the recurrent weights <span class="math inline">\(V\)</span> lead to vanishing (or exploding) gradients,</li>
+<li>additive gated architectures, such as LSTMs, significantly reduce this issue.</li>
+</ul>
+<p>Deep RNNs</p>
+<ul>
+<li>Increasing the size of the recurrent layer increases memory capacity with a quadratic slow down,</li>
+<li>deepening networks in both dimensions can improve their representational efficiency and memory capacity with a linear complexity cost.</li>
+</ul>
+<p>Large Vocabularies</p>
+<ul>
+<li>Large vocabularies, <span class="math inline">\(V &gt; 10^4\)</span>, lead to slow softmax calculations,</li>
+<li>reducing the number of vector matrix products evaluated,by factorising the softmax or sampling, reduces the training overhead significantly.</li>
+<li>Different optimisations have different training and evaluation complexities which should be considered.</li>
+</ul>
+<p><strong>Readings</strong></p>
+<p>Textbook</p>
+<ul>
+<li>Deep Learning, Chapter 10</li>
+</ul>
+<p>Blog Posts</p>
+<ul>
+<li>Andrej Karpathy: <a href="http://karpathy.github.io/2015/05/21/rnn-effectiveness/" target="_blank" rel="noopener">The Unreasonable Effectiveness of Recurrent Neural Networks</a></li>
+<li>Yoav Goldberg: <a href="http://nbviewer.jupyter.org/gist/yoavg/d76121dfde2618422139" target="_blank" rel="noopener">The unreasonable effectiveness of Character-level Language Models</a></li>
+<li>Stephen Merity: <a href="http://smerity.com/articles/2016/orthogonal_init.html" target="_blank" rel="noopener">Explaining and illustrating orthogonal initialization for recurrent neural networks</a></li>
+</ul>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/NLP/">NLP</a><a href="/tags/Deep-NLP/">Deep NLP</a><a href="/tags/RNN/">RNN</a><a href="/tags/LSTM/">LSTM</a><a href="/tags/Language-Model/">Language Model</a><a href="/tags/N-Gram/">N-Gram</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

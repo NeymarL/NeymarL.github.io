@@ -1,0 +1,767 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    Deep NLP - Question Answering | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="Deep NLP - Question Answering">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      Deep NLP - Question Answering</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/08/12/Deep NLP - Question Answering/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-08-12T13:30:19.000Z">
+          2017-08-12
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>Question answering (QA) is a computer science discipline within the fields of information retrieval and natural language processing (NLP), which is concerned with building systems that automatically answer questions posed by humans in a natural language.</p>
+<a id="more"></a>
+<!-- toc -->
+<ul>
+<li><a href="#semantic-parsing">Semantic Parsing</a></li>
+<li><a href="#reading-comprehension">Reading Comprehension</a></li>
+<li><a href="#answer-sentence-selection">Answer Sentence Selection</a></li>
+<li><a href="#visual-question-answering">Visual Question Answering</a></li>
+<li><a href="#summary">Summary</a></li>
+</ul>
+<!-- tocstop -->
+<p><strong>Questions</strong></p>
+<table>
+<colgroup>
+<col style="width: 46%">
+<col style="width: 53%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Question</th>
+<th style="text-align: left;">answer</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">When were the ﬁrst pyramids built?</td>
+<td style="text-align: left;">2630 BC</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Jean-Claude Juncker</td>
+<td style="text-align: left;">Jean-Claude Juncker is a Luxembourgish politician. Since 2014, Juncker has been President of the European Commission.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">How old is Keir Starmer?</td>
+<td style="text-align: left;">54 years</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">What is the current price for AAPL?</td>
+<td style="text-align: left;">136.50 USD</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">What’s the weather like in London?</td>
+<td style="text-align: left;">7 degrees Celsius. Clear with some clouds.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Whom did Juncker meet with?</td>
+<td style="text-align: left;">The European Commission president was speaking after meeting with Irish Taoiseach Enda Kenny in Brussels.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">When did you get to this lecture?</td>
+<td style="text-align: left;">Five minutes after it started.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Why do we yawn?</td>
+<td style="text-align: left;">When we’re bored or tired we don’t breathe as deeply as we normally do. This causes a drop in our blood-oxygen levels and yawning helps us counter-balance that.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Why do we care about QA ?</strong></p>
+<p>Because <strong>QA is awesome</strong></p>
+<ol type="1">
+<li><p><strong>QA is an AI-complete problem.</strong></p>
+<p>If we solve QA, we have solved every other problem, too.</p></li>
+<li><p>Many immediate and obvious applications</p>
+<p>Search, dialogue, information extraction, summarisation, ...</p></li>
+<li><p>Some pretty nice results already</p>
+<p>IBM Watson and Jeopardy!, Siri, Google Search ...</p></li>
+<li><p>Lots left to do!</p>
+<p>Plenty of interesting research and hard problems as well as low-hanging fruit.</p></li>
+</ol>
+<p><strong>Data</strong></p>
+<table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 37%">
+<col style="width: 37%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>question</th>
+<th>context/source</th>
+<th>answer</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Factual questions</td>
+<td>Sets of documents (corpus)</td>
+<td>A single fact</td>
+</tr>
+<tr class="even">
+<td>Complex/narrative questions</td>
+<td>A single document</td>
+<td>An explanation</td>
+</tr>
+<tr class="odd">
+<td>Information Retrieval</td>
+<td>Knowledge Base</td>
+<td>A document</td>
+</tr>
+<tr class="even">
+<td>Library Reference</td>
+<td>Non-linguistic types of data (GPS, images, sensors, ...)</td>
+<td>A sentence or paragraph extracted from somewhere</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td>An image or other type of object</td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td>Another question</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Question Taxonomy</strong></p>
+<p>Many possible taxonomies for questions:</p>
+<ul>
+<li>Wh- words</li>
+<li>Subject of question</li>
+<li>The form of expected answers</li>
+<li>Types of sources from which answers may be drawn</li>
+</ul>
+<p>For the purposes of building QA systems it is useful to start by considering the sources an answer may be drawn from. <strong>Focus on the answer</strong> rather than the question.</p>
+<p><em>Three Questions for building a QA System</em></p>
+<ul>
+<li>What do the answers look like?</li>
+<li>Where can I get the answers from?</li>
+<li>What does my training data look like?</li>
+</ul>
+<p><strong>Areas in Question Answering</strong></p>
+<ul>
+<li>Reading Comprehension
+<ul>
+<li>Answer based on a document</li>
+<li>Context is a speciﬁc document</li>
+</ul></li>
+<li>Semantic Parsing
+<ul>
+<li>Answer is a logical form, possible executed against a KB</li>
+<li>Context is a Knowledge Base</li>
+</ul></li>
+<li>Visual QA
+<ul>
+<li>Answer is simple and factual</li>
+<li>Context is one/multiple image(s)</li>
+</ul></li>
+<li>Information Retrieval
+<ul>
+<li>Answer is a document/paragraph/sentence</li>
+<li>Context is a corpus of documents</li>
+</ul></li>
+<li>Library Reference
+<ul>
+<li>Answer is another question</li>
+<li>Context is the structured knowledge available in the library and the librarians view of it.</li>
+</ul></li>
+</ul>
+<h2><span id="semantic-parsing">Semantic Parsing</span></h2>
+<p>Semantic Parsing is the process of mapping natural language into a formal representation of its meaning. Depending on the chosen formalism this <strong>logical representation</strong> can be used to query a <strong>structured knowledge base</strong>.</p>
+<p><img src="/images/NLP/se_par.png"></p>
+<p><em>Semantic Parsing</em> is <strong>Question→Logical Form.</strong></p>
+<p>We (often mistakenly) then assume that <strong>LF→Answer</strong> is trivial.</p>
+<p><strong>Knowledge Bases for QA with Semantic Parsing</strong></p>
+<p>Knowledge bases typically represent their data as triples：</p>
+<ul>
+<li>Generally: <em>(relation, entity1, entity2)</em></li>
+<li>(married-to, Michelle Obama, Barack Obama)</li>
+<li>(member-of, United Kingdom, European Union)</li>
+</ul>
+<p>There are several (large) databases freely available to use, e.g.:</p>
+<ul>
+<li><strong>Freebase</strong>: 1.9 billion triples on general knowledge. Defunct as of 2016 and replaced by Google Knowledge Graph</li>
+<li><strong>WikiData</strong>: Information on 25 million entities</li>
+<li><strong>OpenStreetMap</strong>: 3 billion triples on geography</li>
+<li><strong>GeoQuery</strong>: 700 facts about US geography. Tiny dataset, but frequently used in semantic parsing work.</li>
+</ul>
+<p><strong>Supervised Data is expensive!</strong></p>
+<ul>
+<li><strong>Free917</strong>: 917 freebase annotated questions</li>
+<li><strong>GeoQuery</strong>: 880 questions on US geography</li>
+<li><strong>NLMaps</strong>: 2,380 natural language queries on the OSM data</li>
+</ul>
+<p>These kinds of datasets are incredibly expensive to create as they require experts for the manual annotation process, who are trained in using a given database schema:</p>
+<ul>
+<li><p>“<em>Where are kindergartens in Hamburg?</em>”</p></li>
+<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">query(area(keyval(name,Hamburg)), nwr(keyval(amenity,kindergarten)), qtype(latlong))</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>A Deep Learning Approach to Semantic Parsing</strong></p>
+<p>Semantic parsing can be viewed as a sequence to sequence model, not unlike <strong>machine translation</strong>.</p>
+<p><img src="/images/NLP/dl_sen.png"></p>
+<p>Details</p>
+<ul>
+<li>✅ Encode sentence with sequence models</li>
+<li>✅ Decode with standard mechanisms from MT</li>
+<li>❌ Supervised training data hard to come by</li>
+<li>❌ Depending on formalism used, highly complex target side</li>
+<li>❌ How to deal with proper nouns and numbers?</li>
+</ul>
+<p><strong>One Solution to Sparsity: Avoid Logical Forms</strong></p>
+<p>Semantic parsing frequently reduce the reliance on supervised data (language-logical form) by exploiting other types of data such as <strong>question-answer pairs</strong> or corpora of <strong>questions only</strong>.</p>
+<blockquote>
+<p>Berant et al. (2013): Semantic Parsing on Freebase from QA Pairs Reddy et al. (2014): Large-scale Semantic Parsing without QA Pairs</p>
+</blockquote>
+<p><img src="/images/NLP/graph.png"></p>
+<p><strong>Improved Neural Semantic Parsing</strong></p>
+<p>We can apply the same idea to neural semantic parsing, and further take mechanisms from <strong>machine translation</strong> to improve performance and data eﬃciency:</p>
+<ul>
+<li>Like in MT, using attention can be helpful
+<ul>
+<li>Dong and Lapata (2016): Language to Logical Form with Neural Attention</li>
+</ul></li>
+<li>Exploit the highly rigid structure in the target side to constrain generation
+<ul>
+<li>Liang et al. (2016): Neural Symbolic Machines</li>
+<li>Ling et al. (2016): Latent predictor networks for code generation</li>
+</ul></li>
+<li>Make use of semi-supervised training to counter sparsity
+<ul>
+<li>Kocisky et al. (2016): Semantic Parsing with Semi-Supervised Sequential Autoencoders</li>
+</ul></li>
+</ul>
+<p><em>Generation with multiple sources</em></p>
+<blockquote>
+<p>Ling et al. (2016): Latent predictor networks for code generation</p>
+</blockquote>
+<p><img src="/images/NLP/multi_src.png"></p>
+<p><strong>Semantic Parsing Summary</strong></p>
+<ul>
+<li>✅ LF instead of answer makes system robust</li>
+<li>✅ Answer independent of question and parsing mechanism</li>
+<li>✅ Can deal with rapidly changing information</li>
+<li>❌ Constrained to queriable questions in DB schema</li>
+<li>❌ No database is large enough</li>
+<li>❌ Training data hard to ﬁnd</li>
+</ul>
+<p><em>Questions</em></p>
+<ul>
+<li>✅ When were the pyramids built?</li>
+<li>❓ Jean-Claude Juncker</li>
+<li>✅ How old is Keir Starmer?</li>
+<li>✅ What is the price for AAPL?</li>
+<li>✅ What’s the weather in London?</li>
+<li>❌ Whom did Juncker meet with?</li>
+<li>❌ When did you get here?</li>
+<li>❌ Why do we yawn?</li>
+</ul>
+<p>Caveat: Each of these examples requires a <strong>diﬀerent</strong> underlying KB!</p>
+<h2><span id="reading-comprehension">Reading Comprehension</span></h2>
+<p>Answer a question related to a given document.</p>
+<p><strong>Corpora for Reading Comprehension</strong></p>
+<ul>
+<li><strong>CNN/DailyMail</strong>: Over 1 million cloze form QA pairs with articles from CNN and Mail online for context. Pick an anonymised entity.</li>
+<li><strong>CBT</strong>: 700k QA pairs, children’s books as context. Pick one of 10 candidates.</li>
+<li><strong>SQuAD</strong>: 100k manual QA pairs with 500 Wikipedia articles for context. Answer is a span.</li>
+</ul>
+<p>Assumptions made in all of the above tasks</p>
+<ul>
+<li>Context is read on the ﬂy and unknown during training phase</li>
+<li>Answer is contained in the context as a single word or span</li>
+<li>This constraint does not hold for reading comprehension in general!</li>
+</ul>
+<p><em>CNN article Example</em></p>
+<ul>
+<li>Document
+<ul>
+<li>The BBC producer allegedly struck by Jeremy Clarkson will not press charges against the “Top Gear” host, his lawyer said Friday. Clarkson, who hosted one of the most-watched television shows in the world, was dropped by the BBC Wednesday after an internal investigation by the British broadcaster found he had subjected producer Oisin Tymon “to an unprovoked physical and verbal attack.” . . .</li>
+</ul></li>
+<li>Query
+<ul>
+<li>Producer X will not press charges against Jeremy Clarkson, his lawyer says.</li>
+</ul></li>
+<li>Answer
+<ul>
+<li>Oisin Tymon</li>
+</ul></li>
+</ul>
+<p>We formulate <em>Cloze style</em> queries from the story paraphrases.</p>
+<p>Out of vocabulary (OOV) and proper nouns are dealt with by <strong>replacing all entities with anonymised markers</strong>. This greatly reduces the vocabulary size.</p>
+<ul>
+<li><p>Document</p>
+<ul>
+<li><p>the ent381 producer allegedly struck by ent212 will not press</p>
+<p>charges against the “ ent153 ” host , his lawyer said friday . ent212 , who hosted one of the most - watched television shows in the world , was dropped by the ent381 wednesday after an internal investigation by the ent180 broadcaster found he had subjected producer ent193 “ to an unprovoked physical and verbal attack . ” . . .</p></li>
+</ul></li>
+<li><p>Query</p>
+<ul>
+<li>Producer X will not press charges against ent212 , his lawyer says .</li>
+</ul></li>
+<li><p>Answer</p>
+<ul>
+<li>ent193</li>
+</ul></li>
+</ul>
+<p><strong>A Generic Neural Model for Reading Comprehension</strong></p>
+<p>Given context <span class="math inline">\(d\)</span> and question <span class="math inline">\(q\)</span>, the probability of an answer <span class="math inline">\(a\)</span> can be represented as: <span class="math display">\[
+p(a|q, d) \varpropto \exp(W(a)g(q, d)), \ \ s.t.a \in V
+\]</span> Details</p>
+<ul>
+<li>✅ Encode question and context with sequence models</li>
+<li>✅ Combine <span class="math inline">\(q\)</span> and <span class="math inline">\(d\)</span> with an MLP or attention <span class="math inline">\(g\)</span></li>
+<li>✅ Select answer from attention map, by using a classiﬁer, or with generative setup</li>
+<li>❌ How to deal with out of vocabulary (OOV) terms?</li>
+<li>❌ How to deal with proper nouns and numbers?</li>
+</ul>
+<p><img src="/images/NLP/rc_attn.png"></p>
+<ul>
+<li>Read (encode) context document and question</li>
+<li>Use question to attend to context</li>
+<li>Use joint representation to generate answer
+<ul>
+<li>Predict based on attention map</li>
+<li>Generate conditioned on joint representation</li>
+<li>Classify over set of candidate answers</li>
+</ul></li>
+</ul>
+<p>Denote the outputs of a bidirectional LSTM as <span class="math inline">\(\overrightarrow{y(t)}\)</span> and <span class="math inline">\(\overleftarrow{y(t)}\)</span>. Form two encodings, one for the query and one for each token in the document, <span class="math display">\[
+u = \overrightarrow{y_q}(|q|)\ ||\ \overleftarrow{y_q}(1),\ \ y_d(t) = \overrightarrow{y_d}(t)\ ||\ \overleftarrow{y_d}(t)
+\]</span> The representation <span class="math inline">\(r\)</span> of the document <span class="math inline">\(d\)</span> is formed by a weighted sum of the token vectors. The weights are interpreted as the model’s attention, <span class="math display">\[
+\begin{alignat}{3}
+m(t) &amp;= \tanh(W_{ym}y_d(t)+W_{um}u) \\
+s(t) &amp;\varpropto \exp(w_{ms}^Tm(t)) \\
+r &amp;= y_ds \\
+\end{alignat}
+\]</span> Deﬁne the joint document and query embedding via a non-linear combination: <span class="math display">\[
+g^{AR}(d, q) = \tanh(W_{rg}r+W_{ug}u)
+\]</span> Training</p>
+<p><img src="/images/NLP/traing.png"></p>
+<p>Models were trained using asynchronous minibatch stochastic gradient descent (RMSProp) on approximately 25 GPUs.</p>
+<p><em>Attention Sum Reader</em></p>
+<blockquote>
+<p>Kadlec et al. (2016), Text Understanding with the Attention Sum Reader Network</p>
+</blockquote>
+<p>The model can be modiﬁed to make use of the fact that <strong>the answer is a word from the context document</strong>. Now we calculate the probability of the answer being in position <span class="math inline">\(i\)</span> of the context: <span class="math display">\[
+p(i|q, d)  \varpropto \exp(f_i(d)\cdot g(q))
+\]</span> Positional probabilities can then be summed to form token-based probabilities: <span class="math display">\[
+P(w|q, d) \varpropto \sum_{i(w,d)}P(i|q,d)
+\]</span> The rest of the model is equivalent to the attentive reader model presented before.</p>
+<p><strong>Reading Comprehension Summary</strong></p>
+<ul>
+<li>✅ Ask questions in context</li>
+<li>✅ Easily used in discriminative and generative fashion</li>
+<li>✅ Large datasets available</li>
+<li>❌ Constraint on context often artiﬁcial</li>
+<li>❌ Many types of questions unanswerable</li>
+</ul>
+<p><em>Questions</em></p>
+<ul>
+<li>❓ When were the pyramids built?</li>
+<li>❓ Jean-Claude Juncker</li>
+<li>❓ How old is Keir Starmer?</li>
+<li>❓ What is the price for AAPL?</li>
+<li>❓ What’s the weather in London?</li>
+<li>✅ Whom did Juncker meet with?</li>
+<li>❌ When did you get here?</li>
+<li>❌ Why do we yawn?</li>
+</ul>
+<p>Caveat: Need context for any of these, and incredibly up-to-date context for some of these.</p>
+<h2><span id="answer-sentence-selection">Answer Sentence Selection</span></h2>
+<p><img src="/images/NLP/trump.jpg"></p>
+<p><strong>Answer Sentence Selection</strong> describes the task of picking a suitable sentence from a corpus that can be used to answer a question.</p>
+<ul>
+<li><strong>Questions</strong>: Factual questions, possibly with context</li>
+<li><strong>Data Source</strong>: “The Web” or the output of some IR system</li>
+<li><strong>Answer</strong>: One or several excerpts pertinent to the answer</li>
+</ul>
+<p>The answer is <strong>guaranteed to be extracted</strong>, while in reading comprehension it could be either generated or extracted.</p>
+<p><strong>Data Corpora</strong></p>
+<ul>
+<li><strong>TREC QA track (8-13)</strong>: Several hundred manually-annotated question answer pairs with around 20 candidates per instance.</li>
+<li><strong>MS MARCO</strong>: 100k question-answer pairs with 10 contextual passages each. Can also be used as a QA dataset for reading comprehension.</li>
+</ul>
+<p>Likewise, answer sentence selection plays a role in any information retrieval setup, and datasets from IR and other QA tasks can easily be converted into answer selection style datasets.</p>
+<p><em>A Neural Model for Answer Sentence Selection</em></p>
+<blockquote>
+<p>Yu et al., 2014</p>
+</blockquote>
+<p>We need to compute the probability of an answer candidate <span class="math inline">\(a\)</span> and a question <span class="math inline">\(q\)</span> matching. Note that this is diﬀerent from the previous task as we now calculate that score independently of all other candidates: <span class="math display">\[
+p(y=1|q, a) = \sigma(q^TMa + b)
+\]</span> <img src="/images/NLP/ass.png"></p>
+<p><strong>Evaluation</strong></p>
+<p>Unlike single entity style QA where we can use a simple accuracy measure, tasks such as answer sentence selection require more specialised metrics for evaluating model performance.</p>
+<table>
+<colgroup>
+<col style="width: 20%">
+<col style="width: 40%">
+<col style="width: 40%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>measure</th>
+<th>description</th>
+<th>formula</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Accuracy</td>
+<td>Binary measure</td>
+<td>#true/#toal</td>
+</tr>
+<tr class="even">
+<td>Mean Reciprocal Rank</td>
+<td>Measures position of ﬁrst relevant document in return set.</td>
+<td><span class="math inline">\(\frac{1}{\|Q\|}\sum_{i=1}^{\|Q\|}\frac{1}{rank_i}\)</span></td>
+</tr>
+<tr class="odd">
+<td>BLEU Score</td>
+<td>Machine Translation measure for translation accuracy</td>
+<td>complicated</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Answer Selection Summary</strong></p>
+<ul>
+<li>✅ Designed to deal with large amounts of context</li>
+<li>✅ More robust than ‘true’ QA systems as it turns provides context with its answers</li>
+<li>✅ Obvious pipeline step between IR and QA</li>
+<li>❌ Does not provide answers, provides context only</li>
+<li>❌ Real-world use depends on underlying IR pipeline</li>
+</ul>
+<p><em>Questions</em></p>
+<ul>
+<li>✅ When were the pyramids built?</li>
+<li>✅ Jean-Claude Juncker</li>
+<li>✅ How old is Keir Starmer?</li>
+<li>❌ What is the price for AAPL?</li>
+<li>❌ What’s the weather in London?</li>
+<li>❓ Whom did Juncker meet with?</li>
+<li>❌ When did you get here?</li>
+<li>✅ Why do we yawn?</li>
+</ul>
+<p>Note: Things like age or stock price may produce answers, but with no guarantee of accuracy (any mention of any AAPL price might be a good ﬁt).</p>
+<h2><span id="visual-question-answering">Visual Question Answering</span></h2>
+<p>Sometimes questions require context outside of pure language.</p>
+<p><img src="/images/NLP/visual.jpg"></p>
+<p><strong>Task and Corpora</strong></p>
+<p>In recent years a number of visual QA datasets have sprung up. Some of the more popular ones include:</p>
+<ul>
+<li><strong>VisualQA</strong>: Agrawal et al. (2015)</li>
+<li><strong>VQA 2.0</strong> Goyal et al. (2016)</li>
+<li><strong>COCO-QA</strong> Ren et al. (2015)</li>
+</ul>
+<p>Details between these datasets vary, but the basic organisation remains the same of images paired with simple questions and answers (either free form or from a list of options).</p>
+<p>All of these are reasonably large (100ks of images, over 1M questions).</p>
+<p><strong>Visual QA</strong></p>
+<ul>
+<li>Question is language → some encoder</li>
+<li>Context is a single picture → convolutional network</li>
+<li>Answer is a single word → classiﬁer function</li>
+</ul>
+<p>We have covered all the components already:</p>
+<p><img src="/images/NLP/visualQA.jpg"></p>
+<p><strong>Blind Model</strong></p>
+<blockquote>
+<p>Goyal et al. (2016)</p>
+</blockquote>
+<p><em>Ignoring the images is a good baseline!</em></p>
+<ul>
+<li>What colour is the cat?</li>
+<li>How many chairs are around the table?</li>
+<li>What furniture is in the bedroom?</li>
+<li>Where is the person sleeping?</li>
+</ul>
+<p>We can get reasonably good guesses in at many of these questions without seeing an image for context.</p>
+<p><strong>Attention Methods for Visual QA</strong></p>
+<blockquote>
+<p>Yang et al. (2015): Stacked Attention Networks for Image Question Answering</p>
+</blockquote>
+<p>Viewing VQA from the perspective of our default QA paradigm, there is signiﬁcant overlap with reading comprehension style models. We use similar techniques to improve performance.</p>
+<p>We can use attention on visual representations:</p>
+<p><img src="/images/NLP/attn_vqa.png"></p>
+<p><img src="/images/NLP/vqa_eg.jpg"></p>
+<p><strong>VIisual Question Answering Summary</strong></p>
+<ul>
+<li>✅ Extra modality ‘for free’</li>
+<li>✅ Plenty of training data available as of recently</li>
+<li>❌ Currently quite gimmicky</li>
+<li>❌ Still a long way to go</li>
+</ul>
+<p><em>Questions</em></p>
+<ul>
+<li>❌ When were the pyramids built?</li>
+<li>❌ Jean-Claude Juncker</li>
+<li>❌ How old is Keir Starmer?</li>
+<li>❌ What is the price for AAPL?</li>
+<li>❓ What’s the weather in London?</li>
+<li>❌ Whom did Juncker meet with?</li>
+<li>❌ When did you get here?</li>
+<li>❌ Why do we yawn?</li>
+</ul>
+<h2><span id="summary">Summary</span></h2>
+<p><strong>How to build your own QA system ?</strong></p>
+<p>Build a QA model in seven questions</p>
+<ul>
+<li>What is the task?</li>
+<li>What do question, answer and context look like?</li>
+<li>Where does the data come from?</li>
+<li>Can you augment the data?</li>
+<li>How to encode question and context?</li>
+<li>How to combine question and context?</li>
+<li>How to predict or generate an answer?</li>
+</ul>
+<p>There are plenty of open questions left in QA. Just remember to <strong>start with the data</strong>!</p>
+<p><em>Sources and Further Reading</em></p>
+<ul>
+<li><strong>Question Answering Theory and Datasets</strong>
+<ul>
+<li>Pomerantz (2005), A Linguistic Analysis of Question Taxonomies</li>
+<li>Nguyen et al. (2016), MS MARCO: A Human Generated Machine Reading Comprehension Dataset</li>
+<li>Haas and Riezler (2016), A Corpus and Semantic Parser for Multilingual Natural Language Querying of OpenStreetMap</li>
+</ul></li>
+<li><strong>Semantic Parsing</strong>
+<ul>
+<li>Artzi et al. (2013), Semantic Parsing with CCG</li>
+<li>Berant et al. (2013), Semantic Parsing on Freebase from Question-Answer Pairs</li>
+<li>http://nlp.stanford.edu/software/sempre/</li>
+</ul></li>
+<li><strong>Reading Comprehension</strong>
+<ul>
+<li>Hermann et al. (2015), Teaching Machines to Read and Comprehend</li>
+<li>Kadlec et al. (2016), Text Understanding with the Attention Sum Reader Network</li>
+</ul></li>
+<li><strong>Visual QA</strong>
+<ul>
+<li>Yang et al. (2015), Stacked Attention Networks for Image Question Answering</li>
+<li>Ren et al. (2015), Exploring Models and Data for Image Question Answering</li>
+<li>Goyal et al. (2016), Making the V in VQA Matter: Elevating the Role of Image Understanding in Visual Question Answering.</li>
+<li>https://avisingh599.github.io/deeplearning/visual-qa/</li>
+</ul></li>
+</ul>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/NLP/">NLP</a><a href="/tags/Attention/">Attention</a><a href="/tags/Deep-NLP/">Deep NLP</a><a href="/tags/QA/">QA</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

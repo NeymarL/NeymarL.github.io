@@ -1,0 +1,409 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    深入理解SVM | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="深入理解SVM">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      深入理解SVM</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/09/13/Support Vector Machine/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-09-13T11:42:06.000Z">
+          2016-09-13
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <blockquote>
+<p>支持向量机（Support Vector Machine, SVM）是一种分类模型，它的基本模型是定义在特征空间上的间隔最大的线性分类器。SVM 还包含核技巧，使它成为非线性分类器。</p>
+</blockquote>
+<!-- toc -->
+<ul>
+<li><a href="#线性可分支持向量机">线性可分支持向量机</a>
+<ul>
+<li><a href="#硬间隔最大化">硬间隔最大化</a></li>
+</ul></li>
+<li><a href="#线性支持向量机">线性支持向量机</a>
+<ul>
+<li><a href="#软间隔最大化">软间隔最大化</a></li>
+</ul></li>
+<li><a href="#非线性支持向量机">非线性支持向量机</a>
+<ul>
+<li><a href="#核函数">核函数</a></li>
+</ul></li>
+<li><a href="#smo">SMO</a></li>
+<li><a href="#总结思考">总结思考</a></li>
+<li><a href="#参考文献">参考文献</a></li>
+</ul>
+<!-- tocstop -->
+<a id="more"></a>
+<h2><span id="线性可分支持向量机">线性可分支持向量机</span></h2>
+<p>先来介绍一些概念。</p>
+<p><strong>分割超平面</strong></p>
+<p>定义：设 <span class="math inline">\(C\)</span> 和 <span class="math inline">\(D\)</span> 为两不相交的凸集，则存在平面 <span class="math inline">\(P\)</span>，<span class="math inline">\(P\)</span> 可以将 <span class="math inline">\(C\)</span> 和 <span class="math inline">\(D\)</span> 完全分离，则 <span class="math inline">\(P\)</span> 为两集合的分割超平面。</p>
+<p>那么如何定义两个集合的“最优”分割超平面？如下图所示，这些线都可以把两个集合完全分开，那么哪条线是最好的？</p>
+<p><img src="/images/1473584864752.png"></p>
+<blockquote>
+<p>两个集合的距离，定义为两个集合间元素的最短距离。</p>
+</blockquote>
+<p>直观上我们认为如果某一条分割线（或者超平面），使得两个集合到它的<strong>最短距离距离最大</strong>，那么这条分割线（或超平面）就认为是最优的，因为它最大化地分开了两个集合。</p>
+<p><img src="/images/1473585333350.png"></p>
+<p>上图红线为最优分割线，平行于它的左右两条虚线为两个集合的边界，过边界的点（向量）起支撑作用，好像把分割超平面支起来一样，所以这些点就叫<strong>支撑向量</strong>。找到了支撑向量，也就找到了集合边界，也就确定了分割超平面，通过这种方法分类的模型就叫做<strong>支持向量机</strong>。</p>
+<h3><span id="硬间隔最大化">硬间隔最大化</span></h3>
+<p><strong>输入数据</strong></p>
+<p>假设给定一个特征空间上的训练数据集 <span class="math display">\[T=\{(x_1,y_1), (x_2,y_2)...(x_N,y_N)\}\]</span> 其中，<span class="math inline">\(x_i∈R^n\)</span>，<span class="math inline">\(y_i∈\{+1,-1\}\)</span>，<span class="math inline">\(i=1,2,...N\)</span>，<span class="math inline">\(x_i\)</span> 为第 <span class="math inline">\(i\)</span> 个实例(若 <span class="math inline">\(n&gt;1\)</span>，<span class="math inline">\(x_i\)</span> 为向量)；<span class="math inline">\(y_i\)</span> 为 <span class="math inline">\(x_i\)</span> 的类标记。当 <span class="math inline">\(y_i=+1\)</span> 时，称 <span class="math inline">\(x_i\)</span> 为正例；当 <span class="math inline">\(y_i=-1\)</span> 时，称 <span class="math inline">\(x_i\)</span> 为负例；<span class="math inline">\((x_i,y_i)\)</span> 称为样本点。</p>
+<p>给定线性可分训练数据集，通过<strong>间隔最大化</strong>得到的分离超平面为 <span class="math display">\[y(x) = w^T\Phi(x) + b\]</span></p>
+<p>相应的分类决策函数 <span class="math inline">\(f(x) = sign(w^T\Phi(x) + b)\)</span> ，该决策函数称为线性可分支持向量机。</p>
+<p><span class="math inline">\(φ(x)\)</span> 是某个确定的特征空间转换函数，它的作用是将 <span class="math inline">\(x\)</span> 映射到(更高的)维度。最简单直接的：<span class="math inline">\(\Phi(x) = x\)</span>。求解分离超平面问题可以等价为求解相应的<strong>凸二次规划问题</strong>。</p>
+<p><img src="/images/1473595785438.png"></p>
+<p><strong>推导目标函数</strong></p>
+<blockquote>
+<p>点到直线距离 平面一点 <span class="math inline">\(\overrightarrow{x_0}\)</span> 到直线 <span class="math inline">\(y = \overrightarrow{w}\overrightarrow{x} + b\)</span> 的距离为 <span class="math inline">\(\frac{|\overrightarrow{w}\overrightarrow{x} + b|}{||\overrightarrow{w}||}\)</span>，若直线变换为 <span class="math inline">\(y = \frac{\overrightarrow{w}\overrightarrow{x} + b}{||\overrightarrow{w}||}\)</span>，则距离为 <span class="math inline">\(|y(\overrightarrow{x_0})|\)</span></p>
+</blockquote>
+<p>根据题设 <span class="math inline">\(y(x) = w^T\Phi(x) + b\)</span>，有 <span class="math inline">\(y_i(x)\cdot y(x_i) &gt; 0\)</span>，<span class="math inline">\(w\)</span>, <span class="math inline">\(b\)</span> 等比例缩放，则 <span class="math inline">\(t*y\)</span> 的值同样缩放，从而样本 <span class="math inline">\(i\)</span> 到超平面的距离为： <span class="math display">\[\frac{y_i\cdot y(x_i)}{||w||} = \frac{y_i \cdot (w^T\Phi(x_i) + b)}{||w||}\]</span></p>
+<p>我们要求<strong>最短距离最大</strong>的超平面，所以目标函数为：</p>
+<p><span class="math display">\[\arg \max_{w, b}\{\frac{1}{||w||}\min_i[y_i \cdot (w^T\cdot \Phi(x_i) + b)]\}\]</span></p>
+<p>由于我们总可以通过等比例缩放 <span class="math inline">\(w\)</span> 的方法，使得两类点的函数值都满足 <span class="math inline">\(|y|\geqslant 1\)</span>，加上这个约束之后 ： <span class="math inline">\(\min_i[y_i \cdot (w^T\cdot \Phi(x_i) + b)] = 1\)</span>，所以目标函数化简为：</p>
+<p><span class="math display">\[\arg \max_{w,b}\frac{1}{||w||}\]</span> <span class="math display">\[s.t. \ y_i(w^T\cdot \Phi(x_i) + b) \geqslant 1, \ \ i = 1, 2, ... n\]</span></p>
+<p>我们做一下简单的变化，得到：</p>
+<p><span class="math display">\[\arg \min_{w,b}\frac{1}{2}||w||^2\]</span> <span class="math display">\[s.t. \ y_i(w^T\cdot \Phi(x_i) + b) -1 \geqslant 0, \ \ i = 1, 2, ... n\]</span></p>
+<p>求一个带约束的函数的最值，通常使用<a href="https://www.wikiwand.com/en/Lagrange_multiplier" target="_blank" rel="noopener">Lagrange乘数法</a>。</p>
+<blockquote>
+<p>In mathematical optimization, the method of Lagrange multipliers is a strategy for finding the local maxima and minima of a function subject to equality constraints.</p>
+</blockquote>
+<p>Lagrange函数为：</p>
+<p><span class="math display">\[L(w,b,\alpha) = \frac{1}{2}||w||^2- \sum_{i=1}^n\alpha_i(y_i(w^T\cdot \Phi(x_i) + b) - 1)\]</span></p>
+<p>由于我们要求 $_i 0 $，而 <span class="math inline">\((y_i(w^T\cdot \Phi(x_i) + b) - 1)\)</span> 是一个正值，所以 <span class="math inline">\(L(w, b, \alpha) \leqslant \frac{1}{2}||w||^2\)</span>，即 <span class="math inline">\(max_\alpha L(w, b, \alpha) = \frac{1}{2}||w||^2\)</span>，所以原问题是极小极大问题： <span class="math display">\[\min_{w,b}\max_\alpha L(w, b, \alpha)\]</span></p>
+<p>我们再做一下变化，变成原始问题的对偶问题：</p>
+<p><span class="math display">\[\max_\alpha\min_{w,b}L(w, b, \alpha)\]</span></p>
+<blockquote>
+<p>一般情况下，<span class="math inline">\(\min_y\max_x f(x, y) \geqslant \max_x\min_y f(x, y)\)</span>，由于我们的 <span class="math inline">\(L(w, b, \alpha)\)</span> 满足 <a href="https://www.wikiwand.com/en/Karush%E2%80%93Kuhn%E2%80%93Tucker_conditions" target="_blank" rel="noopener">KKT条件</a>，所以可以取等号。</p>
+</blockquote>
+<p>由于先求 <span class="math inline">\(\min_{w,b}\)</span>，所以将拉格朗日函数 <span class="math inline">\(L(w,b,\alpha)\)</span> 分别对 <span class="math inline">\(w,b\)</span> 求偏导并令其为 <span class="math inline">\(0\)</span> :</p>
+<p><span class="math display">\[\frac{\partial L}{\partial w} = 0 \Rightarrow w = \sum_{i=1}^n\alpha_i y_i \Phi(x_i)\]</span> <span class="math display">\[\frac{\partial L}{\partial b} = 0 \Rightarrow \sum_{i=1}^n\alpha_i y_i = 0\]</span></p>
+<p>把上面二式代回 <span class="math inline">\(L(w, b, \alpha)\)</span>，并化简得：</p>
+<p><span class="math display">\[\begin{array}{lcl}
+L(w, b, \alpha) = \frac{1}{2}||w||^2- \sum_{i=1}^n\alpha_i(y_i(w^T\cdot \Phi(x_i) + b) - 1) \\
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ = \frac{1}{2}w^Tw - w^T\sum_{i=1}^n\alpha_iy_i\Phi(x_i) - b\sum_{i=1}^n\alpha_iy_i + \sum_{i=1}^n\alpha_i \\
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ = \frac{1}{2}w^T\sum_{i=1}^n\alpha_i y_i \Phi(x_i) - w^T\sum_{i=1}^n\alpha_iy_i\Phi(x_i) - b \cdot 0 + \sum_{i=1}^n\alpha_i \\
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ = \sum_{i=1}^n\alpha_i - \frac{1}{2}(\sum_{i=1}^n\alpha_i y_i \Phi(x_i))^T\sum_{i=1}^n\alpha_i y_i \Phi(x_i) \\
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ = \sum_{i=1}^n\alpha_i -\frac{1}{2}\sum_{i,j=1}^n\alpha_i\alpha_jy_iy_j\Phi(x_i)\Phi(x_j)
+\end{array}\]</span></p>
+<p>继续求 <span class="math inline">\(\min_{w,b}L(w, b, \alpha)\)</span> 对 <span class="math inline">\(\alpha\)</span> 的极大：</p>
+<p><span class="math display">\[\max_\alpha \sum_{i=1}^n\alpha_i - \frac{1}{2}\sum_{i,j=1}^n\alpha_i\alpha_jy_iy_j\Phi(x_i)\Phi(x_j)\]</span> <span class="math display">\[s.t. \sum_{i=1}^n \alpha_iy_i = 0, \alpha_i \geqslant 0, i = 1, 2, ... n\]</span></p>
+<p>我们对目标函数添加负号，转化为对 <span class="math inline">\(\alpha\)</span> 求极小：</p>
+<p><span class="math display">\[\min_\alpha \frac{1}{2}\sum_{i,j=1}^n\alpha_i\alpha_jy_iy_j\Phi(x_i)\Phi(x_j) - \sum_{i=1}^n\alpha_i\]</span> <span class="math display">\[s.t. \sum_{i=1}^n \alpha_iy_i = 0, \alpha_i \geqslant 0, i = 1, 2, ... n\]</span></p>
+<p>用某些方法（比如：<a href="#SMO">SMO</a>）求得最优解 <span class="math inline">\(\alpha^*\)</span>，然后可以计算出分隔超平面：</p>
+<p><span class="math display">\[w^* = \sum_{i=1}^n\alpha_i^*y_i\Phi(x_i)\]</span> <span class="math display">\[b^* = y_i - \sum_{i=1}^n\alpha_i^*y_i\Phi(x_i)\cdot \Phi(x_j)\]</span> <span class="math display">\[w^*\Phi(x) + b^* = 0\]</span></p>
+<p>其中，<span class="math inline">\(x_j\)</span> 为某一样本，所以分类决策函数为：</p>
+<p><span class="math display">\[f(x) = sign(w^*\Phi(x) + b^*)\]</span></p>
+<h2><span id="线性支持向量机">线性支持向量机</span></h2>
+<p>解决问题之后我们发现，有时候不一定分类完全正确的超平面就是最好的，容忍些小错误可能会更好，如下图所示：</p>
+<p><img src="/images/1473671960505.png"></p>
+<p>明显虚线比完全分对的实线看起来要好一些，实线可能过拟合了。而且更多的情况是数据集本身就不是线性可分的，解决这些问题就需要用<strong>软间隔最大化的线性支持向量机</strong>了！</p>
+<h3><span id="软间隔最大化">软间隔最大化</span></h3>
+<p>若数据线性不可分，则增加松弛因子 <span class="math inline">\(ξ_i≥0\)</span> , 使函数间隔加上松弛变量大于等于 <span class="math inline">\(1\)</span>。这样, 约束条件变成 : <span class="math display">\[y_i(w\cdot x_i + b) \geqslant 1 - \xi_i\]</span></p>
+<p>则目标函数变为：</p>
+<p><span class="math display">\[\min_{w,b, \xi}\frac{1}{2}||w||^2 + C\sum_{i=1}^n\xi_i\]</span> <span class="math display">\[s.t. y_i(w\cdot x_i + b) \geqslant 1 - \xi_i, \ \xi_i \geqslant 0, \ i = 1,2, ... n\]</span></p>
+<p>其中，参数 <span class="math inline">\(C\)</span> 用于调节容忍错误的程度。当 <span class="math inline">\(C \rightarrow +\infty\)</span> 时，要最小化目标函数，<span class="math inline">\(\xi_i\)</span> 只能取非常非常小的值，即 <span class="math inline">\(\xi_i \rightarrow 0\)</span>，相当于线性可分SVM；当 <span class="math inline">\(C\)</span> 比较小时，<span class="math inline">\(\xi_i\)</span> 可以取得较大的值，从而容错率较大，可防止过拟合。</p>
+<p>构造Lagrange函数： <span class="math display">\[L(w, b, \xi, \alpha, \mu) = \frac{1}{2}||w||^2 + C\sum_{i=1}^n\xi_i -\sum_{i=1}^n\alpha_i(y_i(w^T\cdot \Phi(x_i) + b) - 1 + \xi_i) - \sum_{i=1}^n\mu_i\xi_i\]</span></p>
+<p>对 <span class="math inline">\(w, b, \xi\)</span> 求偏导并令其等于 <span class="math inline">\(0\)</span> 得：</p>
+<p><span class="math display">\[\frac{\partial L}{\partial w} = 0 \Rightarrow \sum_{i=1}^n\alpha_iy_i\Phi(x_i)\]</span> <span class="math display">\[\frac{\partial L}{\partial b} = 0 \Rightarrow \sum_{i=1}^n\alpha_i y_i = 0\]</span> <span class="math display">\[\frac{\partial L}{\partial \xi} = 0 \Rightarrow C - \alpha_i - \mu_i = 0\]</span></p>
+<p>将上面三式代入Lagrange函数得：</p>
+<p><span class="math display">\[\min_{w,b,\xi}L(w,b,\xi,\alpha,\mu) = -\frac{1}{2}\sum_{i=1}^n\sum_{j=1}^n\alpha_i\alpha_jy_iy_j(\Phi(x_i)\cdot \Phi(x_j)) + \sum_{i=1}^n\alpha_i\]</span></p>
+<p>对上式求关于 <span class="math inline">\(\alpha\)</span> 的极大，得到：</p>
+<p><span class="math display">\[\max_\alpha -\frac{1}{2}\sum_{i=1}^n\sum_{j=1}^n\alpha_i\alpha_jy_iy_j(\Phi(x_i)\cdot \Phi(x_j)) + \sum_{i=1}^n\alpha_i\]</span> <span class="math display">\[s.t. \sum_{i=0}^n\alpha_iy_i = 0, \ C - \alpha_i - \mu_i = 0, \ \alpha_i \geqslant 0, \mu_i \geqslant 0, i = 1,2...n\]</span></p>
+<p>由于 <span class="math inline">\(C - \alpha_i - \mu_i = 0\)</span>，我们可以知道：<span class="math inline">\(0 \leqslant \alpha_i \leqslant C\)</span>。</p>
+<p>整理得到对偶问题：</p>
+<p><span class="math display">\[\min_\alpha \sum_{i=1}^n\alpha_i-\frac{1}{2}\sum_{i=1}^n\sum_{j=1}^n\alpha_i\alpha_jy_iy_j(\Phi(x_i)\cdot \Phi(x_j))\]</span> <span class="math display">\[s.t. \sum_{i=0}^n\alpha_iy_i = 0, \ 0 \leqslant \alpha_i \leqslant C,\  i = 1,2...n\]</span></p>
+<p>通过某些方法（比如：<a href="#SMO">SMO</a>）求解约束最优化问题，求得最优解 <span class="math inline">\(\alpha^*\)</span>。</p>
+<p>计算 <span class="math inline">\(w^*\)</span> 和 <span class="math inline">\(b^*\)</span> ：</p>
+<p><span class="math display">\[w^* = \sum_{i=1}^n\alpha_i^*y_i\Phi(x_i)\]</span> <span class="math display">\[b^* = \frac{\max_{i:y_i = -1}w^*\Phi(x_i)+\min_{i:y_i = 1}w^*\Phi(x_i)}{2}\]</span></p>
+<p>注意： * 计算 <span class="math inline">\(b^*\)</span>时，需要使用满足条件 <span class="math inline">\(0&lt;α_j&lt;C\)</span> 的向量 * 实践中往往取<strong>支持向量</strong>的所有值取平均，作为 <span class="math inline">\(b^*\)</span></p>
+<p>求得分离超平面：<span class="math inline">\(w^*\Phi(x) + b^* = 0\)</span></p>
+<p>分类决策函数为：</p>
+<p><span class="math display">\[f(x) = sign(w^*\Phi(x) + b^*)\]</span></p>
+<p><strong>损失函数分析</strong></p>
+<p><img src="/images/1473691411792.png"></p>
+<p>若一正例样本落在 <span class="math inline">\(y=1\)</span> 下侧或正好在线上，则惩罚 <span class="math inline">\(\xi = 0\)</span> ；若落在 <span class="math inline">\(y=0\)</span> 与 <span class="math inline">\(y=1\)</span> 之间，则惩罚为一个小于 <span class="math inline">\(1\)</span> 的数，即 <span class="math inline">\(\xi &lt; 1\)</span>；若正好落在分割线上，则 <span class="math inline">\(\xi = 1\)</span> ；若该样本落在 <span class="math inline">\(y = 0\)</span> 上侧，则惩罚为大于 <span class="math inline">\(1\)</span> 的值，即 <span class="math inline">\(\xi &gt; 1\)</span>。画在坐标轴上就是：</p>
+<p><img src="/images/1473691785170.png"></p>
+<p>其中，蓝色的线就是SVM的损失函数，红色的线是Logistic回归的损失函数，绿色的线是0/1损失。</p>
+<h2><span id="非线性支持向量机">非线性支持向量机</span></h2>
+<p>可以使用核函数，将原始输入空间映射到新的特征空间，从而，使得原本线性不可分的 样本可能在核空间可分，从而实现非线性支持向量机。</p>
+<h3><span id="核函数">核函数</span></h3>
+<p>我们要优化的目标函数为： <span class="math display">\[\min_\alpha \sum_{i=1}^n\alpha_i-\frac{1}{2}\sum_{i=1}^n\sum_{j=1}^n\alpha_i\alpha_jy_iy_j(\Phi(x_i)\cdot \Phi(x_j))\]</span></p>
+<p>我们定义核函数 <span class="math inline">\(\kappa(x_i, x_j) = \Phi(x_i) \cdot \Phi(x_j)\)</span>，来代替 <span class="math inline">\(\Phi(x_i)\)</span> 与 <span class="math inline">\(\Phi(x_j)\)</span> 的点积，从而我们不用自己提取 <span class="math inline">\(x\)</span> 的特征 <span class="math inline">\(\Phi(x)\)</span>，只需定义一个核函数来表示两个样本的<strong>相似度</strong>。</p>
+<p>常用的核函数有以下几个： * 多项式核函数：<span class="math inline">\(\kappa(x_1, x_2) = (\alpha \cdot ||x_1 - x_2||^a + r)^b\)</span>，<span class="math inline">\(\alpha, a, b, r\)</span> 为常数 * 高斯核函数RBF：<span class="math inline">\(\kappa(x_1,x_2) = \exp(-\frac{||x_1 - x_2||^2}{2\sigma^2})\)</span> * Sigmoid核：<span class="math inline">\(\kappa(x_1,x_2) = \tanh(\gamma\cdot||x_1-x_2||^a+r)\)</span>，<span class="math inline">\(\gamma,a,r\)</span> 为常数</p>
+<p>在实际应用中，往往依赖<strong>先验领域知识</strong>/<strong>交叉验证</strong>等方案才能选择有效的核函数；若没有更多先验信息，则使用<strong>高斯核函数</strong>。</p>
+<p><strong>核函数映射</strong></p>
+<p><img src="/images/1473693232751.png"></p>
+<p>高斯核函数其实可以在样本周围形成一圈圈等高线，使<strong>正样本上升形成山峰</strong>，<strong>负样本下降形成山谷</strong>，然后总会有一个或多个超平面可以完美分割两类样本，如上图所示。</p>
+<p><img src="/images/1473693532937.png"></p>
+<p>那么多个完美分割的超平面哪个是最好的呢？是粉红色的还是黑色的？</p>
+<p>其实我们只需要把样本到平面的<strong>最短距离求</strong>出来，然后<strong>最大化</strong>这个距离就可以，没错，就是<strong>在核函数映射的空间里做SVM</strong>！而且总是可以找到一个最优的分割平面来分割数据集，这也就是 SVM + kernel trick 异常强大的原因。</p>
+<p><strong>RBF</strong></p>
+<p>在多说一点高斯核函数，<span class="math inline">\(\kappa(x_1,x_2) = \exp(-\frac{||x_1 - x_2||^2}{2\sigma^2})\)</span>。</p>
+<blockquote>
+<p><span class="math inline">\(e^x\)</span> 的Taylor展开：<span class="math inline">\(e^x = 1 + x + \frac{x^2}{2!} + \frac{x^3}{3!} + ... + \frac{x^n}{n!} + R_n\)</span></p>
+</blockquote>
+<p>我们对高斯核函数做一些变换并Taylor展开：</p>
+<p><span class="math display">\[\begin{array}{lcl}
+\kappa(x_1,x_2) = e^{-\frac{||x_1 - x_2||^2}{2\sigma^2}} = e^{-\frac{(x_1 - x_2)^2}{2\sigma^2}} \\
+\ \ \ \ \ \ \ \ \ \ \ \ \ = e^{-\frac{x_1^2 - 2x_1x_2 + x_2^2}{2\sigma^2}} \\
+\ \ \ \ \ \ \ \ \ \ \ \ \ = e^{-\frac{x_1^2 + x_2^2}{2\sigma^2}} \cdot e^{\frac{x_1x_2}{\sigma^2}} \\
+\ \ \ \ \ \ \ \ \ \ \ \ \ = e^{-\frac{x_1^2 + x_2^2}{2\sigma^2}} \cdot(1 + \frac{1}{\sigma^2}\cdot\frac{x_1x_2}{1!} + (\frac{1}{\sigma^2})^2\cdot\frac{(x_1x_2)^2}{2!} + ... +  (\frac{1}{\sigma^2})^n\cdot\frac{(x_1x_2)^n}{n!} + ...) \\
+\ \ \ \ \ \ \ \ \ \ \ \ \ = e^{-\frac{x_1^2 + x_2^2}{2\sigma^2}} \cdot (1\cdot1 + \frac{1}{1!}\frac{x_1}{\sigma}\frac{x_2}{\sigma} + \frac{1}{2!}\frac{x_1^2}{\sigma^2}\frac{x_2^2}{\sigma^2} + ... + \frac{1}{n!}\frac{x_1^n}{\sigma^n}\frac{x_2^n}{\sigma^n}+...) \\
+\ \ \ \ \ \ \ \ \ \ \ \ \ = \Phi(x_1)^T\cdot\Phi(x_2)
+\end{array}\]</span></p>
+<p>其中，<span class="math inline">\(\Phi(x) = e^{-\frac{x^2}{2\sigma^2}}(1+\sqrt{\frac{1}{1!}}\frac{x}{\sigma} + \sqrt{\frac{1}{2!}}\frac{x^2}{\sigma^2} + ...+\sqrt{\frac{1}{n!}}\frac{x^n}{\sigma^n} + ...)\)</span></p>
+<p>由 <span class="math inline">\(\Phi(x)\)</span> 结果可见高斯核函数实际把特征映射到了<strong>无穷维</strong>，然后由SVM选出几个最优维度进行分类。</p>
+<h2><span id="smo">SMO</span></h2>
+<p>SVM中系数的求解：<strong>Sequential Minimal Optimization</strong></p>
+<p><strong>算法思想</strong> * 有多个拉格朗日乘子 * 每次只选择其中<strong>两个乘子</strong>做优化，其他因子认为是<strong>常数</strong> * 将N个解问题，转换成两个变量的求解问题：并且目标函数是<strong>凸</strong>的</p>
+<p><strong>算法步骤</strong> * 考察目标函数，假设 <span class="math inline">\(α_1\)</span> 和 <span class="math inline">\(α_2\)</span> 是变量，其他是定值： <span class="math display">\[\min_\alpha \sum_{i=1}^n\alpha_i-\frac{1}{2}\sum_{i=1}^n\sum_{j=1}^n\alpha_i\alpha_jy_iy_j\kappa(x_i,x_j)\]</span> <span class="math display">\[s.t. \sum_{i=0}^n\alpha_iy_i = 0, \ 0 \leqslant \alpha_i \leqslant C,\  i = 1,2...n\]</span> * 二变量优化问题 <span class="math display">\[y_1 \neq y_2，\begin{cases} L = \max\{0, \alpha_1 - \alpha2\} \\
+H = \min\{C, C+\alpha_1-\alpha_2\}
+\end{cases}\]</span> <span class="math display">\[y_1 = y_2，\begin{cases} L = \max\{0, \alpha_1 + \alpha2 - C\} \\
+H = \min\{C, \alpha_1+\alpha_2\}
+\end{cases}\]</span> * 迭代公式 <span class="math display">\[g(x) = \sum_{i=1}^ny_i\alpha_i\kappa(x_i, x) + b\]</span> <span class="math display">\[\eta = \kappa(x_1, x_1) + \kappa(x_2, x_2) - 2\kappa(x_1, x_2) = ||\Phi(x_1) - \Phi(x_2)||^2\]</span> <span class="math display">\[E_i = g(x_i) - y_i = (\sum_{j=1}^ny_j\alpha_j\kappa(x_j, x_i) + b) - y_i,\ \ \ i = 1, 2\]</span> <span class="math display">\[\alpha_j^{new} = \alpha_j^{old} + \frac{y_j(E_i - E_j)}{\eta}\]</span> * 迭代 <span class="math inline">\(m\)</span> 次 <span class="math inline">\(\alpha_j\)</span> 没有变化就可以退出迭代了，<span class="math inline">\(m\)</span> 为自己设置的阈值。</p>
+<h2><span id="总结思考">总结思考</span></h2>
+<ul>
+<li>SVM可以用来划分多类别吗?
+<ul>
+<li>答案是肯定的。</li>
+<li>直接多分类</li>
+<li>1 vs all</li>
+</ul></li>
+<li>SVM和Logistic回归的比较
+<ul>
+<li>经典的SVM，直接输出类别，不给出后验概率</li>
+<li>Logistic回归，会给出属于哪个类别的后验概率</li>
+<li>二者<strong>目标函数的异同</strong></li>
+</ul></li>
+<li>SVM也可以用于回归问题：SVR</li>
+</ul>
+<h2><span id="参考文献">参考文献</span></h2>
+<ul>
+<li>李航，统计学习方法，清华大学出版社，2012</li>
+<li>Charlie Frogner. Support Vector Machines. 2011</li>
+<li>Corinana Cortes, Vladimir Vapnik. Support-Vector Networks. Machine Learning, 20, 273-297, 1995</li>
+<li>John C. Platt. Sequential Minimal Optimization: A Fast Algorithm for Training Support Vector Machines. 1998</li>
+<li>Andrew W. Moore. Support Vector Machines, 2001</li>
+</ul>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/SVM/">SVM</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

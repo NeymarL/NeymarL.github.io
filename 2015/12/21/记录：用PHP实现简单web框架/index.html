@@ -1,0 +1,389 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    记录：用PHP实现简单web框架 | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="记录：用PHP实现简单web框架">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      记录：用PHP实现简单web框架</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2015/12/21/记录：用PHP实现简单web框架/" rel="bookmark">
+        <time class="entry-date published" datetime="2015-12-21T04:46:40.000Z">
+          2015-12-21
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <blockquote>
+<p>这个框架功能比较简单，只有url拦截及自定义、加载静态模板两个功能，之前的博客也是基于这个框架实现的。第一部分是记录实现这个框架所需的php基础知识，第二部分是这两个功能的实现方法。最后还有实现自动登录的最佳实践。</p>
+</blockquote>
+<a id="more"></a>
+<h2><span id="php基础相关">php基础相关</span></h2>
+<h3><span id="_server"><code>$_SERVER</code></span></h3>
+<blockquote>
+<p>服务器和执行环境信息</p>
+</blockquote>
+<p><a href="http://php.net/manual/zh/reserved.variables.server.php" target="_blank" rel="noopener">php手册</a></p>
+<p>几个用到的项： * <code>'REQUEST_METHOD'</code> : 访问页面使用的请求方法；例如，<code>“GET”</code>,<code>“HEAD”</code>，<code>“POST”</code>，<code>“PUT”</code>。 * <code>'REQUEST_URI'</code> : URI 用来指定要访问的页面。例如 <code>“/index.html”</code>。</p>
+<h3><span id="date">Date</span></h3>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">date(format,timestamp)</span><br></pre></td></tr></table></figure>
+<div class="line-block">参数 | 描述 |<br>
+:--- | : --- |<br>
+format | 必需。规定如何返回结果。|<br>
+timestamp | 可选。 |</div>
+<h4><span id="格式化方式说明">格式化方式说明</span></h4>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">格式化方式</th>
+<th style="text-align: left;">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Y</td>
+<td style="text-align: left;">4位数字年，y为2位数字，如99即1999年</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">m</td>
+<td style="text-align: left;">数字月份，前面有前导0，如01。n 为无前导0数字月份</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">F</td>
+<td style="text-align: left;">月份，完整的文本格式，例如 January 或者 March</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">M</td>
+<td style="text-align: left;">三个字母缩写表示的月份，例如 Jan 或者 Mar</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">d</td>
+<td style="text-align: left;">月份中的第几天，前面有前导0，如03。j 为无前导0的天数</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">w</td>
+<td style="text-align: left;">星期中的第几天，以数字表示，0表示星期天</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">z</td>
+<td style="text-align: left;">年份中的第几天，范围0-366</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">W</td>
+<td style="text-align: left;">年份中的第几周，如第32周</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">H</td>
+<td style="text-align: left;">24小时格式，有前导0，h为12小时格式</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">G</td>
+<td style="text-align: left;">24小时格式，无前导0，g为对应12小时格式</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">i</td>
+<td style="text-align: left;">分钟格式，有前导0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">s</td>
+<td style="text-align: left;">秒格式，有前导0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">A</td>
+<td style="text-align: left;">大写上下午，如AM，a为小写</td>
+</tr>
+</tbody>
+</table>
+<p><strong>例子</strong> <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">echo</span>(<span class="string">"Result with date():&lt;br /&gt;"</span>);</span><br><span class="line"><span class="keyword">echo</span>(date(<span class="string">"l"</span>) . <span class="string">"&lt;br /&gt;"</span>);</span><br><span class="line"><span class="keyword">echo</span>(date(<span class="string">"l dS \of F Y h:i:s A"</span>) . <span class="string">"&lt;br /&gt;"</span>);</span><br><span class="line"><span class="keyword">echo</span>(<span class="string">"Oct 3,1975 was on a "</span>.date(<span class="string">"l"</span>, mktime(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">10</span>,<span class="number">3</span>,<span class="number">1975</span>)).<span class="string">"&lt;br /&gt;"</span>);</span><br><span class="line"><span class="keyword">echo</span>(date(DATE_RFC822) . <span class="string">"&lt;br /&gt;"</span>);</span><br><span class="line"><span class="keyword">echo</span>(date(DATE_ATOM,mktime(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">10</span>,<span class="number">3</span>,<span class="number">1975</span>)) . <span class="string">"&lt;br /&gt;&lt;br /&gt;"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span>(<span class="string">"Result with gmdate():&lt;br /&gt;"</span>);</span><br><span class="line"><span class="keyword">echo</span>(gmdate(<span class="string">"l"</span>) . <span class="string">"&lt;br /&gt;"</span>);</span><br><span class="line"><span class="keyword">echo</span>(gmdate(<span class="string">"l dS \of F Y h:i:s A"</span>) . <span class="string">"&lt;br /&gt;"</span>);</span><br><span class="line"><span class="keyword">echo</span>(<span class="string">"Oct 3,1975 was on a "</span>.gmdate(<span class="string">"l"</span>, mktime(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">10</span>,<span class="number">3</span>,<span class="number">1975</span>)).<span class="string">"&lt;br /&gt;"</span>);</span><br><span class="line"><span class="keyword">echo</span>(gmdate(DATE_RFC822) . <span class="string">"&lt;br /&gt;"</span>);</span><br><span class="line"><span class="keyword">echo</span>(gmdate(DATE_ATOM,mktime(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">10</span>,<span class="number">3</span>,<span class="number">1975</span>)) . <span class="string">"&lt;br /&gt;"</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>结果： &gt; Result with <code>date()</code>: Tuesday Tuesday 24th of January 2006 02:41:22 PM Oct 3,1975 was on a Friday Tue, 24 Jan 2006 14:41:22 CET 1975-10-03T00:00:00+0100</p>
+<blockquote>
+<p>Result with <code>gmdate()</code>: Tuesday Tuesday 24th of January 2006 01:41:22 PM Oct 3,1975 was on a Thursday Tue, 24 Jan 2006 13:41:22 GMT 1975-10-02T23:00:00+0000</p>
+</blockquote>
+<h3><span id="字符串">字符串</span></h3>
+<p><code>explode()</code>分割字符串，返回数组。 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">explode(delimiter, string)</span><br></pre></td></tr></table></figure></p>
+<h4><span id="随机字符串">随机字符串</span></h4>
+<ol type="1">
+<li>预置一个的字符串 $chars ，包括 a – z，A – Z，0 – 9，以及一些特殊字符。</li>
+<li>在 $chars 字符串中随机取一个字符。</li>
+<li>重复第二步n次，可得长度为n的字符串。</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">generate_password</span><span class="params">( $length = <span class="number">8</span> )</span> </span>&#123;  </span><br><span class="line"><span class="comment">// 密码字符集，可任意添加你需要的字符  </span></span><br><span class="line">    $chars = ‘abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@<span class="comment">#$%^&amp;*()-_ []&#123;&#125;&lt;&gt;~`+=,.;:/?|’;  </span></span><br><span class="line">    $password = ”;  </span><br><span class="line">    <span class="keyword">for</span> ( $i = <span class="number">0</span>; $i &lt; $length; $i++ )  </span><br><span class="line">    &#123;  </span><br><span class="line">        <span class="comment">// 这里提供两种字符获取方式  </span></span><br><span class="line">        <span class="comment">// 第一种是使用 substr 截取$chars中的任意一位字符；  </span></span><br><span class="line">        <span class="comment">// 第二种是取字符数组 $chars 的任意元素  </span></span><br><span class="line">        <span class="comment">// $password .= substr($chars,     mt_rand(0, strlen($chars) – 1), 1);  </span></span><br><span class="line">         $password .= $chars[ mt_rand(<span class="number">0</span>,     strlen($chars) - <span class="number">1</span>) ];  </span><br><span class="line">    &#125;  </span><br><span class="line">    <span class="keyword">return</span> $password;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><span id="加密">加密</span></h3>
+<p>sha256 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$password = hash(<span class="string">'sha256'</span>, $identifier . $_POST[<span class="string">'password'</span>]);</span><br></pre></td></tr></table></figure></p>
+<h3><span id="session">Session</span></h3>
+<p>每次用之前一定要<code>session_start()</code>： <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">session_start();</span><br><span class="line">$_SESSION[$var] = xxxx;</span><br></pre></td></tr></table></figure></p>
+<h3><span id="cookie">Cookie</span></h3>
+<h4><span id="如何创建-cookie">如何创建 cookie？</span></h4>
+<p><code>setcookie()</code>函数用于设置 cookie。</p>
+<p>语法 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">setcookie(name, value, expire, path, domain);</span><br></pre></td></tr></table></figure></p>
+<p>例子 在下面的例子中，我们将创建名为 &quot;user&quot; 的 cookie，把为它赋值 &quot;Alex Porter&quot;。我们也规定了此 cookie 在一小时后过期： <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line">setcookie(<span class="string">"user"</span>, <span class="string">"Alex Porter"</span>, time()+<span class="number">3600</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注释：在发送 cookie 时，cookie 的值会自动进行 URL 编码，在取回时进行自动解码（为防止 URL 编码，请使用 <code>setrawcookie()</code> 取而代之）。</p>
+</blockquote>
+<h4><span id="如何取回-cookie-的值">如何取回 Cookie 的值？</span></h4>
+<p>PHP 的<code>$_COOKIE</code>变量用于取回 cookie 的值。 在下面的例子中，我们取回了名为 <code>&quot;user&quot;</code>的 cookie 的值，并把它显示在了页面上： <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">// Print a cookie</span></span><br><span class="line"><span class="keyword">echo</span> $_COOKIE[<span class="string">"user"</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">// A way to view all cookies</span></span><br><span class="line">print_r($_COOKIE);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h4><span id="如何删除-cookie">如何删除 cookie？</span></h4>
+<p>当删除 cookie 时，您应当使过期日期变更为过去的时间点。 删除的例子： <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line"><span class="comment">// set the expiration date to one hour ago</span></span><br><span class="line">setcookie(<span class="string">"user"</span>, <span class="string">""</span>, time()<span class="number">-3600</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h3><span id="变参">变参</span></h3>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">variable</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">     <span class="keyword">echo</span> func_num_args();         <span class="comment">//输出参数个数</span></span><br><span class="line">     $varArray = func_get_args();     <span class="comment">//获取参数，返回参数数组</span></span><br><span class="line">     <span class="keyword">foreach</span>($varArray <span class="keyword">as</span> $value)</span><br><span class="line">         <span class="keyword">echo</span> $value;</span><br><span class="line">     </span><br><span class="line">     <span class="keyword">echo</span> func_get_arg;       <span class="comment">//获取单个参数</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<h3><span id="反射">反射</span></h3>
+<p>参考：<a href="http://blog.csdn.net/hguisu/article/details/7357421" target="_blank" rel="noopener">PHP的反射机制</a> <a href="http://php.net/manual/zh/book.reflection.php" target="_blank" rel="noopener">php手册</a></p>
+<h4><span id="建立反射类">建立反射类</span></h4>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$class = <span class="keyword">new</span> ReflectionClass(<span class="string">'Person'</span>);<span class="comment">//建立 Person这个类的反射类  </span></span><br><span class="line">$instance  = $class-&gt;newInstanceArgs($args);<span class="comment">//相当于实例化Person 类</span></span><br></pre></td></tr></table></figure>
+<h4><span id="获取属性properties">获取属性(Properties)</span></h4>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$properties = $class-&gt;getProperties();  </span><br><span class="line"><span class="keyword">foreach</span>($properties <span class="keyword">as</span> $property) &#123;  </span><br><span class="line">    <span class="keyword">echo</span> $property-&gt;getName().<span class="string">"\n"</span>;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4><span id="获取注释">获取注释</span></h4>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">foreach</span>($properties <span class="keyword">as</span> $property) &#123;  </span><br><span class="line">    <span class="keyword">if</span>($property-&gt;isProtected()) &#123;  </span><br><span class="line">        $docblock = $property-&gt;getDocComment();  </span><br><span class="line">        preg_match(<span class="string">'/ type\=([a-z_]*) /'</span>, $property-&gt;getDocComment(), $matches);  </span><br><span class="line">        <span class="keyword">echo</span> $matches[<span class="number">1</span>].<span class="string">"\n"</span>;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4><span id="获取类的方法">获取类的方法</span></h4>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>($class-&gt;hasMethod($methodName))&#123;</span><br><span class="line">	$method = $class-&gt;getMethod($methodName);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4><span id="执行类的方法">执行类的方法</span></h4>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$instance-&gt;getBiography(); <span class="comment">//执行Person 里的方法getBiography  </span></span><br><span class="line"><span class="comment">//或者：  </span></span><br><span class="line">$ec=$class-&gt;getmethod(<span class="string">'getName'</span>);  <span class="comment">//获取Person 类中的getName方法  </span></span><br><span class="line">$ec-&gt;invoke($instance);       <span class="comment">//执行getName 方法 </span></span><br><span class="line"><span class="comment">// 或者：</span></span><br><span class="line">$method-&gt;invokeArgs($instance, $params); <span class="comment">// $params为数组</span></span><br></pre></td></tr></table></figure>
+<h2><span id="uri">URI</span></h2>
+<blockquote>
+<p>uri结构：<code>apppath/class/method/params</code> uri示例 : <code>www.liuhe.website/index.php?/Articles/single/13</code></p>
+</blockquote>
+<p>实现方法：</p>
+<ul>
+<li>在<code>index.php</code>中通过<code>$_SERVER['REQUEST_URI']</code>获取uri，然后获取<code>className</code>, <code>methodName</code>以及<code>params</code>。</li>
+<li>include相应控制器的文件，即<code>controller/$className.php</code>。</li>
+<li>建立反射类，调用相关method传入相应参数。</li>
+<li>防止直接通过文件目录访问(通过服务器配置rewrite实现)</li>
+</ul>
+<p>code: <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Parse uri , instantiate the class</span></span><br><span class="line"><span class="comment"> * and invoke the method</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">parseRequestUri</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">isset</span>($_SERVER[<span class="string">'REQUEST_URI'</span>])) &#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;uri_string = $_SERVER[<span class="string">'REQUEST_URI'</span>];</span><br><span class="line">        <span class="keyword">$this</span>-&gt;segments = explode(<span class="string">'/'</span>, <span class="keyword">$this</span>-&gt;uri_string);</span><br><span class="line">        <span class="comment">// var_dump($this-&gt;segments);</span></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * get the class name, method name and the params</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">if</span> (count(<span class="keyword">$this</span>-&gt;segments) &lt;= <span class="number">2</span>) &#123;</span><br><span class="line">            $className = <span class="string">'Articles'</span>;</span><br><span class="line">            $methodName = <span class="string">'home'</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            $className = <span class="keyword">$this</span>-&gt;segments[<span class="number">2</span>];</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">isset</span>(<span class="keyword">$this</span>-&gt;segments[<span class="number">3</span>])) &#123;</span><br><span class="line">                $methodName = <span class="keyword">$this</span>-&gt;segments[<span class="number">3</span>];</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">// 404 Error</span></span><br><span class="line">                <span class="keyword">$this</span>-&gt;_404Error(<span class="string">"Empty Method"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> ($_SERVER[<span class="string">'REQUEST_METHOD'</span>] == <span class="string">'GET'</span> || $_SERVER[<span class="string">'REQUEST_METHOD'</span>] == <span class="string">'POST'</span>) &#123;</span><br><span class="line">            $params = <span class="keyword">array</span>();</span><br><span class="line">            $len = count(<span class="keyword">$this</span>-&gt;segments);</span><br><span class="line">            <span class="keyword">if</span> ($len &gt; <span class="number">4</span>) &#123;</span><br><span class="line">                <span class="keyword">for</span> ($i = <span class="number">4</span>; $i &lt; $len; $i++) &#123;</span><br><span class="line">                    array_push($params, <span class="keyword">$this</span>-&gt;segments[$i]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            $classFile = <span class="string">"controller/$className.php"</span>;</span><br><span class="line">            <span class="keyword">if</span> (!file_exists($classFile)) &#123;</span><br><span class="line">                <span class="comment">// 404 error</span></span><br><span class="line">                <span class="keyword">$this</span>-&gt;_404Error(<span class="string">"File Not Found"</span>);</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">/*</span></span><br><span class="line"><span class="comment">             * build reflection class, invoke the method</span></span><br><span class="line"><span class="comment">             */</span></span><br><span class="line">            <span class="keyword">require</span> <span class="string">"$classFile"</span>;</span><br><span class="line">            $rc = <span class="keyword">new</span> ReflectionClass($className);</span><br><span class="line">            <span class="keyword">if</span> (!$rc-&gt;hasMethod($methodName)) &#123;</span><br><span class="line">                <span class="comment">// 404 error</span></span><br><span class="line">                <span class="keyword">$this</span>-&gt;_404Error(<span class="string">"Method Not Found"</span>);</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            $instance = $rc-&gt;newInstance();</span><br><span class="line">            $method = $rc-&gt;getMethod($methodName);</span><br><span class="line">            $method-&gt;invokeArgs($instance, $params);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"not set REQUEST_URI"</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2><span id="加载静态模板带参数">加载静态模板（带参数）</span></h2>
+<p>实现方法： * 定义参数结构（占位符）：<code></code> * i 为第i个参数 * 把模板文件加载到内存，用字符串替换函数替换上述占位符。</p>
+<p>code： <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* Load a static template</span></span><br><span class="line"><span class="comment">*</span></span><br><span class="line"><span class="comment">* <span class="doctag">@var</span> string, array</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">load</span><span class="params">($page = <span class="string">''</span>, $args = array<span class="params">()</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">empty</span>($page)) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    $fileName = <span class="string">"static/$page"</span>;</span><br><span class="line">    $file = fopen($fileName, <span class="string">"r"</span>);</span><br><span class="line">    $content = fread($file, filesize($fileName));</span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">empty</span>($args)) &#123;</span><br><span class="line">        $i = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (strpos($content, <span class="string">"&#123;&#123;args[$i]&#125;&#125;"</span>) !== <span class="keyword">false</span>) &#123;</span><br><span class="line">            $content = str_replace(<span class="string">"&#123;&#123;args[$i]&#125;&#125;"</span>, $args[$i], $content);</span><br><span class="line">            $i += <span class="number">1</span>;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">echo</span> <span class="string">"$content"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2><span id="实现自动登录">实现自动登录</span></h2>
+<blockquote>
+<p>以下部分来自StackOverflow</p>
+</blockquote>
+<h3><span id="improved-persistent-login-cookie-best-practice">Improved Persistent Login Cookie Best Practice</span></h3>
+<ol type="1">
+<li>When the user successfully logs in with Remember Me checked, a login cookie is issued in addition to the standard session management cookie.</li>
+<li>The login cookie contains a series identifier and a token. The series and token are <strong>unguessable random numbers </strong>from a suitably large space. Both are stored together in a database table, <strong>the token is hashed </strong>(sha256 is fine).</li>
+<li>When a non-logged-in user visits the site and presents a login cookie, the series identifier is looked up in the database.
+<ol type="1">
+<li>If the series identifier is present and the hash of the token matches the hash for that series identifier, the user is considered authenticated. <strong>A new token is generated</strong>, a new hash for the token is stored over the old record, and a new login cookie is issued to the user (it's okay to re-use the series identifier).</li>
+<li>If the series is present but the token does not match, a theft is assumed. The user receives a strongly worded warning and <strong>all of the user's remembered sessions are deleted.</strong></li>
+<li>If the username and series are not present, the login cookie is ignored.</li>
+</ol></li>
+</ol>
+<p>This approach provides defense-in-depth. If someone manages to leak the database table, it does not give an attacker an open door for impersonating users.</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/踩坑现场/">踩坑现场</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/后台开发/">后台开发</a><a href="/tags/PHP/">PHP</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

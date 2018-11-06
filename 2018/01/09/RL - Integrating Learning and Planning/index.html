@@ -1,0 +1,475 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    RL - Integrating Learning and Planning | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="RL - Integrating Learning and Planning">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      RL - Integrating Learning and Planning</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2018/01/09/RL - Integrating Learning and Planning/" rel="bookmark">
+        <time class="entry-date published" datetime="2018-01-09T13:11:09.000Z">
+          2018-01-09
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <h2><span id="introduction">Introduction</span></h2>
+<p>In last lecture, we learn <strong>policy</strong> directly from experience. In previous lectures, we learn <strong>value function</strong> directly from experience. In this lecture, we will learn <strong>model</strong> directly from experience and use <strong>planning</strong> to construct a value function or policy. Integrate learning and planning into a single architecture.</p>
+<p>Model-Based RL</p>
+<ul>
+<li>Learn a model from experience</li>
+<li><strong>Plan</strong> value function (and/or policy) from model</li>
+</ul>
+<a id="more"></a>
+<p><strong>Table of Contents</strong></p>
+<!-- toc -->
+<ul>
+<li><a href="#model-based-reinforcement-learning">Model-Based Reinforcement Learning</a></li>
+<li><a href="#integrated-architectures">Integrated Architectures</a></li>
+<li><a href="#simulation-based-search">Simulation-Based Search</a></li>
+</ul>
+<!-- tocstop -->
+<h2><span id="model-based-reinforcement-learning">Model-Based Reinforcement Learning</span></h2>
+<p><img src="/images/mbrl.png"></p>
+<p>Advantages of Model-Based RL</p>
+<ul>
+<li>Can efficiently learn model by supervised learning methods</li>
+<li>Can reason about model uncertainty</li>
+</ul>
+<p>Disadvantages</p>
+<ul>
+<li>First learn a model, then construct a value function -&gt; two source of approximation error</li>
+</ul>
+<p><strong>What is a Model?</strong></p>
+<p>A model <span class="math inline">\(\mathcal{M}\)</span> is a representation of an MDP <span class="math inline">\(&lt;\mathcal{S}, \mathcal{A}, \mathcal{P}, \mathcal{R}&gt;\)</span> parametrized by <span class="math inline">\(\eta\)</span>.</p>
+<p>We will assume state space <span class="math inline">\(\mathcal{S}\)</span> and action space <span class="math inline">\(\mathcal{A}\)</span> are known. So a model <span class="math inline">\(\mathcal{M}=&lt;\mathcal{P}_, \eta\mathcal{R}_\eta&gt;\)</span> represents state transitions <span class="math inline">\(\mathcal{P}_\eta \approx \mathcal{P}\)</span> and rewards <span class="math inline">\(\mathcal{R}_\eta\approx \mathcal{R}\)</span>. <span class="math display">\[
+S_{t+1}\sim\mathcal{P}_\eta(S_{t+1}|S_t, A_t)\\
+R_{t+1}=\mathcal{R}_\eta(R_{t+1}|S_t, A_t)
+\]</span> Typically assume conditional independence between state transitions and rewards.</p>
+<p>Goal: estimate model <span class="math inline">\(\mathcal{M}_\eta\)</span> from experience <span class="math inline">\(\{S_1, A_1, R_2, …, S_T\}\)</span>.</p>
+<p>This is a supervised learning problem: <span class="math display">\[
+S_1, A_1 \rightarrow R_2, S_2 \\
+S_2, A_2 \rightarrow R_3, S_3 \\
+...\\
+S_{T-1}, A_{T-1} \rightarrow R_T, S_T \\
+\]</span> Learning <span class="math inline">\(s, a\rightarrow r\)</span> is a <em>regression</em> problem; learning <span class="math inline">\(s, a\rightarrow s&#39;\)</span> is a <em>density</em> estimation problem. Pick loss function, e.g. mean-squared error, KL divergence, … Find parameters <span class="math inline">\(\eta\)</span> that minimise empirical loss.</p>
+<p>Examples of Models</p>
+<ul>
+<li>Table Lookup Model</li>
+<li>Linear Expectation Model</li>
+<li>Linear Gaussian Model</li>
+<li>Gaussian Process Model</li>
+<li>Deep Belief Network Model</li>
+</ul>
+<p><strong>Table Lookup Model</strong></p>
+<p>Model is an explicit MDP. Count visits <span class="math inline">\(N(s, a)\)</span> to each state action pair: <span class="math display">\[
+\hat{\mathcal{P}}^a_{s,s&#39;}=\frac{1}{N(s,a)}\sum^T_{t=1}1(S_t,A_t,S_{t+1}=s, a, s&#39;)\\
+\hat{\mathcal{R}}^a_{s,s&#39;}=\frac{1}{N(s,a)}\sum^T_{t=1}1(S_t,A_t=s, a)R_t
+\]</span> Alternatively, at each time-step <span class="math inline">\(t\)</span>, record experience tuple <span class="math inline">\(&lt;S_t, A_t, R_{t+1}, S_{t+1}&gt;\)</span>. To sample model, randomly pick tuple matching <span class="math inline">\(&lt;s, a, \cdot, \cdot&gt;\)</span>.</p>
+<p><strong>AB Example</strong></p>
+<p><img src="/images/ab2.png"></p>
+<p>We have contrusted a <strong>table lookup model</strong> from the experience. Next step, we will planning with a model.</p>
+<p><strong>Planning with a model</strong></p>
+<p>Given a model <span class="math inline">\(\mathcal{M}_\eta=&lt;\mathcal{P}_\eta, \mathcal{R}_\eta&gt;\)</span>, solve the MDP <span class="math inline">\(&lt;\mathcal{S}, \mathcal{A}, \mathcal{P}_\eta, \mathcal{R}_\eta&gt;\)</span> using favorite planning algorithms</p>
+<ul>
+<li>Value iteration</li>
+<li>Policy iteration</li>
+<li>Tree search</li>
+<li>….</li>
+</ul>
+<p><strong>Sample-Based Planning</strong></p>
+<p>A simple but powerful approach to planning is to use the model <strong>only</strong> to generate samples.</p>
+<p><strong>Sample</strong> experience from model <span class="math display">\[
+S_{t+1}\sim\mathcal{P}_\eta(S_{t+1}|S_t,A_t)\\
+R_{t+1}=\mathcal{R}_\eta(R_{t+1}|S_t,A_t)
+\]</span> Apply <strong>model-free</strong> RL to samples, e.g.:</p>
+<ul>
+<li>Monte-Carlo control</li>
+<li>Sarsa</li>
+<li>Q-learning</li>
+</ul>
+<p>Sample-based planning methods are often more efficient.</p>
+<p><strong>Back to AB Example</strong></p>
+<p><img src="/images/ab3.png"></p>
+<p>We can use our model to sample more experience and apply model-free RL to them.</p>
+<p><strong>Planning with an Inaccurate Model</strong></p>
+<p>Given an imperfect model <span class="math inline">\(&lt;\mathcal{P}_\eta, \mathcal{R}_\eta&gt; ≠ &lt;\mathcal{P}, \mathcal{R}&gt;\)</span>. Performance of model-based RL is limited to optimal policy for approximate MDP <span class="math inline">\(&lt;\mathcal{S}, \mathcal{A}, \mathcal{P}_\eta, \mathcal{R}_\eta&gt;\)</span> i.e. Model-based RL is only as good as the estimated model.</p>
+<p>When the model is inaccurate, planning process will compute a suboptimal policy.</p>
+<ul>
+<li>Solution1: when model is wrong, use model-free RL</li>
+<li>Solution2: reason explicitly about model uncertainty</li>
+</ul>
+<h2><span id="integrated-architectures">Integrated Architectures</span></h2>
+<p>We consider two sources of experience:</p>
+<ul>
+<li><p>Real experience: Sampled from environment (true MDP) <span class="math display">\[
+S&#39;\sim \mathcal{P}^a_{s,s&#39;}\\
+R=\mathcal{R}^a_s
+\]</span></p></li>
+<li><p>Simulated experience: Sampled from model (approximate MDP) <span class="math display">\[
+S&#39;\sim \mathcal{P}_\eta(S&#39;|S, A)\\
+R=\mathcal{R}_\eta(R|S, A)
+\]</span></p></li>
+</ul>
+<p><strong>Integrating Learning and Planning</strong></p>
+<p>Dyna Architecture</p>
+<ul>
+<li>Learn a model from real experience</li>
+<li>Learn and plan value function (and/or policy) from real and simulated experience</li>
+</ul>
+<p><img src="/images/dyna.png"></p>
+<p>The simplest dyna algorithm is <em>Dyna-Q Algorithm</em>:</p>
+<p><img src="/images/dynaq.png"></p>
+<p><img src="/images/dynaqres.png"></p>
+<p>From the experiments, we can see that using planning is more efficient than direct RL only.</p>
+<p><strong>Dyna-Q with an Inaccurate Model</strong></p>
+<p>The changed envrionment is <strong>harder</strong>:</p>
+<p><img src="/images/dynaqhard.png"></p>
+<p>There is a <strong>easier</strong> change:</p>
+<p><img src="/images/dynaqeasy.png"></p>
+<h2><span id="simulation-based-search">Simulation-Based Search</span></h2>
+<p>Let's back to planning problems. Simulation-based search is another approach to solve MDP.</p>
+<p><strong>Forward Search</strong></p>
+<p>Forward search algorithms select the best action by <strong>lookahead</strong>. They build a <strong>search tree</strong> with the current state <span class="math inline">\(s_t\)</span> at the root using a model of the MDP to look ahead.</p>
+<p><img src="/images/ftree.png"></p>
+<p>We don't need to solve the whole MDP, just sub-MDP starting from <strong>now</strong>.</p>
+<p><strong>Simulation-Based Search</strong></p>
+<p>Simulation-based search is forward search paradigm using sample-based planning. Simulate episodes of experience from <strong>now</strong> with the model. Apply <strong>model-free</strong> RL to simulated episodes.</p>
+<p><img src="/images/sbsearch.png"></p>
+<p>Simulate episodes of experience from <strong>now</strong> with the model: <span class="math display">\[
+\{s_t^k, A^k_t,R^k_{t+1}, ..., S^k_T\}^K_{k=1}\sim\mathcal{M}_v
+\]</span> Apply <strong>model-free</strong> RL to simulated episodes</p>
+<ul>
+<li>Monte-Carlo control <span class="math inline">\(\rightarrow\)</span> Monte-Carlo search</li>
+<li>Sarsa <span class="math inline">\(\rightarrow\)</span> TD search</li>
+</ul>
+<p><strong>Simple Monte-Carlo Search</strong></p>
+<p>Given a model <span class="math inline">\(\mathcal{M}_v\)</span> and a simulation policy <span class="math inline">\(\pi\)</span>.</p>
+<p>For each action <span class="math inline">\(a\in\mathcal{A}\)</span></p>
+<ul>
+<li><p>Simulate <span class="math inline">\(K\)</span> episodes from current (real) state <span class="math inline">\(s_t\)</span> <span class="math display">\[
+\{s_t, a, R^k_{t+1},S^k_{t+1},A^k_{t+1}, ..., S^k_T \}^K_{k=1}\sim \mathcal{M}_v, \pi
+\]</span></p></li>
+<li><p>Evaluate actions by mean return (<strong>Monte-Carlo evaluation</strong>) <span class="math display">\[
+Q(s_t, a)=\frac{1}{K}\sum^k_{k=1}G_t\rightarrow q_\pi(s_t, a)
+\]</span></p></li>
+</ul>
+<p>Select current (real) action with maximum value <span class="math display">\[
+a_t=\arg\max_{a\in\mathcal{A}}Q(s_t, a)
+\]</span> <strong>Monte-Carlo Tree Search</strong></p>
+<p>Given a model <span class="math inline">\(\mathcal{M}_v\)</span>. Simulate <span class="math inline">\(K\)</span> episodes from current state <span class="math inline">\(s_t\)</span> using current simulation policy <span class="math inline">\(\pi\)</span>. <span class="math display">\[
+\{s_t, A_t^k, R^k_{t+1},S^k_{t+1},A^k_{t+1}, ..., S^k_T \}^K_{k=1}\sim \mathcal{M}_v, \pi
+\]</span> Build a search tree containing visited states and actions. <strong>Evaluate</strong> states <span class="math inline">\(Q(s, a)\)</span> by mean return of episodes from <span class="math inline">\(s, a\)</span>: <span class="math display">\[
+Q(s, a)=\frac{1}{N(s,a)}\sum^K_{k=1}\sum^T_{u=t}1(S_u, A_u=s,a)G_u \to q_\pi(s,a)
+\]</span> After search is finished, select current (real) action with maximum value in search tree: <span class="math display">\[
+a_t=\arg\max_{a\in\mathcal{A}}Q(s_t, a)
+\]</span> In MCTS, the simulation policy <span class="math inline">\(\pi\)</span> <strong>improves</strong>.</p>
+<p>Each simulation consists of two phases (in-tree, out-of-tree)</p>
+<ul>
+<li><strong>Tree policy</strong> (improves): pick actions to maximise <span class="math inline">\(Q(S,A)\)</span></li>
+<li><strong>Default policy</strong> (fixed): pick actions randomly</li>
+</ul>
+<p>Repeat (each simulation)</p>
+<ul>
+<li><span class="math inline">\(\color{red}{\mbox{Evaluate}}\)</span> states <span class="math inline">\(Q(S,A)\)</span> by Monte-Carlo evaluation</li>
+<li><span class="math inline">\(\color{red}{\mbox{Improve}}\)</span> tree policy, e.g. by <span class="math inline">\(\epsilon\)</span>-greedy(Q)</li>
+</ul>
+<p>MCTS is <strong>Monte-Carlo control</strong> applied to <strong>simulated experience</strong>.</p>
+<p>Converges on the optimal search tree, <span class="math inline">\(Q(S, A) \to q_*(S, A)\)</span>.</p>
+<p><strong>Case Study: the Game of Go</strong></p>
+<p><img src="/images/go_2.png"></p>
+<p><em>Rules of Go</em></p>
+<ul>
+<li>Usually played on 19$<span class="math inline">\(19, also 13\)</span><span class="math inline">\(13 or 9\)</span>$9 board</li>
+<li>Black and white place down stones alternately</li>
+<li>Surrounded stones are captured and removed</li>
+<li>The player with more territory wins the game</li>
+</ul>
+<p><img src="/images/ruleofgo.png"></p>
+<p><em>Position Evaluation in Go</em></p>
+<p>The key problem is how good is a position <span class="math inline">\(s\)</span>?</p>
+<p>So the reward function is if Black wins, the reward of the final position is 1, otherwise 0: <span class="math display">\[
+R_t = 0 \mbox{ for all non-terminal steps } t&lt;T\\
+R_T=\begin{cases} 
+1,  &amp; \mbox{if }\mbox{ Black wins} \\
+0, &amp; \mbox{if }\mbox{ White wins}
+\end{cases}
+\]</span> Policy <span class="math inline">\(\pi=&lt;\pi_B,\pi_W&gt;\)</span> selects moves for both players.</p>
+<p>Value function (how good is position <span class="math inline">\(s\)</span>): <span class="math display">\[
+v_\pi(s)=\mathbb{E}_\pi[R_T|S=s]=\mathbb{P}[Black wins|S=s]\\
+v_*(s)=\max_{\pi_B}\min_{\pi_w}v_\pi(s)
+\]</span> <em>Monte Carlo Evaluation in Go</em></p>
+<p><img src="/images/mcego.png"></p>
+<p><img src="/images/amcts1.png"></p>
+<p><img src="/images/amcts2.png"></p>
+<p><img src="/images/amcts3.png"></p>
+<p><img src="/images/amcts4.png"></p>
+<p><img src="/images/amcts5.png"></p>
+<p>So, MCTS will expand the tree towards the node that is most promising and ignore the useless parts.</p>
+<p><strong>Advantages of MC Tree Search</strong></p>
+<ul>
+<li>Highly selective best-first search</li>
+<li>Evaluates states <em>dynamically</em></li>
+<li>Uses sampling to break curse of dimensionality</li>
+<li>Works for &quot;black-box&quot; models (only requires samples)</li>
+<li>Computationally efficient, anytime, parallelisable</li>
+</ul>
+<p><strong>Temporal-Difference Search</strong></p>
+<ul>
+<li>Simulation-based search</li>
+<li>Using TD instead of MC (bootstrapping)</li>
+<li>MC tree search applies MC control to sub-MDP from now</li>
+<li>TD search applies Sarsa to sub-MDP from now</li>
+</ul>
+<p><strong>MC vs. TD search</strong></p>
+<p>For model-free reinforcement learning, bootstrapping is helpful</p>
+<ul>
+<li>TD learning reduces variance but increase bias</li>
+<li>TD learning is usually more efficient than MC</li>
+<li>TD(<span class="math inline">\(\lambda\)</span>) can be much more efficient than MC</li>
+</ul>
+<p>For simulation-based search, bootstrapping is also helpful</p>
+<ul>
+<li>TD search reduces variance but increase bias</li>
+<li>TD search is usually more efficient than MC search</li>
+<li>TD(<span class="math inline">\(\lambda\)</span>) search can be much more efficient than MC search</li>
+</ul>
+<p><strong>TD Search</strong></p>
+<p>Simulate episodes from the current (real) state <span class="math inline">\(s_t\)</span>. Estimate action-value function <span class="math inline">\(Q(s, a)\)</span>. For each step of simulation, update action-values by Sarsa: <span class="math display">\[
+\triangle Q(S,A)=\alpha (R+\gamma Q(S&#39;,A&#39;)-Q(S,A))
+\]</span> Select actions based on action-value <span class="math inline">\(Q(s,a)\)</span>, e.g. <span class="math inline">\(\epsilon\)</span>-greedy. May also use function approximation for <span class="math inline">\(Q\)</span>.</p>
+<p><strong>Dyna-2</strong></p>
+<p>In Dyna-2, the agent stores two sets of feature weights:</p>
+<ul>
+<li><strong>Long-term</strong> memory</li>
+<li><strong>Short-term</strong> (working) memory</li>
+</ul>
+<p>Long-term memory is updated from <strong>real experience</strong> using TD learning</p>
+<ul>
+<li>General domain knowledge that applies to any episode</li>
+</ul>
+<p>Short-term memory is updated from <strong>simulated experience</strong> using TD search</p>
+<ul>
+<li>Specific local knowledge about the current situation</li>
+</ul>
+<p>Over value function is sum of long and short-term memories.</p>
+<p>End.</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Reinforcement-Learning/">Reinforcement Learning</a><a href="/tags/AlphaGo/">AlphaGo</a><a href="/tags/增强学习/">增强学习</a><a href="/tags/MCTS/">MCTS</a><a href="/tags/TD-Search/">TD Search</a><a href="/tags/Dyna/">Dyna</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

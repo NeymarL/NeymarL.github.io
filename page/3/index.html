@@ -1,0 +1,1042 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    Page 3 | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        
+  <article>
+
+  
+  
+  <h3 class="article-title"><a href="/2017/08/09/Deep NLP - Conditional Language Model with Attention/"><span>
+        Deep NLP - Conditional Language Model with Attention</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/08/09/Deep NLP - Conditional Language Model with Attention/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-08-09T14:30:19.000Z">
+          2017-08-09
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <!-- toc -->
+<ul>
+<li><a href="#machine-translation-with-attention">Machine translation with attention</a>
+<ul>
+<li><a href="#with-concatenation">With Concatenation</a></li>
+<li><a href="#with-convolutional-nets">With Convolutional Nets</a></li>
+<li><a href="#with-bidirectional-rnns">With Bidirectional RNNS</a></li>
+<li><a href="#attention">Attention</a></li>
+</ul></li>
+<li><a href="#image-caption-generation-with-attention">Image caption generation with attention</a></li>
+</ul>
+<!-- tocstop -->
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/NLP/">NLP</a><a href="/tags/NMT/">NMT</a><a href="/tags/Attention/">Attention</a><a href="/tags/Deep-NLP/">Deep NLP</a><a href="/tags/Machine-Translation/">Machine Translation</a>
+      </span>
+      
+
+    </div>
+
+    
+    <div class="article-meta pull-right">
+      <span>
+        <i class="icon-comments"></i>
+        <span>
+          <a href="/2017/08/09/Deep NLP - Conditional Language Model with Attention/#comment">
+            Comments</a>
+        </span>
+      </span>
+    </div>
+    
+  </div>
+</article>
+
+
+  <article>
+
+  
+  
+  <h3 class="article-title"><a href="/2017/08/08/Deep NLP - Conditional Language Modeling/"><span>
+        Deep NLP - Conditional Language Model</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/08/08/Deep NLP - Conditional Language Modeling/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-08-08T13:30:19.000Z">
+          2017-08-08
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <!-- toc -->
+<ul>
+<li><a href="#kalchbrenner-and-blunsom-2013">Kalchbrenner and Blunsom 2013</a></li>
+<li><a href="#sutskever-et-al-2014">Sutskever et al. (2014)</a></li>
+<li><a href="#kiros-et-al2013">Kiros et al.(2013)</a></li>
+</ul>
+<!-- tocstop -->
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/NLP/">NLP</a><a href="/tags/NMT/">NMT</a><a href="/tags/Deep-NLP/">Deep NLP</a><a href="/tags/Machine-Translation/">Machine Translation</a>
+      </span>
+      
+
+    </div>
+
+    
+    <div class="article-meta pull-right">
+      <span>
+        <i class="icon-comments"></i>
+        <span>
+          <a href="/2017/08/08/Deep NLP - Conditional Language Modeling/#comment">
+            Comments</a>
+        </span>
+      </span>
+    </div>
+    
+  </div>
+</article>
+
+
+  <article>
+
+  
+  
+  <h3 class="article-title"><a href="/2017/08/07/Deep NLP - Text Classification/"><span>
+        Deep NLP - Text Classification</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/08/07/Deep NLP - Text Classification/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-08-07T13:30:19.000Z">
+          2017-08-07
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <!-- toc -->
+<ul>
+<li><a href="#generative-and-discriminative-models">Generative and discriminative models</a></li>
+<li><a href="#naive-bayes-classifier">Naive Bayes classifier</a></li>
+<li><a href="#feature-representations">Feature Representations</a></li>
+<li><a href="#logistic-regression">Logistic Regression</a></li>
+<li><a href="#representing-text-with-a-rnn">Representing Text with a RNN</a></li>
+<li><a href="#convolutional-neural-network">Convolutional Neural Network</a></li>
+</ul>
+<!-- tocstop -->
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/NLP/">NLP</a><a href="/tags/Deep-NLP/">Deep NLP</a><a href="/tags/LSTM/">LSTM</a><a href="/tags/Naive-Bayes/">Naive Bayes</a><a href="/tags/Text-Classification/">Text Classification</a>
+      </span>
+      
+
+    </div>
+
+    
+    <div class="article-meta pull-right">
+      <span>
+        <i class="icon-comments"></i>
+        <span>
+          <a href="/2017/08/07/Deep NLP - Text Classification/#comment">
+            Comments</a>
+        </span>
+      </span>
+    </div>
+    
+  </div>
+</article>
+
+
+  <article>
+
+  
+  
+  <h3 class="article-title"><a href="/2017/08/06/Deep NLP - RNNs and Language Modelling/"><span>
+        Deep NLP - Recurrent Neural Networks and Language Modelling</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/08/06/Deep NLP - RNNs and Language Modelling/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-08-06T12:30:19.000Z">
+          2017-08-06
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <!-- toc -->
+<ul>
+<li><a href="#count-based-n-gram-language-models">Count based N-Gram Language Models</a></li>
+<li><a href="#neural-n-gram-language-models">Neural N-Gram Language Models</a></li>
+<li><a href="#recurrent-neural-network-language-models">Recurrent Neural Network Language Models</a>
+<ul>
+<li><a href="#long-short-term-memory-lstm">Long Short Term Memory (LSTM)</a></li>
+<li><a href="#deep-rnn-lms">Deep RNN LMs</a></li>
+</ul></li>
+</ul>
+<!-- tocstop -->
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/NLP/">NLP</a><a href="/tags/Deep-NLP/">Deep NLP</a><a href="/tags/RNN/">RNN</a><a href="/tags/LSTM/">LSTM</a><a href="/tags/Language-Model/">Language Model</a><a href="/tags/N-Gram/">N-Gram</a>
+      </span>
+      
+
+    </div>
+
+    
+    <div class="article-meta pull-right">
+      <span>
+        <i class="icon-comments"></i>
+        <span>
+          <a href="/2017/08/06/Deep NLP - RNNs and Language Modelling/#comment">
+            Comments</a>
+        </span>
+      </span>
+    </div>
+    
+  </div>
+</article>
+
+
+  <article>
+
+  
+  
+  <h3 class="article-title"><a href="/2017/08/05/DeepNLP-Word Level Semantics/"><span>
+        Deep NLP - Word Level Semantics</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/08/05/DeepNLP-Word Level Semantics/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-08-05T10:30:19.000Z">
+          2017-08-05
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <!-- toc -->
+<ul>
+<li><a href="#word-level-semantics">Word Level Semantics</a>
+<ul>
+<li><a href="#count-based-methods">Count-based methods</a></li>
+<li><a href="#neural-embedding-models">Neural Embedding Models</a>
+<ul>
+<li><a href="#cw">C&amp;W</a></li>
+<li><a href="#cbow">CBoW</a></li>
+<li><a href="#skip-gram">Skip-gram</a></li>
+</ul></li>
+<li><a href="#task-based-embedding-learning">Task-based Embedding Learning</a></li>
+</ul></li>
+</ul>
+<!-- tocstop -->
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/NLP/">NLP</a><a href="/tags/Deep-NLP/">Deep NLP</a><a href="/tags/Word2Vec/">Word2Vec</a><a href="/tags/CBoW/">CBoW</a><a href="/tags/Skip-gram/">Skip-gram</a>
+      </span>
+      
+
+    </div>
+
+    
+    <div class="article-meta pull-right">
+      <span>
+        <i class="icon-comments"></i>
+        <span>
+          <a href="/2017/08/05/DeepNLP-Word Level Semantics/#comment">
+            Comments</a>
+        </span>
+      </span>
+    </div>
+    
+  </div>
+</article>
+
+
+  <article>
+
+  
+  
+  <h3 class="article-title"><a href="/2017/07/13/Regularization for Deep Learning/"><span>
+        Regularization for Deep Learning</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/07/13/Regularization for Deep Learning/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-07-13T14:30:19.000Z">
+          2017-07-13
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>定义：Any modification we make to a learning algorithm that is intended to reduce its generalization error but not its training error.</p>
+<!-- toc -->
+<ul>
+<li><a href="#parameter-norm-penalties">Parameter Norm Penalties</a>
+<ul>
+<li><a href="#l2-parameter-regularzation"><span class="math inline">\(L^2\)</span> Parameter Regularzation</a></li>
+<li><a href="#l1-regularization"><span class="math inline">\(L^1\)</span> Regularization</a></li>
+</ul></li>
+<li><a href="#regularization-and-under-constrained-problems">Regularization and Under-Constrained Problems</a></li>
+<li><a href="#dataset-augmentation">Dataset Augmentation</a></li>
+<li><a href="#noise-robustness">Noise Robustness</a></li>
+<li><a href="#multi-task-learning">Multi-Task Learning</a></li>
+<li><a href="#early-stopping">Early Stopping</a></li>
+</ul>
+<!-- tocstop -->
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Regularization/">Regularization</a><a href="/tags/L1-Norm/">L1 Norm</a><a href="/tags/L2-Norm/">L2 Norm</a>
+      </span>
+      
+
+    </div>
+
+    
+    <div class="article-meta pull-right">
+      <span>
+        <i class="icon-comments"></i>
+        <span>
+          <a href="/2017/07/13/Regularization for Deep Learning/#comment">
+            Comments</a>
+        </span>
+      </span>
+    </div>
+    
+  </div>
+</article>
+
+
+  <article>
+
+  
+  
+  <h3 class="article-title"><a href="/2017/07/06/物联网安全概论/"><span>
+        物联网安全概论</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/07/06/物联网安全概论/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-07-06T02:41:47.000Z">
+          2017-07-06
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p><strong>目录</strong></p>
+<!-- toc -->
+<ul>
+<li><a href="#概论">概论</a></li>
+<li><a href="#密码学基础">密码学基础</a></li>
+<li><a href="#现代常规对称加密技术">现代常规对称加密技术</a>
+<ul>
+<li><a href="#des">DES</a></li>
+<li><a href="#triple-des">Triple DES</a></li>
+<li><a href="#aes">AES</a></li>
+</ul></li>
+<li><a href="#公钥密码">公钥密码</a>
+<ul>
+<li><a href="#随机数产生">随机数产生</a></li>
+<li><a href="#公钥密码算法">公钥密码算法</a>
+<ul>
+<li><a href="#diffie-hellman密钥交换">Diffie-Hellman密钥交换</a></li>
+<li><a href="#背包算法">背包算法</a></li>
+<li><a href="#rsa算法">RSA算法</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#hash函数-数字签名与身份认证">Hash函数、数字签名与身份认证</a>
+<ul>
+<li><a href="#hash函数">Hash函数</a></li>
+<li><a href="#数字签名">数字签名</a></li>
+<li><a href="#身份认证">身份认证</a></li>
+</ul></li>
+<li><a href="#pki">PKI</a></li>
+<li><a href="#基于身份加密体制">基于身份加密体制</a></li>
+<li><a href="#物联网安全">物联网安全</a>
+<ul>
+<li><a href="#密码学在分布式传感器网络dsn中的应用">密码学在分布式传感器网络（DSN）中的应用</a></li>
+<li><a href="#基于密码学的rfid认证">基于密码学的RFID认证</a></li>
+<li><a href="#基于pke的rfid认证">基于PKE的RFID认证</a></li>
+</ul></li>
+</ul>
+<!-- tocstop -->
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/本科课程/">本科课程</a><a href="/tags/物联网/">物联网</a><a href="/tags/信息安全/">信息安全</a><a href="/tags/RSA/">RSA</a><a href="/tags/DES/">DES</a><a href="/tags/AES/">AES</a><a href="/tags/PKI/">PKI</a><a href="/tags/HASH/">HASH</a>
+      </span>
+      
+
+    </div>
+
+    
+    <div class="article-meta pull-right">
+      <span>
+        <i class="icon-comments"></i>
+        <span>
+          <a href="/2017/07/06/物联网安全概论/#comment">
+            Comments</a>
+        </span>
+      </span>
+    </div>
+    
+  </div>
+</article>
+
+
+  <article>
+
+  
+  
+  <h3 class="article-title"><a href="/2017/06/30/计算机网络/"><span>
+        计算机网络</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/06/30/计算机网络/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-06-30T02:41:47.000Z">
+          2017-06-30
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p><strong>目录</strong></p>
+<!-- toc -->
+<ul>
+<li><a href="#计算机网络概论">计算机网络概论</a>
+<ul>
+<li><a href="#计算机网络的定义">计算机网络的定义</a></li>
+<li><a href="#因特网的结构">因特网的结构</a></li>
+<li><a href="#协议分层与服务模型">协议分层与服务模型</a></li>
+<li><a href="#分组交换网的性能指标">分组交换网的性能指标</a></li>
+</ul></li>
+<li><a href="#数据通信基础">数据通信基础</a>
+<ul>
+<li><a href="#交换技术">交换技术</a></li>
+<li><a href="#接入网">接入网</a></li>
+<li><a href="#物理层概述">物理层概述</a></li>
+</ul></li>
+<li><a href="#直接连接的网络">直接连接的网络</a>
+<ul>
+<li><a href="#链路层概述">链路层概述</a></li>
+<li><a href="#成桢">成桢</a></li>
+<li><a href="#差错检测和纠错技术">差错检测和纠错技术</a></li>
+<li><a href="#可靠传输原理">可靠传输原理</a></li>
+<li><a href="#多路访问协议">多路访问协议</a></li>
+<li><a href="#以太网">以太网</a></li>
+<li><a href="#链路层交换机">链路层交换机</a></li>
+</ul></li>
+<li><a href="#网络互联">网络互联</a>
+<ul>
+<li><a href="#网络层概述">网络层概述</a></li>
+<li><a href="#网络服务模型">网络服务模型</a></li>
+<li><a href="#网际协议ip">网际协议（IP）</a></li>
+<li><a href="#路由选择协议及其算法">路由选择协议及其算法</a></li>
+<li><a href="#路由器的工作原理">路由器的工作原理</a></li>
+</ul></li>
+<li><a href="#端到端协议">端到端协议</a>
+<ul>
+<li><a href="#运输层协议概述">运输层协议概述</a></li>
+<li><a href="#多路复用与多路分解">多路复用与多路分解</a></li>
+<li><a href="#udp">UDP</a></li>
+<li><a href="#tcp">TCP</a></li>
+<li><a href="#tcp拥塞控制">TCP拥塞控制</a></li>
+</ul></li>
+<li><a href="#网络应用协议">网络应用协议</a>
+<ul>
+<li><a href="#域名系统dns">域名系统DNS</a></li>
+<li><a href="#http">HTTP</a></li>
+</ul></li>
+</ul>
+<!-- tocstop -->
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/TCP-IP/">TCP/IP</a><a href="/tags/计算机网络/">计算机网络</a><a href="/tags/本科课程/">本科课程</a><a href="/tags/UDP/">UDP</a><a href="/tags/HTTP/">HTTP</a>
+      </span>
+      
+
+    </div>
+
+    
+    <div class="article-meta pull-right">
+      <span>
+        <i class="icon-comments"></i>
+        <span>
+          <a href="/2017/06/30/计算机网络/#comment">
+            Comments</a>
+        </span>
+      </span>
+    </div>
+    
+  </div>
+</article>
+
+
+  <article>
+
+  
+  
+  <h3 class="article-title"><a href="/2017/06/29/物联网通信技术/"><span>
+        物联网通信技术</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/06/29/物联网通信技术/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-06-29T12:08:47.000Z">
+          2017-06-29
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p><strong>目录</strong></p>
+<!-- toc -->
+<ul>
+<li><a href="#无线通信基础">无线通信基础</a>
+<ul>
+<li><a href="#信号传输">信号传输</a></li>
+<li><a href="#编码和调制">编码和调制</a></li>
+</ul></li>
+<li><a href="#无线网络基础">无线网络基础</a>
+<ul>
+<li><a href="#多址接入mac">多址接入（MAC）</a></li>
+</ul></li>
+<li><a href="#802154zigbee">802.15.4/Zigbee</a>
+<ul>
+<li><a href="#概述">概述</a></li>
+<li><a href="#物理层">物理层</a></li>
+<li><a href="#mac层">MAC层</a></li>
+<li><a href="#网络层">网络层</a></li>
+<li><a href="#tinyos">TinyOS</a></li>
+</ul></li>
+<li><a href="#无线局域网">无线局域网</a>
+<ul>
+<li><a href="#mac层-1">MAC层</a></li>
+<li><a href="#功耗管理">功耗管理</a></li>
+</ul></li>
+<li><a href="#无线广域网">无线广域网</a>
+<ul>
+<li><a href="#大容量的小区制利用有限频段覆盖无限大面积">大容量的小区制：利用有限频段覆盖无限大面积</a></li>
+<li><a href="#gsmgprs">GSM/GPRS</a></li>
+<li><a href="#cdma">CDMA</a></li>
+<li><a href="#3g">3G</a></li>
+</ul></li>
+<li><a href="#物联网通信架构">物联网通信架构</a>
+<ul>
+<li><a href="#基于ip的物联网通信架构">基于IP的物联网通信架构</a></li>
+<li><a href="#6lowpan">6LowPAN</a></li>
+</ul></li>
+<li><a href="#各种技术对比">各种技术对比！</a></li>
+</ul>
+<!-- tocstop -->
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/计算机网络/">计算机网络</a><a href="/tags/本科课程/">本科课程</a><a href="/tags/物联网/">物联网</a><a href="/tags/TinyOS/">TinyOS</a><a href="/tags/ZigBee/">ZigBee</a>
+      </span>
+      
+
+    </div>
+
+    
+    <div class="article-meta pull-right">
+      <span>
+        <i class="icon-comments"></i>
+        <span>
+          <a href="/2017/06/29/物联网通信技术/#comment">
+            Comments</a>
+        </span>
+      </span>
+    </div>
+    
+  </div>
+</article>
+
+
+  <article>
+
+  
+  
+  <h3 class="article-title"><a href="/2017/06/25/物联网中间件技术/"><span>
+        物联网中间件技术</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/06/25/物联网中间件技术/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-06-25T06:08:47.000Z">
+          2017-06-25
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p><strong>目录</strong></p>
+<!-- toc -->
+<ul>
+<li><a href="#绪论">绪论</a></li>
+<li><a href="#中间件的工作原理">中间件的工作原理</a></li>
+<li><a href="#j2ee简介">J2EE简介</a></li>
+<li><a href="#j2ee-ejb构件基础">J2EE-EJB构件基础</a></li>
+<li><a href="#ejb构件开发">EJB构件开发</a></li>
+<li><a href="#rfid中间件">RFID中间件</a></li>
+</ul>
+<!-- tocstop -->
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/本科课程/">本科课程</a><a href="/tags/物联网/">物联网</a><a href="/tags/中间件/">中间件</a><a href="/tags/Java/">Java</a><a href="/tags/EJB/">EJB</a>
+      </span>
+      
+
+    </div>
+
+    
+    <div class="article-meta pull-right">
+      <span>
+        <i class="icon-comments"></i>
+        <span>
+          <a href="/2017/06/25/物联网中间件技术/#comment">
+            Comments</a>
+        </span>
+      </span>
+    </div>
+    
+  </div>
+</article>
+
+
+
+<nav class="pagination">
+  
+  <a href="/page/2/" class="pagination-prev">Prev</a>
+  
+  
+  <a href="/page/4/" class="pagination-next">Next</a>
+  
+</nav>
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

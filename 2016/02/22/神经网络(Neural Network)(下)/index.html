@@ -1,0 +1,361 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    神经网络(Neural Network)(下) | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="神经网络(Neural Network)(下)">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      神经网络(Neural Network)(下)</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/02/22/神经网络(Neural Network)(下)/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-02-22T15:10:00.000Z">
+          2016-02-22
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <!-- toc -->
+<ul>
+<li><a href="#cost-function">Cost Function</a></li>
+<li><a href="#backpropagation-algorithm">Backpropagation Algorithm</a></li>
+<li><a href="#backpropagation-intuition">Backpropagation Intuition</a></li>
+<li><a href="#implementation-note-unrolling-parameters">Implementation Note: Unrolling Parameters</a></li>
+<li><a href="#gradient-checking">Gradient Checking</a></li>
+<li><a href="#putting-it-together">Putting it Together</a></li>
+<li><a href="#nn-for-linear-systems">NN for linear systems</a>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#testing-your-linear-nn">Testing your linear NN</a></li>
+</ul></li>
+<li><a href="#reference">Reference</a></li>
+</ul>
+<!-- tocstop -->
+<a id="more"></a>
+<h2><span id="cost-function">Cost Function</span></h2>
+<p>Let's first define a few variables that we will need to use: * <span class="math inline">\(L\)</span> = total number of layers in the network * <span class="math inline">\(s_l\)</span>= number of units (not counting bias unit) in layer <span class="math inline">\(l\)</span> * <span class="math inline">\(K\)</span> = number of output units/classes</p>
+<p>Recall that in neural networks, we may have many output nodes. We denote <span class="math inline">\(h_Θ(x)_k\)</span> as being a hypothesis that results in the <span class="math inline">\(k^{th}\)</span> output.</p>
+<p>Our cost function for neural networks is going to be a <strong>generalization</strong> of the one we used for logistic regression.</p>
+<p>Recall that the cost function for regularized logistic regression was:</p>
+<p><span class="math display">\[J(θ)=−\frac{1}{m}[∑^m_{i=1}y^{(i)}log(h_θ(x^{(i)}))+(1−y^{(i)})log(1−h_θ(x^{(i)}))]+\frac{λ}{2m}∑^n_{j=1}θ^2_j\]</span></p>
+<p>For neural networks, it is going to be slightly more complicated:</p>
+<p><span class="math inline">\(J(Θ)=−\frac{1}{m}[∑^m_{i=1}∑_{k=1}^Ky^{(i)}_klog((h_Θ(x^{(i)}))_k)+(1−y^{(i)}_k)log(1−(h_Θ(x^{(i)}))_k)]+\frac{λ}{2m}\sum_{l=1}^{L−1}\sum_{i=1}^{s_l}\sum_{j=1}^{s_l+1}(Θ^{(l)}_{j,i})^2\)</span></p>
+<figure>
+<img src="/images/1473765472300.png" alt="Alt text"><figcaption>Alt text</figcaption>
+</figure>
+<p>We have added a few nested summations to account for our multiple output nodes. In the first part of the equation, between the square brackets, we have an additional nested summation that loops through the number of output nodes.</p>
+<p>In the regularization part, after the square brackets, we must account for multiple theta matrices. <strong>The number of columns in our current theta matrix is equal to the number of nodes in our current layer (including the bias unit)</strong>. <strong>The number of rows in our current theta matrix is equal to the number of nodes in the next layer (excluding the bias unit)</strong>. As before with logistic regression, we square every term.</p>
+<p>Note: * the double sum simply adds up the logistic regression costs calculated for each cell in the output layer; * the triple sum simply adds up the squares of all the individual Θs in the entire network. * the i in the triple sum does <strong>not</strong> refer to training example i</p>
+<h2><span id="backpropagation-algorithm">Backpropagation Algorithm</span></h2>
+<p>&quot;Backpropagation&quot; is neural-network terminology(术语) for minimizing our cost function, just like what we were doing with gradient descent in logistic and linear regression.</p>
+<p>Our goal is to compute: <span class="math display">\[min_ΘJ(Θ)\]</span></p>
+<p>That is, we want to minimize our cost function <span class="math inline">\(J\)</span> using an optimal set of parameters in theta.</p>
+<p>In this section we'll look at the equations we use to compute the partial derivative of <span class="math inline">\(J(Θ)\)</span>: <span class="math display">\[\frac{∂}{∂Θ^{(l)}_{i,j}}J(Θ)\]</span></p>
+<p>In backpropagation we're going to compute for every node: <span class="math inline">\(δ^{(l)}_j\)</span> = &quot;<strong>error</strong>&quot; of node <span class="math inline">\(j\)</span> in layer <span class="math inline">\(l\)</span></p>
+<p>Recall that <span class="math inline">\(a^{(l)}_j\)</span> is activation node <span class="math inline">\(j\)</span> in layer <span class="math inline">\(l\)</span>.</p>
+<p>For the last layer, we can compute the vector of delta values with: <span class="math display">\[δ^{(L)}=a^{(L)}−y\]</span></p>
+<figure>
+<img src="/images/1473765394042.png" alt="Alt text"><figcaption>Alt text</figcaption>
+</figure>
+<p>Where <span class="math inline">\(L\)</span> is our total number of layers and <span class="math inline">\(a^{(L)}\)</span> is the vector of activation units for the last layer. So our &quot;<strong>error values</strong>&quot; for the last layer are simply the differences of our actual results in the last layer and the correct outputs in <span class="math inline">\(y\)</span>.</p>
+<p>To get the delta values of the layers before the last layer, we can use an equation that steps us back from right to left: <span class="math display">\[δ^{(l)}=((Θ^{(l)})^Tδ^{(l+1)}) .∗ g′(z^{(l)})\]</span></p>
+<figure>
+<img src="/images/1473765325959.png" alt="Alt text"><figcaption>Alt text</figcaption>
+</figure>
+<p>The delta values of layer <span class="math inline">\(l\)</span> are calculated by multiplying the delta values in the next layer with the theta matrix of layer <span class="math inline">\(l\)</span>. We then element-wise multiply that with a function called <span class="math inline">\(g&#39;\)</span>, or <em>g-prime</em>, which is the derivative of the activation function <span class="math inline">\(g\)</span> evaluated with the input values given by <span class="math inline">\(z^{(l)}\)</span>.</p>
+<p>The <em>g-prime</em> derivative terms can also be written out as: <span class="math display">\[g′(z^{(l)})=a^{(l)} .∗ (1−a^{(l)})\]</span></p>
+<p>This can be shown and proved in calculus.</p>
+<p><span class="math display">\[g(z)=\frac{1}{1+e^{−z}}\]</span> <span class="math display">\[\begin{array}{lcr}
+\frac{∂g(z)}{∂z}=−(\frac{1}{1+e^{−z}})^2\frac{∂}{∂z}(1+e^{−z}) \\
+\ \ \ \ \ \ \ \ \ =−(\frac{1}{1+e^{−z}})^2e^{−z}(−1) \\
+\ \ \ \ \ \ \ \ \ =(\frac{1}{1+e^{−z}})(\frac{1}{1+e^{−z}})(e^{−z}) \\
+\ \ \ \ \ \ \ \ \ =(\frac{1}{1+e^{−z}})(\frac{e^{−z}}{1+e^{−z}}) \\
+\ \ \ \ \ \ \ \ \ =g(z)(1−g(z))
+\end{array}\]</span></p>
+<p>The full backpropagation equation for the inner nodes is then: <span class="math display">\[δ^{(l)}=((Θ^{(l)})^Tδ^{(l+1)}) .∗ a^{(l)} .∗ (1−a^{(l)})\]</span></p>
+<p>We can compute our partial derivative terms by multiplying our activation values and our error values for each training example t: <span class="math display">\[\frac{∂J(Θ)}{∂Θ^{(l)}_{i,j}}=\frac{1}{m}\sum^m_{t=1}a^{(t)(l)}_jδ^{(t)(l+1)}_i\]</span></p>
+<p><img src="/images/1473766072648.png" alt="Alt text"> <span class="math display">\[\frac{\partial}{\partial W^{(l)}_{ij}} J(W,b;x,y)= \frac{\partial}{\partial z^{(l+1)}_{i}}J(W,b;x,y) \cdot \frac{\partial z^{(l+1)}_i}{\partial W^{(l)}_{ij}} = a^{(l)}_j\delta^{(l+1)}_i\]</span></p>
+<p>This however <strong>ignores regularization</strong>, which we'll deal with later.</p>
+<p>Note: <span class="math inline">\(δ^{l+1}\)</span> and <span class="math inline">\(a^{l+1}\)</span> are vectors with <span class="math inline">\(s_{l+1}\)</span> elements. Similarly, <span class="math inline">\(a^{(l)}\)</span> is a vector with <span class="math inline">\(s_l\)</span> elements. Multiplying them produces a matrix that is <span class="math inline">\(s_{l+1}\)</span> by <span class="math inline">\(s_l\)</span> which is the <strong>same dimension</strong> as <span class="math inline">\(Θ^{(l)}\)</span>. That is, the process produces a gradient term for every element in <span class="math inline">\(Θ^{(l)}\)</span>. (Actually, <span class="math inline">\(Θ^{(l)}\)</span> has <span class="math inline">\(s_{l+1} + 1\)</span> rows, so the dimensionality is not exactly the same).</p>
+<p>We can now take all these equations and put them together into a backpropagation algorithm:</p>
+<figure>
+<img src="/images/1456125275491.png" alt="Backpropagation Algorithm"><figcaption>Backpropagation Algorithm</figcaption>
+</figure>
+<p><strong>Backpropagation Algorithm</strong></p>
+<ul>
+<li>Given training set {(<span class="math inline">\(x^{(1)}\)</span>, <span class="math inline">\(y^{(1)}\)</span>)⋯(<span class="math inline">\(x^{(m)}\)</span>, <span class="math inline">\(y^{(m)}\)</span>)}</li>
+<li>Set <span class="math inline">\(Δ^{(l)}_{i,j} := 0\)</span> for all (<span class="math inline">\(l\)</span>, <span class="math inline">\(i\)</span>, <span class="math inline">\(j\)</span>)</li>
+<li>For training example <span class="math inline">\(t=1\)</span> to <span class="math inline">\(m\)</span>:
+<ul>
+<li>Set <span class="math inline">\(a^{(1)} := x^{(t)}\)</span></li>
+<li>Perform <strong>forward propagation</strong> to compute <span class="math inline">\(a^{(l)}\)</span> for <span class="math inline">\(l=2,3,…,L\)</span></li>
+<li>Using <span class="math inline">\(y^{(t)}\)</span>, compute <span class="math inline">\(δ^{(L)}=a^{(L)}−y^{(t)}\)</span></li>
+<li>Compute <span class="math inline">\(δ^{(L−1)}\)</span>,<span class="math inline">\(δ^{(L−2)}\)</span>,…,<span class="math inline">\(δ^{(2)}\)</span> using <span class="math inline">\(δ^{(l)}=((Θ^{(l)})^Tδ^{(l+1)}) .∗ a^{(l)} .∗ (1−a^{(l)})\)</span></li>
+<li><span class="math inline">\(Δ^{(l)}_{i,j} :=Δ^{(l)}_{i,j}+a^{(l)}_jδ^{(l+1)}_i\)</span> or with vectorization, <span class="math inline">\(Δ^{(l)} :=Δ^{(l)}+δ^{(l+1)}(a^{(l)})^T\)</span></li>
+</ul></li>
+<li><span class="math inline">\(D^{(l)}_{i,j} := \frac{1}{m}(Δ^{(l)}_{i,j}+λΘ^{(l)}_{i,j})\)</span> If <span class="math inline">\(j≠0\)</span></li>
+<li><span class="math inline">\(D^{(l)}_{i,j} := \frac{1}{m}Δ^{(l)}_{i,j}\)</span> If <span class="math inline">\(j=0\)</span></li>
+</ul>
+<p>The capital-delta matrix is used as an &quot;<strong>accumulator</strong>&quot; to add up our values as we go along and eventually compute our partial derivative.</p>
+<p>The actual proof is quite involved, but, the <span class="math inline">\(D^{(l)}_{i,j}\)</span> terms are the partial derivatives and the results we are looking for: <span class="math inline">\(D^{(l)}_{i,j} = \frac{∂J(Θ)}{∂Θ^{(l)}_{i,j}}\)</span>.</p>
+<h2><span id="backpropagation-intuition">Backpropagation Intuition</span></h2>
+<p>The cost function is: <span class="math inline">\(J(Θ)=−\frac{1}{m}[∑^m_{i=1}∑_{k=1}^Ky^{(i)}_klog((h_Θ(x^{(i)}))_k)+(1−y^{(i)}_k)log(1−(h_Θ(x^{(i)}))_k)]+\frac{λ}{2m}\sum_{l=1}^{L−1}\sum_{i=1}^{s_l}\sum_{j=1}^{s_l+1}(Θ^{(l)}_{j,i})^2\)</span></p>
+<p>If we consider simple non-multiclass classification (k = 1) and disregard regularization, the cost is computed with: <span class="math display">\[cost(t)=y^{(t)}log(h_θ(x^{(t)}))+(1−y^{(t)})log(1−h_θ(x^{(t)}))\]</span></p>
+<p>More intuitively you can think of that equation roughly as: <span class="math display">\[cost(t)≈(h_θ(x^{(t)})−y^{(t)})^2\]</span></p>
+<p>Intuitively, <span class="math inline">\(δ^{(l)}_j\)</span> is the &quot;error&quot; for <span class="math inline">\(a^{(l)}_j\)</span> (unit <span class="math inline">\(j\)</span> in layer <span class="math inline">\(l\)</span>)</p>
+<p>More formally, the delta values are actually the derivative of the cost function: <span class="math display">\[δ^{(l)}_j=\frac{∂}{∂z^{(l)}_j}cost(t)\]</span></p>
+<p>Recall that our derivative is the slope of a line tangent to the cost function, so the steeper the slope the more incorrect we are.</p>
+<p>Note: In lecture, sometimes <strong>i</strong> is used to <strong>index a training example</strong>. Sometimes it is used to <strong>index a unit in a layer</strong>. In the Back Propagation Algorithm described here, <strong>t</strong> is used to <strong>index a training example</strong> rather than overloading the use of i.</p>
+<h2><span id="implementation-note-unrolling-parameters">Implementation Note: Unrolling Parameters</span></h2>
+<p>With neural networks, we are working with sets of matrices: <span class="math inline">\(Θ_1\)</span>, <span class="math inline">\(Θ_2\)</span>, <span class="math inline">\(Θ_3\)</span>,… <span class="math inline">\(D_1\)</span>, <span class="math inline">\(D_2\)</span>, <span class="math inline">\(D_2\)</span>,…</p>
+<p>In order to use optimizing functions such as &quot;<code>fminunc()</code>&quot;, we will want to &quot;<strong>unroll</strong>&quot; all the elements and put them into one long vector: <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">thetaVector = [ Theta1(:); Theta2(:); Theta3(:); ]</span><br><span class="line">deltaVector = [ D1(:); D2(:); D3(:) ]</span><br></pre></td></tr></table></figure></p>
+<p>If the dimensions of Theta1 is 10x11, Theta2 is 10x11 and Theta3 is 1x11, then we can get back our original matrices from the &quot;unrolled&quot; versions as follows: <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Theta1 = <span class="built_in">reshape</span>(thetaVector(<span class="number">1</span>:<span class="number">110</span>),<span class="number">10</span>,<span class="number">11</span>)</span><br><span class="line">Theta2 = <span class="built_in">reshape</span>(thetaVector(<span class="number">111</span>:<span class="number">220</span>),<span class="number">10</span>,<span class="number">11</span>)</span><br><span class="line">Theta3 = <span class="built_in">reshape</span>(thetaVector(<span class="number">221</span>:<span class="number">231</span>),<span class="number">1</span>,<span class="number">11</span>)</span><br></pre></td></tr></table></figure></p>
+<h2><span id="gradient-checking">Gradient Checking</span></h2>
+<p>Gradient checking will assure that our backpropagation works as intended. We can approximate the derivative of our cost function with: <span class="math display">\[\frac{∂}{∂Θ}J(Θ) ≈ \frac{J(Θ+ϵ)−J(Θ−ϵ)}{2ϵ}\]</span></p>
+<p>With multiple theta matrices, we can approximate the derivative with respect to <span class="math inline">\(Θ_j\)</span> as follows: <span class="math display">\[\frac{∂}{∂Θ_j}J(Θ) ≈ \frac{J(Θ_1,…,Θ_{j+ϵ},…,Θ_n)−J(Θ_1,…,Θ_{j−ϵ},…,Θ_n)}{2ϵ}\]</span></p>
+<p>A good small value for <span class="math inline">\(ϵ\)</span> (epsilon), guarantees the math above to become true. If the value be much smaller, may we will end up with numerical problems. The professor Andrew usually uses the value <span class="math inline">\(ϵ=10^{−4}\)</span>.</p>
+<p>We are only adding or subtracting epsilon to the <span class="math inline">\(Θ_j\)</span> matrix. In octave we can do it as follows: <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">epsilon = <span class="number">1e-4</span>;</span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:n,</span><br><span class="line">  thetaPlus = theta;</span><br><span class="line">  thetaPlus(<span class="built_in">i</span>) += epsilon;</span><br><span class="line">  thetaMinus = theta;</span><br><span class="line">  thetaMinus(<span class="built_in">i</span>) -= epsilon;</span><br><span class="line">  gradApprox(<span class="built_in">i</span>) = (J(thetaPlus) - J(thetaMinus))/(<span class="number">2</span>*epsilon)</span><br><span class="line"><span class="keyword">end</span>;</span><br></pre></td></tr></table></figure></p>
+<p>We then want to check that <code>gradApprox</code> ≈ <code>deltaVector</code>.</p>
+<p>Once you've verified <strong>once</strong> that your backpropagation algorithm is correct, then you don't need to compute gradApprox again. <strong>The code to compute gradApprox is very slow</strong>.</p>
+<h2><span id="putting-it-together">Putting it Together</span></h2>
+<p>First, <strong>pick a network architecture</strong>; choose the <strong>layout</strong> of your neural network, including how many hidden units in each layer and how many layers total. * Number of input units = dimension of features <span class="math inline">\(x^{(i)}\)</span> * Number of output units = number of classes * Number of hidden units per layer = usually more the better (must balance with cost of computation as it increases with more hidden units) * Defaults: 1 hidden layer. If more than 1 hidden layer, then the same number of units in every hidden layer.</p>
+<p><strong>Training a Neural Network</strong></p>
+<ol type="1">
+<li>Randomly initialize the weights</li>
+<li>Implement forward propagation to get <span class="math inline">\(h_θ(x^{(i)})\)</span></li>
+<li>Implement the cost function</li>
+<li>Implement backpropagation to compute partial derivatives</li>
+<li>Use gradient checking to confirm that your backpropagation works. Then disable gradient checking.</li>
+<li>Use gradient descent or a built-in optimization function to minimize the cost function with the weights in theta.</li>
+</ol>
+<p>When we perform forward and back propagation, we loop on every training example: <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:m,</span><br><span class="line">   Perform forward propagation and backpropagation using example (x(<span class="built_in">i</span>),y(<span class="built_in">i</span>))</span><br><span class="line">   (Get activations a(l) and delta terms d(l) <span class="keyword">for</span> l = <span class="number">2</span>,...,L</span><br></pre></td></tr></table></figure></p>
+<h2><span id="nn-for-linear-systems">NN for linear systems</span></h2>
+<h3><span id="introduction">Introduction</span></h3>
+<p>The NN we created for classification can easily be modified to have a linear output.</p>
+<p>First solve the 4th programming exercise. You can create a new function script, nnCostFunctionLinear.m, with the following characteristics * There is only one output node, so you do not need the 'num_labels' parameter. * Since there is one linear output, you do not need to convert y into a logical matrix. * You still need a non-linear function in the hidden layer. * The non-linear function is often the <code>tanh()</code> function - it has an output range from -1 to +1, and its gradient is easily implemented. Let <span class="math inline">\(g(z)=tanh(z)\)</span>. * The gradient of tanh is <span class="math inline">\(g′(z)=1−g(z)^2\)</span>. Use this in backpropagation in place of the sigmoid gradient. * Use linear regression for the NN output (do not use a sigmoid function on the output layer). * Cost computation: Use the linear cost function for <span class="math inline">\(J\)</span> (from ex1 and ex5) for the unregularized portion. For the regularized portion, use the same method as ex4. * Where <code>reshape()</code> is used to form the Theta matrices, replace 'num_labels' with '1'.</p>
+<p>You will also need to create a <code>predictLinear()</code> function, using the <code>tanh()</code> function in the hidden layer, and a linear output.</p>
+<h3><span id="testing-your-linear-nn">Testing your linear NN</span></h3>
+<p>Here is a test case for your <code>nnCostFunctionLinear()</code> <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">% inputs</span></span><br><span class="line">nn_params = [<span class="number">31</span> <span class="number">16</span> <span class="number">15</span> <span class="number">-29</span> <span class="number">-13</span> <span class="number">-8</span> <span class="number">-7</span> <span class="number">13</span> <span class="number">54</span> <span class="number">-17</span> <span class="number">-11</span> <span class="number">-9</span> <span class="number">16</span>]'/ <span class="number">10</span>;</span><br><span class="line">il = <span class="number">1</span>;</span><br><span class="line">hl = <span class="number">4</span>;</span><br><span class="line">X = [<span class="number">1</span> ; <span class="number">2</span> ; <span class="number">3</span>];</span><br><span class="line">y = [<span class="number">1</span> ; <span class="number">4</span> ; <span class="number">9</span>];</span><br><span class="line">lambda = <span class="number">0.01</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">% command</span></span><br><span class="line">[<span class="built_in">j</span> g] = nnCostFunctionLinear(nn_params, il, hl, X, y, lambda)</span><br><span class="line"></span><br><span class="line"><span class="comment">% results</span></span><br><span class="line"><span class="built_in">j</span> =  <span class="number">0.020815</span></span><br><span class="line">g =</span><br><span class="line">    <span class="number">-0.0131002</span></span><br><span class="line">    <span class="number">-0.0110085</span></span><br><span class="line">    <span class="number">-0.0070569</span></span><br><span class="line">     <span class="number">0.0189212</span></span><br><span class="line">    <span class="number">-0.0189639</span></span><br><span class="line">    <span class="number">-0.0192539</span></span><br><span class="line">    <span class="number">-0.0102291</span></span><br><span class="line">     <span class="number">0.0344732</span></span><br><span class="line">     <span class="number">0.0024947</span></span><br><span class="line">     <span class="number">0.0080624</span></span><br><span class="line">     <span class="number">0.0021964</span></span><br><span class="line">     <span class="number">0.0031675</span></span><br><span class="line">    <span class="number">-0.0064244</span></span><br></pre></td></tr></table></figure></p>
+<p>Now create a script that uses the 'ex5data1.mat' from ex5, but without creating the polynomial terms. With 8 units in the hidden layer and MaxIter set to 200, you should be able to get a final cost value of 0.3 to 0.4. The results will vary a bit due to the random Theta initialization. If you plot the training set and the predicted values for the training set (using your <code>predictLinear()</code> function), you should have a good match.</p>
+<h2><span id="reference">Reference</span></h2>
+<ul>
+<li><a href="https://www.coursera.org/learn/machine-learning" target="_blank" rel="noopener">机器学习 Andrew Ng</a></li>
+<li><a href="http://deeplearning.stanford.edu/wiki/index.php/%E5%8F%8D%E5%90%91%E4%BC%A0%E5%AF%BC%E7%AE%97%E6%B3%95" target="_blank" rel="noopener">UFLDL教程</a></li>
+</ul>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Neural-Network/">Neural Network</a><a href="/tags/Dense/">Dense</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

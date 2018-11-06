@@ -1,0 +1,549 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    RL - Markov Decision Processes | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="RL - Markov Decision Processes">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      RL - Markov Decision Processes</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/08/18/RL - Markov Decision Processes/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-08-18T07:02:19.000Z">
+          2017-08-18
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p><strong>Table of Contents</strong></p>
+<!-- toc -->
+<ul>
+<li><a href="#markov-processes">Markov Processes</a></li>
+<li><a href="#markov-reward-process">Markov Reward Process</a></li>
+<li><a href="#markov-decision-process">Markov Decision Process</a></li>
+</ul>
+<!-- tocstop -->
+<h2><span id="markov-processes">Markov Processes</span></h2>
+<p>Basically, <strong>Markov decision processes</strong> formally describe an environment for reinforcement learning, where the environment is <strong>fully observable</strong>, which means the current state completely characterises the process.</p>
+<a id="more"></a>
+<p>Almost all RL problems can be formalised as MDPs, e.g.</p>
+<ul>
+<li>Optimal control primarily deals with continuous MDPs</li>
+<li>Partially observable problems can be converted into MDPs</li>
+<li>Bandits are MDPs with one state</li>
+</ul>
+<p>So, if we solve MDP, we can solve all above RL problems.</p>
+<p><strong>Markov Property</strong></p>
+<p>Markov Property is &quot;The future is independent of the past given the present&quot;, like <a href="https://www.52coding.com.cn/index.php?/Articles/single/69">last note</a> said. The formal definition is: <span class="math display">\[
+P[S_{t+1}|S_t]=P[S_{t+1}|S_1, ..., S_t]
+\]</span> where <span class="math inline">\(S\)</span> represents a state.</p>
+<p>The formula means the current can capture all relevant information from the history. Once the state is known, the history may be thrown away, i.e. the state is a sufficient statistic of the future.</p>
+<p><strong>State Transition Matrix</strong></p>
+<p>We know that given the current state, we can use its information to reach the next state, but how? — It is characterized by the <em>state transition probability</em>.</p>
+<p>For a Markov state <span class="math inline">\(s\)</span> and successor state <span class="math inline">\(s&#39;\)</span> , the state transition probability is deﬁned by <span class="math display">\[
+P_{ss&#39;}=P[S_{t+1}=s&#39;|S_t=s]
+\]</span> We can put all of the probabities into a matrix called transition matrix, denoted by <span class="math inline">\(P\)</span> : <span class="math display">\[
+P = \begin{bmatrix}
+P_{11}     &amp; \cdots &amp; P_{1n}      \\
+\vdots &amp; \ddots &amp; \vdots \\
+P_{n1}     &amp; \cdots &amp; P_{nn}
+\end{bmatrix}
+\]</span> where each row of the matrix sums to 1.</p>
+<p><strong>Markov Process</strong></p>
+<p>Formally, a Markov process is a <strong>memoryless</strong> random process, i.e. a sequence of random states <span class="math inline">\(S_1, S_2, …\)</span> with the <strong>Markov property</strong>.</p>
+<blockquote>
+<p>Definition</p>
+<p><strong>A Markov Process (or Markov Chain) is tuple</strong> <span class="math inline">\(&lt;S, P&gt;\)</span></p>
+<ul>
+<li><strong><span class="math inline">\(S\)</span> is a (finite) set of states</strong></li>
+<li><strong><span class="math inline">\(P\)</span> is a state transition probability matrix, <span class="math inline">\(P_{ss&#39;} = P[S_{t+1}=s&#39;|S_t=s]\)</span></strong></li>
+</ul>
+</blockquote>
+<p><em>Example</em></p>
+<p><img src="/images/markov.png"></p>
+<p>The above figure show a markov chains of a student's life. Process starts from <em>Class 1</em>, taking class 1 may be boring, so he have either 50% probability to look <em>Facebook</em> or to move to <em>Class 2</em>. …. And finally, he reach the final state <em>Sleep</em>. It's a final state just because it is a self-loop with probability 1 which is nothing special.</p>
+<p>We can sample sequences from such process. Sample <strong>episodes</strong> for Student Markov Chain starting from <span class="math inline">\(S_1 = C_1\)</span>: <span class="math display">\[
+S_1, S_2, ..., S_T
+\]</span></p>
+<ul>
+<li>C1 C2 C3 Pass Sleep</li>
+<li>C1 FB FB C1 C2 Sleep</li>
+<li>C1 C2 C3 Pub C2 C3 Pass Sleep</li>
+<li>C1 FB FB C1 C2 C3 Pub C1 FB FB FB C1 C2 C3 Pub C2 Sleep</li>
+</ul>
+<p>Also, we can make the transition matrix from such markov chain:</p>
+<p><img src="/images/trans_mat.png"></p>
+<p>If we have this matrix, we can fully describe the Markov process.</p>
+<h2><span id="markov-reward-process">Markov Reward Process</span></h2>
+<p>So far, we have never talked about Reinforcement Learning, there is no reward at all. So, let's talk about the <em>Markov Reward Process</em>.</p>
+<p>The most important is adding reward to Markov process, so a Markov reward process is a Markov chain with values.</p>
+<blockquote>
+<p>Definition</p>
+<p>A Markov Reward Process is tuple <span class="math inline">\(&lt;S, P, R, \gamma&gt;\)</span></p>
+<ul>
+<li><span class="math inline">\(S\)</span> is a (finite) set of states</li>
+<li><span class="math inline">\(P\)</span> is a state transition probability matrix, <span class="math inline">\(P_{ss&#39;} = P[S_{t+1}=s&#39;|S_t=s]\)</span></li>
+<li><strong><span class="math inline">\(R\)</span> is a reward function, <span class="math inline">\(R_s=E[R_{t+1}|S_t=s]\)</span></strong></li>
+<li><strong><span class="math inline">\(\gamma\)</span> is a discount factor, <span class="math inline">\(\gamma \in [0, 1]\)</span></strong></li>
+</ul>
+</blockquote>
+<p>Note that <span class="math inline">\(R\)</span> is the <strong>immediate reward</strong>, it characterize the reward you will get if you currently stay on state <span class="math inline">\(s\)</span>.</p>
+<p><em>Example</em></p>
+<p>Let's back to the student example:</p>
+<p><img src="/images/mrp.png"></p>
+<p>At each state, we have corresponding reward represents the goodness/badness of that state.</p>
+<p><strong>Return</strong></p>
+<p>We don't actually care about the immediate reward, we care about the whole random sequence's total reward. So we define the term <em>return</em>:</p>
+<blockquote>
+<p>Definition</p>
+<p><strong>The return <span class="math inline">\(G_t\)</span> is the total dicounted reward from time-step <span class="math inline">\(t\)</span>.</strong> <span class="math display">\[
+G_t=R_{t+1}+\gamma R_{t+2}+...=\sum_{k=0}^\infty \gamma^kR_{t+k+1}
+\]</span></p>
+</blockquote>
+<p>The discount <span class="math inline">\(\gamma \in [0,1]\)</span> is the present value of future rewards. So the value of receiving reward <span class="math inline">\(R\)</span> after <span class="math inline">\(k+1\)</span> time-steps is <span class="math inline">\(\gamma^k R\)</span>.</p>
+<p><strong>Note</strong>: <span class="math inline">\(R_{t+1}\)</span> is the immediate reward of state <span class="math inline">\(S_t\)</span>.</p>
+<p>This values <strong>immediate reward</strong> above <strong>delayed reward</strong>:</p>
+<ul>
+<li><span class="math inline">\(\gamma\)</span> closes to <span class="math inline">\(0\)</span> leads to &quot;myopic&quot; evaluation</li>
+<li><span class="math inline">\(\gamma\)</span> closes to <span class="math inline">\(1\)</span> leads to &quot;far-sighted&quot; evaluation</li>
+</ul>
+<p>Most Markov reward and decision processes are discounted. <strong>Why?</strong></p>
+<ul>
+<li><strong>Mathematically convenient</strong> to discount rewards</li>
+<li><strong>Avoids inﬁnite returns</strong> in cyclic Markov processes</li>
+<li><strong>Uncertainty</strong> about the future may not be fully represented</li>
+<li>If the reward is ﬁnancial, immediate rewards may earn more interest than delayed rewards</li>
+<li><strong>Animal/human behaviour</strong> shows preference for immediate reward</li>
+<li>It is sometimes possible to use undiscounted Markov reward processes (i.e. γ = 1), e.g. if all sequences terminate.</li>
+</ul>
+<p><strong>Value Function</strong></p>
+<p>The value function <span class="math inline">\(v(s)\)</span> gives the long-term value of state <span class="math inline">\(s\)</span>.</p>
+<blockquote>
+<p>Definition</p>
+<p><strong>The state value funtion <span class="math inline">\(v(s)\)</span> of an MRP is the expected return starting from state <span class="math inline">\(s\)</span></strong> <span class="math display">\[
+v(s) = E[G_t|S_t=s]
+\]</span></p>
+</blockquote>
+<p>We use expectation because it is a random process, we want to figure out the expected value of a state, not such a sequence sampled starts it.</p>
+<p><em>Example</em></p>
+<p>Sample <strong>returns</strong> from Student MRP, starting from <span class="math inline">\(S_1 = C1\)</span> with <span class="math inline">\(\gamma = \frac{1}{2}\)</span>: <span class="math display">\[
+G_1=R_2+\gamma R_3+...+\gamma^{T-2}R_T
+\]</span> <img src="/images/samret.png"></p>
+<p>The <em>return</em> is random, but the <em>value function</em> is not random, rather, it is expectation of all samples' return.</p>
+<p>Let's see the example of state <em>value function</em>:</p>
+<p><img src="/images/svf.png"></p>
+<p>When <span class="math inline">\(\gamma = 0\)</span>, the value function just consider the reward of current state no matter how it changes future.</p>
+<p><img src="/images/gamma0.9.png"></p>
+<p><img src="/images/gamma1.png"></p>
+<p><strong>Bellman Equation for MRPs</strong></p>
+<p>The value function can be decomposed into two parts:</p>
+<ul>
+<li>immediate reward <span class="math inline">\(R_{t+1}\)</span></li>
+<li>discounted value of successor state <span class="math inline">\(\gamma v(S_{t+1})\)</span></li>
+</ul>
+<p>So as to we can apply dynamic programming to solve the value function.</p>
+<p>Here is the demonstration: <span class="math display">\[
+\begin{align}
+v(s) &amp; = \mathbb{E}[G_t|S_t=s] \\
+&amp; = \mathbb{E}[R_{t+1}+\gamma R_{t+2}+\gamma^2 R_{t+3}+...|S_t=s] \\
+&amp;= \mathbb{E}[R_{t+1}+\gamma(R_{t+2}+\gamma R_{t+3}+...)|S_t=s]\\
+&amp;= \mathbb{E}[R_{t+1}+\gamma G_{t+1}|S_t=s]\\
+&amp;= \mathbb{E}[R_{t+1}+\gamma v(S_{t+1})|S_t=s]
+\end{align}
+\]</span> Here we get: <span class="math display">\[
+v(s) =\mathbb{E}[R_{t+1}+\gamma v(S_{t+1})|S_t=s]=R_{t+1}+\gamma\mathbb{E}[ v(S_{t+1})|S_t=s]
+\]</span> We look ahead one-step, and averaging all value function of next possible state:</p>
+<p><img src="/images/bf2.png"> <span class="math display">\[
+v(s) = R_s+\gamma\sum_{s&#39;\in S}P_{ss&#39;}v(s&#39;)
+\]</span> We can use the Bellman equation to vertify a MRP:</p>
+<p><img src="/images/verMRP.png"></p>
+<p><em>Bellman Equation in Matrix Form</em></p>
+<p>The Bellman equation can be expressed concisely using matrices, <span class="math display">\[
+v = R + \gamma Pv
+\]</span> where <span class="math inline">\(v\)</span> is a column vector with one entry per state: <span class="math display">\[
+\begin{bmatrix}
+v(1)         \\
+\vdots  \\
+v(n)    
+\end{bmatrix}=\begin{bmatrix}
+R_1         \\
+\vdots  \\
+R_n   
+\end{bmatrix}+\gamma \begin{bmatrix}
+P_{11}     &amp; \cdots &amp; P_{1n}      \\
+\vdots &amp; \ddots &amp; \vdots \\
+P_{n1}     &amp; \cdots &amp; P_{nn}
+\end{bmatrix}\begin{bmatrix}
+v(1)         \\
+\vdots  \\
+v(n)    
+\end{bmatrix}
+\]</span> Because the Bellman equation is a linear equation, it can be solved directly: <span class="math display">\[
+\begin{align}
+v &amp; = R+\gamma Pv \\
+(I-\gamma P)v&amp; =R \\
+v &amp;= (I-\gamma P)^{-1}R
+\end{align}
+\]</span> However, the Computational complexity is <span class="math inline">\(O(n^3)\)</span> for <span class="math inline">\(n\)</span> states, because of the inverse operation. This method can be applied to solve small MRPs.</p>
+<p>There are many iterative methods for large MRPs, e.g.</p>
+<ul>
+<li>Dynamic programming</li>
+<li>Monte-Carlo evaluation</li>
+<li>Temporal-Diﬀerence learning</li>
+</ul>
+<p>So far with MRP, all we want to do is to make decisions, so let's move on <em>Markov Decision Process</em>, which we actually using in RL.</p>
+<h2><span id="markov-decision-process">Markov Decision Process</span></h2>
+<p>A <strong>Markov decision process (MDP)</strong> is a Markov reward process with decisions. It is an <em>environment</em> in which all states are Markov.</p>
+<blockquote>
+<p>Definition</p>
+<p><strong>A Markov Decision Process is a tuple</strong> <span class="math inline">\(&lt;S, A,P,R,\gamma&gt;\)</span></p>
+<ul>
+<li><span class="math inline">\(S\)</span> is a finite set of states</li>
+<li><span class="math inline">\(A\)</span> <strong>is a finite set of actions</strong></li>
+<li><span class="math inline">\(P\)</span> is a state transition probability matrix, <span class="math inline">\(P^a_{ss&#39;}=\mathbb{P}[S_{t+1}=s&#39;|S_t=s, A_t=a]\)</span></li>
+<li><span class="math inline">\(R\)</span> is a reward function, <span class="math inline">\(R^a_s=\mathbb{E}[R_{t+1}|S_t=s,A_t=t]\)</span></li>
+<li><span class="math inline">\(\gamma\)</span> is a discount factor <span class="math inline">\(\gamma \in[0,1]\)</span></li>
+</ul>
+</blockquote>
+<p><em>Example</em></p>
+<p><img src="/images/mdpstu.png"></p>
+<p>Red marks represents the actions or decisions, what we want to do is to find the best path that maximize the value function.</p>
+<p><strong>Policy</strong></p>
+<p>Formally, the decision can be defined as <em>policy</em>:</p>
+<blockquote>
+<p>Definition</p>
+<p><strong>A policy π is a distribution over actions given states,</strong> <span class="math display">\[
+\pi(a|s)=\mathbb{P}[A_t=a|S_t=s]
+\]</span></p>
+</blockquote>
+<p>A policy fully deﬁnes the behaviour of an agent.</p>
+<p>Note that MDP policies depend on the current state (not the history), i.e. policies are stationary (time-independent), <span class="math inline">\(A_t~\pi(\cdot|S_t), \forall t&gt;0\)</span>.</p>
+<p>An MDP can transform into a Markov process or an MRP:</p>
+<ul>
+<li><p>Given an MDP <span class="math inline">\(\mathcal{M}=&lt;\mathcal{S,A,P,R}, \gamma&gt;\)</span> and a policy <span class="math inline">\(\pi\)</span></p></li>
+<li><p>The state sequence <span class="math inline">\(&lt;S_1 , S_2 , ... &gt;\)</span> is a Markov process <span class="math inline">\(&lt;\mathcal{S, P}^π&gt;\)</span></p></li>
+<li><p>The state and reward sequence <span class="math inline">\(&lt;S_1 , R_2 , S_2 , …&gt;\)</span> is a Markov reward process <span class="math inline">\(&lt;\mathcal{S,P}^\pi,\mathcal{R}^\pi,\gamma&gt;\)</span> where, <span class="math display">\[
+\mathcal{P}^\pi_{s,s&#39;}=\sum_{a\in\mathcal{A}}\pi(a|s)P^a_{ss&#39;}
+\]</span></p>
+<p><span class="math display">\[
+\mathcal{R}^\pi_s=\sum_{a\in\mathcal{A}}\pi(a|s)\mathcal{R}^a_s
+\]</span></p></li>
+</ul>
+<p><strong>Value Function</strong></p>
+<p>There are two value functions: the first one is called <em>state-value function</em> which represents the expected return following policy <span class="math inline">\(\pi\)</span>, the other is called <em>action-value function</em> which measures the goodness/badness of an action following policy <span class="math inline">\(\pi\)</span>.</p>
+<blockquote>
+<p>Definition</p>
+<p>The <strong>state-value function</strong> <span class="math inline">\(v_π (s)\)</span> of an MDP is the expected return starting from state <span class="math inline">\(s\)</span>, and then following policy π <span class="math display">\[
+v_\pi(s)=\mathbb{E}_\pi[G_t|S_t=s]
+\]</span></p>
+</blockquote>
+<blockquote>
+<p>Definition</p>
+<p>The <strong>action-value function</strong> <span class="math inline">\(q_π (s, a)\)</span> is the expected return starting from state <span class="math inline">\(s\)</span>, taking action <span class="math inline">\(a\)</span>, and then following policy <span class="math inline">\(π\)</span> <span class="math display">\[
+q_\pi(s,a)=\mathbb{E}_\pi[G_t|S_t=s,A_t=a]
+\]</span></p>
+</blockquote>
+<p><em>Example</em></p>
+<p><img src="/images/svformdp.png"></p>
+<p><strong>Bellman Expectation Equation</strong></p>
+<p>The <strong>state-value function</strong> can again be decomposed into immediate reward plus discounted value of successor state, <span class="math display">\[
+v_\pi(s)=\mathbb{E}_\pi[R_{t+1}+\gamma v_\pi(S_{t+1})|S_t=s]
+\]</span> The <strong>action-value function</strong> can similarly be decomposed, <span class="math display">\[
+q_\pi(s,a)=\mathbb{E}_\pi[R_{t+1}+\gamma q_\pi (S_{t+1},A_{t+1})|S_t=s,A_t=a]
+\]</span> <em>Bellman Expectation Equation for <span class="math inline">\(V_π\)</span></em></p>
+<p><img src="/images/vpi.png"> <span class="math display">\[
+v_\pi(s)=\sum_{a\in\mathcal{A}}\pi(a|s)q_\pi(s,a)
+\]</span> The look-ahead approach is taking an action and computing its reward, all we need to do is to averaging all possible actions' rewards, which is equal to current state-value.</p>
+<p><em>Bellman Expectation Equation for <span class="math inline">\(Q_π\)</span></em></p>
+<p><img src="/images/qpi.png"> <span class="math display">\[
+q_\pi(s,a)=\mathcal{R}_s^a + \gamma \sum_{s&#39;\in\mathcal{S}}P^a_{ss&#39;}v_\pi(s&#39;)
+\]</span> It is identical to the immediate reward of taking action <span class="math inline">\(a\)</span> plus the average of the reward/value of all possible states which the action could lead to.</p>
+<p><em>Bellman Expectation Equation for <span class="math inline">\(V_π\)</span></em></p>
+<p><img src="/images/vpi2.png"> <span class="math display">\[
+v_\pi(s)=\sum_{a\in\mathcal{A}}\pi(a|s)(\mathcal{R}^a_s+\gamma\sum_{s&#39;\in\mathcal{S}}P^a_{ss&#39;}v_\pi(s&#39;))
+\]</span> This is a two-step look-ahead approach, just combining the last two equations.</p>
+<p><img src="/images/qpi2.png"> <span class="math display">\[
+q_\pi(s,a)=\mathcal{R}^a_s+\gamma\sum_{s&#39;\in\mathcal{S}}P^a_{ss&#39;}\sum_{a&#39;\in\mathcal{A}}\pi(a&#39;|s&#39;)q_\pi(s&#39;,a&#39;)
+\]</span> <em>Example</em>: State-value function</p>
+<p><img src="/images/qgbee.png"></p>
+<p><em>Bellman Expectation Equation (Matrix Form)</em></p>
+<p>The Bellman expectation equation can be expressed concisely using the induced MRP, <span class="math display">\[
+v_\pi=R^\pi+\gamma P^\pi v_\pi
+\]</span> with direct solution <span class="math display">\[
+v_\pi=(I-\gamma P^{\pi-1})^{-1}R^\pi
+\]</span> <strong>Optimal Value Function</strong></p>
+<blockquote>
+<p>Definition</p>
+<p><strong>The optimal state-value function <span class="math inline">\(v_∗(s)\)</span> is the maximum value function over all policies</strong> <span class="math display">\[
+v_\ast(s)=\max_{\pi}v_\pi(s)
+\]</span> <strong>The optimal action-value function <span class="math inline">\(q_∗ (s, a)\)</span> is the maximum action-value function over all policies</strong> <span class="math display">\[
+q_\ast(s,a)=\max_\pi q_\pi(s,a)
+\]</span></p>
+</blockquote>
+<p>The optimal value function speciﬁes the best possible performance in the MDP.</p>
+<p>If we know the <span class="math inline">\(q_*(s,a)\)</span>, we &quot;solve&quot; MDP because we know what actions should take at each state to maximize the reward.</p>
+<p><em>Example</em></p>
+<p><img src="/images/egvalue.png"></p>
+<p><img src="/images/egstar.png"></p>
+<p><strong>Optimal Policy</strong></p>
+<p>Deﬁne a partial ordering over policies <span class="math display">\[
+\pi≥\pi&#39;\ if\ v_\pi(s)≥v_{\pi&#39;}, \forall s
+\]</span></p>
+<blockquote>
+<p>Theorem</p>
+<ul>
+<li><strong>There exists an optimal policy <span class="math inline">\(π_∗\)</span> that is better than or equal to all other policies,</strong>, <span class="math inline">\(\pi_* ≥ \pi, \forall \pi\)</span></li>
+<li><strong>All optimal policies achieve the optimal value function,</strong> <span class="math inline">\(v_{pi_*}=v_*(s)\)</span></li>
+<li><strong>All optimal policies achieve the optimal action-value function,</strong> <span class="math inline">\(q_{\pi_*}(s,a)=q_*(s,a)\)</span></li>
+</ul>
+</blockquote>
+<p><em>Finding an Optimal Policy</em></p>
+<p>An optimal policy can be found by maximising over <span class="math inline">\(q_∗ (s, a)\)</span>,</p>
+<p><span class="math display">\[
+\pi_\ast(a|s)=\begin{cases}
+1\ if\ a=\arg\max_{a\in\mathcal{A}}q_\ast(s,a) \\
+0 \ otherwise
+\end{cases}
+\]</span></p>
+<p>There is always a deterministic optimal policy for any MDP. So if we know <span class="math inline">\(q_∗ (s, a)\)</span>, we immediately have the optimal policy.</p>
+<p><img src="/images/optpol.png"></p>
+<p>The optimal policy is highlight in red.</p>
+<p><strong>Bellman Optimality Equation</strong></p>
+<p>The optimal value functions are recursively related by the Bellman optimality equations:</p>
+<p><img src="/images/boev.png"></p>
+<p><span class="math display">\[v_\ast(s)=\max_aq_\ast(s,a)\]</span></p>
+<p><img src="/images/boeq.png"></p>
+<p><span class="math display">\[q_\ast(s,a)=\mathcal{R}^a_s+\gamma\sum_{s&#39;\in\mathcal{S}}\mathcal{P}^a_{ss&#39;}v_\ast(s&#39;)\]</span></p>
+<p><img src="/images/boev2.png"></p>
+<p><span class="math display">\[v_\ast(s)=\max_a\mathcal{R}^a_s+\gamma\sum_{s&#39;\in\mathcal{S}}\mathcal{P}^a_{ss&#39;}v_\ast(s&#39;)\]</span></p>
+<p><img src="/images/boeq2.png"></p>
+<p><span class="math display">\[q_\ast(s,a)=\mathcal{R}^a_s+\gamma\sum_{s&#39;\in\mathcal{S}}P^a_{ss&#39;}\max_{a&#39;}q_\ast(s&#39;,s)\]</span></p>
+<p><em>Example</em></p>
+<p><img src="/images/boe_in_stu_mdp.png"></p>
+<p><em>Solving the Bellman Optimality Equation</em></p>
+<p>Bellman Optimality Equation is non-linear, so it is not able to be sovle as solving linear equation. And there is no closed from solution (in general).</p>
+<p>Many <strong>iterative</strong> solution methods</p>
+<ul>
+<li>Value Iteration</li>
+<li>Policy Iteration</li>
+<li>Q-learning</li>
+<li>Sarsa</li>
+</ul>
+<p>End. Next note will introduce how to solve the Bellman Optimality Equation by dynamic programming.</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Reinforcement-Learning/">Reinforcement Learning</a><a href="/tags/增强学习/">增强学习</a><a href="/tags/MDP/">MDP</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

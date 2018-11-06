@@ -1,0 +1,952 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    Page 5 | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        
+  <article>
+
+  
+  
+  <h3 class="article-title"><a href="/2016/09/13/Support Vector Machine/"><span>
+        深入理解SVM</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/09/13/Support Vector Machine/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-09-13T11:42:06.000Z">
+          2016-09-13
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <blockquote>
+<p>支持向量机（Support Vector Machine, SVM）是一种分类模型，它的基本模型是定义在特征空间上的间隔最大的线性分类器。SVM 还包含核技巧，使它成为非线性分类器。</p>
+</blockquote>
+<!-- toc -->
+<ul>
+<li><a href="#线性可分支持向量机">线性可分支持向量机</a>
+<ul>
+<li><a href="#硬间隔最大化">硬间隔最大化</a></li>
+</ul></li>
+<li><a href="#线性支持向量机">线性支持向量机</a>
+<ul>
+<li><a href="#软间隔最大化">软间隔最大化</a></li>
+</ul></li>
+<li><a href="#非线性支持向量机">非线性支持向量机</a>
+<ul>
+<li><a href="#核函数">核函数</a></li>
+</ul></li>
+<li><a href="#smo">SMO</a></li>
+<li><a href="#总结思考">总结思考</a></li>
+<li><a href="#参考文献">参考文献</a></li>
+</ul>
+<!-- tocstop -->
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/SVM/">SVM</a>
+      </span>
+      
+
+    </div>
+
+    
+    <div class="article-meta pull-right">
+      <span>
+        <i class="icon-comments"></i>
+        <span>
+          <a href="/2016/09/13/Support Vector Machine/#comment">
+            Comments</a>
+        </span>
+      </span>
+    </div>
+    
+  </div>
+</article>
+
+
+  <article>
+
+  
+  
+  <h3 class="article-title"><a href="/2016/09/08/提升方法：GBDT , XGBOOST, AdaBoost/"><span>
+        提升方法：GBDT , XGBOOST &amp; AdaBoost</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/09/08/提升方法：GBDT , XGBOOST, AdaBoost/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-09-08T11:42:06.000Z">
+          2016-09-08
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <blockquote>
+<p><strong>提升</strong> (<em>boosting</em>) 方法是一种常用的统计学习方法，应用广泛且有效，在分类问题中，它通过改变训练样本的权重，学习多个分类器，并将这些分类器进行线性组合，提高分类器性能。</p>
+</blockquote>
+<!-- toc -->
+<ul>
+<li><a href="#gbdt">GBDT</a>
+<ul>
+<li><a href="#提升的概念">提升的概念</a></li>
+<li><a href="#提升算法">提升算法</a></li>
+<li><a href="#梯度提升决策树-gbdt">梯度提升决策树 GBDT</a></li>
+</ul></li>
+<li><a href="#xgboost">XGBOOST</a></li>
+<li><a href="#adaboost">AdaBoost</a>
+<ul>
+<li><a href="#误差分析">误差分析</a></li>
+</ul></li>
+<li><a href="#参考文献">参考文献</a></li>
+</ul>
+<!-- tocstop -->
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Boosting/">Boosting</a><a href="/tags/GBDT/">GBDT</a><a href="/tags/xgboost/">xgboost</a>
+      </span>
+      
+
+    </div>
+
+    
+    <div class="article-meta pull-right">
+      <span>
+        <i class="icon-comments"></i>
+        <span>
+          <a href="/2016/09/08/提升方法：GBDT , XGBOOST, AdaBoost/#comment">
+            Comments</a>
+        </span>
+      </span>
+    </div>
+    
+  </div>
+</article>
+
+
+  <article>
+
+  
+  
+  <h3 class="article-title"><a href="/2016/09/02/决策树和随机森林中的公式推导/"><span>
+        决策树 &amp; 随机森林中的公式推导</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/09/02/决策树和随机森林中的公式推导/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-09-02T11:42:06.000Z">
+          2016-09-02
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p><strong>决策树学习的生成算法</strong>主要有三种： * ID3 * Iterative Dichotomiser * C4.5 * CART * Classification And Regression Tree</p>
+<p>决策树建立就是从特征中选择一个作为分类条件把样本划分为两个子集，然后对每个子集做同样的事情直到每个子集都属于相同的标签。所以建立决策树的关键在于每次划分子集的时候选择哪个特征，这也是上面三种算法的最主要区别，下面将一一探讨。</p>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Decision-Tree/">Decision Tree</a><a href="/tags/ID3/">ID3</a><a href="/tags/C4-5-CART/">C4.5 CART</a><a href="/tags/随机森林/">随机森林</a><a href="/tags/Bagging/">Bagging</a>
+      </span>
+      
+
+    </div>
+
+    
+    <div class="article-meta pull-right">
+      <span>
+        <i class="icon-comments"></i>
+        <span>
+          <a href="/2016/09/02/决策树和随机森林中的公式推导/#comment">
+            Comments</a>
+        </span>
+      </span>
+    </div>
+    
+  </div>
+</article>
+
+
+  <article>
+
+  
+  
+  <h3 class="article-title"><a href="/2016/08/30/线性回归中的一些公式推导/"><span>
+        线性回归中的一些公式推导</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/08/30/线性回归中的一些公式推导/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-08-30T11:42:06.000Z">
+          2016-08-30
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <h2 id="使用极大似然估计推导损失函数">使用极大似然估计推导损失函数</h2>
+<p><strong>回归方程</strong></p>
+<p><span class="math display">\[h_\theta(x) = \sum^n_{i=0}\theta_ix_i = \theta^Tx\]</span></p>
+<p>考虑任意一样本 <span class="math inline">\(y^{(i)}\)</span> ，则有： <span class="math display">\[y^{(i)} = \theta^Tx^{(i)} + \epsilon^{(i)}\]</span> 其中 <span class="math inline">\(\epsilon^{(i)}\)</span> 是误差。</p>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Linear-Regression/">Linear Regression</a><a href="/tags/Logistic-Regression/">Logistic Regression</a>
+      </span>
+      
+
+    </div>
+
+    
+    <div class="article-meta pull-right">
+      <span>
+        <i class="icon-comments"></i>
+        <span>
+          <a href="/2016/08/30/线性回归中的一些公式推导/#comment">
+            Comments</a>
+        </span>
+      </span>
+    </div>
+    
+  </div>
+</article>
+
+
+  <article>
+
+  
+  
+  <h3 class="article-title"><a href="/2016/07/22/阿里音乐流行趋势预测大赛总结/"><span>
+        阿里音乐流行趋势预测大赛总结</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/07/22/阿里音乐流行趋势预测大赛总结/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-07-22T11:42:06.000Z">
+          2016-07-22
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <h2 id="赛题分析">赛题分析</h2>
+<p>题目要求根据用户过去六个月的交互纪录来预测未来两个月歌手的播放量。</p>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/踩坑现场/">踩坑现场</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/数据挖掘/">数据挖掘</a>
+      </span>
+      
+
+    </div>
+
+    
+    <div class="article-meta pull-right">
+      <span>
+        <i class="icon-comments"></i>
+        <span>
+          <a href="/2016/07/22/阿里音乐流行趋势预测大赛总结/#comment">
+            Comments</a>
+        </span>
+      </span>
+    </div>
+    
+  </div>
+</article>
+
+
+  <article>
+
+  
+  
+  <h3 class="article-title"><a href="/2016/07/16/决策树之ID3算法详解/"><span>
+        决策树之ID3算法详解</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/07/16/决策树之ID3算法详解/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-07-16T01:53:00.000Z">
+          2016-07-16
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <!-- toc -->
+<ul>
+<li><a href="#决策树简介">决策树简介</a>
+<ul>
+<li><a href="#构造决策树">构造决策树</a></li>
+</ul></li>
+<li><a href="#id3-算法">ID3 算法</a>
+<ul>
+<li><a href="#概揽">概揽</a></li>
+<li><a href="#信息增益">信息增益</a></li>
+<li><a href="#划分数据集">划分数据集</a></li>
+<li><a href="#递归构建决策树">递归构建决策树</a></li>
+</ul></li>
+<li><a href="#总结">总结</a></li>
+<li><a href="#参考">参考</a></li>
+</ul>
+<!-- tocstop -->
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Decision-Tree/">Decision Tree</a><a href="/tags/ID3/">ID3</a>
+      </span>
+      
+
+    </div>
+
+    
+    <div class="article-meta pull-right">
+      <span>
+        <i class="icon-comments"></i>
+        <span>
+          <a href="/2016/07/16/决策树之ID3算法详解/#comment">
+            Comments</a>
+        </span>
+      </span>
+    </div>
+    
+  </div>
+</article>
+
+
+  <article>
+
+  
+  
+  <h3 class="article-title"><a href="/2016/06/23/Understanding RNN LSTM Networks/"><span>
+        Understanding RNN&amp;LSTM Networks</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/06/23/Understanding RNN LSTM Networks/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-06-23T01:53:00.000Z">
+          2016-06-23
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>转载自：http://colah.github.io/posts/2015-08-Understanding-LSTMs/</p>
+<!-- toc -->
+<ul>
+<li><a href="#recurrent-neural-networks">Recurrent Neural Networks</a></li>
+<li><a href="#the-problem-of-long-term-dependencies">The Problem of Long-Term Dependencies</a></li>
+<li><a href="#lstm-networks">LSTM Networks</a>
+<ul>
+<li><a href="#the-core-idea-behind-lstms">The Core Idea Behind LSTMs</a></li>
+<li><a href="#step-by-step-lstm-walk-through">Step-by-Step LSTM Walk Through</a></li>
+<li><a href="#variants-on-long-short-term-memory">Variants on Long Short Term Memory</a></li>
+</ul></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+<!-- tocstop -->
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/RNN/">RNN</a><a href="/tags/LSTM/">LSTM</a>
+      </span>
+      
+
+    </div>
+
+    
+    <div class="article-meta pull-right">
+      <span>
+        <i class="icon-comments"></i>
+        <span>
+          <a href="/2016/06/23/Understanding RNN LSTM Networks/#comment">
+            Comments</a>
+        </span>
+      </span>
+    </div>
+    
+  </div>
+</article>
+
+
+  <article>
+
+  
+  
+  <h3 class="article-title"><a href="/2016/03/24/Large Scale Machine Learning/"><span>
+        Large Scale Machine Learning</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/03/24/Large Scale Machine Learning/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-03-24T14:32:00.000Z">
+          2016-03-24
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <!-- toc -->
+<ul>
+<li><a href="#stochastic-gradient-descent">Stochastic Gradient Descent</a></li>
+<li><a href="#mini-batch-gradient-descent">Mini-Batch Gradient Descent</a>
+<ul>
+<li><a href="#stochastic-gradient-descent-convergence">Stochastic Gradient Descent Convergence</a></li>
+</ul></li>
+<li><a href="#online-learning">Online Learning</a></li>
+<li><a href="#map-reduce-and-data-parallelism">Map Reduce and Data Parallelism</a></li>
+</ul>
+<!-- tocstop -->
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/MapReduce/">MapReduce</a>
+      </span>
+      
+
+    </div>
+
+    
+    <div class="article-meta pull-right">
+      <span>
+        <i class="icon-comments"></i>
+        <span>
+          <a href="/2016/03/24/Large Scale Machine Learning/#comment">
+            Comments</a>
+        </span>
+      </span>
+    </div>
+    
+  </div>
+</article>
+
+
+  <article>
+
+  
+  
+  <h3 class="article-title"><a href="/2016/03/19/推荐系统 （Recommender Systems）/"><span>
+        推荐系统 （Recommender Systems）</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/03/19/推荐系统 （Recommender Systems）/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-03-19T14:32:00.000Z">
+          2016-03-19
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <!-- toc -->
+<ul>
+<li><a href="#problem-formulation">Problem Formulation</a></li>
+<li><a href="#content-based-recommendations">Content Based Recommendations</a></li>
+<li><a href="#collaborative-filtering">Collaborative Filtering</a>
+<ul>
+<li><a href="#collaborative-filtering-algorithm">Collaborative Filtering Algorithm</a>
+<ul>
+<li><a href="#vectorization-low-rank-matrix-factorization">Vectorization: Low Rank Matrix Factorization</a></li>
+<li><a href="#implementation-detail-mean-normalization">Implementation Detail: Mean Normalization</a></li>
+</ul></li>
+</ul></li>
+</ul>
+<!-- tocstop -->
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Recommender-Systems/">Recommender Systems</a><a href="/tags/Collaborative-Filtering/">Collaborative Filtering</a>
+      </span>
+      
+
+    </div>
+
+    
+    <div class="article-meta pull-right">
+      <span>
+        <i class="icon-comments"></i>
+        <span>
+          <a href="/2016/03/19/推荐系统 （Recommender Systems）/#comment">
+            Comments</a>
+        </span>
+      </span>
+    </div>
+    
+  </div>
+</article>
+
+
+  <article>
+
+  
+  
+  <h3 class="article-title"><a href="/2016/03/19/Anomaly Detection/"><span>
+        Anomaly Detection</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/03/19/Anomaly Detection/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-03-19T12:32:00.000Z">
+          2016-03-19
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <!-- toc -->
+<ul>
+<li><a href="#problem-motivation">Problem Motivation</a></li>
+<li><a href="#gaussian-distribution">Gaussian Distribution</a></li>
+<li><a href="#algorithm">Algorithm</a></li>
+<li><a href="#developing-and-evaluating-an-anomaly-detection-system">Developing and Evaluating an Anomaly Detection System</a></li>
+<li><a href="#anomaly-detection-vs-supervised-learning">Anomaly Detection vs. Supervised Learning</a></li>
+<li><a href="#choosing-what-features-to-use">Choosing What Features to Use</a></li>
+<li><a href="#multivariate-gaussian-distribution">Multivariate Gaussian Distribution</a></li>
+<li><a href="#anomaly-detection-using-the-multivariate-gaussian-distribution">Anomaly Detection using the Multivariate Gaussian Distribution</a></li>
+</ul>
+<!-- tocstop -->
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Machine-Learning/">Machine Learning</a>
+      </span>
+      
+
+    </div>
+
+    
+    <div class="article-meta pull-right">
+      <span>
+        <i class="icon-comments"></i>
+        <span>
+          <a href="/2016/03/19/Anomaly Detection/#comment">
+            Comments</a>
+        </span>
+      </span>
+    </div>
+    
+  </div>
+</article>
+
+
+
+<nav class="pagination">
+  
+  <a href="/page/4/" class="pagination-prev">Prev</a>
+  
+  
+  <a href="/page/6/" class="pagination-next">Next</a>
+  
+</nav>
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

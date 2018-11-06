@@ -1,0 +1,267 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    记录：在 Docker 上配置 PHP 应用 | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="记录：在 Docker 上配置 PHP 应用">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      记录：在 Docker 上配置 PHP 应用</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/01/17/记录：在 Docker 上配置 PHP 应用/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-01-16T16:16:06.000Z">
+          2016-01-17
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <blockquote>
+<p><strong>什么是Docker</strong> docker的英文本意是码头工人，也就是搬运工，这种搬运工搬运的是集装箱（Container），集装箱里面装的可不是商品货物，而是任意类型的App，Docker把App（叫Payload）装在Container内，通过Linux Container技术的包装将App变成一种标准化的、可移植的、自管理的组件，这种组件可以在你的latop上开发、调试、运行，最终非常方便和一致地运行在production环境下。</p>
+</blockquote>
+<a id="more"></a>
+<h2><span id="起">起</span></h2>
+<p>起因是腾讯云的学生审核通过了，然后就花一块钱买了个服务器，就想在腾讯云上也配置下我的（前）博客，但是又不想每次都重新配置环境，于是就想到了Docker，折腾了两三天网站总算是可以跑了，这里记录一下踩坑过程。</p>
+<blockquote>
+<p>Docker的核心底层技术是LXC（Linux Container），Docker在其上面加了薄薄的一层，添加了许多有用的功能。<a href="http://stackoverflow.com/questions/17989306/what-does-docker-add-to-lxc-tools-the-userspace-lxc-tools" target="_blank" rel="noopener">这篇stackoverflow</a>上的问题和答案很好地诠释了Docker和LXC的区别，能够让你更好的了解什么是Docker， 简单翻译下就是以下几点： * Docker提供了一种可移植的配置标准化机制，允许你一致性地在不同的机器上运行同一个Container；而LXC本身可能因为不同机器的不同配置而无法方便地移植运行； Docker以App为中心，为应用的部署做了很多优化，而LXC的帮助脚本主要是聚焦于如何机器启动地更快和耗更少的内存； * Docker为App提供了一种自动化构建机制（Dockerfile），包括打包，基础设施依赖管理和安装等等； * Docker提供了一种类似git的Container版本化的机制，允许你对你创建过的容器进行版本管理，依靠这种机制，你还可以下载别人创建的Container，甚至像git那样进行合并； * Docker Container是可重用的，依赖于版本化机制，你很容易重用别人的Container（叫Image），作为基础版本进行扩展； * Docker Container是可共享的，有点类似github一样，* Docker有自己的INDEX，你可以创建自己的Docker用户并上传和下载Docker Image； * Docker提供了很多的工具链，形成了一个生态系统；这些工具的目标是自动化、个性化和集成化，包括对PAAS平台的支持等；</p>
+</blockquote>
+<hr>
+<p>我之前其实是买过一本Docker的书的，但是还没来得及怎么看，这次突然要用就赶紧翻了翻，也Google了一下，发现了这个网站 : <a href="http://dockerpool.com/static/books/docker_practice/index.html" target="_blank" rel="noopener">Docker —— 从入门到实践</a>，结果发现书里的内容和这里基本一样，连名字也差不多，早知道就不买书了。</p>
+<p>就这样开始了学习Docker之旅。</p>
+<h2><span id="承">承</span></h2>
+<p>我的网站环境是nginx+php+mysql，鉴于数据库还用原来服务器上的就好，所以只需要配置nginx与php。</p>
+<p>这里有两个选项： * nginx和php放到一个docker里 * 把nginx和php分开放到两个docker里</p>
+<p>前者明显看起来简单一些，因为不涉及容器互联等问题还省事，但其实这种将所有服务放在一个容器内的模式有个形象的非官方称呼：Fat Container。与之相对的是将服务分拆到容器的模式。从Docker的设计可以看到，构建镜像的过程中可以指定唯一一个容器启动的指令，<strong>因此Docker天然适合一个容器只运行一种服务</strong>，而这也是官方更推崇的。</p>
+<p>由于我一开始并不知道一个docker只能运行一个服务，所以我选了第一种方案，然后就多踩了一个大坑。</p>
+<p>当时遇到这么一个有趣的现象：我用Dockerfile创建镜像，Dockerfile最后包含这么两条启动服务的命令 <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CMD</span><span class="bash"> [<span class="string">"nginx"</span>]</span></span><br><span class="line"><span class="bash">CMD [<span class="string">"php-fpm"</span>]</span></span><br></pre></td></tr></table></figure></p>
+<p>nginx天生就是后台服务，而php-fpm一这种方式可以前台运行，看起来这种组合挺好，容器启动之后也不会立刻终止，而是一直在运行，但是访问不了网站！！</p>
+<p>这是为什么呢？ 因为nginx在最后那个容器里没有启动，具体为什么没有启动我也不是很清楚，这也就是说Docker天然适合一个容器只运行一种服务的原因吧。可是如果只保留nginx的话，也会因为它是后台运行所以容器刚运行就会停止。</p>
+<p>然后我就好奇别人的nginx是怎么运行的。我就看了看<a href="https://hub.docker.com/_/nginx/" target="_blank" rel="noopener">nginx的官方镜像</a>，再它的dockerfile最后写的是： <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CMD [&quot;nginx&quot;, &quot;-g&quot;, &quot;daemon off;&quot;]</span><br></pre></td></tr></table></figure></p>
+<p>查了查然后知道通过这个参数可以让nginx前台运行，而不会使容器直接停止。</p>
+<p>然后我就把Dockerfile修改成这样： <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CMD</span><span class="bash"> [<span class="string">"php-fpm"</span>]</span></span><br><span class="line"><span class="bash">CMD [<span class="string">"nginx"</span>, <span class="string">"-g"</span>, <span class="string">"daemon off;"</span>]</span></span><br></pre></td></tr></table></figure></p>
+<p>大家应该也看出来了，这样就喜闻乐见地解析不了php了。</p>
+<h2><span id="转">转</span></h2>
+<p>接着我就好奇别人的集成好多服务的docker是怎么启动的，google到了几个这样的应用，然后就发现了<a href="http://supervisord.org/" target="_blank" rel="noopener">supervisord</a>，这个东东是一个进程管理器，可以完美解决上述问题，只需一个配置文件： <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[supervisord]</span><br><span class="line">nodaemon=true</span><br><span class="line"></span><br><span class="line">[program:php-fpm]</span><br><span class="line">command=php-fpm</span><br><span class="line"></span><br><span class="line">[program:nginx]</span><br><span class="line">command=nginx</span><br></pre></td></tr></table></figure></p>
+<p>配置和启动命令就可以写成： <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ADD</span><span class="bash"> ./supervisord.conf /etc/supervisord.conf</span></span><br><span class="line"><span class="bash">CMD [<span class="string">"supervisord"</span>]</span></span><br></pre></td></tr></table></figure></p>
+<h2><span id="合">合</span></h2>
+<p>这样困扰我好久的问题就解决了。不过这只是我踩到的总多坑的其中之一，算是比较大的一个，也是稍微有点分享价值的一个，相比这个问题的解决方案而言，解决这个问题的过程更有价值一些吧，故在此记录一下。</p>
+<p>ps : 还有个小坑也值得注意一下，我用centos7作为基础镜像，通过yum安装的php不自带mysqli模块，需要手动安装<code>RUN yum install -y php-mysqli</code>，这个当时找问题也找了好久。</p>
+<blockquote>
+<p><strong>参考</strong> http://dockerpool.com/static/books/docker_practice/index.html http://tech.uc.cn/?p=2726 http://avnpc.com/pages/build-php-develop-env-by-docker</p>
+</blockquote>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/踩坑现场/">踩坑现场</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/后台开发/">后台开发</a><a href="/tags/PHP/">PHP</a><a href="/tags/Docker/">Docker</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

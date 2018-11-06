@@ -1,0 +1,332 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    Dimensionality Reduction | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="Dimensionality Reduction">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      Dimensionality Reduction</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/03/13/Dimensionality Reduction/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-03-13T12:32:00.000Z">
+          2016-03-13
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <!-- toc -->
+<ul>
+<li><a href="#motivation-i-data-compression">Motivation I: Data Compression</a></li>
+<li><a href="#motivation-ii-visualization">Motivation II: Visualization</a></li>
+<li><a href="#principal-component-analysis-problem-formulation">Principal Component Analysis Problem Formulation</a></li>
+<li><a href="#principal-component-analysis-algorithm">Principal Component Analysis Algorithm</a></li>
+<li><a href="#choosing-the-number-of-principal-components">Choosing the Number of Principal Components</a></li>
+<li><a href="#reconstruction-from-compressed-representation">Reconstruction from Compressed Representation</a></li>
+<li><a href="#advice-for-applying-pca">Advice for Applying PCA</a></li>
+</ul>
+<!-- tocstop -->
+<a id="more"></a>
+<h1><span id="motivation-i-data-compression">Motivation I: Data Compression</span></h1>
+<p>We may want to reduce the dimension of our features if we have a lot of redundant data.</p>
+<p>To do this, we find two highly correlated features, plot them, and make a new line that seems to describe both features accurately. We place all the new features on this single line.</p>
+<p>Doing dimensionality reduction will <strong>reduce the total data</strong> we have to store in computer memory and will <strong>speed up our learning algorithm</strong>.</p>
+<p>Note: in dimensionality reduction, we are reducing our features rather than our number of examples. Our variable <span class="math inline">\(m\)</span> will stay the same size; <span class="math inline">\(n\)</span>, the number of features each example from <span class="math inline">\(x^{(1)}\)</span> to <span class="math inline">\(x^{(m)}\)</span> carries, will be reduced.</p>
+<h1><span id="motivation-ii-visualization">Motivation II: Visualization</span></h1>
+<p>It is not easy to visualize data that is more than three dimensions. We can reduce the dimensions of our data to 3 or less in order to plot it.</p>
+<p>We need to find new features, <span class="math inline">\(z_1, z_2\)</span> (and perhaps <span class="math inline">\(z_3\)</span>) that can effectively summarize all the other features.</p>
+<p>Example: hundreds of features related to a country's economic system may all be combined into one feature that you call &quot;Economic Activity.&quot;</p>
+<h1><span id="principal-component-analysis-problem-formulation">Principal Component Analysis Problem Formulation</span></h1>
+<p>The most popular dimensionality reduction algorithm is <em>Principal Component Analysis</em> (<strong>PCA</strong>)</p>
+<p><strong>Problem formulation</strong></p>
+<p>Given two features, <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span>, we want to find a single line that effectively describes both features at once. We then map our old features onto this new line to get a new single feature.</p>
+<p>The same can be done with three features, where we map them to a plane.</p>
+<p>The <strong>goal</strong> of PCA is to reduce the average of all the distances of every feature to the projection line. This is the <strong>projection error</strong>.</p>
+<ul>
+<li>Reduce from 2d to 1d: find a direction (a vector <span class="math inline">\(u^{(1)} \in \mathbb{R}^n\)</span>) onto which to project the data so as to minimize the projection error.</li>
+</ul>
+<p>The more general case is as follows:</p>
+<ul>
+<li>Reduce from n-dimension to k-dimension: Find <span class="math inline">\(k\)</span> vectors <span class="math inline">\(u^{(1)}, u^{(2)}, \dots, u^{(k)}\)</span> onto which to project the data so as to minimize the projection error.</li>
+</ul>
+<p>If we are converting from 3d to 2d, we will project our data onto two directions (a plane), so <span class="math inline">\(k\)</span> will be 2.</p>
+<p><strong>PCA is not linear regression</strong> * In linear regression, we are minimizing the squared error from every point to our predictor line. These are vertical distances. * In PCA, we are minimizing the shortest distance, or shortest orthogonal distances, to our data points.</p>
+<p>More generally, in linear regression we are taking all our examples in <span class="math inline">\(x\)</span> and applying the parameters in <span class="math inline">\(\Theta\)</span> to predict <span class="math inline">\(y\)</span>.</p>
+<p>In PCA, we are taking a number of features <span class="math inline">\(x_1, x_2, \dots, x_n\)</span>, and finding a closest common dataset among them. We aren't trying to predict any result and we aren't applying any theta weights to the features.</p>
+<h1><span id="principal-component-analysis-algorithm">Principal Component Analysis Algorithm</span></h1>
+<p>Before we can apply PCA, there is a data pre-processing step we must perform:</p>
+<p><strong>Data preprocessing</strong></p>
+<ol type="1">
+<li>Let <span class="math inline">\(μ=\frac{1}{m}\sum^{m}_{i=1}x^{(i)}\)</span>.</li>
+<li>Replace each <span class="math inline">\(x^{(i)}\)</span> with <span class="math inline">\(x^{(i)}−μ\)</span>.</li>
+<li>Let <span class="math inline">\(σ^2_j=\frac{1}{m}\sum_i(x^{(i)}_j)^2\)</span></li>
+<li>Replace each <span class="math inline">\(x^{(i)}_j\)</span> with <span class="math inline">\(\frac{x^{(i)}_j}{σ_j}\)</span>.</li>
+</ol>
+<p>Above, we first subtract the mean of each feature from the original feature. Then we scale all the features (<span class="math inline">\(x_j^{(i)} = \dfrac{x_j^{(i)} - \mu_j}{s_j}\)</span>) We can define specifically what it means to reduce from 2d to 1d data as follows: <span class="math display">\[x^{(i)} \in \mathbb{R}^2 \rightarrow z^{(i)} \in \mathbb{R}\]</span> The <span class="math inline">\(z\)</span> values are all real numbers and are the projections of our features onto <span class="math inline">\(u^{(1)}\)</span>.</p>
+<p>So, PCA has two tasks: figure out <span class="math inline">\(u^{(1)},\dots,u^{(k)}\)</span> and also to find <span class="math inline">\(z_1, z_2, \dots, z_m\)</span>.</p>
+<p><strong>Mathematical proof</strong></p>
+<p>We would like to automatically select the direction <span class="math inline">\(u\)</span> corresponding to the first of the two figures shown above.</p>
+<p>To formalize this, note that given a unit vector <span class="math inline">\(u\)</span> and a point <span class="math inline">\(x\)</span>, the length of the projection of <span class="math inline">\(x\)</span> onto <span class="math inline">\(u\)</span> is given by <span class="math inline">\(x^Tu\)</span>. I.e., if <span class="math inline">\(x^{(i)}\)</span> is a point in our dataset ,then its projection onto <span class="math inline">\(u\)</span> is distance <span class="math inline">\(x^Tu\)</span> from the origin. Hence, to maximize the variance of the projections, we would like to choose a unit-length <span class="math inline">\(u\)</span> so as to <strong>maximize</strong>:</p>
+<p><span class="math display">\[\frac{1}{m}\sum^m_{i=1}(x^{(i)T}u)^2 = \frac{1}{m}\sum^m_{i=1}u^tx^{(i)}x^{(i)T}u = u^T(\frac{1}{m}\sum^m_{i=1}x^{(i)}x^{(i)T})u\]</span></p>
+<p>If you haven’t seen this before, try using the method of <a href="https://www.wikiwand.com/en/Lagrange_multiplier" target="_blank" rel="noopener">Lagrange multipliers(拉格朗日乘数法)</a> to maximize <span class="math inline">\(u^TΣu\)</span> subject to that <span class="math inline">\(u^Tu= 1\)</span>. You should be able to show that <span class="math inline">\(Σu=λu\)</span>, for some <span class="math inline">\(λ\)</span>, which implies <span class="math inline">\(u\)</span> is an eigenvector of <span class="math inline">\(Σ\)</span>, with eigenvalue <span class="math inline">\(λ\)</span>. Because <span class="math inline">\(Σ\)</span> is symmetric(对称的), the <span class="math inline">\(u_i\)</span> ’s will (or always can be chosen to be) orthogonal(正交的 ) to each other.</p>
+<p>We easily recognize that the maximizing this subject to <span class="math inline">\(||u||^2= 1\)</span> gives the principal eigenvector of <span class="math inline">\(Σ =\frac{1}{m}\sum^m_{i=1}x^{(i)}x^{(i)T}\)</span>, which is just the empirical <strong>covariance matrix</strong> of the data (assuming it has <strong>zero mean</strong>).</p>
+<p>To summarize, we have found that if we wish to find a 1-dimensional subspace with with to approximate the data, we should choose <span class="math inline">\(u\)</span> to be the principal eigenvector of <span class="math inline">\(Σ\)</span>. More generally, if we wish to project our data into a k-dimensional subspace (k &lt; n), we should choose <span class="math inline">\(u_1\)</span>, . . . , <span class="math inline">\(u_k\)</span> to be the top <span class="math inline">\(k\)</span> eigenvectors of <span class="math inline">\(Σ\)</span>. The <span class="math inline">\(u_i\)</span>’s now form a new, orthogonal basis for the data.</p>
+<p>Then, to represent <span class="math inline">\(x^{(i)}\)</span> in this basis, we need only compute the corresponding vector <span class="math display">\[y^{(i)}=\begin{bmatrix}
+u^T_1x^{(i)}     \\
+u^T_2x^{(i)}    \\
+\vdots  \\
+u^T_kx^{(i)}
+\end{bmatrix}∈\mathbb{R}^k\]</span></p>
+<p>Thus, whereas <span class="math inline">\(x^{(i)}∈\mathbb{R}^n\)</span>, the vector <span class="math inline">\(y^{(i)}\)</span> now gives a lower,k-dimensional, approximation/representation for <span class="math inline">\(x^{(i)}\)</span>. <strong>PCA</strong> is therefore also referred to as a <strong>dimensionality reduction</strong> algorithm. The vectors <span class="math inline">\(u_1\)</span>, . . . , <span class="math inline">\(u_k\)</span> are called the first <span class="math inline">\(k\)</span> principal components of the data.</p>
+<p><strong>The PCA Algorithm</strong></p>
+<p>1.<strong>Compute &quot;covariance matrix&quot;</strong> <span class="math display">\[ \large \Sigma = \dfrac{1}{m}\sum^m_{i=1}(x^{(i)})(x^{(i)})^T \]</span> This can be vectorized in Octave as: <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Sigma = (<span class="number">1</span>/m) * X' * X;</span><br></pre></td></tr></table></figure></p>
+<p>We denote the covariance matrix with a <strong>capital sigma</strong> (which happens to be the same symbol for summation, confusingly---they represent entirely different things).</p>
+<p>Note that <span class="math inline">\(x^{(i)}\)</span> is an <span class="math inline">\(n \times 1\)</span> vector, <span class="math inline">\((x^{(i)})^T\)</span> is an <span class="math inline">\(1 \times n\)</span> vector and <span class="math inline">\(X\)</span> is a <span class="math inline">\(m \times n\)</span> matrix (row-wise stored examples). The product of those will be an <span class="math inline">\(n \times n\)</span> matrix, which are the dimensions of <span class="math inline">\(\Sigma\)</span>.</p>
+<p>2.<strong>Compute &quot;eigenvectors&quot; of covariance matrix <span class="math inline">\(\Sigma\)</span></strong> <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[U,S,V] = svd(Sigma);</span><br></pre></td></tr></table></figure></p>
+<p><code>svd()</code> is the 'singular value decomposition(奇异值分解)', a built-in Octave function.</p>
+<p>What we actually want out of <code>svd()</code> is the '<code>U</code>' matrix of the Sigma covariance matrix: <span class="math inline">\(U \in \mathbb{R}^{n \times n}\)</span>. U contains <span class="math inline">\(u^{(1)},\dots,u^{(n)}\)</span>, which is exactly what we want.</p>
+<p>3.<strong>Take the first <span class="math inline">\(k\)</span> columns of the U matrix and compute <span class="math inline">\(z\)</span></strong></p>
+<p>We'll assign the first <span class="math inline">\(k\)</span> columns of U to a variable called '<strong>Ureduce</strong>'. This will be an <span class="math inline">\(n \times k\)</span> matrix. We compute z with: <span class="math display">\[ \large z^{(i)} = Ureduce^T \cdot x^{(i)} \]</span></p>
+<p><span class="math inline">\(Ureduce^T\)</span> will have dimensions <span class="math inline">\(k \times n\)</span> while <span class="math inline">\(x^{(i)}\)</span> will have dimensions <span class="math inline">\(n \times 1\)</span>. The product <span class="math inline">\(Ureduce^T \cdot x^{(i)}\)</span> will have dimensions <span class="math inline">\(k \times 1\)</span>.</p>
+<p>To <strong>summarize</strong>, the whole algorithm in octave is roughly: <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Sigma = (<span class="number">1</span>/m) * X' * X;  <span class="comment">% compute the covariance matrix</span></span><br><span class="line">[U,S,V] = svd(Sigma);    <span class="comment">% compute our projected directions</span></span><br><span class="line">Ureduce = U(:,<span class="number">1</span>:k);      <span class="comment">% take the first k directions</span></span><br><span class="line">z = Ureduce' * x;        <span class="comment">% compute the projected data points</span></span><br></pre></td></tr></table></figure></p>
+<h1><span id="choosing-the-number-of-principal-components">Choosing the Number of Principal Components</span></h1>
+<p>How do we choose <span class="math inline">\(k\)</span>, also called the number of principal components? Recall that <span class="math inline">\(k\)</span> is the dimension we are reducing to.</p>
+<p>One way to choose <span class="math inline">\(k\)</span> is by using the following formula: * Given the average squared projection error: <span class="math inline">\(\dfrac{1}{m}\sum^m_{i=1}||x^{(i)} - x_{approx}^{(i)}||^2\)</span> * Also given the total variation in the data: <span class="math inline">\(\dfrac{1}{m}\sum^m_{i=1}||x^{(i)}||^2\)</span> * Choose <span class="math inline">\(k\)</span> to be the smallest value such that: <span class="math display">\[\large \dfrac{\dfrac{1}{m}\sum^m_{i=1}||x^{(i)} - x_{approx}^{(i)}||^2}{\dfrac{1}{m}\sum^m_{i=1}||x^{(i)}||^2} \leq 0.01\]</span></p>
+<p>In other words, the squared projection error divided by the total variation should be less than one percent, so that <strong>99% of the variance is retained</strong>.</p>
+<p><strong>Algorithm for choosing <span class="math inline">\(k\)</span></strong></p>
+<ol type="1">
+<li>Try PCA with <span class="math inline">\(k = 1, 2, \dots\)</span></li>
+<li>Compute <span class="math inline">\(U_{reduce}, z, x\)</span></li>
+<li>Check the formula given above that 99% of the variance is retained. If not, go to step one and increase <span class="math inline">\(k\)</span>.</li>
+</ol>
+<p>This procedure would actually be horribly inefficient. In Octave, we will call svd: <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[U,S,V] = svd(Sigma)</span><br></pre></td></tr></table></figure></p>
+<p>Which gives us a matrix S. We can actually check for 99% of retained variance using the S matrix as follows: <span class="math display">\[ \dfrac{\sum_{i=1}^kS_{ii}}{\sum_{i=1}^nS_{ii}} \geq 0.99 \]</span></p>
+<h1><span id="reconstruction-from-compressed-representation">Reconstruction from Compressed Representation</span></h1>
+<p>If we use PCA to compress our data, how can we uncompress our data, or go back to our original number of features?</p>
+<p>To go from 1-dimension back to 2d we do: <span class="math inline">\(z \in \mathbb{R} \rightarrow x \in \mathbb{R}^2\)</span>.</p>
+<p>We can do this with the equation: <span class="math inline">\(x_{approx}^{(1)} = U_{reduce} \cdot z^{(1)}\)</span>.</p>
+<p>Note that we can only get approximations of our original data.</p>
+<h1><span id="advice-for-applying-pca">Advice for Applying PCA</span></h1>
+<p>The most common use of PCA is to <strong>speed up supervised learning</strong>.</p>
+<p>Given a training set with a large number of features (e.g. <span class="math inline">\(x^{(1)},\dots,x^{(m)} \in \mathbb{R}^{10000}\)</span>) we can use PCA to reduce the number of features in each example of the training set (e.g. <span class="math inline">\(z^{(1)},\dots,z^{(m)} \in \mathbb{R}^{1000}\)</span>).</p>
+<p>Note that we should define the PCA reduction from <span class="math inline">\(x^{(i)}\)</span> to <span class="math inline">\(z^{(i)}\)</span> only on the training set and not on the cross-validation or test sets. You can apply the mapping <span class="math inline">\(z^{(i)}\)</span> to your cross-validation and test sets after it is defined on the training set.</p>
+<p><strong>Applications</strong> * Compressions * Reduce space of data * Speed up algorithm * Visualization of data * Choose k = 2 or k = 3</p>
+<p><strong>Bad use of PCA</strong>: trying to prevent overfitting. We might think that reducing the features with PCA would be an effective way to address overfitting. It might work, but is not recommended because it does not consider the values of our results <span class="math inline">\(y\)</span>. Using just regularization will be at least as effective.</p>
+<p>Don't assume you need to do PCA. <strong>Try your full machine learning algorithm without PCA first</strong>. Then use PCA if you find that you need it.</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/PCA/">PCA</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

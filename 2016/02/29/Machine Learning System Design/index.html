@@ -1,0 +1,321 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    Machine Learning System Design | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="Machine Learning System Design">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      Machine Learning System Design</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/02/29/Machine Learning System Design/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-02-29T12:32:00.000Z">
+          2016-02-29
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <!-- toc -->
+<ul>
+<li><a href="#prioritizing-what-to-work-on">Prioritizing What to Work On</a></li>
+<li><a href="#error-analysis">Error Analysis</a></li>
+<li><a href="#error-metrics-for-skewed-classes">Error Metrics for Skewed Classes</a></li>
+<li><a href="#trading-off-precision-and-recall">Trading Off Precision and Recall</a></li>
+<li><a href="#data-for-machine-learning">Data for Machine Learning</a></li>
+</ul>
+<!-- tocstop -->
+<a id="more"></a>
+<h2><span id="prioritizing-what-to-work-on">Prioritizing What to Work On</span></h2>
+<p>Different ways we can approach a machine learning problem:</p>
+<ul>
+<li>Collect lots of data (for example &quot;honeypot&quot; project but doesn't always work)</li>
+<li>Develop sophisticated features (for example: using email header data in spam emails)</li>
+<li>Develop algorithms to process your input in different ways (recognizing misspellings in spam).</li>
+</ul>
+<p>It is difficult to tell which of the options will be helpful. Error Analysis</p>
+<h2><span id="error-analysis">Error Analysis</span></h2>
+<p>The recommended approach to solving machine learning problems is:</p>
+<ul>
+<li>Start with a simple algorithm, implement it quickly, and test it early.</li>
+<li>Plot learning curves to decide if more data, more features, etc. will help</li>
+<li>Error analysis: manually examine the errors on examples in the cross validation set and try to spot a trend.</li>
+</ul>
+<p>It's important to get error results as a single, numerical value. Otherwise it is difficult to assess your algorithm's performance. You may need to process your input before it is useful. For example, if your input is a set of words, you may want to treat the same word with different forms (fail/failing/failed) as one word, so must use &quot;stemming software&quot; to recognize them all as one.</p>
+<h2><span id="error-metrics-for-skewed-classes">Error Metrics for Skewed Classes</span></h2>
+<p>It is sometimes difficult to tell whether a reduction in error is actually an improvement of the algorithm.</p>
+<p>For example: In predicting a cancer diagnoses where 0.5% of the examples have cancer, we find our learning algorithm has a 1% error. However, if we were to simply classify every single example as a 0, then our error would reduce to 0.5% even though we did not improve the algorithm.</p>
+<p>This usually happens with skewed(倾斜) classes; that is, when our class is very rare in the entire data set.</p>
+<p>Or to say it another way, when we have lot more examples from one class than from the other class.</p>
+<p>For this we can use <strong>Precision/Recall</strong>.</p>
+<p>Predicted: 1, Actual: 1 --- True positive Predicted: 0, Actual: 0 --- True negative Predicted: 0, Actual, 1 --- False negative Predicted: 1, Actual: 0 --- False positive</p>
+<table>
+<colgroup>
+<col style="width: 55%">
+<col style="width: 44%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">table</th>
+<th style="text-align: center;"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Predicted: 1, Actual: 1 --- True positive</td>
+<td style="text-align: center;">Predicted: 1, Actual: 0 --- False positive</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Predicted: 0, Actual, 1 --- False negative</td>
+<td style="text-align: center;">Predicted: 0, Actual: 0 --- True negative</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precision</strong> : of all patients we predicted where y=1, what fraction actually has cancer?</p>
+<p><span class="math display">\[\frac{True\ Positives}{Total\ number\ of\ predicted\ positives}=\frac{True\ Positives}{True\ Positives + False\ positives}\]</span></p>
+<p><strong>Recall</strong> : Of all the patients that actually have cancer, what fraction did we correctly detect as having cancer?</p>
+<p><span class="math display">\[\frac{True\ Positives}{Number\ of\ actual\ positives}=\frac{True\ Positives}{True\ Positives + False\ negatives}\]</span></p>
+<p>These two metrics give us a better sense of how our classifier is doing. We want <strong>both</strong> precision and recall to be <strong>high</strong>.</p>
+<p>In the example at the beginning of the section, if we classify all patients as 0, then our recall will be <span class="math inline">\(\frac{0}{0+f}=0\)</span>, so despite having a lower error percentage, we can quickly see it has worse <strong>recall</strong>.</p>
+<p>Note 1: if an algorithm predicts only negatives like it does in one of exercises, the precision is not defined, it is impossible to divide by 0. F1 score will not be defined too.</p>
+<p>Note 2: a manual calculation of precision and other functions is a error prone process. it is very easy though to create an Excel file for this. Put into it a table 2*2 for all necessary input values, label them like &quot;TruePositives&quot;, &quot;FalsePositives&quot;, and on other cells of Excel add formulas like =SUM(TruePositive, FalsePositive, TrueNegative, FalseNegative), label this one AllExamples. Then on another cell label Accuracy and a formula: =SUM(TruePositive,TrueNegative)/AllExamples. The same with others. After 10 minutes you will have a spreadsheet for all examples and questions.</p>
+<h2><span id="trading-off-precision-and-recall">Trading Off Precision and Recall</span></h2>
+<p>We might want a confident prediction of two classes using logistic regression. One way is to increase our threshold:</p>
+<p><span class="math display">\[Predict\ 1\ if:\ h_θ(x)≥0.7\]</span> <span class="math display">\[Predict\ 0\ if:\ h_θ(x)&lt;0.7\]</span></p>
+<p>This way, we only predict cancer if the patient has a 70% chance.</p>
+<p>Doing this, we will have <strong>higher precision</strong> but <strong>lower recall</strong> (refer to the definitions in the previous section).</p>
+<p>In the opposite example, we can lower our threshold:</p>
+<p><span class="math display">\[Predict\ 1\ if:\ h_θ(x)≥0.3\]</span> <span class="math display">\[Predict\ 0\ if:\ h_θ(x)&lt;0.3\]</span></p>
+<p>That way, we get a very safe prediction. This will cause <strong>higher recall</strong> but <strong>lower precision</strong>.</p>
+<ul>
+<li>The greater the threshold, the greater the precision and the lower the recall.</li>
+<li>The lower the threshold, the greater the recall and the lower the precision.</li>
+</ul>
+<p>In order to turn these two metrics into one single number, we can take the <span class="math inline">\(F\)</span> value.</p>
+<p>One way is to take the <strong>average</strong>: <span class="math display">\[\frac{P+R}{2}\]</span></p>
+<p>This does not work well. If we predict all <span class="math inline">\(y=0\)</span> then that will bring the average up despite having 0 recall. If we predict all examples as <span class="math inline">\(y=1\)</span>, then the very high recall will bring up the average despite having 0 precision.</p>
+<p>A better way is to compute the <span class="math inline">\(F\ Score\)</span> (or <strong>F1 score</strong>):</p>
+<p><span class="math display">\[F\ Score=2\frac{PR}{P+R}\]</span></p>
+<p>In order for the <span class="math inline">\(F\ Score\)</span> to be large, both <strong>precision</strong> and <strong>recall</strong> must be <strong>large</strong>.</p>
+<p>We want to train precision and recall on the <strong>cross validation set</strong> so as not to bias our test set.</p>
+<h2><span id="data-for-machine-learning">Data for Machine Learning</span></h2>
+<p>How much data should we train on?</p>
+<p>In certain cases, an &quot;inferior(差的) algorithm,&quot; if given enough data, can outperform(胜过) a superior algorithm with less data.</p>
+<p>We must choose our features to have <strong>enough</strong> information. A useful test is: Given input x, would a human expert be able to confidently predict y?</p>
+<p><strong>Rationale(原理) for large data</strong>: if we have a <strong>low bias</strong> algorithm (many features or hidden units making a very complex function), then the larger the training set we use, the less we will have overfitting (and the more accurate the algorithm will be on the test set).</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/F1/">F1</a><a href="/tags/Recall/">Recall</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

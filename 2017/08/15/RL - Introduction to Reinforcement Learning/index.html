@@ -1,0 +1,535 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    RL - Introduction to Reinforcement Learning | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="RL - Introduction to Reinforcement Learning">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      RL - Introduction to Reinforcement Learning</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/08/15/RL - Introduction to Reinforcement Learning/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-08-15T07:55:19.000Z">
+          2017-08-15
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>RL, especially DRL (Deep Reinforcement Learning) has been an fervent research area during these years. One of the most famous RL work would be AlphaGo, who has beat <a href="https://www.wikiwand.com/en/Lee_Sedol" target="_blank" rel="noopener">Lee Sedol</a>, one of the best players at Go, last year. And in this year (2017), AlphaGo won three games with Ke Jie, the world No.1 ranked player. Not only in Go, AI has defeated best human play in many games, which illustrates the powerful of the combination of Deep Learning and Reinfocement Learning. However, despite AI plays better games than human, AI takes more time, data and energy to train which cannot be said to be very intelligent. Still, there are numerous unexplored and unsolved problems in RL research, that's also why we want to learn RL.</p>
+<p>This is the first note of David Silver's <a href="http://www0.cs.ucl.ac.uk/staff/D.Silver/web/Teaching.html" target="_blank" rel="noopener">RL course</a>.</p>
+<a id="more"></a>
+<!-- toc -->
+<ul>
+<li><a href="#about-reinforcement-learning">About Reinforcement Learning</a></li>
+<li><a href="#the-reinforcement-learning-problem">The Reinforcement Learning Problem</a></li>
+<li><a href="#inside-an-rl-agent">Inside An RL Agent</a></li>
+<li><a href="#problems-within-reinforcement-learning">Problems within Reinforcement Learning</a></li>
+</ul>
+<!-- tocstop -->
+<h2><span id="about-reinforcement-learning">About Reinforcement Learning</span></h2>
+<p>Reinforcement Learning is one of the three major branches of Machine Learning, and is also the intersect of many different disciplines, as the following two figure illustrated.</p>
+<p><img src="/images/branches.png"></p>
+<p><img src="/images/faces.png"></p>
+<p>There are several reasons that makes reinforcement learning different from other machine learning paradigms:</p>
+<ul>
+<li>There is no supervisor, only a <em>reward</em> signal</li>
+<li>Feedback is delayed, not instantaneous</li>
+<li>Time really matters (sequential, non i.i.d data)</li>
+<li>Agent's actions affect the subsequent data it receives</li>
+</ul>
+<p>There are some examples of Reinforcement Learning:</p>
+<ul>
+<li>Fly stunt manoeuvres in a helicopter</li>
+<li>Defeat the world champion at Backgammon</li>
+<li>Manage an investment portfolio</li>
+<li>Control a power station</li>
+<li>Make a humanoid robot walk</li>
+<li>Play many diﬀerent Atari games better than humans</li>
+</ul>
+<h2><span id="the-reinforcement-learning-problem">The Reinforcement Learning Problem</span></h2>
+<p><strong>Rewards</strong></p>
+<p>We say RL do not have a supervisor, just a <em>reward</em> signal. Then what is <em>reward</em> ?</p>
+<ul>
+<li>A <strong>reward</strong> <span class="math inline">\(R_t\)</span> is a scalar feedback signal</li>
+<li>Indicates how well agent is doing at step <span class="math inline">\(t\)</span></li>
+<li>The agent's job is to maximise cumulative reward</li>
+</ul>
+<p>Reinforcement Learning is based on the <strong>reward hypothesis</strong>, which is</p>
+<blockquote>
+<p>Definition of reward hypothesis</p>
+<p><strong>All goals can be described by the maximisation of expected cumulative reward.</strong></p>
+</blockquote>
+<p>There are some examples of <em>rewards</em> :</p>
+<ul>
+<li>Fly stunt manoeuvres in a helicopter
+<ul>
+<li>+ve reward for following desired trajectory</li>
+<li>−ve reward for crashing</li>
+</ul></li>
+<li>Defeat the world champion at Backgammon
+<ul>
+<li>+/−ve reward for winning/losing a game</li>
+</ul></li>
+<li>Manage an investment portfolio
+<ul>
+<li>+ve reward for each $ in bank</li>
+</ul></li>
+<li>Control a power station
+<ul>
+<li>+ve reward for producing power</li>
+<li>−ve reward for exceeding safety thresholds</li>
+</ul></li>
+<li>Make a humanoid robot walk
+<ul>
+<li>+ve reward for forward motion</li>
+<li>−ve reward for falling over</li>
+</ul></li>
+<li>Play many diﬀerent Atari games better than humans
+<ul>
+<li>+/−ve reward for increasing/decreasing score</li>
+</ul></li>
+</ul>
+<p><strong>Sequential Decision Making</strong></p>
+<p>So, according to the <em>reward hypothesis</em>, our goal is to <strong>select actions to maximise total future reward</strong>. Actions may have long term consequences as well as reward may be delayed. It may be better to sacrifice immediate reward to gain more long-term reward. For instance, a ﬁnancial investment may take months to mature and a helicopter might prevent a crash in several hours.</p>
+<p><strong>Agent and Environment</strong></p>
+<p><img src="/images/aae.png"></p>
+<p>Agents and envrionments are big concepts in RL. They have following relationships:</p>
+<ul>
+<li>At each step <span class="math inline">\(t\)</span> the agent:
+<ul>
+<li>Excutes action <span class="math inline">\(A_t\)</span></li>
+<li>Receives observation <span class="math inline">\(O_t\)</span></li>
+<li>Receives scalar reward <span class="math inline">\(R_t\)</span></li>
+</ul></li>
+<li>The environment:
+<ul>
+<li>Receives action <span class="math inline">\(A_t\)</span></li>
+<li>Emits observation <span class="math inline">\(O_{t+1}\)</span></li>
+<li>Emits scalar reward <span class="math inline">\(R_{t+1}\)</span></li>
+</ul></li>
+<li><span class="math inline">\(t\)</span> increments at env. step</li>
+</ul>
+<p><strong>State</strong></p>
+<p><em>History and State</em></p>
+<p>The <strong>history</strong> is the sequence of observations, actions, rewards: <span class="math display">\[
+H_t = O_1, R_1, A_1, ..., A_{t-1}, O_t, R_t
+\]</span> which means all observable variables up to time <span class="math inline">\(t\)</span>, i.e. the sensorimotor stream of a robot or embodied agent.</p>
+<p>What happens next depends on the history:</p>
+<ul>
+<li>The agent selects actions</li>
+<li>The environments select observations/rewards</li>
+</ul>
+<p><strong>State</strong> is the information used to determine what happens next. Formally, state is a function of the history: <span class="math display">\[
+S_t = f(H_t)
+\]</span> <em>Environment State</em></p>
+<p>The <strong>environment state</strong> <span class="math inline">\(S^e_t\)</span> is the environment's private representation, i.e. whatever data the environment uses to pick the next observation /reward. The environment state is not usually visible to the agent. Even if <span class="math inline">\(S^e_t\)</span> is visible, it may contain irrelevant information.</p>
+<p><em>Agent State</em></p>
+<p>The <strong>agent state</strong> <span class="math inline">\(S^a_t\)</span> is the agent's internal representation, i.e. whatever information the agent uses to pick the next action. It is the information used by reinforcement learning algotithms. It can be any function of history: <span class="math display">\[
+S^a_t=f(H_t)
+\]</span> <em>Information State</em></p>
+<p>An <strong>information state</strong> (a.k.a. <strong>Markov state</strong>) contains all useful information from the history.</p>
+<blockquote>
+<p>Definition</p>
+<p><strong>A state <span class="math inline">\(S_t\)</span> is Markov if and only if</strong> <span class="math display">\[
+P[S_{t+1}|S_t]=P[S_{t+1}|S_1,...,S_t]
+\]</span></p>
+</blockquote>
+<p>The above formular means:</p>
+<ul>
+<li><p>&quot;The future is independent of the past given the present&quot; <span class="math display">\[
+H_{1:t}\rightarrow S_t\rightarrow H_{t+1:\infty}
+\]</span></p></li>
+<li><p>Once the state is known, the history may be thrown away.</p></li>
+<li><p>The state is a sufficient statistic of the future</p></li>
+<li><p>The environment state <span class="math inline">\(S^e_t\)</span> is Markov</p></li>
+<li><p>The history <span class="math inline">\(H_t\)</span> is Markov</p></li>
+</ul>
+<p><em>Rat Example</em></p>
+<p>Here is an example to explain what is state, imagine you are a rat and your master would decide whether to excuted you or give you a pice of cheese. The master makes decisions according to a sequence of signals, the first two sequence and the result are shown in the figure below:</p>
+<p><img src="/images/firsttwo.png"></p>
+<p>The question is, what would you get if the sequence is like below:</p>
+<p><img src="/images/que.png"></p>
+<p>Well, the answer you may give is decided by what is your agent state：</p>
+<ul>
+<li>If agent state = last 3 items in sequence, then the answer would be being excuted.</li>
+<li>If agent state = counters for lights, bells and levers, then the answer would be given a piece of cheese.</li>
+<li>What if agent state = complete sequence?</li>
+</ul>
+<p><em>Fully Observable Environments</em></p>
+<p><strong>Full observability</strong>: agent <strong>directly</strong> observes environment state: <span class="math display">\[
+O_t = S^a_t=S^e_t
+\]</span></p>
+<ul>
+<li>Agent state = environment state = information state</li>
+<li>Formally, this is a <strong>Markov decision process</strong> (MDP)</li>
+</ul>
+<p><em>Partially Observable Environments</em></p>
+<p><strong>Partial observability</strong>: agent <strong>indirectly</strong> observes environment:</p>
+<ul>
+<li>A robot with camera vision isn't told its absolute location</li>
+<li>A trading agent only observes current prices</li>
+<li>A poker playing agent only observes public cards</li>
+</ul>
+<p>With partial observability, agent state ≠ environment state, formally this is a <strong>partially observable Markov decision process</strong> (POMDP).</p>
+<p>In this situation, agent must construct its own state representation <span class="math inline">\(S^a_t\)</span>, e.g.</p>
+<ul>
+<li>Complete history: <span class="math inline">\(S^a_t = H_t\)</span></li>
+<li><strong>Beliefs</strong> of environment state: <span class="math inline">\(S_t^a = (P[S^e_t=s^1], …, P[S^e_t=s^n])\)</span></li>
+<li>Recurrent neural network: <span class="math inline">\(S^a_t=\sigma(S^a_{t-1}W_s+O_tW_o)\)</span></li>
+</ul>
+<h2><span id="inside-an-rl-agent">Inside An RL Agent</span></h2>
+<p>There are three major components of an RL agent, actually, an agent may include one or more of these:</p>
+<ul>
+<li>Policy: agent's behaviour function</li>
+<li>Value function：how good is each state and/or action</li>
+<li>Model：agent's representation of the environment</li>
+</ul>
+<p><strong>Policy</strong></p>
+<p>A <strong>Policy</strong> is the agent's behaviour, it is a map from state to action, e.g.</p>
+<ul>
+<li>Deterministic policy：<span class="math inline">\(a = \pi(s)\)</span></li>
+<li>Stochastic policy: <span class="math inline">\(\pi(a|s)=P[A_t=a|S_t=s]\)</span></li>
+</ul>
+<p><strong>Value Function</strong></p>
+<p>Value function is a prediction of future reward, it is used to evaluate the goodness/badness of states. And therefore to select between actions: <span class="math display">\[
+v_\pi(s)=E_\pi[R_{t+1}+\gamma R_{t+2}+\gamma^2R_{t+3}+...|S_t=s]
+\]</span> <strong>Model</strong></p>
+<p>A <strong>model</strong> predicts what the environment will do next, denoted by <span class="math inline">\(P\)</span> which predicts the next state and by <span class="math inline">\(R\)</span> predicts the next (immediate) reward: <span class="math display">\[
+P^a_{ss&#39;}=P[S_{t+1}=s&#39;|S_t=s,A_t=a]
+\]</span></p>
+<p><span class="math display">\[
+R^a_s=E[R_{t+1}|S_t=s, A_t=a]
+\]</span></p>
+<p><em>Maze Example</em></p>
+<p><img src="/images/maze.png"></p>
+<p>Let an RL agent to solve the maze, the parameters are:</p>
+<ul>
+<li>Rewards: -1 per time-step</li>
+<li>Actions: N, E, S, W</li>
+<li>States: Agent's location</li>
+</ul>
+<p>Then the policy map would be (arrows represent policy <span class="math inline">\(\pi(s)\)</span> for each state <span class="math inline">\(s\)</span>):</p>
+<p><img src="/images/mpolicy.png"></p>
+<p>And the value function at each state would be (numbers represent value <span class="math inline">\(v_\pi(s)\)</span> of each state <span class="math inline">\(s\)</span>):</p>
+<p><img src="/images/mvf.png"></p>
+<p>Model could be visualize as following:</p>
+<ul>
+<li>Grid layout represents transition model <span class="math inline">\(P^a_{ss&#39;}\)</span></li>
+<li>Numbers represent immediate reward <span class="math inline">\(R^a_s\)</span> from each state <span class="math inline">\(s\)</span> (same for all <span class="math inline">\(a\)</span>)</li>
+</ul>
+<p><img src="/images/mm.png"></p>
+<ul>
+<li>Agent may have an internal model of the environment</li>
+<li>Dynamics: how actions change the state</li>
+<li>Rewards: how much reward from each state</li>
+<li>The model may be imperfect</li>
+</ul>
+<p><strong>Categorizing RL agents</strong></p>
+<p>RL agents could be categorized into several categories:</p>
+<ul>
+<li>Value Based
+<ul>
+<li>No Policy (Implicit)</li>
+<li>Value Function</li>
+</ul></li>
+<li>Policy Based
+<ul>
+<li>Policy</li>
+<li>No Value Function</li>
+</ul></li>
+<li>Actor Critic
+<ul>
+<li>Policy</li>
+<li>Value Function</li>
+</ul></li>
+<li>Model Free
+<ul>
+<li>Policy and/or Value Function</li>
+<li>No Model</li>
+</ul></li>
+<li>Model Based
+<ul>
+<li>Policy and/or Value Function</li>
+<li>Model</li>
+</ul></li>
+</ul>
+<p><img src="/images/agcat.png"></p>
+<h2><span id="problems-within-reinforcement-learning">Problems within Reinforcement Learning</span></h2>
+<p>This section only proposes questions without providing the solutions.</p>
+<p><strong>Learning and Planning</strong></p>
+<p>Two fundamental problems in sequential decision making:</p>
+<ul>
+<li>Reinforcement Learning
+<ul>
+<li>The environment is initially unknown</li>
+<li>The agent interacts with the environment</li>
+<li>The agent improves its policy</li>
+</ul></li>
+<li>Planning:
+<ul>
+<li>A model of the environment is known</li>
+<li>The agent performs computations with its model (without any external interaction)</li>
+<li>The agent improves its policy a.k.a. deliberation, reasoning, introspection, pondering, thought, search</li>
+</ul></li>
+</ul>
+<p><em>Atari Example: Reinforcement Learning</em></p>
+<p><img src="/images/atari.png"></p>
+<p>In atari games, rules of the game are unknown, the agent learns directly from interactive game-play by picking actions on joystick and seeing pixels and scores.</p>
+<p><em>Atari Example: Planning</em></p>
+<p><img src="/images/plan.png"></p>
+<p>In such case, rules of the game are known, which means the agent could query the emulator as known as a perfect model inside agent's brain. Agents need plan ahead to ﬁnd optimal policy, e.g. tree search.</p>
+<p><strong>Exploration and Exploitation</strong></p>
+<ul>
+<li>Reinforcement learning is like trial-and-error learning</li>
+<li>The agent should discover a good policy</li>
+<li>From its experiences of the environment</li>
+<li>Without losing too much reward along the way</li>
+<li><strong>Exploration</strong> ﬁnds more information about the environment</li>
+<li><strong>Exploitation</strong> exploits known information to maximise reward</li>
+<li>It is usually important to explore as well as exploit</li>
+</ul>
+<p><em>Examples</em></p>
+<ul>
+<li>Restaurant Selection
+<ul>
+<li>Exploitation Go to your favourite restaurant</li>
+<li>Exploration Try a new restaurant</li>
+</ul></li>
+<li>Online Banner Advertisements
+<ul>
+<li>Exploitation Show the most successful advert</li>
+<li>Exploration Show a diﬀerent advert</li>
+</ul></li>
+<li>Game Playing
+<ul>
+<li>Exploitation Play the move you believe is best</li>
+<li>Exploration Play an experimental move</li>
+</ul></li>
+</ul>
+<p><strong>Prediction and Control</strong></p>
+<p><strong>Prediction</strong>: evaluate the future</p>
+<ul>
+<li>Given a policy</li>
+</ul>
+<p><strong>Control</strong>: optimise the future</p>
+<ul>
+<li>Find the best policy</li>
+</ul>
+<p>End. Next note will introduce the Markov Decision Processes.</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Reinforcement-Learning/">Reinforcement Learning</a><a href="/tags/AlphaGo/">AlphaGo</a><a href="/tags/增强学习/">增强学习</a><a href="/tags/DRL/">DRL</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

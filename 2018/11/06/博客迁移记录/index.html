@@ -1,0 +1,278 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    博客迁移踩坑记录 | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="博客迁移踩坑记录">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      博客迁移踩坑记录</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2018/11/06/博客迁移记录/" rel="bookmark">
+        <time class="entry-date published" datetime="2018-11-06T02:41:47.000Z">
+          2018-11-06
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>博客迁移这个事早就想做了，但到现在才有时间和精力来完成。为什么要迁移呢？主要有几个原因：</p>
+<ol type="1">
+<li>原博客更新、维护较麻烦。原博客是自己用<a href="https://www.52coding.com.cn/2015/12/21/%E8%AE%B0%E5%BD%95%EF%BC%9A%E7%94%A8PHP%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95web%E6%A1%86%E6%9E%B6/">PHP搭的</a>，之前的写作方式是用Markdown写好导出HTML，再修改HTML代码使得静态资源（图片等）加载正确，这就使得修改博客很麻烦；更换主题也很麻烦，博客的主题和Markdown的主题通常会有冲突，所以想换个样式就要改半天CSS。</li>
+<li>觉得UI有些难看，想要简洁一些；</li>
+<li>安全问题。</li>
+</ol>
+<p>现在的解决方案是<a href="https://pages.github.com/" target="_blank" rel="noopener">Github Pages</a> + <a href="https://hexo.io/zh-cn/index.html" target="_blank" rel="noopener">Hexo</a>，主题选的是<a href="https://github.com/CodeDaraW/Hacker" target="_blank" rel="noopener">Hacker</a>，迁移了两天终于搞完了，在此简单记录一下遇到的坑。</p>
+<a id="more"></a>
+<h3><span id="数学公式渲染">数学公式渲染</span></h3>
+<p>由于这款主题并不是原生支持数学公式的，所以要添加些代码来使其支持Mathjax，参考http://searene.me/2016/10/01/Let-hexo-support-mathjax/。</p>
+<p>首先在主题的<code>layout</code>目录下新建<code>mathjax.ejs</code>，文件内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&lt;% if (theme.mathjax.enable)&#123; %&gt;</span><br><span class="line">&lt;script type=&quot;text/x-mathjax-config&quot;&gt;</span><br><span class="line">  MathJax.Hub.Config(&#123;</span><br><span class="line">      tex2jax: &#123;</span><br><span class="line">        inlineMath: [ [&apos;$&apos;,&apos;$&apos;], [&quot;\\(&quot;,&quot;\\)&quot;] ],</span><br><span class="line">        processEscapes: true</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;script type=&quot;text/x-mathjax-config&quot;&gt;</span><br><span class="line">  MathJax.Hub.Config(&#123;</span><br><span class="line">        tex2jax: &#123;</span><br><span class="line">          skipTags: [&apos;script&apos;, &apos;noscript&apos;, &apos;style&apos;, &apos;textarea&apos;, &apos;pre&apos;, &apos;code&apos;]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;);</span><br><span class="line">  &lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;script type=&quot;text/x-mathjax-config&quot;&gt;</span><br><span class="line">  MathJax.Hub.Queue(function() &#123;</span><br><span class="line">          var all = MathJax.Hub.getAllJax(), i;</span><br><span class="line">          for(i=0; i &lt; all.length; i += 1) &#123;</span><br><span class="line">              all[i].SourceElement().parentNode.className += &apos; has-jax&apos;;</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;);</span><br><span class="line">  &lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;script type=&quot;text/javascript&quot; src=&quot;https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot;&gt;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;% &#125; %&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>坑1</strong>：之前在网上查到的代码给的MathJax.js的链接多是过期的，如<code>https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML</code>，然后就被坑了。</p>
+<p>然后在<code>layout.ejs</code>中加上<code>&lt;%- partial('mathjax') %&gt;</code>，文件整体内容为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE HTML&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;%- partial(&apos;components/head&apos;) %&gt;</span><br><span class="line"></span><br><span class="line">&lt;body&gt;</span><br><span class="line">  &lt;div class=&quot;blog&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;content&quot;&gt;</span><br><span class="line"></span><br><span class="line">      &lt;%- partial(&apos;components/header&apos;) %&gt;</span><br><span class="line"></span><br><span class="line">      &lt;main class=&quot;site-main posts-loop&quot;&gt;</span><br><span class="line">        &lt;%- body %&gt;</span><br><span class="line">      &lt;/main&gt;</span><br><span class="line"></span><br><span class="line">      &lt;%- partial(&apos;components/footer&apos;) %&gt;</span><br><span class="line">      &lt;%- partial(&apos;components/googleanalytics&apos;) %&gt;</span><br><span class="line">      &lt;!-- 新加的 --&gt;</span><br><span class="line">      &lt;%- partial(&apos;mathjax&apos;) %&gt; </span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line"></span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>最后在主题的<code>_config.yml</code>中加上： <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">mathjax:</span></span><br><span class="line"><span class="attr">  enable:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure></p>
+<p>如果没有安装MathJax插件的话需要安装一下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-math --save</span><br></pre></td></tr></table></figure>
+<p>重新生成一下应该就可以渲染数学公式了。</p>
+<p>不过还有些问题，就是你写在数学公式里的下划线(<code>_</code>)、反斜杠(<code>\</code>)、和星号(<code>*</code>)会被当作普通Markdown来处理，比如把下划线(<code>_</code>)和星号(<code>*</code>)替换成<code>&lt;em&gt;</code>标签等导致公式渲染错误。</p>
+<p>解决方案来自https://zhuanlan.zhihu.com/p/33857596，打开<code>nodes_modules/marked/lib/marked.js</code>:</p>
+<ol type="1">
+<li><p>找到下面的代码:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">escape</span>: <span class="regexp">/^\\([\\`*&#123;&#125;\[\]()# +\-.!_&gt;])/</span>,</span><br></pre></td></tr></table></figure>
+<p>改为：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">escape</span>: <span class="regexp">/^\\([`*&#123;&#125;\[\]()# +\-.!_&gt;])/</span>,</span><br></pre></td></tr></table></figure></li>
+<li><p>找到em的符号:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">em: <span class="regexp">/^\b((?:[^]|_)+?)\b|^*((?:**|[\s\S])+?)*(?!*)/</span>,</span><br></pre></td></tr></table></figure>
+<p>改为：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">em:<span class="regexp">/^\*((?:\*\*|[\s\S])+?)\*(?!\*)/</span>,</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>这样就去掉了<code>_</code>的斜体含义，在公式里使用<code>_</code>就没有问题了，不过要使用<code>*</code>的话要用<code>\ast</code>替代。</p>
+<h3><span id="评论">评论</span></h3>
+<p>Hacker这款主题支持两种评论方式，分别是<a href="https://github.com/imsun/gitment" target="_blank" rel="noopener">Gitment</a>和<a href="https://disqus.com/" target="_blank" rel="noopener">Disqus</a>。一开始试了试Gitment，配置好之后发现不能用，其原因是有一个服务过期了而作者也弃坑了没人管，我也懒得折腾就转向了Disqus，注册了之后就可以直接使用，十分方便（不过好像要翻墙才能访问= =）。</p>
+<h3><span id="其他">其他</span></h3>
+<p><strong>分割线</strong></p>
+<p>Hexo中写作不能使用<code>___</code>来实现分割线，用了的话会generate失败，而且提示的错误很迷，曾经困扰了我很久。</p>
+<p><strong>修改网站Icon</strong></p>
+<p>在主题中找到<code>head.ejs</code>文件，其中有一行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;link href=&quot;&lt;%- config.root %&gt;favicon.ico&quot; rel=&quot;icon&quot;&gt;;</span><br></pre></td></tr></table></figure>
+<p>按理来说只要往根目录（<code>source</code>）下放一个<code>favicon.ico</code>的文件即可。</p>
+<p>可是我的就不行，不知道什么原因，把文件名换了就可以了，所以我改成了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;link href=&quot;&lt;%- config.root %&gt;icon.png&quot; type=&quot;image/png&quot; rel=&quot;icon&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>然后往根目录下放一个<code>icon.png</code>，解决。</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/踩坑现场/">踩坑现场</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Mathjax/">Mathjax</a><a href="/tags/Hexo/">Hexo</a><a href="/tags/Disqus/">Disqus</a><a href="/tags/Gitment/">Gitment</a><a href="/tags/Github-Pages/">Github Pages</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

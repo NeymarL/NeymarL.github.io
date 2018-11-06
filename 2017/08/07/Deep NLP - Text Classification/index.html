@@ -1,0 +1,375 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    Deep NLP - Text Classification | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="Deep NLP - Text Classification">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      Deep NLP - Text Classification</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/08/07/Deep NLP - Text Classification/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-08-07T13:30:19.000Z">
+          2017-08-07
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <!-- toc -->
+<ul>
+<li><a href="#generative-and-discriminative-models">Generative and discriminative models</a></li>
+<li><a href="#naive-bayes-classifier">Naive Bayes classifier</a></li>
+<li><a href="#feature-representations">Feature Representations</a></li>
+<li><a href="#logistic-regression">Logistic Regression</a></li>
+<li><a href="#representing-text-with-a-rnn">Representing Text with a RNN</a></li>
+<li><a href="#convolutional-neural-network">Convolutional Neural Network</a></li>
+</ul>
+<!-- tocstop -->
+<a id="more"></a>
+<h2><span id="generative-and-discriminative-models">Generative and discriminative models</span></h2>
+<p><strong>Generative (joint) models</strong> <span class="math inline">\(P(c, d)\)</span></p>
+<ul>
+<li>Model the distribution of individual classes and place probabilities over both observed data and hidden variables (such as labels)</li>
+<li>E.g. n-gram models, hidden Markov models, probabilistic context-free grammars, IBM machine translation models, Naive Bayes...</li>
+</ul>
+<p><strong>Discriminative (conditional) models</strong> <span class="math inline">\(P(c|d)\)</span></p>
+<ul>
+<li>Learn <strong>boundaries</strong> between classes. Take data as given and put probability over the hidden structure give the data.</li>
+<li>E.g. logistic regression, maximum entropy models, conditional random fields, support-vector machines...</li>
+</ul>
+<h2><span id="naive-bayes-classifier">Naive Bayes classifier</span></h2>
+<p>Bayes' Rule: <span class="math display">\[
+P(c|d) = \frac{P(c)P(d|c)}{P(d)}
+\]</span> This estimates the probility of document <span class="math inline">\(d\)</span> being in class <span class="math inline">\(c\)</span>, assuming document length <span class="math inline">\(n_d\)</span> and tokens <span class="math inline">\(t\)</span>: <span class="math display">\[
+P(c|d)  = P(c)P(d|c) = P(c)\prod_{1 ≤i≤n_d}P(t_i|c)
+\]</span> <strong>Independence Assumptions</strong></p>
+<p>Note that we assume <span class="math inline">\(P(t_i|c) = P(t_j|c)\)</span> independent of token position. This is the <strong>naive</strong> part of Naive Bayes.</p>
+<p>The best class is the <strong>maximum a posteriori (MAP)</strong> clss: <span class="math display">\[
+c_{map} = \arg\max_{c\in C}P(c|d) = \arg\max_{c\in C}P(c)\prod_{1≤i≤n_d}P(t_i|c)
+\]</span> Multiplying tons of small probabilities is tricky, so <strong>log space</strong> it: <span class="math display">\[
+c_{map} = \arg\max_{c\in C}(\log P(c) + \sum_{1≤i≤n_d}\log P(t_i|c))
+\]</span> Finally: zero probabilities are bad. Add <strong>smoothing</strong>: <span class="math display">\[
+P(t|c) = \frac{T_{ct}}{\sum_{t&#39;\in V}T_{ct&#39;}} =&gt; P(t|c) = \frac{T_{ct} + 1}{\sum_{t&#39;\in V}T_{ct&#39;}+|V|}
+\]</span> This is Laplace or add-1 smoothing.</p>
+<p><strong>Advantages</strong></p>
+<ul>
+<li>Simple</li>
+<li>Interpretable</li>
+<li>Fast (linear in size of training set and test document)</li>
+<li>Text representation trivial (bag of words)</li>
+</ul>
+<p><strong>Drawbacks</strong></p>
+<ul>
+<li>Independence assumptions often too strong</li>
+<li>Sentence/document structure not taken into account</li>
+<li>Naive classifier has zero probabilities; smoothing is awkward</li>
+</ul>
+<p><strong>Naive Bayes is a generative model!!!</strong> <span class="math display">\[
+P(c|d)P(d) = P(d|c)P(c) = P(d, c)
+\]</span> While we are using a conditional probability <span class="math inline">\(P(c|d)\)</span> for classification, we model the joint probability of <span class="math inline">\(c\)</span> and <span class="math inline">\(d\)</span>.</p>
+<p>This meas it is trivial to invert the process and generate new text given a class label.</p>
+<h2><span id="feature-representations">Feature Representations</span></h2>
+<p>A feature representation (of text) can be viewed as a vector where each element indicates the presence or absence of a given feature in a document.</p>
+<p>Note: features can be binary (presence/absence), multinomial (count) or continuous (eg. TF-IDF weighted).</p>
+<h2><span id="logistic-regression">Logistic Regression</span></h2>
+<p>A general framework for learning <span class="math inline">\(P(c|d)\)</span> is <strong>logistic regression</strong></p>
+<ul>
+<li>logistic : because is uses a logistic function</li>
+<li>regression : combines a feature vector (<span class="math inline">\(d\)</span>) with weights (<span class="math inline">\(\beta\)</span>) to compute an answer</li>
+</ul>
+<p>Binary case: <span class="math display">\[
+P(true|d) = \frac{1}{1 + \exp(\beta_0 + \sum_i\beta_iX_i)}
+\]</span></p>
+<p><span class="math display">\[
+P(false|d) = \frac{\exp(\beta_0 + \sum_i\beta_iX_i)}{1 + \exp(\beta_0+\sum_i\beta_iX_i)}
+\]</span></p>
+<p>Multinomial case: <span class="math display">\[
+P(c|d) = \frac{\exp(\beta_{c,0} + \sum_i\beta_{c,i}X_i)}{\sum_{c&#39;}\exp(\beta_{c&#39;,0} +  \sum_i\beta_{c&#39;,i}X_i)}
+\]</span> The binary and general functions for the logistic regression can be simplified as follows: <span class="math display">\[
+P(c|d) = \frac{1}{1+\exp(-z)}
+\]</span></p>
+<p><span class="math display">\[
+P(c|d) = \frac{\exp(z_c)}{\sum_{c&#39;}\exp(z_{c&#39;})}
+\]</span></p>
+<p>which are referred to as the <strong>logistic</strong> and <strong>softmax</strong> function.</p>
+<p>Given this model formulation, we want to learn parameters <span class="math inline">\(β\)</span> that maximise the conditional likelihood of the data according to the model.</p>
+<p>Due to the softmax function we not only construct a classifier, but learn <strong>probability distributions</strong> over classifications.</p>
+<p>There are many ways to chose weights <span class="math inline">\(β\)</span>:</p>
+<ul>
+<li>Perceptron Find misclassified examples and move weights in the direction of their correct class</li>
+<li>Margin-Based Methods such as Support Vector Machines can be used for learning weights</li>
+<li>Logistic Regression Directly maximise the conditional log-likelihood via gradient descent.</li>
+</ul>
+<p><strong>Advantages</strong></p>
+<ul>
+<li>Still reasonably simple</li>
+<li>Results are very interpretable</li>
+<li>Do not assume statistical independence between features!</li>
+</ul>
+<p><strong>Drawbacks</strong></p>
+<ul>
+<li>Harder to learn than Naive Bayes</li>
+<li>Manually designing features can be expensive</li>
+<li>Will not necessarily generalise well due to hand-craftedfeatures</li>
+</ul>
+<h2><span id="representing-text-with-a-rnn">Representing Text with a RNN</span></h2>
+<p><img src="/images/NLP/RNNre.png"></p>
+<ul>
+<li><span class="math inline">\(h_i\)</span> is a function of <span class="math inline">\(x\{0:i\}\)</span> and <span class="math inline">\(h\{0:i−1\}\)</span></li>
+<li>It contains information about all text read up to point <span class="math inline">\(i\)</span>.</li>
+<li>The first half of this lecture was focused on learning a representation <span class="math inline">\(X\)</span> for a given text</li>
+</ul>
+<p>So in order to classify text we can simply take a trained language model and extract text representations from the final hidden state <span class="math inline">\(c_n\)</span>.</p>
+<p>Classification as before using a logistic regression: <span class="math display">\[
+P(c|d) = \frac{\exp(\beta_{c,0} + \sum_i\beta_{c,i}h_{ni})}{\sum_{c&#39;}\exp(\beta_{c&#39;,0} +  \sum_i\beta_{c&#39;,i}h_{ni})}
+\]</span> ✅ Can use RNN + Logistic Regression out of the box ✅ Can in fact use any other classifier on top of <span class="math inline">\(h\)</span> ! ❌ How to ensure that <span class="math inline">\(h\)</span> pays attention to relevant aspects of data?</p>
+<p><strong>Move the classification function inside the network</strong></p>
+<p><img src="/images/NLP/RNNtext.png"></p>
+<p>This is a simple <strong>Multilayer Perceptron (MLP)</strong>. We can train the model using the cross-entropy loss: <span class="math display">\[
+L_i = -\sum_c y_c \log P(c|d_i) = -\log (\frac{\exp(m_c)}{\sum_j\exp(m_j)})
+\]</span></p>
+<ul>
+<li>Cross-entropy is designed to deal with errors on <strong>probabilities</strong>.</li>
+<li>Optimizing means minimizing the cross-entropy between the estiated class probabilities (<span class="math inline">\(P(c|d)\)</span>) and the ture distribution.</li>
+<li>There are many alternative losses (hinge-loss, square error, L1 loss).</li>
+</ul>
+<p><strong>Dual Objective RNN</strong></p>
+<p>In practice it may make sense to combine an LM objective with classifier training and to optimise the two losses jointly.</p>
+<p><img src="/images/NLP/DualRNN.png"> <span class="math display">\[
+J = \alpha J_{class} + (1-\alpha)J_{lm}
+\]</span> Such a joint loss enables making use of text beyond labelled data.</p>
+<p><strong>Bi-Directional RNNs</strong></p>
+<p>Another way to add signal is to process the input text both in a forward and in a backward sequence.</p>
+<p><img src="/images/NLP/BiRNN.png"></p>
+<p>The update rules for this directly follow the regular forward-facing RNN arhitecture. In practice, bidirectional networks have shown to be more robust than unidirectional networks.</p>
+<p>A bidirectional network can be used as a classifier simply by redefining <span class="math inline">\(d\)</span> to be the <strong>concatenation</strong> of both final hidden states: <span class="math display">\[
+d = (\rightarrow{h_n}||h_0\leftarrow)
+\]</span> <strong>RNN Classifier can be either a generative or a discriminative model</strong></p>
+<p><img src="/images/NLP/seq2seq.png"></p>
+<p>Encoder: discriminative (it does not model the probability of the text) Joint-model: generative (learns both <span class="math inline">\(P(c)\)</span> and <span class="math inline">\(P(d)\)</span>).</p>
+<h2><span id="convolutional-neural-network">Convolutional Neural Network</span></h2>
+<p>Reasons to consider CNNs for Text:</p>
+<ul>
+<li>✅ Really fast (GPU)</li>
+<li>✅ BOW is often sufficient</li>
+<li>✅ Actually can take some structure into account</li>
+<li>❌ Not sequential in its processing of input data</li>
+<li>❌ Easier to discriminate than to generate variably sized data</li>
+</ul>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/NLP/">NLP</a><a href="/tags/Deep-NLP/">Deep NLP</a><a href="/tags/LSTM/">LSTM</a><a href="/tags/Naive-Bayes/">Naive Bayes</a><a href="/tags/Text-Classification/">Text Classification</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

@@ -1,0 +1,466 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    海量数据挖掘（三）：Finding Similar Sets | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="海量数据挖掘（三）：Finding Similar Sets">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      海量数据挖掘（三）：Finding Similar Sets</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/01/04/海量数据挖掘（三）：Finding Similar Sets/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-01-04T14:41:06.000Z">
+          2016-01-04
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <blockquote>
+<p>此系列为Cousera上Standford的<a href="https://class.coursera.org/mmds-002" target="_blank" rel="noopener">Mining Massive Datasets</a>课程学习笔记。 这是该系列的第三篇笔记：<strong>Finding Similar Sets</strong></p>
+</blockquote>
+<a id="more"></a>
+<!-- toc -->
+<ul>
+<li><a href="#应用介绍-applications">应用介绍 Applications</a>
+<ul>
+<li><a href="#相似文档-similar-documents">相似文档 Similar Documents</a></li>
+</ul></li>
+<li><a href="#shingles">Shingles</a>
+<ul>
+<li><a href="#shingles-和相似度的关系">Shingles 和相似度的关系</a></li>
+<li><a href="#压缩">压缩</a></li>
+</ul></li>
+<li><a href="#minhashing">Minhashing</a>
+<ul>
+<li><a href="#jaccard-similarity">Jaccard Similarity</a></li>
+<li><a href="#from-sets-to-boolean-matrices">From Sets to Boolean Matrices</a></li>
+<li><a href="#four-types-of-rows">Four Types of Rows</a></li>
+<li><a href="#minhashing-1">Minhashing</a></li>
+<li><a href="#性质">性质</a></li>
+<li><a href="#minhashing-的实现">Minhashing 的实现</a></li>
+</ul></li>
+<li><a href="#locality-sensitive-hashing">Locality-Sensitive Hashing</a>
+<ul>
+<li><a href="#lsh">LSH</a>
+<ul>
+<li><a href="#lsh-for-minhashing-signatures">LSH for Minhashing Signatures</a></li>
+</ul></li>
+<li><a href="#hash-function-for-one-bucket">Hash Function for One Bucket</a></li>
+<li><a href="#analysis-of-lsh">Analysis of LSH</a></li>
+<li><a href="#lsh-summary">LSH Summary</a></li>
+</ul></li>
+<li><a href="#applications-of-lsh">Applications of LSH</a>
+<ul>
+<li><a href="#实体解析-entity-resolution">实体解析 Entity Resolution</a></li>
+<li><a href="#指纹匹配-fingerprint-matching">指纹匹配 Fingerprint Matching</a></li>
+<li><a href="#finding-duplicate-news-articles">Finding Duplicate News Articles</a></li>
+</ul></li>
+</ul>
+<!-- tocstop -->
+<h2><span id="应用介绍-applications">应用介绍 Applications</span></h2>
+<p>许多数据挖掘的问题都可以被化为是找相似集的问题，比如： 1. 具有很多相似单词的页面可以被认为是相同的主题.. 2. 找具有相似品味的NetFlix(一家在世界多国提供网路随选串流影片的公司)用户，向他们推荐电影。 3. 实体解析(Entity resolution)</p>
+<h3><span id="相似文档-similar-documents">相似文档 Similar Documents</span></h3>
+<p>给定一堆文档，比如web页面，找到具有大量相同文字的文档对，可以用来发现： * 镜像站点。应用：网页去重 * 抄袭，包括大量引用。 * 来自不同的站点的相似的文章，比如多家媒体都报道某一事件。</p>
+<p><strong>基本技术</strong></p>
+<ol type="1">
+<li><strong>Shingling</strong> : 把文档，邮件等等转换成集合。</li>
+<li><strong>Minhashing</strong> : 把大的集合转换成短的标志(signature)并且保持着相似性。</li>
+<li><strong>Locality-sensitive hashing</strong> : 专注于可能相似的标志对儿(pairs of signature)。</li>
+</ol>
+<p><strong>图解</strong></p>
+<p><img src="/images/1451286062856.png"></p>
+<h2><span id="shingles">Shingles</span></h2>
+<blockquote>
+<p><strong>k-shingle</strong> 或 <strong>k-gram</strong> 是指文档中连续出现的 <strong>k</strong> 个字符构成的序列。</p>
+</blockquote>
+<p>举例说明： 给定 <code>k=2 , doc = abcab</code> 。 每两个字符构成一个shingle, 即： <code>ab</code>, <code>bc</code>, <code>ca</code>, <code>ab</code>，所以2-Shingles的集合就为：<code>{ab, bc, ca}</code></p>
+<p>这样就可以用一个<code>k-shingles</code>的集合表示一个文档！</p>
+<h3><span id="shingles-和相似度的关系">Shingles 和相似度的关系</span></h3>
+<p>如果我们发想两个文档中有大量的shingles相同，那么这两个文档就是相似的而且很直观。</p>
+<p>如果改变文档中的一个单词，只会影响这个单词前后<code>k</code>个字符的<code>k-shingles</code>。</p>
+<p>如果重新把文档中的段落排序，只会影响段落边界周围的<code>2k</code>个<code>k-shingles</code>。</p>
+<p><em>举例说明</em> <code>k = 3</code>， &quot;The dog which chased the cat&quot; <strong>vs</strong> &quot;The dog that chased the cat&quot;</p>
+<p>第二句把第一句的<code>which</code>改成了<code>that</code>，处理之后之只有7个<code>3-shingles</code> 被替换了，分别是：<code>'g w'</code>, <code>' wh'</code>, <code>'whi'</code> , <code>'hic'</code>, <code>'ich'</code>, <code>'ch '</code>和 <code>'h c'</code>。</p>
+<h3><span id="压缩">压缩</span></h3>
+<p>值得注意的是，如果k取的比较大的话（比如比较论文通常取k=9），shingles会很长，就比较浪费空间了，我们可以把shingles通过hash操作变成一个整数（4个字节），我们管这个整数叫 <code>tokens</code>。之后就可以用一组<code>token</code>来表示一个文档了。</p>
+<p>Two documents could (rarely) appear to have shingles in common, when in fact only the hash values were shared.</p>
+<h2><span id="minhashing">Minhashing</span></h2>
+<h3><span id="jaccard-similarity">Jaccard Similarity</span></h3>
+<p>杰卡德相似系数</p>
+<p>两个集合的Jaccard Similarity定义：交集除以并集。</p>
+<blockquote>
+<p><span class="math inline">\(Sim(C_1, C_2) =\frac{ |C_1 \cap C_2|} {|C_1 \cup C_2|}\)</span></p>
+</blockquote>
+<p><img src="/images/1451358527521.png"></p>
+<p>比如上图，两个集合的交集为 <span class="math inline">\(3\)</span>，并集为 <span class="math inline">\(8\)</span>, 所以相似系数为：<span class="math inline">\(\frac{3}{8}\)</span></p>
+<h3><span id="from-sets-to-boolean-matrices">From Sets to Boolean Matrices</span></h3>
+<p>把集合转换成布尔矩阵</p>
+<p>为了方便计算Jaccard Similarity，我们需要把集合转换成矩阵。</p>
+<ul>
+<li><p>矩阵的行表示集合中的各个元素，比如每个<code>k-shingles</code></p></li>
+<li><p>矩阵的列表示各个集合，比如每个文档的<code>k-shingles</code>集合</p></li>
+<li><p>如果行 <span class="math inline">\(e\)</span> 是列 <span class="math inline">\(S\)</span> 的一个成员，那么在<span class="math inline">\(e\)</span>行<span class="math inline">\(S\)</span>列的值为<span class="math inline">\(1\)</span>，否则为<span class="math inline">\(0\)</span></p></li>
+<li><p>两列之间的相似度就是Jaccard 相似度。</p></li>
+<li><p>通常情况下，这会是一个稀疏矩阵。</p></li>
+</ul>
+<p><strong>举个例子</strong> <img src="/images/1451359226406.png"></p>
+<p>图中矩阵只有两列<span class="math inline">\(C_1\)</span>和<span class="math inline">\(C_2\)</span>，他们的相似度就等于都为<span class="math inline">\(1\)</span>的行除以至少有一个为<span class="math inline">\(1\)</span>的行，即： &gt; <span class="math inline">\(Sim(C_1, C_2) = 2/5 = 0.4\)</span></p>
+<h3><span id="four-types-of-rows">Four Types of Rows</span></h3>
+<p>给定两列<span class="math inline">\(C_1\)</span>和<span class="math inline">\(C_2\)</span>，我们定义一下四种类型的行： <img src="/images/1451359444350.png"></p>
+<p>现在可以这么计算Jaccard相似度了：<span class="math inline">\(Sim(C_1, C_2) = \frac{a}{a + b + c}\)</span></p>
+<h3><span id="minhashing">Minhashing</span></h3>
+<p>假设行是随机排列的，定义 <span class="math inline">\(minhash\)</span> <span class="math inline">\(function\)</span> <span class="math inline">\(h(C)\)</span> = the number of the first (in the permuted order) row in which column C has 1 如果没看懂后面有例子。</p>
+<p>通常用一些（比如100）独立的hash function来为每列创建<span class="math inline">\(Signature\)</span>。</p>
+<p>这些signatures存储在一个<span class="math inline">\(signature\)</span> <span class="math inline">\(matrix\)</span>– whose columns represent the sets and the rows represent the minhash values, in order for that column.</p>
+<p><strong>例子</strong></p>
+<p>输入矩阵： <img src="/images/1451362719714.png"></p>
+<p>上图右侧为输入矩阵，左侧为3组随机排列。</p>
+<p>先看第一组（紫色的） * 排列的第一行是矩阵的第五行，该行第二列和第四列为<span class="math inline">\(1\)</span>, 其余为<span class="math inline">\(0\)</span>, 所以该组的minhash value为<code>0 1 0 1</code>; * 排列的第二行是矩阵的第六行，该行第一列和第三行为<span class="math inline">\(1\)</span>,其余为<span class="math inline">\(0\)</span>，所以minhash value的第二、四行不变，第一、三行改为当前行号，即：<code>2 1 2 1</code>; * 由于每列都非零，这组就结束了，最后的minhash value就是<code>2 1 2 1</code>。</p>
+<p>在看第二组（黄色的） * 排列的第一行是矩阵的第三行，该行的第二列和第四列为<span class="math inline">\(1\)</span>，其余列为<span class="math inline">\(0\)</span>，所以minhash value的第二、四列变为当前行号，第一、三列不变，即：<code>0 1 0 1</code> * 排列的第二行是矩阵的第二行，该行第一、四列为<span class="math inline">\(1\)</span>，其余为<span class="math inline">\(0\)</span>，由于minhash value的第四列值不为0，所以第四列值不变，第一列值变为当前行好，即：<code>2 1 0 1</code> * 排列的第三行是矩阵的四行，该行第一、四列值为<span class="math inline">\(1\)</span>，而minhash value里的一、四列已不为0,所以没有变化，即还是：<code>2 1 0 1</code> * 排列的第四行是矩阵的第一行，该行第一、三列值为<span class="math inline">\(1\)</span>，所以minhash value的第三列变为当前行号，其余不变，即：<code>2 1 4 1</code></p>
+<p>第三组留给读者自己练习，总体的标志矩阵(Signature matrix)就是： <img src="/images/1451363798021.png"></p>
+<h3><span id="性质">性质</span></h3>
+<p>所有排列的<span class="math inline">\(h(C_1) = h(C_2)\)</span>的概率等于这两列的Jaccard相似度： &gt; <span class="math inline">\(P(h(C_1) = h(C_2)) = Sim(C_1, C_2)\)</span></p>
+<p>都等于<span class="math inline">\(\frac{a}{a+b+c}\)</span>！</p>
+<p><strong>Why?</strong></p>
+<p><span class="math inline">\(h(C_1) = h(C_2)\)</span>只有在a类型的行中出现，所以<span class="math inline">\(h(C_1) = h(C_2)\)</span>这个事件就相当于a类型的行出现，那么<span class="math inline">\(h(C_1) = h(C_2)\)</span>的概率就是a类型的行出现的概率，即<span class="math inline">\(\frac{a}{a+b+c}\)</span>。</p>
+<p><strong>标志的相似度</strong></p>
+<ul>
+<li>The <strong>similarity of signatures</strong> is the fraction of the minhash functions in which they agree.
+<ul>
+<li>Thinking of signatures as columns of integers, the similarity of signatures is the fraction of rows in which they agree.</li>
+</ul></li>
+<li>Thus, the expected similarity of two signatures equals the Jaccard similarity of the columns or sets that the signatures represent.
+<ul>
+<li>And the longer the signatures, the smaller will be the expected error.</li>
+</ul></li>
+</ul>
+<p><strong>Minhash的例子</strong> 输入矩阵和上面那个例子相同： <img src="./1451362719714.png" alt="Input Matrix"></p>
+<p>得到标志矩阵： <img src="/images/1451363798021.png"></p>
+<p>我们来计算一下实际的Jaccard相似度与Signature的相似度。</p>
+<p>先看第一列和第二列，在输入矩阵中没有<span class="math inline">\(a\)</span>类型的行，所以Jaccard相似度为零; 在标志矩阵M中第一、二列也没有相同的一行，Signature相似度也为零。</p>
+<p>再看第一、三列，输入矩阵中只有一行非<span class="math inline">\(a\)</span>类型，所以Jaccard相似度为<span class="math inline">\(0.75\)</span>; 而标志矩阵中有两行值相同，一行值不同，所以Signature相似度为<span class="math inline">\(0.67\)</span></p>
+<p>同理第2、4列的Jaccard相似度为<span class="math inline">\(0.75\)</span>，Signature相似度为<span class="math inline">\(1.00\)</span></p>
+<p>整理一下： | Similarity | 1-3 | 2-4 | 1-2| | :--- | :--- | :--- | :-- | |Jaccard | 0.75 | 0.75 | 0 | |Signature | 0.67 | 1.00 | 0 |</p>
+<p>可见由于排列的组数较少还是有一定误差的。</p>
+<h3><span id="minhashing-的实现">Minhashing 的实现</span></h3>
+<p>困难： * 假设数据量非常大，比如十亿行; * 把十亿行做随机排列是不现实的，也没有必要。 * 不过就算是用之前的随机排列序列，要* 100个随机排列序列，每个序列有十亿个项，光存储这些序列就要大约40TB。 * 随机读取可能会导致系统抖动。</p>
+<p>一个好的读取rows实践是准备很多（比如100个）hash function，避免生产序列。</p>
+<p>对于每一列 <span class="math inline">\(c\)</span> 和每个hash function <span class="math inline">\(h_j\)</span>， 只存储一个值<span class="math inline">\(M(i, c)\)</span>。</p>
+<p>目标是让 <span class="math inline">\(M(i, c)\)</span> 成为每个 <span class="math inline">\(h_i(r)\)</span> 的最小值， <span class="math inline">\(h_i(r)\)</span>等于<span class="math inline">\(r\)</span> where column c has 1 in row r * h i (r) gives order of rows for i th permutation</p>
+<p><strong>具体算法</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">for each row r do begin</span><br><span class="line">	for each hash function h_i do</span><br><span class="line">		compute h_i(r);</span><br><span class="line">	for each column c</span><br><span class="line">		if c has 1 in row r</span><br><span class="line">			for each hash function h_i do</span><br><span class="line">				if h_i(r) is samller than M(i, c) then</span><br><span class="line">					M(i, c) = h_i(r)</span><br><span class="line">end;</span><br></pre></td></tr></table></figure>
+<p>举例： <img src="/images/1451367036074.png"></p>
+<p>输入矩阵如图所示，取两个hash function : <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">h(x) = x mod 5</span><br><span class="line">g(x) = (2x + 1) mod 5</span><br></pre></td></tr></table></figure></p>
+<p>具体过程如下： <img src="/images/1451367200601.png"></p>
+<p>最后的结果的相似度的 <span class="math inline">\(0\)</span>, 实际的Jaccard相似度是<span class="math inline">\(\frac{1}{5}\)</span> ## Locality-Sensitive Hashing 局部敏感哈希</p>
+<h3><span id="lsh">LSH</span></h3>
+<p>基本思想：Generate from the collection of all elements (signatures in our example) a small list of <strong>candidate pairs</strong>: pairs of elements whose similarity must be evaluated.</p>
+<p>简单来说就是从我们Minhashing得到的标记矩阵生成可能相似的文档对列表。</p>
+<p>候选相似文档对 =&gt; 这一对的Jaccard相似度必须被准确计算出来</p>
+<p><strong>方法</strong></p>
+<ul>
+<li>选一个相似度标准 <span class="math inline">\(t\)</span>，并且 <span class="math inline">\(t &lt; 1\)</span>，如果两个文档的相似度大于 <span class="math inline">\(t\)</span>，则认为这两个文档相似。</li>
+<li>如果列<span class="math inline">\(c\)</span>和列<span class="math inline">\(d\)</span>被视为候选文档对，那么他们一定要满足 <span class="math inline">\(M(i, c) = M(i, d) &gt;= t\)</span> ，其中<span class="math inline">\(M\)</span>是标记矩阵。</li>
+</ul>
+<h4><span id="lsh-for-minhashing-signatures">LSH for Minhashing Signatures</span></h4>
+<p><strong>总体思想</strong>：把标记矩阵里的hash很多遍，只有hash到同一个桶(bucket)里的列才被认为是可能相似的。</p>
+<p><strong>Partion Into Bands</strong></p>
+<p><img src="/images/1451568313351.png"></p>
+<p>如图所示，把标记矩阵的所有行分成 <span class="math inline">\(b\)</span> 个<em>带(bands)</em>，每个带有 <span class="math inline">\(r\)</span> 行。对于每条带，对带里面每列进行hash，分别hash到k个桶中，并让k尽可能得大。</p>
+<p>只有有&gt;=1的band哈希到同一个桶中，就把这两列当作候选相似对。</p>
+<h3><span id="hash-function-for-one-bucket">Hash Function for One Bucket</span></h3>
+<p><img src="/images/1451568830329.png"></p>
+<p><strong>Example - Bands</strong></p>
+<p>假设有 100,000 列，每列有100个标记，因此存储标记需要40MB; 我们希望找到所以相似度大于80%的文档对，用上面的方法，把标记分为20个带，每个带里有5个标记。</p>
+<p>这样的话，如果文档<span class="math inline">\(C_1\)</span>和<span class="math inline">\(C_2\)</span>的相似度是<strong>80%</strong>，那么他们的任意一个带的5个标记都相同的概率是: <span class="math inline">\((0.8)^5 = 0.328\)</span> ，看起来好像不大，但是只要有任意一个带都相同就被认为是候选对，所以他们不被选上的概率，即20个带都不相同的概率为：<span class="math inline">\((1-0.328)^{20} = 0.00035\)</span>，也就是<strong>每3000个相似度为80%的文档对里才会有一对漏选</strong>。</p>
+<p>我们再考虑文档<span class="math inline">\(C_1\)</span>和<span class="math inline">\(C_2\)</span>只有<strong>40%</strong>的相似度，那么他们任意一个带的5个标记都相同的概率为 <span class="math inline">\((0.4)^5 = 0.01\)</span>，则文档<span class="math inline">\(C_1\)</span>和<span class="math inline">\(C_2\)</span>被选为候选对的概率，即他们中有一个带完全相同的概率为: $C_{20}^1 × 0.01 = 0.2 $，就是说每5个40%相似度的文档对里就有一对会被误选为候选对。<strong>但是</strong>相似度小于40%的文档对里误选的概率就非常小了。</p>
+<h3><span id="analysis-of-lsh">Analysis of LSH</span></h3>
+<figure>
+<img src="./1451629865035.png" alt="What We Want"><figcaption>What We Want</figcaption>
+</figure>
+<p>我们希望LSH达到的效果是相似度在我们设定的阈值之下的文档对都不被选进候选文档对，而在其之上的文档对都选进来，<strong>不误选一个也不错选一个</strong>，这是最理想的情况，我们的目标就是向它靠拢。</p>
+<p>如果不使用分带的方法，直接一行一行的看，会出现下图所示的问题： <img src="/images/1451630150113.png"></p>
+<p>这个图纵向是标记完全相同的概率，横向是相似度，由于相似度等于标记(minhash value)相同的概率，所以实际曲线就是这个矩形的对角线，与理想状况的曲线相差甚远，可见误差是非常大的。</p>
+<p>如果把所有行分成b带，每个带有r行，那么曲线如下图所示： <img src="/images/1451631757641.png"></p>
+<p>可以得到在阈值 <span class="math inline">\(t\)</span> 约等于 <span class="math inline">\((\frac{1}{b})^{\frac{1}{r}}\)</span> 时，曲线与理想状态颇为接近，误差非常小。</p>
+<p>数值举例：<span class="math inline">\(b = 20, r = 5\)</span> <img src="/images/1451631969408.png"></p>
+<p>可见文档相似度在70%以上是很容易被选进的，在40%一下是很难选进的，如果阈值定在70%的话且文档相似度分布比较均匀的和误差会很小。</p>
+<h3><span id="lsh-summary">LSH Summary</span></h3>
+<p>Tune to <strong>get</strong> almost all pairs with similar signatures, but <strong>eliminate</strong> most pairs that do not have similar signatures.</p>
+<p><strong>Check</strong> that candidate pairs really do have similar signatures.</p>
+<p><em>Optional</em>: In another pass through data, check that the remaining candidate pairs really represent similar <em>sets</em> . ## Applications of LSH</p>
+<h3><span id="实体解析-entity-resolution">实体解析 Entity Resolution</span></h3>
+<blockquote>
+<p><strong>实体解析(Entity Resolution)</strong>是通过检测记录来判断这些记录是否来自同一个实体。实体可以是人、公司、事件等等。</p>
+</blockquote>
+<p><strong>Typically</strong>, we want to merge records if their values in corresponding fields are similar.</p>
+<p><strong>Matching Customer Records</strong></p>
+<p>这门课的老师曾经应用LSH解决过一个实际问题，这个问题大概是这样：有两个公司A和B，公司A答应把一部分顾客拉拢到公司B，然后B给A一定的费用，一开始挺好，可是好景不长，他们就开始争论到底有多少顾客是从A公司过去的，为此吵得不可开交。</p>
+<p><strong>任务</strong>就是通过两个公司的数据库判断有多少顾客是从A公司过去的。</p>
+<p>注：同一个顾客在两个公司的数据里可能会有一些偏差，比如电话号码变了或者地址变了或者一个用的是小名另一个用的是全名等等。</p>
+<p><strong>现状</strong> 每个公司大概有1百万条记录描述的顾客可能是被A公司送到B公司的。每条记录包括名字、住址和电话，但是处于种种原因，出自同一个人的记录也可能不完全相同(原因如上)。</p>
+<p><strong>方案</strong> 1. 定一个量度。比如每对记录有300分的相似度，每个属性100分。两条记录具有相同的地址和电话但是名字拼写有小的差别，这种就给290分，如果名字区别很大可能就是240分等。</p>
+<ol start="2" type="1">
+<li>把经过LSH筛选的所有候选记录的分数算出来，分高的就认为是同一个人。</li>
+</ol>
+<p><strong>问题</strong></p>
+<p>需要计算 <span class="math inline">\((1 × 10^6)^2\)</span> 对个分数值，太大了。</p>
+<p><strong>解决方法 : A Simple LSH</strong></p>
+<p>定义3个哈希函数，分别 hash 名字、地址和电话。如果三个属性有一个是相同的就把具体分数算出来。</p>
+<p>这种方法也会丢失一些每个属性的有点小区别的记录对，不过没关系，概率非常小。</p>
+<p><em>额外</em> &gt; <em>How do we hash strings such as names so there is one bucket for each string?</em> <strong>Answer</strong> : Sort the strings instead.</p>
+<h3><span id="指纹匹配-fingerprint-matching">指纹匹配 Fingerprint Matching</span></h3>
+<p><strong>指纹的存储方法</strong> 用一系列<strong>细节特征(minutiae)</strong>代表一个指纹。 * These are features of a fingerprint, e.g., points where two ridges come together or a ridge ends.</p>
+<p><strong>LSH for Fingerprints</strong></p>
+<p>把网格铺在指纹上，相同的指纹会重合。具有细节特征(minutiae)的方格的集合就可以表示一个指纹。另外，treat minutiae near a grid boundary as if also present in adjacent grid points.</p>
+<p><img src="/images/1451741534631.png"></p>
+<p><strong>把LSH应用到指纹匹配</strong></p>
+<ul>
+<li>指纹 = 方格的集合</li>
+<li>不需要minhash，因为方格数不是很多，而且也不是稀疏矩阵</li>
+<li>用一个<strong>位向量(bit-vector)</strong>表示一个指纹：如果那个方格有minutiae，则这个位的值是1。这种方法相对于直接存整数节省了很多空间。</li>
+<li>随机从位向量中取3个集合，每个集合有3个方格（3位）。</li>
+<li>对于每一个集合，只有三位全部为1才被认为是Candidate Pairs 。</li>
+<li>Funny sort of ‘bucketization.”</li>
+</ul>
+<p>拿一个例子说明算法的效果。</p>
+<p><strong>假设</strong> 一般的只有有20%的格子有minutiae，如果两个指纹来自同一个手指，那么他们应该有80%的方格是相同的。</p>
+<p><strong>计算</strong> 任意两个指纹集合在三个格子内都有minutiae的概率为 <span class="math inline">\((0.2)^6 = 0.000064\)</span></p>
+<p>来自同一个手指的两个指纹集合在三个格子内都有minutiae的概率为 <span class="math inline">\(((0.2)(0.8))^3 = 0.004096\)</span></p>
+<p>在1024个集合中至少有一个集合满足上述要求的概率为 <span class="math inline">\(1 - (1 - 0.004096)^{1024} = 0.985\)</span></p>
+<p>不是来自同一个手指但是被选上的概率为 <span class="math inline">\(1-(1-0.000064)^{1024} = 0.063\)</span>，也就是有6.3%的概率误选，并不是很理想，不过我们可以通过增加集合里的方格数，比如变成4或5个，来降低误选率。</p>
+<h3><span id="finding-duplicate-news-articles">Finding Duplicate News Articles</span></h3>
+<p><strong>Problem</strong> : the same article, say from the Associated Press, appears on the Web site of many newspapers, but looks quite different.</p>
+<p>与找相似文档不同的地方在于： * 每份新闻有自己的logo和语言描述 * 不同的广告 * 可能还有到其他文章的链接 * 也可能对原始文章进行了删减</p>
+<p><strong>Special Shingling Technique</strong></p>
+<p>通过观察可以发现，新闻正文中会出现很多停用词(stop words)，然而广告中却没有。</p>
+<p><a href="http://www.wikiwand.com/zh-hans/%E5%81%9C%E7%94%A8%E8%AF%8D" target="_blank" rel="noopener">停用词</a>就是没什么实际含义的词，比如： “<strong>I</strong> recommend <strong>that you</strong> buy Sudzo <strong>for your</strong> laundry.” 停用词就是加粗的那些。如果是广告的话可能就只有 “Buy Sudzo” 了。</p>
+<p>这个特殊的Shingling就是选停用词以及它后面的两个词作为Shingles，拿上面那就话举例，shingles就是 <code>I recommend that</code>、<code>that you buy</code>、<code>you buy Sudzo</code>等等。</p>
+<p><strong>Why it Works</strong></p>
+<ul>
+<li>By requiring each shingle to have a stop word, they biased the mapping from documents to shingles so it picked more shingles from the article than from the ads.</li>
+<li>Pages with the same article, but different ads, have higher Jaccard similarity than those with the same ads, different articles.</li>
+</ul>
+<p><strong>Enter LSH</strong></p>
+<ul>
+<li>Their first attempt at minhashing was very inefficient.</li>
+<li>They were unaware of the importance of doing the minhashing row by row.</li>
+<li>Since their data was column by column, they needed to sort once before minhashing.</li>
+</ul>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/数据挖掘/">数据挖掘</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

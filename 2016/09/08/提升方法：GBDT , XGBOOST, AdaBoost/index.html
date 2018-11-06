@@ -1,0 +1,476 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    提升方法：GBDT , XGBOOST &amp; AdaBoost | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="提升方法：GBDT , XGBOOST &amp; AdaBoost">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      提升方法：GBDT , XGBOOST &amp; AdaBoost</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/09/08/提升方法：GBDT , XGBOOST, AdaBoost/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-09-08T11:42:06.000Z">
+          2016-09-08
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <blockquote>
+<p><strong>提升</strong> (<em>boosting</em>) 方法是一种常用的统计学习方法，应用广泛且有效，在分类问题中，它通过改变训练样本的权重，学习多个分类器，并将这些分类器进行线性组合，提高分类器性能。</p>
+</blockquote>
+<!-- toc -->
+<ul>
+<li><a href="#gbdt">GBDT</a>
+<ul>
+<li><a href="#提升的概念">提升的概念</a></li>
+<li><a href="#提升算法">提升算法</a></li>
+<li><a href="#梯度提升决策树-gbdt">梯度提升决策树 GBDT</a></li>
+</ul></li>
+<li><a href="#xgboost">XGBOOST</a></li>
+<li><a href="#adaboost">AdaBoost</a>
+<ul>
+<li><a href="#误差分析">误差分析</a></li>
+</ul></li>
+<li><a href="#参考文献">参考文献</a></li>
+</ul>
+<!-- tocstop -->
+<a id="more"></a>
+<h2><span id="gbdt">GBDT</span></h2>
+<p>我们知道<strong>随机森林</strong>的决策树分别采样建立, 相对<strong>独立</strong>。 那么引来了如下思考 :</p>
+<ul>
+<li>假定当前一定得到了 <span class="math inline">\(m-1\)</span> 颗决策树, 是否可以通过现有样本和决策树的信息, 对第 <span class="math inline">\(m\)</span> 颗决策树的建立产生有益的影响呢 ?</li>
+<li>各个决策树组成随机森林后, 最后的投票过程可否在建立决策树时即确定呢?</li>
+</ul>
+<p>答案是肯定的，这也就是<strong>提升（boosting）</strong>的方法所解决的问题。</p>
+<h3><span id="提升的概念">提升的概念</span></h3>
+<p><strong>提升</strong>是一个机器学习技术, 可以用于<strong>回归和分类</strong>问题, 它每一步产生一个<strong>弱预测模型</strong>(如决策树), 并<strong>加权累加</strong>到总模型中，最终得带一个<strong>强预测模型</strong>; 如果每一步的弱预测模型生成都是依据损失函数的梯度方向, 则称之为<strong>梯度提升(Gradient boosting)</strong>。</p>
+<p>提升的方法基于这样一个思想：对于一个复杂任务来说，将多个专家的判断进行适当的综合所得出的判断，要比其中任何一个专家单独的判断好。实际上，就是“<strong>三个臭皮匠顶个诸葛亮</strong>”的道理。</p>
+<p><strong>梯度提升</strong>算法首先给定一个<strong>目标损失函数</strong>, 它的定义域是所有可行的<strong>弱函数集合(基函数)</strong>; 提升算法通过迭代的选择一个<strong>负梯度方向</strong>上的基函数来逐渐逼近局部极小值。这种在函数域的梯度提升观点对机器学习的很多领域有深刻影响。</p>
+<p><strong>梯度提升</strong>算法实际上和<strong>梯度下降</strong>算法是一样的，只不过看问题的角度不同，比如在线性回归中，我们通过梯度下降来优化参数 <span class="math inline">\(\theta\)</span> ，使损失函数能达到（局部）最小值；如果我们换个角度，我们优化的不是 <span class="math inline">\(\theta\)</span>，而是 <span class="math inline">\(h_\theta(x) = \theta^T x\)</span> 这个函数，再通过沿梯度方向下降的方法达到损失函数（局部）最小值，就变成了梯度提升算法。</p>
+<h3><span id="提升算法">提升算法</span></h3>
+<p>给定输入向量 <span class="math inline">\(x\)</span> 和输出变量 <span class="math inline">\(y\)</span> 组成的若干训练样本 <span class="math inline">\((x_1, y_1), (x_2,y_2),...,(x_n,y_n)\)</span> , 目标是找到近似函数 <span class="math inline">\(F(x)\)</span> , 使得损失函数 <span class="math inline">\(L(y,F(x))\)</span> 的损失值最小。</p>
+<p>损失函数 <span class="math inline">\(L(y,F(x))\)</span> 的定义不唯一，典型定义有以下两种：</p>
+<ul>
+<li><span class="math inline">\(L(y,F(x)) = \frac{1}{2}(y - F(x))^2\)</span>，这个定义其实默认误差服从<strong>高斯分布</strong></li>
+<li><span class="math inline">\(L(y,F(x)) =| y - F(x) |\)</span>，这个定义则认为误差服从<strong>Laplace（双指数）分布</strong></li>
+</ul>
+<p>假设最优解为 <span class="math inline">\(F^*(x)\)</span>，则：</p>
+<p><span class="math display">\[F^*(x) =\arg\min_F E(x, y)[L(y, F(x))]\]</span></p>
+<p>该式的意思就是使<strong>损失函数期望风险最小化</strong>的参数 <span class="math inline">\(F(x)\)</span> 为最优解 <span class="math inline">\(F^*(x)\)</span>。</p>
+<p>我们知道任何函数都可以被分解为一族<strong>基函数的线性组合</strong>，比如傅立叶分解可以把任何函数分解为三角函数的线性组合，所以这里的 <span class="math inline">\(F(x)\)</span> 也不例外，我们假设它是一族基函数 <span class="math inline">\(f_i(x)\)</span> 的线性组合，即： <span class="math display">\[F(x) = \sum_{i=1}^M\gamma_if_i(x) + const\]</span></p>
+<p><strong>算法推导</strong></p>
+<p>我们使用梯度提升方法寻找最优解 <span class="math inline">\(F(x)\)</span>, 使得损失函数在训练集上的<strong>期望最小</strong>。方法如下:</p>
+<ul>
+<li><p>首先, 令 <span class="math inline">\(f_0(x) = 1\)</span>，求常系数 <span class="math inline">\(\gamma_0\)</span> : <span class="math display">\[F_0(x) =\gamma_0f_0(x) =\gamma_0 =\arg\min_\gamma\sum_{i=1}^n L(y_i,\gamma)\]</span></p>
+<ul>
+<li>若损失函数采用平方定义，上式可以解得：<span class="math inline">\(F_0(x) =\gamma =\frac{1}{n}\sum_{i=1}^ny_i\)</span></li>
+<li>若损失函数采用绝对值定义，则解 <span class="math inline">\(F_0(x)\)</span> 为 <span class="math inline">\(y_1, y_2 ... y_n\)</span> 的中位数</li>
+</ul></li>
+<li>知道 <span class="math inline">\(F_0(x)\)</span> 之后，接下来用递推的思路来想，如果已知 <span class="math inline">\(F_0(x), F_1(x) ... F_{m-1}(x)\)</span> ，如何求 <span class="math inline">\(F_m(x)\)</span> ？于是得到下面的公式： <span class="math display">\[F_m(x) = F_{m-1}(x) + \arg \min_{f \in H} \sum_{i=1}^nL(y_i, F_{m-1}(x_i) + f(x_i))\]</span></li>
+<li><p>我们可以用<strong>梯度下降</strong>的方法近似计算上式。若使 <span class="math inline">\(\sum_{i=1}^nL(y_i, F_{m-1}(x_i) + f(x_i))\)</span> 取得最小值，我们可以对 <span class="math inline">\(f(x_i)\)</span> 求偏导求出梯度，然后沿负梯度方向下降一个步长 <span class="math inline">\(\gamma_m\)</span>，由于这个步长可以通过<strong>线性搜索</strong>求出最优值，所以该步长与负梯度的乘积可以近似为上式的最小值，于是得到如下的更新公式： <span class="math display">\[F_m(x) = F_{m-1}(x) - \gamma_m \sum_{i=1}^n\nabla_fL(y_i, F_{m-1}(x_i))\]</span></p></li>
+</ul>
+<p><strong>提升算法</strong></p>
+<ol type="1">
+<li>初始给定模型为常数 <span class="math inline">\(F_0(x) = \arg \min_\gamma \sum_{i=1}^n L(y_i, \gamma)\)</span></li>
+<li>对于 <span class="math inline">\(m=1\)</span> 到 <span class="math inline">\(M\)</span>
+<ol type="1">
+<li>计算<strong>伪残差 (pseudo residuals)</strong> <span class="math inline">\(r_{im} = [\frac{\partial L(y_i, F(x_i))}{\partial F(x_i)}]_{F(x) = F_{m-1}(x)}\)</span> <span class="math inline">\(i = 1, 2 ... n\)</span></li>
+<li>使用数据 <span class="math inline">\(\{(\overrightarrow{x_i}, r_{im})\}_{i=1}^n\)</span> 训练<strong>拟合残差</strong>的基函数 <span class="math inline">\(f_m(x)\)</span> （比如一棵决策树）</li>
+<li>计算步长 $<em>m = </em><em>{i=1}^nL(y_i, F</em>{m-1}(x_i) - f_m(x_i)) $
+<ul>
+<li>一维优化问题</li>
+</ul></li>
+<li>更新模型：<span class="math inline">\(F_m(x) = F_{m-1}(x) - \gamma_m \cdot f_m(x)\)</span></li>
+</ol></li>
+</ol>
+<h3><span id="梯度提升决策树-gbdt">梯度提升决策树 GBDT</span></h3>
+<p>在提升算法中，如果基函数选择的是决策树，那么算法又叫<strong>梯度提升决策树</strong>，也就是<strong>GBDT</strong>。</p>
+<p><strong>GBDT</strong></p>
+<ul>
+<li>在第 <span class="math inline">\(m\)</span> 步的梯度提升是根据伪残差数据计算决策树 <span class="math inline">\(t_m(x)\)</span>。</li>
+<li><p>令树 <span class="math inline">\(t_m(x)\)</span> 的叶节点数目为 <span class="math inline">\(J\)</span>, 即树 <span class="math inline">\(t_m(x)\)</span> 将输入空间划分为 <span class="math inline">\(J\)</span> 个不相交区域<span class="math inline">\(R_{1m},R_{2m},...,R_{Jm}\)</span> ,并且决策树 <span class="math inline">\(t_m(x)\)</span> 可以在每个区域中给出某个类型的确定性预测。使用指示记号 <span class="math inline">\(I(x)\)</span>, 对于输入 <span class="math inline">\(x\)</span>, <span class="math inline">\(t_m(x)\)</span> 为: <span class="math display">\[t_m(x) = \sum_{j=1}^Jb_{jm}I(x \in R_{jm})\]</span></p></li>
+<li><p>其中，<span class="math inline">\(b_{jm}\)</span> 是样本 <span class="math inline">\(x\)</span> 在区域 <span class="math inline">\(R_{jm}\)</span> 的预测值，<span class="math display">\[I(x) = \begin{cases}
+1, &amp; x == True \\
+0, &amp; x == False
+\end{cases}\]</span></p></li>
+<li>使用线性搜索计算学习率,最小化损失函树
+<ul>
+<li><span class="math inline">\(F_m(x) = F_{m-1}(x) + \gamma_m \cdot t_m(x)\)</span></li>
+<li><span class="math inline">\(\gamma_m = \arg \min_\gamma\sum_{i=1}^nL(y_i, F_{m-1}(x_i) + \gamma_mt_m(x_i))\)</span></li>
+</ul></li>
+<li>进一步：对树的每个区域分别计算步长，从而系数 <span class="math inline">\(b_{jm}\)</span> 被合并到步长中，从而:
+<ul>
+<li><span class="math inline">\(F_m(x) = F_{m-1}(x) + \sum_{j=1}^J\gamma_mI(x \in R_{jm})\)</span></li>
+<li><span class="math inline">\(\gamma_{jm} = \arg \min_\gamma\sum_{x_i \in R_{jm}}L(y_i, F_{m-1}(x_i) + \gamma_mt_m(x_i))\)</span></li>
+</ul></li>
+</ul>
+<p><strong>参数设置和正则化</strong></p>
+<p>对训练集拟合过高会降低模型的泛化能力, 需要使用<strong>正则化</strong>技术来降低过拟合。</p>
+<ul>
+<li>对复杂模型增加惩罚项, 如 : 模型复杂度正比于叶结点数目或者叶结点预测值的平方和等</li>
+<li>用决策树剪枝</li>
+<li>叶结点数目控制了树的层数, 一般选择 <span class="math inline">\(4≤J≤8\)</span></li>
+<li>叶结点包含的最少样本数目
+<ul>
+<li>防止出现过小的叶结点, 降低预测方差</li>
+</ul></li>
+<li>梯度提升迭代次数 <span class="math inline">\(M\)</span> :
+<ul>
+<li>增加 <span class="math inline">\(M\)</span> 可降低训练集的损失值, 但有过拟合风险</li>
+<li>交叉验证</li>
+</ul></li>
+</ul>
+<p><strong>GBDT总结</strong></p>
+<ul>
+<li>函数估计本来被认为是在函数空间而非参数空间的数值优化问题，而阶段性的加性扩展和梯度下降手段将函数估计转换成参数估计。</li>
+<li>损失函数是最小平方误差、绝对值误差等，则为<strong>回归问题</strong>；而误差函数换成多类别Logistic似然函数，则成为<strong>分类问题</strong>。</li>
+<li>对<strong>目标函数分解成若干基函数的加权</strong>和，是常见的技术手段：<a href="https://neymarl.github.io/2016/02/18/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C(Neural%20Network)(%E4%B8%8A)/" target="_blank" rel="noopener">神经网络</a>、径向基函数、傅立叶/小波变换、<a href="https://neymarl.github.io/2016/03/03/Support%20Vector%20Machines%20(SVMs)/" target="_blank" rel="noopener">SVM</a>都可以看到它的影子。</li>
+</ul>
+<h2><span id="xgboost">XGBOOST</span></h2>
+<p><span class="math display">\[F_m(x)=F_{m-1}(x)+\arg\min_{f\in H}\sum_{i=1}^nL(y_i, F_{m-1}(x_i) + f(x_i))\]</span></p>
+<p>普通提升算法包括GBDT在计算上式实采用的是<strong>梯度提升</strong>，也就是只用了一阶导数信息，如果常识<strong>二阶导数</strong>的信息呢？</p>
+<p><strong>目标函数</strong>：<span class="math inline">\(J(f_t) = \sum_{i=1}^nL(y_i, F_{m-1}(x_i) + f_t(x_i)) + \Omega(f_t) + C\)</span> 其中，<span class="math inline">\(\Omega(f_t)\)</span> 为正则项，<span class="math inline">\(C\)</span> 为常数，目的是要求出使目标函数最小的 <span class="math inline">\(f_t\)</span>。</p>
+<blockquote>
+<p>二阶Taylor展式： <span class="math display">\[f(x + \triangle x) = f(x) + f&#39;(x)\triangle x + f&#39;&#39;(x)\triangle x^2 + O(x^3)\]</span></p>
+</blockquote>
+<p>令： <span class="math display">\[g_i = \frac{\partial L(y_i, F_{m-1}(x_i))}{\partial F_{m-1}(x_i)}, h_i = \frac{\partial^2 L(y_i, F_{m-1}(x_i))}{\partial F_{m-1}(x_i)}\]</span></p>
+<p>对 <span class="math inline">\(J(f_t)\)</span> 二阶Taylor展开并省略高阶无穷小得：</p>
+<p><span class="math display">\[J(f_t) \approx  \sum_{i=1}^n (L(y_i, F_{m-1}(x_i)) + g_if_t(x_i) + \frac{1}{2}h_if_t^2(x_i)) + \Omega(f_t) + C\]</span></p>
+<blockquote>
+<p><strong>决策树的描述</strong> * 使用决策树对样本做分类(回归)，是从根结点到叶节点的细化过程；落在相同叶节点的样本的预测值是相同的 * 假定某决策树的叶结点数目为 <span class="math inline">\(T\)</span>，每个叶结点的权值为 <span class="math inline">\(\overrightarrow{w} = (w_1,w_2 ... w_T)\)</span> ，决策树的学习过程，就是构造如何使用特征得到划分，从而得到这些权值的过程。<strong>叶权值就是这个叶节点的预测结果</strong>，若是分类问题，也就是这类样本的标签。 * 样本 <span class="math inline">\(x\)</span> 落在叶结点 <span class="math inline">\(q\)</span> 中，定义描述决策树函数为: <span class="math inline">\(f_t(x) = w_q(x)\)</span> * 一个决策树的核心即“树结构”和“叶权值”</p>
+</blockquote>
+<p>决策树的复杂度可考虑叶结点数和叶权值，如使用叶结点总数和叶权值平方和的加权： <span class="math display">\[\Omega(f_t) = \gamma \cdot T_t + \lambda \cdot \frac{1}{2}\sum_{j=1}^Tw_j^2 \]</span> 其中，<span class="math inline">\(T_t\)</span> 为叶子的个数。</p>
+<p>我们继续来推导目标函数 <span class="math inline">\(J(f_t)\)</span>：</p>
+<p><span class="math display">\[\begin{array}{lcl}
+J(f_t) = \sum_{i=1}^n [L(y_i, F_{m-1}(x_i)) + g_if_t(x_i) + \frac{1}{2}h_if_t^2(x_i)] + \Omega(f_t) + C \\
+\ \ \ \ \ \ \ = \sum_{i=1}^n[g_if_t(x_i) + \frac{1}{2}h_if_t^2(x_i)]+ \Omega(f_t) + C \\
+\ \ \ \ \ \ \ =\sum_{i=1}^n[g_iw_q(x_i) + \frac{1}{2}h_iw_q^2(x_i)] + \gamma \cdot T_t + \lambda \cdot \frac{1}{2}\sum_{j=1}^Tw_j^2 + C \\
+\ \ \ \ \ \ \ = \sum_{j=1}^T [(\sum_{i \in I_j}g_i)w_j + \frac{1}{2}(\sum_{i \in I_j}h_i)w_j^2] + \gamma \cdot T_t + \lambda \cdot \frac{1}{2}\sum_{j=1}^Tw_j^2 + C \\
+\ \ \ \ \ \ \ = \sum_{j=1}^T[(\sum_{i \in I_j}g_i)w_j + \frac{1}{2}(\lambda + \sum_{i \in I_j}h_i)w_j^2] + \gamma \cdot T_t + C
+\end{array}\]</span></p>
+<p>令 <span class="math inline">\(G_j = \sum_{i \in I_j}g_i\)</span>，<span class="math inline">\(H_j = \sum_{i \in I_j}h_i\)</span>，从而： <span class="math display">\[J(f_t) = \sum_{j=1}^T[G_jw_j + \frac{1}{2}(\lambda + H_j)w_j^2] + \gamma \cdot T_t + C\]</span></p>
+<p>对 <span class="math inline">\(w_j\)</span> 求偏导得： <span class="math display">\[\frac{\partial}{\partial w_j}J(f_t) = G_j + (\lambda + H_j)w_j\]</span></p>
+<p>令 <span class="math inline">\(\frac{\partial J(f_t)}{\partial w_j} = 0\)</span>，得： <span class="math display">\[w_j = -\frac{G_j}{\lambda + H_j}\]</span></p>
+<p>回代入目标函数得： <span class="math display">\[J(f_t) = -\frac{1}{2}\sum_{j=1}^T\frac{G_j^2}{\lambda + H_j} + \gamma \cdot T_t\]</span></p>
+<p>这就是目标函数最后的结果，<strong>值越小代表决策树的结构越好</strong>。</p>
+<p>我们要构建一颗决策树 <span class="math inline">\(f_t\)</span>，使目标函数 <span class="math inline">\(J(f_t)\)</span> 达到最小，构建时可借鉴<a href="https://neymarl.github.io/2016/09/02/%E5%86%B3%E7%AD%96%E6%A0%91%20&amp;%20%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97%E4%B8%AD%E7%9A%84%E5%85%AC%E5%BC%8F%E6%8E%A8%E5%AF%BC/" target="_blank" rel="noopener">ID3/C4.5/CART</a>的做法：</p>
+<ul>
+<li>如何进行子树划分？
+<ul>
+<li>对于某可行划分, 计算划分后的 <span class="math inline">\(J(f_t)\)</span></li>
+<li>对于所有可行划分, 选择 <span class="math inline">\(J(f_t)\)</span> 降低最小的分割点</li>
+</ul></li>
+<li>枚举可行的分割点, 选择增益最大的划分, 继续同样的操作, 直到满足某阈值或得到纯节点
+<ul>
+<li><span class="math inline">\(Gain(\phi) = \frac{1}{2}[\frac{G_L^2}{H_L + \lambda} + \frac{G_R^2}{H_R + \lambda} - \frac{(G_L + G_R)^2}{H_L + H_R + \lambda}]\)</span> <img src="/images/1473252993577.png"></li>
+</ul></li>
+</ul>
+<p><strong>XGBOOST总结</strong></p>
+<ul>
+<li>XGBOOST 与 GBDT 的区别在于更新模型的方法不同，其余都是一样的</li>
+<li>相对于传统的GBDT，XGBoost使用了<strong>二阶信息</strong>，可以更快的在训练集上收敛</li>
+<li>由于“<strong>随机森林族</strong>”本身具备防止过拟合的优势，因此XGBoost仍然一定程度的具有该特性</li>
+<li>XGBoost的实现中使用了<strong>并行/多核计算</strong>, 因此训练速度快; 同时它的原生语言为C/C++, 这是它速度快的实践原因</li>
+</ul>
+<h2><span id="adaboost">AdaBoost</span></h2>
+<p><strong>思考</strong>：如果对GBDT的基函数的学习中，不止考虑函数的参数和权值，而是对样本本身也加权，会得到什么结果呢？这其实就是Adaboost的思想。</p>
+<p><strong>AdaBoost算法</strong></p>
+<ul>
+<li><p>设训练数据集 <span class="math inline">\(T={(x_1,y_1), (x_2,y_2)...(x_N,y_N)}\)</span>，初始化训练数据的权值分布 <span class="math inline">\(D_1 = (w_{11}, w_{12}, ..., w_{1i}, ...., w_{1N})\)</span>, <span class="math inline">\(w_{1i} = \frac{1}{N}\)</span>, <span class="math inline">\(i = 1, 2, ... N\)</span>。</p></li>
+<li>对于 <span class="math inline">\(m = 1, 2, ... M\)</span>，<span class="math inline">\(M\)</span> 为树的棵数:
+<ul>
+<li><p>使用具有权值分布 <span class="math inline">\(D_m\)</span> 的训练数据集学习, 得到基本分类器 <span class="math display">\[G_m(x) : x \rightarrow \{-1, 1\}\]</span></p></li>
+<li><p>计算 <span class="math inline">\(G_m(x)\)</span> 在训练数据集上的分类误差率: <span class="math display">\[e_m = P(G_m(x_i) \neq y_i) = \sum_{i=1}^Nw_{mi}I(G_m(x_i) \neq y_i)\]</span></p></li>
+<li><p>计算 <span class="math inline">\(G_m(x)\)</span> 的系数 <span class="math display">\[\alpha_m = \frac{1}{2}\log \frac{1-e_m}{e_m}\]</span></p></li>
+<li>更新训练数据集的权值分布 <span class="math display">\[D_{m+1} = (w_{m+1, 1}, w_{m+1, 2}, ...., w_{m+1, i}, ..., w_{m+1, N})\]</span> <span class="math display">\[w_{m+1, i} = \frac{w_{mi}}{Z_m}\exp(-\alpha_m y_iG_m(x_i)), i = 1, 2, ... , N\]</span></li>
+<li>这里，<span class="math inline">\(Z_m\)</span> 是归一化因子： <span class="math display">\[Z_m = \sum_{i=1}^Nw_{mi}\exp(-\alpha_my_iG_m(x_i))\]</span></li>
+<li><p>它使 <span class="math inline">\(D_{m+1}\)</span> 成为一个概率分布（和为1）。</p></li>
+</ul></li>
+<li><p>构建基本分类器的线性组合 <span class="math display">\[f(x) = \sum_{m=1}^M\alpha_mG_m(x)\]</span></p></li>
+<li><p>得到最终分类器： <span class="math display">\[G(x) = sign(f(x)) = sign(\sum_{m=1}^M\alpha_mG_m(x))\]</span></p></li>
+</ul>
+<p><strong>算法解释</strong></p>
+<p>我们先分析 <span class="math inline">\(G_m(x)\)</span> 的系数：<span class="math inline">\(\alpha_m = \frac{1}{2}\log \frac{1-e_m}{e_m}\)</span>，这里的 <span class="math inline">\(e_m\)</span> 是分类错误率。 这个式子实现了这么一个理论：如果一个分类器的分类错误率超过50%，那么这个分类器还不如随机分类（默认均匀分布，随机分50%错误率）来得好，把这个分类器直接反转效果反而会更好。</p>
+<ul>
+<li>如果 <span class="math inline">\(e_m &lt; 0.5\)</span>，则 <span class="math inline">\(1- e_m &gt; 0.5\)</span>，所以 <span class="math inline">\(\frac{1-e_m}{e_m} &gt; 1\)</span>，可以得到 <span class="math inline">\(\log\frac{1-e_m}{e_m} &gt; 0\)</span>，即：<span class="math inline">\(\alpha_m &gt; 0\)</span>，说明如果这个分类器的错误率小于0.5则权值为正，表示可以参考这个分类器的结果，并且错误率越低分类器的权值越大；</li>
+<li>如果 <span class="math inline">\(e_m &gt; 0.5\)</span>，则 <span class="math inline">\(1- e_m &lt; 0.5\)</span>，所以 <span class="math inline">\(\frac{1-e_m}{e_m} &lt; 1\)</span>，可以得到 <span class="math inline">\(\log\frac{1-e_m}{e_m} &lt; 0\)</span>，即：<span class="math inline">\(\alpha_m &lt; 0\)</span>，就相当于把分类器反转。</li>
+</ul>
+<p>再来看权值更新公式，<span class="math inline">\(w_{m+1, i} = \frac{w_{mi}}{Z_m}\exp(-\alpha_m y_iG_m(x_i)), i = 1, 2, ... , N\)</span></p>
+<ul>
+<li><p>先看指数上的一小部分 : <span class="math inline">\(-\alpha_m y_iG_m(x_i)\)</span>，其中 <span class="math inline">\(-\alpha_m\)</span> 为该分类器的权值，<span class="math inline">\(y_i\)</span> 为第 <span class="math inline">\(i\)</span> 个样本的实际类别且 <span class="math inline">\(y_i \in \{-1, 1\}\)</span>，<span class="math inline">\(G_m(x_i)\)</span> 为预测类别。</p>
+<ul>
+<li>若预测类别与实际类别一致，则 <span class="math inline">\(y_iG_m(x_i) &gt; 0\)</span>，反之则 <span class="math inline">\(y_iG_m(x_i) &lt; 0\)</span></li>
+<li>如果该分类器比较靠谱的话（<span class="math inline">\(e_m &lt; 0.5\)</span>），<span class="math inline">\(\alpha_m\)</span> 是个正数，反之是个负数。</li>
+<li>综合起来看：如果靠谱的分类器预测错了（或者不靠谱的分类器预测对了），则 <span class="math inline">\(-\alpha_m y_iG_m(x_i) &gt; 0\)</span>，反之则 <span class="math inline">\(-\alpha_m y_iG_m(x_i) &lt; 0\)</span></li>
+</ul></li>
+<li><p><span class="math inline">\(Z_m\)</span> 是用来归一化的，不用看，把其他部分合起来：</p>
+<ul>
+<li>如果 <span class="math inline">\(-\alpha_m y_iG_m(x_i) &gt; 0\)</span>，则 <span class="math inline">\(\exp(-\alpha_m y_iG_m(x_i)) &gt; 1\)</span>，进而得到 <span class="math inline">\(w_{m+1, i} = w_{mi} * 一个大于1的数\)</span>，即权值增加。</li>
+<li>如果 <span class="math inline">\(-\alpha_m y_iG_m(x_i) &lt; 0\)</span>，则 <span class="math inline">\(\exp(-\alpha_m y_iG_m(x_i)) &lt; 1\)</span>，进而得到 <span class="math inline">\(w_{m+1, i} = w_{mi} * 一个小于1的数\)</span>，即权值降低。</li>
+</ul></li>
+<li><p><strong>结论</strong>：如果分类器预测错了则增加该样本的权值，在下次分类时重点关注该样本；如果分类正确则降低该样本的权值，在下次分类时弱化该样本。也就是样本的权值动态变化，如下图所示：</p></li>
+</ul>
+<p><img src="/images/1473337734827.png"></p>
+<h3><span id="误差分析">误差分析</span></h3>
+<p>AdaBoost算法最终的误差界为：</p>
+<p><span class="math display">\[\frac{1}{N}\sum_{i=1}^NI(G_m(x_i) \neq y_i) \leqslant \frac{1}{N}exp(-y_if(x_i)) = \prod_mZ_m\]</span></p>
+<p><strong>证明</strong></p>
+<ul>
+<li>前半部分：当 <span class="math inline">\(G(x_i) \neq y_i\)</span> 时，<span class="math inline">\(y_if(x_i) &lt; 0\)</span>，因而 <span class="math inline">\(exp(-y_if(x_i)) \geqslant 1\)</span>，而 <span class="math inline">\(\frac{1}{N}\sum_{i=1}^NI(G_m(x_i) \neq y_i) \leqslant 1\)</span>，所以 <span class="math inline">\(\frac{1}{N}\sum_{i=1}^NI(G_m(x_i) \neq y_i) \leqslant \frac{1}{N}exp(-y_if(x_i))\)</span>，前半部分得证。 <br></li>
+<li>后半部分：
+<ul>
+<li><p>由 <span class="math inline">\(Z_m\)</span> 的定义式得：<span class="math inline">\(w_{mi}exp(-\alpha_my_iG_m(x_i)) = Z_mw_{m+1,i}\)</span> <span class="math display">\[\begin{array}{lcl}
+\frac{1}{N}exp(-y_if(x_i)) \\
+= \frac{1}{N}\sum_i\exp(- \sum_{m=1}^M\alpha_my_iG_m(x_i)) \\
+= \sum_iw_{1i}\prod_{m=1}^M\exp(-\alpha_my_iG_m(x_i)) \\
+= Z_1\sum_i w_{2,1}\prod_{m=2}^M\exp(-\alpha_my_iG_m(x_i)) \\
+= Z_1Z_2\sum_i w_{3,1}\prod_{m=3}^M\exp(-\alpha_my_iG_m(x_i)) \\
+= .... \\
+= Z_1Z_2...Z_{M-1}\sum_i w_{M,1}\exp(-\alpha_my_iG_m(x_i)) \\
+= \prod_{m=1}^MZ_m
+\end{array}\]</span></p></li>
+<li><p>后半部分得证</p></li>
+</ul></li>
+</ul>
+<p>这一结果说明，可以在每一轮选取适当的 <span class="math inline">\(G_m\)</span> 使得 <span class="math inline">\(Z_m\)</span> 最小，从而使训练误差下降最快。</p>
+<p><strong>训练误差界</strong></p>
+<p><span class="math display">\[\begin{array}{lcl}
+Z_m = \sum_{i=1}^Nw_{mi}\exp(-\alpha_my_iG_m(x_i)) \\
+\ \ \ \ \ = \sum_{y_i=G_m(x_i)}w_{mi}e^{-\alpha_m} +  \sum_{y_i\neq G_m(x_i)}w_{mi}e^{\alpha_m}
+\end{array}\]</span></p>
+<p>因为 <span class="math inline">\(\alpha_m = \frac{1}{2}\log\frac{1-e_m}{e_m}\)</span>，<span class="math inline">\(\sum_{y_i=G_m(x_i)}w_{mi} = 1 - e_m\)</span>，<span class="math inline">\(\sum_{y_i\neq G_m(x_i)}w_{mi} = e_m\)</span> 所以 <span class="math display">\[\begin{array}{lcl}
+Z_m = (1- e_m)e^{-\alpha_m} + e_me^{\alpha_m} \\
+\ \ \ \ \ = 2\sqrt{e_m(1-e_m)} \\
+\ \ \ \ \ = \sqrt{1-4\gamma_m^2}
+\end{array}\]</span> 其中，<span class="math inline">\(\gamma_m = \frac{1}{2} - e_m\)</span>。</p>
+<p>由此得到： <span class="math display">\[\prod_{m=1}^MZ_m = \prod_{m=1}^M \sqrt{1-4\gamma_m^2} \leqslant \exp(-2\sum_{m=1}^M\gamma_m^2)\]</span></p>
+<p>取 <span class="math inline">\(\gamma_1, \gamma_2....\)</span> 的最小值，记为 <span class="math inline">\(\gamma\)</span>， 则有： <span class="math display">\[\frac{1}{N}\sum_{i=1}^NI(G_m(x_i) \neq y_i) \leqslant \exp(-2M\gamma^2)\]</span></p>
+<p>这表明AdaBoost训练误差是<strong>以指数速率下降</strong>的！</p>
+<p><strong>AdaBoost总结</strong></p>
+<ul>
+<li>AdaBoost算法可以看做是采用指数损失函数的提升方法，其每个基函数的学习算法为前向分步算法</li>
+<li>AdaBoost的训练误差是以指数速率下降的</li>
+<li>AdaBoost算法不需要事先知道下界 <span class="math inline">\(\gamma\)</span>，具有<strong>自适应性(Adaptive)</strong>，它能自适应弱分类器的训练误差率</li>
+</ul>
+<h2><span id="参考文献">参考文献</span></h2>
+<ul>
+<li>李航，统计学习方法，清华大学出版社，2012</li>
+<li>Jerome H. Friedman. Greedy Function Approximation: A Gradient Boosting Machine. February 1999</li>
+</ul>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Boosting/">Boosting</a><a href="/tags/GBDT/">GBDT</a><a href="/tags/xgboost/">xgboost</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

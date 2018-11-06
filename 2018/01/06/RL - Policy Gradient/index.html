@@ -1,0 +1,549 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    RL - Policy Gradient | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="RL - Policy Gradient">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      RL - Policy Gradient</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2018/01/06/RL - Policy Gradient/" rel="bookmark">
+        <time class="entry-date published" datetime="2018-01-06T05:42:09.000Z">
+          2018-01-06
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <h2><span id="introduction">Introduction</span></h2>
+<p>This lecture talks about methods that optimise policy directly. Instead of working with value function as we consider so far, we seek experience and use the experience to update our policy in the direction that makes it better.</p>
+<p>In the last lecture, we approximated the value or action-value function using parameters <span class="math inline">\(\theta\)</span>, <span class="math display">\[
+V_\theta(s)\approx V^\pi(s)\\
+Q_\theta(s, a)\approx Q^\pi(s, a)
+\]</span> A policy was generated directly from the value function using <span class="math inline">\(\epsilon\)</span>-greedy.</p>
+<p>In this lecture we will directly parametrise the policy <span class="math display">\[
+\pi_\theta(s, a)=\mathbb{P}[a|s, \theta]
+\]</span> We will focus again on <span class="math inline">\(\color{red}{\mbox{model-free}}\)</span> reinforcement learning.</p>
+<a id="more"></a>
+<p><strong>Table of Contents</strong></p>
+<!-- toc -->
+<ul>
+<li><a href="#finite-difference-policy-gradient">Finite Difference Policy Gradient</a></li>
+<li><a href="#monte-carlo-policy-gradient">Monte-Carlo Policy Gradient</a></li>
+<li><a href="#actor-critic-policy-gradient">Actor-Critic Policy Gradient</a></li>
+<li><a href="#summary-of-policy-gradient-algorithms">Summary of Policy Gradient Algorithms</a></li>
+</ul>
+<!-- tocstop -->
+<p><strong>Value-Based and Policy-Based RL</strong></p>
+<ul>
+<li>Value Based
+<ul>
+<li>Learnt Value Function</li>
+<li>Implicit policy (e.g. <span class="math inline">\(\epsilon\)</span>-greedy)</li>
+</ul></li>
+<li>Policy Based
+<ul>
+<li>No Value Function</li>
+<li>Learnt Policy</li>
+</ul></li>
+<li>Actor-Critic
+<ul>
+<li>Learnt Value Function</li>
+<li>Learnt Policy</li>
+</ul></li>
+</ul>
+<p><img src="/images/vfp.png"></p>
+<p><strong>Advantages of Policy-Based RL</strong></p>
+<p>Advantages:</p>
+<ul>
+<li>Better convergence properties</li>
+<li>Effective in high-dimensional or contimuous action spaces (<em>without computing max</em>)</li>
+<li>Can learn stochastic policies</li>
+</ul>
+<p>Disadvantages:</p>
+<ul>
+<li>Typically converge to a local rather than global optimum</li>
+<li>Evaluating a policy is typically inefficient and high variance</li>
+</ul>
+<p>Deterministic policy or taking max is not also the best. Take the rock-paper-scissors game for example.</p>
+<p><img src="/images/rps.png"></p>
+<p>Consider policies <em>iterated</em> rock-paper-scissors</p>
+<ul>
+<li>A deterministic policy is easily exploited</li>
+<li>A uniform random policy is optimal (according to Nash equilibrium)</li>
+</ul>
+<p><strong>Aliased Gridworld Example</strong></p>
+<p><img src="/images/agw.png"></p>
+<p>The agent cannot differentiate the grey states.</p>
+<p>Consider features of the following form (for all N, E, S, W) <span class="math display">\[
+\phi(s, a)=1(\mbox{wall to N, a = move E})
+\]</span> Compare value-based RL, using an approximate value function <span class="math display">\[
+Q_\theta(s, a)=f(\phi(s, a), \theta)
+\]</span> To policy-based RL, using a parametrised policy <span class="math display">\[
+\pi_\theta(s, a)=g(\phi(s, a), \theta)
+\]</span> Since the agent cannot differentiate the grey states given the feature, if you take a <strong>deterministic</strong> policy, you must pick the same action at two grey states.</p>
+<p><img src="/images/deagw.png"></p>
+<p>Under aliasing, an optimal <span class="math inline">\(\color{red}{\mbox{deterministic}}\)</span> policy will either</p>
+<ul>
+<li>move W in both grey states (as shown by red arrows)</li>
+<li>move E in both grey states</li>
+</ul>
+<p>Either way, it can get stuck and never reach the money.</p>
+<p>Value-based RL learns a near-deterministic policy, so it will traverse the corridor for a long time.</p>
+<p><img src="/images/ranagw.png"></p>
+<p>An optimal <span class="math inline">\(\color{red}{\mbox{stochastic}}\)</span> policy will randomly move E or W in grey states: <span class="math display">\[
+\pi_\theta(\mbox{wall to N and S, move E}) = 0.5\\
+\pi_\theta(\mbox{wall to N and S, move W}) = 0.5\\
+\]</span> It will reach the goal state in a few steps with high probability. Policy-based RL can learn the optimal stochastic policy.</p>
+<p>These examples show that a stochastic policy can be better than the deterministic policy, especially in the case that the MDP is <strong>partialy observed</strong> or cannot fully represent the state.</p>
+<p><strong>Policy Objective Functions</strong></p>
+<p>Goal: given policy <span class="math inline">\(\pi_\theta(s, a)\)</span> with parameters <span class="math inline">\(\theta\)</span>, find best <span class="math inline">\(\theta\)</span>. But how do we measure the quality of a policy <span class="math inline">\(\pi_\theta\)</span>?</p>
+<ul>
+<li><p>In episodic environments we can use the <strong>start value</strong> <span class="math display">\[
+J_1(\theta)=V^{\pi_\theta}(s_1)=\mathbb{E}_{\pi_\theta}[v_1]
+\]</span></p></li>
+<li><p>In continuing environments we can use the <strong>average value</strong> <span class="math display">\[
+J_{av}v(\theta)=\sum_s d^{\pi_\theta}(s)V^{\pi_\theta}(s)
+\]</span></p></li>
+<li><p>Or the <strong>average reward per time-step</strong></p>
+<p>​ <span class="math display">\[
+J_{av}R(\theta)=\sum_s d^{\pi_\theta}(s)\sum_a\pi_\theta(s, a)\mathcal{R}^a_s
+\]</span></p></li>
+<li><p>where <span class="math inline">\(d^{\pi_\theta}(s)\)</span> is <strong>stationary distribution</strong> of Markov chain for <span class="math inline">\(\pi_\theta\)</span>.</p></li>
+</ul>
+<p><strong>Policy Optimisation</strong></p>
+<p>Policy based reinforcement learning is an <strong>optimisation</strong> problem. Find <span class="math inline">\(\theta\)</span> that maximises <span class="math inline">\(J(\theta)\)</span>.</p>
+<p>Some approaches do not use gradient</p>
+<ul>
+<li>Hill climbing</li>
+<li>Simplex / amoeba / Nelder Mead</li>
+<li>Genetic algorithms</li>
+</ul>
+<p>However, greater efficiency often possible using gradient</p>
+<ul>
+<li>Gradient descent</li>
+<li>Conjugate gradient</li>
+<li>Quasi-newton</li>
+</ul>
+<p>We focus on gradient descent, many extensions possible. And on methods that exploit sequential structure.</p>
+<h2><span id="finite-difference-policy-gradient">Finite Difference Policy Gradient</span></h2>
+<p><strong>Policy Gradient</strong></p>
+<p>Let <span class="math inline">\(J(\theta)\)</span> be any policy objective function. Policy gradient algorithms search for a local maximum in <span class="math inline">\(J(\theta)\)</span> by ascending the gradient of the policy, w.r.t. parameters <span class="math inline">\(\theta\)</span> <span class="math display">\[
+\triangle\theta = \alpha\nabla_\theta J(\theta)
+\]</span> Where <span class="math inline">\(\bigtriangledown_\theta J(\theta)\)</span> is the <span class="math inline">\(\color{red}{\mbox{policy gradient}}\)</span>, <span class="math display">\[
+\nabla_\theta J(\theta)=\begin{pmatrix}
+\frac{\partial J(\theta)}{\partial \theta_1}  \\
+\vdots\\
+\frac{\partial J(\theta)}{\partial \theta_n}
+\end{pmatrix}
+\]</span> and <span class="math inline">\(\alpha\)</span> is a step-size parameter.</p>
+<p><strong>Computing Gradients By Finite Differences (Numerical)</strong></p>
+<p>To evaluate policy gradient of <span class="math inline">\(\pi_\theta(s, a)\)</span>.</p>
+<ul>
+<li>For each dimension <span class="math inline">\(k\in[1, n]\)</span>:
+<ul>
+<li><p>Estimate <span class="math inline">\(k\)</span>th partial derivative of objective function w.r.t. <span class="math inline">\(\theta\)</span></p></li>
+<li><p>By perturbing <span class="math inline">\(\theta\)</span> by small amount <span class="math inline">\(\epsilon\)</span> in <span class="math inline">\(k\)</span>th dimension <span class="math display">\[
+\frac{\partial J(\theta)}{\partial \theta_k}\approx \frac{J(\theta+\epsilon u_k)-J(\theta)}{\epsilon}
+\]</span> where <span class="math inline">\(u_k\)</span> is unit vector with 1 in <span class="math inline">\(k\)</span>th component, 0 elsewhere</p></li>
+</ul></li>
+<li>Uses <span class="math inline">\(n\)</span> evaluations to compute policy gradient in <span class="math inline">\(n\)</span> dimensions</li>
+</ul>
+<p>This is a simple, noisy, inefficient, but sometimes effective method. It works for <strong>arbitrary</strong> policies, even if policy is <strong>not</strong> differentiable.</p>
+<p>The algorithm is efficient when the dimension of <span class="math inline">\(\theta\)</span> is low.</p>
+<h2><span id="monte-carlo-policy-gradient">Monte-Carlo Policy Gradient</span></h2>
+<p><strong>Score Function</strong></p>
+<p>We now compute the policy gradient <em>analytically</em>.</p>
+<p>Assume policy <span class="math inline">\(\pi_\theta\)</span> is differentiable whenever it is non-zero and we know the gradient <span class="math inline">\(\nabla_\theta\pi_\theta(s, a)\)</span>.</p>
+<p><span class="math inline">\(\color{red}{\mbox{Likelihood ratios}}\)</span> exploit the following identity <span class="math display">\[
+\begin{align}
+\nabla_\theta\pi_\theta(s, a) &amp; =\pi_\theta(s, a) \frac{\nabla_\theta\pi_\theta(s, a) }{\pi_\theta(s, a) } \\
+&amp; = \pi_\theta(s, a) \nabla_\theta\log \pi_\theta(s, a)  \\
+\end{align}
+\]</span> The <span class="math inline">\(\color{red}{\mbox{score function}}\)</span> is $<em></em>(s, a) $. Let's take two examples to see what the score function looks like.</p>
+<p><em>Softmax Policy</em></p>
+<p>We will use a softmax policy as a running example. Weight actions using linear combination of features <span class="math inline">\(\phi(s, a)^T\theta\)</span>. Probability of action is proportional to exponentiated weight: <span class="math display">\[
+\pi_\theta(s, a)\varpropto e^{\phi(s, a)^T\theta}
+\]</span> The score function is <span class="math display">\[
+\nabla_\theta\log\pi_\theta(s, a)=\phi(s, a)-\mathbb{E}_{\pi_\theta}[\phi(s, \cdot)]
+\]</span> (Intuition: log gradient = the feature for the action that we actually took minus the average feature for all actions.)</p>
+<p><em>Gaussian Policy</em></p>
+<p>In continuous action spaces, a Gaussian policy is natural.</p>
+<ul>
+<li>Mean is a linear combination of state features <span class="math inline">\(\mu(s) = \phi(s)^T\theta\)</span>.</li>
+<li>Variance may be fixed <span class="math inline">\(\sigma^2\)</span>, or can also parametrised</li>
+</ul>
+<p>Policy is Gaussian, <span class="math inline">\(a\sim \mathcal{N}(\mu(s), \sigma^2)\)</span>. The score function is <span class="math display">\[
+\nabla_\theta\log\pi_\theta(s, a)=\frac{(a-\mu(s))\phi(s)}{\sigma^2}
+\]</span> So far we just have a sense of what does the score function look like. Now we step into policy gradient theorem.</p>
+<p><strong>One-Step MDPs</strong></p>
+<p>Consider a simple class of one-step MDPs:</p>
+<ul>
+<li>Starting in state <span class="math inline">\(s\sim d(s)\)</span></li>
+<li>Terminating after one time-step with reward <span class="math inline">\(r=\mathcal{R}_{s,a}\)</span></li>
+</ul>
+<p>Use likelihood ratios to compute the policy gradient <span class="math display">\[
+\begin{align}
+J(\theta) &amp;=\mathbb{E}_{\pi_\theta}[r]\\
+&amp;=\sum_{s\in\mathcal{S}}d(s)\sum_{a\in\mathcal{A}}\pi_\theta(s, a)\mathcal{R}_{s,a}
+\end{align}
+\]</span></p>
+<p><span class="math display">\[
+\begin{align}
+\nabla_\theta J(\theta) &amp;=\sum_{s\in\mathcal{S}}d(s)\sum_{a\in\mathcal{A}}\pi_\theta(s, a)\nabla_\theta\log\pi_\theta(s, a)\mathcal{R}_{s,a}\\
+&amp;=\mathbb{E}_{\pi_\theta}[\nabla_\theta\log\pi_\theta(s, a)r]
+\end{align}
+\]</span></p>
+<p>The policy gradient theorem generalises the likelihood ratio approach to multi-step MDPs.</p>
+<ul>
+<li>Replaces instantaneous reward <span class="math inline">\(r\)</span> with long-term value <span class="math inline">\(Q^\pi(s, a)\)</span></li>
+</ul>
+<p>Policy gradient theorem applies to start state objective, average reward, and average value objective.</p>
+<blockquote>
+<p>Theorem</p>
+<p>For any differentiable policy <span class="math inline">\(\pi_\theta(s,a)\)</span>, for any of the policy objective functions mentioned earlier, the policy gradient is <span class="math display">\[
+\nabla_\theta J(\theta)=\color{red}{\mathbb{E}_{\pi_\theta}[\nabla_\theta\log\pi_\theta(s, a)Q^{\pi_\theta}(s, a)]}
+\]</span></p>
+</blockquote>
+<p><strong>Monte-Carlo Policy Gradient (REINFORCE)</strong></p>
+<p>Update parameters by stochastic gradient ascent using policy gradient theorem. And using return <span class="math inline">\(v_t\)</span> as an <strong>unbiased sample</strong> of <span class="math inline">\(Q^{\pi_\theta}(s_t,a_t)\)</span>: <span class="math display">\[
+\triangle\theta_t=\alpha\nabla_\theta\log\pi_\theta(s_t, a_t)v_t
+\]</span> <img src="/images/mcpseudo.png"></p>
+<p>(Note: MCPG is slow.)</p>
+<h2><span id="actor-critic-policy-gradient">Actor-Critic Policy Gradient</span></h2>
+<p><strong>Reducing Variance Using a Critic</strong></p>
+<p>Monte-Carlo policy gradient still has high variance, we use a <span class="math inline">\(\color{red}{critic}\)</span> to estimate the action-value function: <span class="math display">\[
+Q_w(s, a)\approx Q^{\pi_\theta}(s, a)
+\]</span> Actor-critic algorithms maintain two sets of parameters:</p>
+<ul>
+<li>Critic: Updates action-value function parameters <span class="math inline">\(w\)</span></li>
+<li>Actor: Updates policy parameters <span class="math inline">\(\theta\)</span>, in direction suggested by critic</li>
+</ul>
+<p>Actor-critic algorithms follow an <em>approximate</em> policy gradient: <span class="math display">\[
+\nabla_\theta J(\theta)\approx \mathbb{E}_{\pi_\theta}[\nabla_\theta\log\pi_\theta(s, a)Q_w(s, a)]\\
+\triangle\theta= \alpha\nabla_\theta\log\pi_\theta(s, a)Q_w(s, a)
+\]</span> The critic is solving a familiar problem: policy evaluation. This problem was explored in previous lectures:</p>
+<ul>
+<li>Monte-Carlo policy evaluation</li>
+<li>Temporal-Difference learning</li>
+<li>TD(<span class="math inline">\(\lambda\)</span>)</li>
+<li>Least Squares policy evaluation</li>
+</ul>
+<p>Simple actor-critic algorithm based on action-value critic using linear value function approximation. <span class="math inline">\(Q_w(s, a)=\phi(s,a)^Tw\)</span></p>
+<ul>
+<li>Critic: Updates <span class="math inline">\(w\)</span> by linear TD(0)</li>
+<li>Actor: Updates <span class="math inline">\(\theta\)</span> by policy gradient</li>
+</ul>
+<p><img src="/images/qacpseudo.png"></p>
+<p><strong>Bias in Actor-Critic Algorithms</strong></p>
+<p>Approximating the policy gradient introduces bias. A biased policy gradient may not find the right solution. Luckily, if we choose value function approximation carefully, then we can avoid introducing any bias. That is we can still follow the exact policy gradient.</p>
+<blockquote>
+<p><strong>Compatible Function Approximation Theorem</strong></p>
+<p>If the following two conditions are satisdied:</p>
+<ol type="1">
+<li><p>Value function approximator is <strong>compatible</strong> to the policy <span class="math display">\[
+\nabla_w Q_w(s, a)=\nabla_\theta \log\pi_\theta(s, a)
+\]</span></p></li>
+<li><p>Value function parameters <span class="math inline">\(w\)</span> minimise the mean-squared error <span class="math display">\[
+\epsilon=\mathbb{E}_{\pi_\theta}[(Q^{\pi_\theta}(s, a)-Q_w(s, a))^2]
+\]</span></p></li>
+</ol>
+<p>Then the policy gradient is exact, <span class="math display">\[
+\nabla_\theta J(\theta)=\mathbb{E}_{\pi_\theta}[\nabla_\theta\log\pi_\theta(s,a)Q_w(s,a)]
+\]</span></p>
+</blockquote>
+<p><strong>Trick: Reducing Variance Using a Baseline</strong></p>
+<p>We substract a baseline function <span class="math inline">\(B(s)\)</span> from the policy gradient. This can <strong>reduce variance, without changing expectation</strong>: <span class="math display">\[
+\begin{align}
+\mathbb{E}_{\pi_\theta}[\nabla_\theta\log\pi_\theta(s,a)B(s)]&amp;=\sum_{s\in\mathcal{S}}d^{\pi_\theta}(s)\sum_a\nabla_\theta\pi_\theta(s,a)B(s)\\
+&amp;= \sum_{s\in\mathcal{S}}d^{\pi_\theta}B(s)\nabla_\theta\sum_{a\in\mathcal{A}}\pi_\theta(s,a)\\
+&amp;=  \sum_{s\in\mathcal{S}}d^{\pi_\theta}B(s)\nabla_\theta 1 \\
+&amp;=0
+\end{align}
+\]</span> A good baseline is the state value function <span class="math inline">\(B(s)=V^{\pi_\theta}(s)\)</span>. So we can rewrite the policy gradient using the <span class="math inline">\(\color{red}{\mbox{advantage function}}\ A^{\pi_\theta}(s,a)\)</span>. <span class="math display">\[
+A^{\pi_\theta}(s,a)=Q^{\pi_\theta}(s,a)-V^{\pi_\theta}(s)\\
+\nabla_\theta J(\theta)=\mathbb{E}_{\pi_\theta}[\nabla_\theta\log\pi_\theta(s,a)\color{red}{A^{\pi_\theta}(s,a)}]
+\]</span> where <span class="math inline">\(V^{\pi_\theta}(s)​\)</span> is the state value function of <span class="math inline">\(s​\)</span>.</p>
+<p><strong>Intuition</strong>: The advantage function <span class="math inline">\(A^{\pi_\theta}(s,a)\)</span> tells us how much better than usual is it to take action <span class="math inline">\(a\)</span>.</p>
+<p><strong>Estimating the Advantage Function</strong></p>
+<p>How do we know the state value function <span class="math inline">\(V\)</span>?</p>
+<p>One way to do that is to estimate both <span class="math inline">\(V^{\pi_\theta}(s)\)</span> and <span class="math inline">\(Q^{\pi_\theta}(s,a)\)</span>. Using two function approximators and two parameter vectors, <span class="math display">\[
+V_v(s)\approx V^{\pi_\theta}(s)\\
+Q_w(s,a)\approx Q^{\pi_\theta}(s,a)\\
+A(s,a)=Q_w(s,a)-V_v(s)
+\]</span> And updating both value functions by e.g. TD learning.</p>
+<p>Another way is to use the TD error to compute the policy gradient. For the true value function <span class="math inline">\(V^{\pi_\theta}(s)\)</span>, the TD error <span class="math inline">\(\delta^{\pi_\theta}\)</span> <span class="math display">\[
+\delta^{\pi_\theta}=r+\gamma V^{\pi_\theta}(s&#39;)-V^{\pi_\theta}(s)
+\]</span> is an unbiased estimate of the advantage function: <span class="math display">\[
+\begin{align}
+\mathbb{E}_{\pi_\theta}[\delta^{\pi_\theta}|s, a] &amp;= \mathbb{E}_{\pi_\theta}[r+\gamma V^{\pi_\theta}(s&#39;)|s, a]-V^{\pi_\theta}(s)\\
+&amp;= Q^{\pi_\theta}(s, a) - V^{\pi_\theta}(s)\\
+&amp;= \color{red}{A^{\pi_\theta}(s,a)}
+\end{align}
+\]</span> So we can use the TD error to compute the policy gradient <span class="math display">\[
+\nabla_\theta J(\theta)=\mathbb{E}_{\pi_\theta}[\nabla_\theta\log\pi_\theta(s,a)\color{red}{\delta^{\pi_\theta}}]
+\]</span> In practice we can use an approximate TD error: <span class="math display">\[
+\delta_v=r+\gamma V_v(s&#39;)-V_v(s)
+\]</span> This approach only requires one set of critic parameters <span class="math inline">\(v\)</span>.</p>
+<p><strong>Critics and Actors at Different Time-Scales</strong></p>
+<p>Critic can estimate value function <span class="math inline">\(V_\theta(s)\)</span> from many targets at different time-scales</p>
+<ul>
+<li><p>For MC, the target is return <span class="math inline">\(v_t\)</span> <span class="math display">\[
+\triangle \theta=\alpha(\color{red}{v_t}-V_\theta(s))\phi(s)
+\]</span></p></li>
+<li><p>For TD(0), the target is the TD target <span class="math inline">\(r+\gamma V(s&#39;)\)</span> <span class="math display">\[
+\triangle \theta=\alpha(\color{red}{r+\gamma V(s&#39;)}-V_\theta(s))\phi(s)
+\]</span></p></li>
+<li><p>For forward-view TD(<span class="math inline">\(\lambda\)</span>), the target is the return <span class="math inline">\(_vt^\lambda\)</span> <span class="math display">\[
+\triangle \theta=\alpha(\color{red}{v_t^\lambda}-V_\theta(s))\phi(s)
+\]</span></p></li>
+<li><p>For backward-view TD(<span class="math inline">\(\lambda\)</span>), we use eligibility traces <span class="math display">\[
+\begin{align}
+\delta_t &amp;= r_{t+1}+\gamma V(s_{t+1})-V(s_t) \\
+e_t&amp; = \gamma\lambda e_{t-1} +\phi(s_t) \\
+\triangle\theta&amp;=\alpha\delta_te_t
+\end{align}
+\]</span></p></li>
+</ul>
+<p>The policy gradient can also be estimated at many time-scales <span class="math display">\[
+\nabla_\theta J(\theta)=\mathbb{E}_{\pi_\theta}[\nabla_\theta\log\pi_\theta(s,a)\color{red}{A^{\pi_\theta}(s,a)}]
+\]</span></p>
+<ul>
+<li><p>MC policy gradient uses error from complete return <span class="math display">\[
+\triangle\theta=\alpha(\color{red}{v_t}-V_v(s_t))\nabla_\theta\log\pi_\theta(s_t,a_t)
+\]</span></p></li>
+<li><p>Actor-critic policy gradient uses the one-step TD error <span class="math display">\[
+\triangle\theta=\alpha(\color{red}{r+\gamma V_v(s_{t+1})}-V_v(s_t))\nabla_\theta\log\pi_\theta(s_t,a_t)
+\]</span></p></li>
+<li><p>Just like forward-view TD(<span class="math inline">\(\lambda\)</span>), we can mix over time-scale <span class="math display">\[
+\triangle \theta=\alpha(\color{red}{v_t^\lambda}-V_v(s_t))\nabla_\theta\log\pi_\theta(s_t,a_t)
+\]</span> where <span class="math inline">\(v_t^\lambda-V_v(s_t)\)</span> is a biased estimate of advantage function.</p></li>
+<li><p>Like backward-view TD(<span class="math inline">\(\lambda\)</span>), we can also use eligibility traces by substituting <span class="math inline">\(\phi(s)=\nabla_\theta\log\pi_\theta(s,a)\)</span> <span class="math display">\[
+\begin{align}
+\delta_t &amp;= r_{t+1}+\gamma V_v(s_{t+1})-V_v(s_t) \\
+e_{t+1}&amp; = \gamma\lambda e_{t} +\nabla_\theta\log\pi_\theta(s,a) \\
+\triangle\theta&amp;=\alpha\delta_te_t
+\end{align}
+\]</span></p></li>
+</ul>
+<h2><span id="summary-of-policy-gradient-algorithms">Summary of Policy Gradient Algorithms</span></h2>
+<p>The policy gradient has many equivalent forms</p>
+<p><img src="/images/sumpg.png"></p>
+<p>Each leads a stochastic gradient ascent algorithm. Critic uses policy evaluation to estimate <span class="math inline">\(Q^\pi(s, a)\)</span>, <span class="math inline">\(A^\pi(s, a)\)</span> or <span class="math inline">\(V^\pi(s)\)</span>.</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Reinforcement-Learning/">Reinforcement Learning</a><a href="/tags/增强学习/">增强学习</a><a href="/tags/Policy-Gradient/">Policy Gradient</a><a href="/tags/REINFORCE/">REINFORCE</a><a href="/tags/Actor-Critic/">Actor-Critic</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

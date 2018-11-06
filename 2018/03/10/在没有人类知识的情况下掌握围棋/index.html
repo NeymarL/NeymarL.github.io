@@ -1,0 +1,278 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    论文翻译：在没有人类知识的情况下掌握围棋 | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="论文翻译：在没有人类知识的情况下掌握围棋">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      论文翻译：在没有人类知识的情况下掌握围棋</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2018/03/10/在没有人类知识的情况下掌握围棋/" rel="bookmark">
+        <time class="entry-date published" datetime="2018-03-10T06:01:09.000Z">
+          2018-03-10
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <h4><span id="1-前言">1. 前言</span></h4>
+<p>​ 人工智能的一个长期目标是在一些有挑战的领域中从零开始学习出超人熟练程度的算法。最近，AlphaGo成为第一个在围棋比赛中击败世界冠军的程序。 AlphaGo中的树搜索使用深度神经网络评估位置和选定的移动。这些神经网络是通过监督学习来自人类专家的走法以及通过强化自我学习来进行训练的。这里我们只介绍一种基于强化学习的算法，没有超出游戏规则的人类数据，指导或领域知识。AlphaGo成为自己的老师：一个神经网络训练预测AlphaGo的移动选择和游戏的胜者。这个神经网络提高了树搜索的强度，在下一次迭代中拥有更高质量的移动选择和更强的自我学习。我们的新程序AlphaGo Zero从零开始学习，实现了超人的表现，与之前发布的夺冠冠军AlphaGo相比以100-0取胜。</p>
+<a id="more"></a>
+<h4><span id="2-概述">2. 概述</span></h4>
+<p>​ 围棋程序在人工智能方面已经取得了很大的进展，使用经过训练的监督学习系统来复制人类专家的决定。但是，专家数据集通常很昂贵，不可靠或根本无法使用。即使有可靠的数据集，它们也可能会对以这种方式培训的系统的性能施加上限。相比之下，强化学习系统是根据他们自己的经验进行学习的，原则上允许他们超越人类能力，并在缺乏人力专业知识的领域运作。最近，通过强化学习训练的深度神经网络，朝着这个目标快速发展。这些系统在计算机游戏中胜过人类，如Atari游戏和3D虚拟环境。然而，在人类智力方面最具挑战性的领域 - 比如被广泛认为是人工智能的巨大挑战的围棋游戏 - 在广阔的搜索空间中需要精确和复杂的搜索。以前的方法没有在这些领域实现达到人类水平的表现。</p>
+<p>​ AlphaGo 是第一个在围棋中实现超人表现的程序。之前发布的版本，我们称之为AlphaGo Fan，于2015年10月击败了欧洲冠军范辉。AlphaGo Fan 使用了两个深度神经网络：输出移动概率的策略网络和输出位置评估的价值网络。策略网络最初是通过监督学习来准确地预测人类专家的行为，随后通过策略升级强化学习进行了改进。价值网络经过训练，可以预测游戏的胜者。一旦开始训练，这些网络就会与蒙特卡洛树搜索（MCTS）结合使用，从而提供先行搜索，使用策略网络将搜索范围缩小为高概率移动，并使用价值网络来评估树中的位置。我们称之为 AlphaGo Lee 的后续版本使用了类似的方法，并于2016年3月击败了获得18个国际冠军的Lee Sedol。</p>
+<p>​ AlphaGo Zero 与 AlphaGo Fan 和 AlphaGo Lee 在几个重要方面不同。首先，它只是通过自我增强强化学习进行训练，从随机比赛开始，没有任何监督或使用人类数据。其次，它只使用黑白棋位置作为输入。第三，它使用单一的神经网络，而不是单独的策略和价值网络。最后，它使用更简单的搜索树，该搜索依赖于这个单一的神经网络来评估位置和移动，而无需执行任何 Monte Carlo 回溯。为了实现这些结果，我们引入了一种新的强化学习算法，该算法在训练环内部结合了前瞻搜索，从而实现了快速改进和精确而稳定的学习。在方法一栏中中描述了搜索算法，训练过程和网络体系结构中的其他技术差异。</p>
+<h4><span id="3-alphago-zero-中的增强学习">3. AlphaGo Zero 中的增强学习</span></h4>
+<p>​ 我们的新方法使用参数为 <span class="math inline">\(\theta\)</span> 的深度神经网络 <span class="math inline">\(f(\theta)\)</span>。该神经网络将位置及其历史的原始平面表示 s 作为输入，并输出移动概率和价值 <span class="math inline">\((p,v)=f_\theta(s)\)</span>。 移动概率 p 的向量表示选择每个移动 a 的概率，<span class="math inline">\(P_a=Pr(a|s)\)</span> 。价值 v 是一个标量评估，用于估计当前玩家从位置 s 获胜的概率。这个神经网络将策略网络和价值网络结合到一个网络中。神经网络由卷积层，许多残差块组成，批量归一化和非线性整流器（参见方法）组成。</p>
+<p>​ AlphaGo Zero 中的神经网络是通过一种新型的强化学习算法从自我博弈的游戏中训练出来的。在每个位置 <span class="math inline">\(s\)</span>，执行 MCTS 搜索，由神经网络 <span class="math inline">\(f(\theta)\)</span> 指导。MCTS 搜索输出每次移动的概率 <span class="math inline">\(π\)</span>。这些搜索概率通常选择比神经网络的原始移动概率 <span class="math inline">\(p\)</span> 更加强大;因此，MCTS 可被视为策略改进的操作。使用搜索进行自我博弈 - 使用改进的基于 MCTS 的策略来选择每个动作，然后使用游戏获胜者 <span class="math inline">\(z\)</span> 作为价值的样本 - 可以被视为一个强大的策略评估操作。我们的强化学习算法的主要思想是在策略迭代过程中重复使用这些操作：更新神经网络的参数以使移动概率和值 <span class="math inline">\((p,v)=f_\theta(s)\)</span> 更紧密匹配改进的搜索概率和获胜者 <span class="math inline">\((\pi,z)\)</span>；这些新参数将用于下一次自我博弈，以使搜索更加强大。图 1说明了自我博弈训练流程。</p>
+<p><img src="/images/selfplay.png"></p>
+<p>​ <em>图1 AlphaGo Zero中的自我博弈与增强学习训练流程</em></p>
+<p>​ MCTS 使用神经网络 <span class="math inline">\(f(\theta)\)</span> 来指导其模拟（见图 2）。搜索树中的每个边 <span class="math inline">\((s,a)\)</span> 存储先验概率 <span class="math inline">\(P(s,a)\)</span>，访问计数 <span class="math inline">\(N(s,a)\)</span> 和动作价值 <span class="math inline">\(Q(s,a)\)</span> 。每个模拟从根状态开始，并且迭代地选择使置信上限 <span class="math inline">\(Q(s,a)+U(s,a)\)</span> 最大化的移动，其中<span class="math inline">\(U\propto \frac{P(s,a)}{1+N(s,a)}\)</span>，直到遇到叶节点 <span class="math inline">\(s&#39;\)</span>。该叶子位置被网络扩展和评估一次，以产生先验概率和评估，<span class="math inline">\((P(s&#39;, \cdot), v(s&#39;))=f_\theta(s&#39;)\)</span>。在模拟中遍历的每个边 <span class="math inline">\((s,a)\)</span> 被更新以增加其访问计数 <span class="math inline">\(N(s,a)\)</span>，并且将其动作价值更新为在这些模拟上的平均评估 <span class="math inline">\(Q(s,a) = \frac{1}{N(s,a)}\sum_{s&#39;|s,a\rightarrow s&#39;}V(s&#39;)\)</span>， 其中 <span class="math inline">\(s,a\rightarrow s&#39;\)</span> 表示在从位置 <span class="math inline">\(s\)</span> 执行行动 <span class="math inline">\(a\)</span> 后模拟最终达到位置 <span class="math inline">\(s&#39;\)</span>。</p>
+<p><img src="/images/mcts0.png"></p>
+<p>​ <em>图2 AlphaGo Zero中的蒙特卡洛搜索树</em></p>
+<p>​ MCTS 可以被看作是一种自我博弈算法，在给定神经网络参数 <span class="math inline">\(θ\)</span> 和根位置 <span class="math inline">\(s\)</span> 的情况下，计算推荐移动的搜索概率矢量，<span class="math inline">\(\pi = a_\theta(s)\)</span>，与每次移动的访问计数的指数成比例，<span class="math inline">\(\pi_a\propto N(s,a)^{1/\tau}\)</span>，其中 <span class="math inline">\(τ\)</span> 是温度参数。</p>
+<p>​ 神经网络通过使用 MCTS 选择每个动作的自我博弈增强化学习算法进行训练。首先，神经网络被初始化为随机权重 <span class="math inline">\(\theta_0\)</span>。在随后的每次迭代 <span class="math inline">\(i≥1\)</span> 时，产生自我博弈的数据（图 1）。在每个时刻 <span class="math inline">\(t\)</span>，使用先前的神经网络迭代 <span class="math inline">\(f_{\theta_{i-1}}\)</span> 执行 MCTS 搜索，并且通过对搜索概率 <span class="math inline">\(\pi_t\)</span> 进行采样来执行移动。当两个玩家都无路可走时或者当搜索值下降到低于阈值或当游戏超过最大长度时，游戏在时刻 <span class="math inline">\(T\)</span> 终止;然后对游戏进行评分以给出 <span class="math inline">\(r_T\in\{-1,+1\}\)</span> 的最终奖励（详见方法）。每个时刻 <span class="math inline">\(t\)</span> 的数据存储为 <span class="math inline">\((s_t,\pi_t,z_t)\)</span>，其中 <span class="math inline">\(z_t = \pm r_T\)</span> 是时刻 <span class="math inline">\(t\)</span> 从当前玩家角度出发的游戏获胜者。同时（如图 1），新的网络参数 <span class="math inline">\(\theta_i\)</span> 从最后一次自我博弈的所有时间中统一采样的数据 <span class="math inline">\((s,\pi,t)\)</span> 进行训练。调整神经网络 <span class="math inline">\((p,v)=f_{\theta_i}(s)\)</span> 以最小化预测值 <span class="math inline">\(v\)</span> 与实际赢得者 <span class="math inline">\(z\)</span>之间的误差，并使神经网络移动概率 <span class="math inline">\(p\)</span> 与搜索概率 <span class="math inline">\(π\)</span> 的相似性最大化。具体而言，参数 <span class="math inline">\(θ\)</span> 通过梯度下降在损失函数 <span class="math inline">\(l\)</span> 上进行调整，所述损失函数 <span class="math inline">\(l\)</span> 分别对均方误差和交叉熵误差进行求和： <span class="math display">\[
+(p,v)=f_\theta(s) \mbox{ and }l=(z-v)^2-\pi^T\log p+c||\theta||^2
+\]</span> 其中 <span class="math inline">\(c\)</span> 是控制 L2 正则化程度的超参数（为了防止过拟合）。</p>
+<h4><span id="4-alphago-zero-的实验分析">4. AlphaGo Zero 的实验分析</span></h4>
+<p>​ 我们使用上述强化学习流程来训练 AlphaGo Zero。训练从完全随机的行为开始，持续约三天且无人为干预。在训练过程中，每个 MCTS 使用 1,600 次模拟，每次移动的思考时间大约为 0.4s，从而产生了 490 万局自我博弈。 参数从 700,000 个包含 2048 个状态的批量中更新。神经网络包含 20 个残余块。</p>
+<p>​ 图 3 显示了 AlphaGo Zero 在自我博弈过程中的表现，横坐标为训练时间，纵坐标为 Elo 量。整个训练过程进展顺利，并且没有遭受先前文献中提出的振荡或灾难性遗忘。令人惊讶的是，AlphaGo Zero 仅仅 36 小时就赢了AlphaGo Lee。相比之下，AlphaGo Lee 训练了几个月。在 72 小时后，我们根据在首尔人机比赛中使用的相同的 2 小时时间控制和匹配条件，对 AlphaGo Zero 与 AlphaGo Lee 的确切版本进行了评估，该版本击败了 Lee Sedol。AlphaGo Zero 使用带有4个张量处理单元（TPU）的单台机器，而 AlphaGo Lee 分布在多台机器上并使用 48 个TPU。AlphaGo Zero 将 AlphaGo Lee 以 100 比 0 击败。</p>
+<p>​ 为了评估自我强化学习的优点，与从人类数据中学习相比，我们训练了第二个神经网络（使用相同的体系结构）来预测 KGS 服务器数据集中的专家动作; 与之前的工作相比，这实现了预测的准确性。 监督式学习的初始表现更好，并且更好地预测人类职业动作（图 3）。 值得注意的是，尽管监督学习获得了更高的移动预测准确度，但自学者的整体表现更好，在训练的前 24 小时内击败了训练有素的选手。这表明 AlphaGo Zero 可能正在学习一种与人类下棋不同的策略。</p>
+<p><img src="/images/ag0em.png"></p>
+<p>​ <em>图3 AlphaGo Zero的实验评估</em></p>
+<p>​ 为了分离架构和算法的贡献，我们将 AlphaGo Zero 中的神经网络架构的性能与 AlphaGo Lee 中使用的以前的神经网络架构进行了比较（见图 4）。 新训练的AlphaGo Zero 有四个版本的神经网络，分别是：使用 AlphaGo Lee 的卷积网络架构；AlphaGo Zero 的剩余网络架构；使用 AlphaGo Zero 的卷积网络架构；使用AlphaGo Lee 的剩余网络架构。每个网络都经过训练，以最小化相同的损失函数，使用由 AlphaGo Zero 在自我训练 72 小时后产生的固定数据集。使用剩余网络更准确，实现了更低的误差，AlphaGo 的性能提高了 600 多 Elo。将策略和价值组合在一起成为一个网络，略微降低了移动预测的准确性，但是将降低了 AlphaGo 的价值误差和提高了博弈性能约 600 个 Elo。部分原因在于提高了计算效率，但更重要的是，双重目标将网络正则化为支持多种用例的表示。</p>
+<p><img src="/images/ag02.png"></p>
+<p>​ <em>图4 AlphaGo Zero和AlphaGo Lee的神经网络结构比较</em></p>
+<h4><span id="5-alphago-zero-学习到的围棋知识">5. AlphaGo Zero 学习到的围棋知识</span></h4>
+<p>​ AlphaGoZero在其自我博弈训练过程中发现了非凡的围棋知识水平。这不仅包括人类围棋知识的基本要素，还包括超出传统围棋知识范围的非标准策略。</p>
+<p>​ 图 5显示了一个时间线，表明何时发现了专业 joseki（角点序列）;最终AlphaGo Zero 更喜欢先前未知的新的 joseki 变体（图5b ）。图5c 显示了几种在不同训练阶段进行的快速自我博弈。在整个训练中定期进行的锦标赛长度比赛在补充信息中显示。 AlphaGo Zero 从完全随机的移动过渡到对围棋概念的复杂理解，包括fuseki（开场），tesuji（战术），生与死，ko（重复棋局），yose（终局），捕捉比赛，sente（倡议），形状，影响力和领土，都是从最初的原则发现的。令人惊讶的是，Shocho - 人类学习的围棋知识的第一要素之一 - 只有在 AlphaGo Zero 的训练中才能被理解。</p>
+<p><img src="/images/ag05.png"></p>
+<p>​ <em>图5 AlphaGo Zero学到的围棋知识</em></p>
+<h4><span id="6-alphago-zero-的最终水平">6. AlphaGo Zero 的最终水平</span></h4>
+<p>​ 随后我们使用更大的神经网络和更长的持续时间将我们的强化学习管道应用于AlphaGo Zero的第二个实例。再次训练从完全随机行为开始并持续大约40天。</p>
+<p>​ 在训练过程中，产生了 2900 万次自我博弈。参数从每个 2,048 个位置的 310 万个小型批量中更新。神经网络包含 40 个残余块。学习曲线如图 6a 所示。在整个训练过程中定期进行的比赛显示在补充信息中。</p>
+<p><img src="/images/ag06.png"></p>
+<p>​ <em>图6 AlphaGo Zero的评估</em></p>
+<p>​ 我们使用 AlphaGo Fan，AlphaGo Lee 和之前的几个围棋程序的内部比赛评估了训练有素的 AlphaGo Zero。我们还与最强大的现有程序 AlphaGo Master 进行了游戏，该程序基于本文提供的算法和体系结构，但使用了人类数据和特征（请参阅方法） - 它在 60-0 在线游戏中击败了最强的人类职业玩家。在我们的评估中，所有程序都允许每个动作有5秒的思考时间; AlphaGo Zero 和 AlphaGo Master 每台在带有 4 个 TPU 的单台机器上博弈; AlphaGo Fan 和 AlphaGo Lee 分别分布有 176 个GPU和 48 个TPU。我们还包括一个完全基于 AlphaGo Zero 原始神经网络的选手; 该选手只是以最大的概率选择移动（不进行 MCTS 搜索）。</p>
+<p>​ 图 6b显示了每个程序在Elo规模上的表现。未使用任何预测的原始神经网络实现了3,055的Elo评级。 AlphaGo Zero 获得了5,185的评分，而 AlphaGo Master 的4,858，AlphaGo Lee 的 3,739和 AlphaGo Fan 的3,144。</p>
+<p>​ 最后，我们评估了 AlphaGo Zero 对阵 AlphaGo Master，在每场2小时的时间限定内进行了100场比赛，AlphaGo Zero 赢得了其中的89场。</p>
+<h4><span id="7-结论">7. 结论</span></h4>
+<p>​ 我们的研究结果全面证明，即使在最具挑战性的领域中，纯粹的强化学习方法也是完全可行的：在不超出基本规则的情况下，没有关于领域的知识，就可以训练到超人的水平，没有人类的例子或指导。此外，与用人类专家数据训练的程序相比，纯粹的强化学习方法只需要几个小时的训练时间就能达到更好的性能。使用这种方法，AlphaGo Zero 大幅度击败了使用人工数据训练的 AlphaGo 最强大的先前版本。</p>
+<p>​ 人类已经积累了几千年来的围棋知识，发展成固定的模式，总结成谚语和书籍。在几天的时间里，AlphaGo Zero 从零学起，就能够重新发现许多的围棋知识，并能为这个古老的游戏提供新见解、新策略。</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Reinforcement-Learning/">Reinforcement Learning</a><a href="/tags/AlphaGo/">AlphaGo</a><a href="/tags/AlphaZero/">AlphaZero</a><a href="/tags/增强学习/">增强学习</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

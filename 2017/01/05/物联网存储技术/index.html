@@ -1,0 +1,1043 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    物联网存储技术 | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="物联网存储技术">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      物联网存储技术</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/01/05/物联网存储技术/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-01-05T06:08:47.000Z">
+          2017-01-05
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p><strong>目录</strong></p>
+<!-- toc -->
+<ul>
+<li><a href="#元数据管理">元数据管理</a></li>
+<li><a href="#重复数据删除">重复数据删除</a></li>
+<li><a href="#固态存储技术">固态存储技术</a></li>
+<li><a href="#溯源数据的高效存储管理及应用">溯源数据的高效存储管理及应用</a></li>
+<li><a href="#名词解释">名词解释</a></li>
+</ul>
+<!-- tocstop -->
+<a id="more"></a>
+<h2><span id="元数据管理">元数据管理</span></h2>
+<p>元数据描述件系统组织结构的数据(描述数据的数据)，即访问数据之前必须访问的数据的描述信息和空间组织信息。</p>
+<ul>
+<li>OBS(Object-based Storage，对象存储)，OSD(Obeject-based Storage Device，对象存储设备)</li>
+<li>在OBS系统中，元数据分为物理视图（约占元数据总量90%）和逻辑视图（约占元数据总量10%）。
+<ul>
+<li><strong>物理视图</strong>负责将<strong>对象的逻辑块映射到存储物理介质</strong>，以支持对象在块存储设备上的工作，存放在<strong>OSD</strong>上</li>
+<li><strong>逻辑视图</strong>用于<strong>描述整个系统的命名空间、目录层次结构和访问控制策略，将文件映射为存储对象</strong>，存放在<strong>MDS</strong>上。</li>
+<li>存储在<strong>OSD</strong>中的元数据负责OSD上<strong>局部</strong>的数据管理</li>
+<li>而<strong>MDS</strong>上维护管理的元数据则负责整个存储系统中<strong>全局的数据布局、负载调度与访问控制</strong>是OBS元数据管理的<strong>重点</strong></li>
+</ul></li>
+</ul>
+<p>元数据表</p>
+<ul>
+<li>用来描述文件与对象之间的对应关系</li>
+<li>flag为0表示一个文件对应多个对象，索引号字段表示各对象在文件中的物理逻辑顺序，偏移值字段表示该对象在对应文件中的偏移首地址</li>
+<li>flag为1则表示多个文件存在一个对象中，索引号字段表示各文件在对象中的物理逻辑顺序，偏移值字段表示各文件在中该对象的偏移首地址</li>
+<li>OSD号是各存储设备（OSD）在OBS存储系统中的全局唯一标识</li>
+<li>对象号则是根据一定的命名规则形成的对象标识符，通常是一个全局唯一的128位无符号数</li>
+</ul>
+<p>MDS的基本功能</p>
+<ul>
+<li>维护全局树形目录结构</li>
+<li>提供给客户统一的目录视图</li>
+<li>完成客户端提交的文件请求到对象的映射</li>
+<li>并给出所属对象的存储位置</li>
+<li>元数据的本地存储管理</li>
+<li>安全策略</li>
+<li>对象分布管理：负载均衡</li>
+<li>Cache的一致性维护</li>
+</ul>
+<p>元数据管理方式</p>
+<ul>
+<li>核心问题：<strong>元数据在集群上的分配策略</strong></li>
+<li>合理的分配策略可以使元数据在各MDS上均匀分布，来自客户端的访问负载也可以均衡的分布在各个MDS上，在整个MDS集群中尽量分散热点元数据</li>
+<li>静态目录子树分割
+<ul>
+<li>按照传统的文件组织方式，将全局目录树划分为若干子树，每个MDS节点上面维护一个或多个子树，各节点共同组成全局的逻辑视图</li>
+<li>优点
+<ul>
+<li>简单</li>
+<li>最大程度的保留了目录的层次逻辑结构</li>
+<li>便于利用文件访问的空间局部性</li>
+<li>用户的文件访问请求只需涉及一台MDS，各个MDS彼此独立</li>
+</ul></li>
+<li>缺点
+<ul>
+<li>若某个目录子树下面的自目录或文件成为访问<strong>热点</strong>，则存放该目录子树的MDS节点将负载过重，成为MDS集群中的瓶颈</li>
+<li>当加入或删除MDS节点时，需要人工的调整目录子树的分配，大大<strong>限制了MDS集群的可扩展性</strong></li>
+</ul></li>
+</ul></li>
+<li>静态哈希
+<ul>
+<li>静态哈希方法通过将文件标识符、目录/文件名或其他文件特征值进行哈希运算，映射分配到不同的MDS节点上</li>
+<li>优点
+<ul>
+<li>将全局元数据均匀的分配到MDS集群各节点上，不会因为存在热点目录导致MDS负载不均衡</li>
+<li>客户的文件访问请求，只要经过简单的哈希运算便可以定位到目标MDS</li>
+</ul></li>
+<li>缺点
+<ul>
+<li>由于放弃了系统目录结构的空间局部性，在对子目录进行遍历操作，要涉及MDS中大量节点的工作</li>
+<li>对子目录进行重命名操作将导致大量元数据迁移；</li>
+<li>客户端上的Cache也因为不断刷新而降低了命中率</li>
+<li>集群中加入或删除MDS节点时，必然需要更改哈希函数，将导致MDS集群中元数据的重新分配，大量元数据迁移，因此其可扩展性能很有限</li>
+</ul></li>
+</ul></li>
+<li>Lazy Hybrid
+<ul>
+<li>采用文件的全路径名进行哈希运算，这样<strong>相同路径下的所有文件被映射存放到同一MDS上</strong>，这些文件的<strong>元数据进一步通过哈希分散开来</strong>，并使用一个元数据查找表（Metadata Look-up Table，MLT）来记录分布信息</li>
+<li>优点
+<ul>
+<li>既保留了一定的目录结构，又充分分散了热点目录下的元数据</li>
+<li>采用了一种<strong>访问控制链表</strong>描述文件的安全权限，将目录权限的检查合结合文件的元数据中，不必遍历文件路径的所有目录层次才能确定该文件的访问权限</li>
+<li>将元数据的更新操作暂存延迟到该元数据再次访问的时候进行，分散MDS的更新负担</li>
+</ul></li>
+<li>缺点
+<ul>
+<li>与静态哈希类似</li>
+</ul></li>
+</ul></li>
+<li>动态目录子树分割
+<ul>
+<li>将全局目录划分为若干目录子树，分布存储在MDS集群各节点上，当系统中出现热点子目录或目录子树过于庞大时，则采用哈希的方法将该子目录下的所有<strong>元数据分配到集群其他MDS节点上</strong>。</li>
+<li>优点
+<ul>
+<li>最大程度保留目录结构，以便充分利用文件的空间局部性</li>
+<li>动态的进行元数据迁移，调整集群负载</li>
+</ul></li>
+<li>缺点
+<ul>
+<li>在文件访问负载不断变化的情况下，如何能使系统根据负载情况自适应调整元数据分布，是一个实现难题</li>
+</ul></li>
+</ul></li>
+<li>动态哈希
+<ul>
+<li>提供了相对负载均衡、弹性更新策略和全生命周期管理三种策略，通过MDS之间的检测，将高负载MDS中的部分元数据向低负载MDS迁移</li>
+<li>当需添加或移出MDS时
+<ul>
+<li>采用弹性更新策略进行负载调度</li>
+<li>全生命周期管理利用缓存发现热点并制作副本</li>
+<li>分担元数据访问负载</li>
+</ul></li>
+</ul></li>
+<li>HBA
+<ul>
+<li>设计思想是在每个MDS上建立两级布隆过滤器阵列（Bloom-filter arrays），第一级是<strong>LRU Bloom-filter</strong>，用来记录本地MDS访问最频繁的文件，体积小但查找快；第二级Bloom-filter用来<strong>记录本地MDS存储的所有文件</strong>，体积大但查找慢。</li>
+<li>同时，每台MDS还保存了集群中<strong>其他MDS节点的两级Bloom-filter</strong>，构成了两级记录全局文件分布信息的Bloom-filter阵列</li>
+<li>当LRU表发生溢出时，LRU替换策略将会在相应LRU BF中触发一个增删操作。</li>
+<li>当LRU BF的改变超过一个阈值时，该元数据服务器将会向其他所有元数据服务器广播新的LRU BF来更新它在其他服务器的副本</li>
+<li>优点
+<ul>
+<li>HBA策略不关心元数据的具体分配方式，而是通过将客户请求进行两级Bloom-filter阵列查找快速定向到存储该请求文件元数据的MDS上，提高了访问速度</li>
+</ul></li>
+<li>缺点
+<ul>
+<li>不命中带在的请求广播会增加系统额外负担</li>
+</ul></li>
+</ul></li>
+<li>G-HBA
+<ul>
+<li>引入了分组的概念，将MDS集群根据物理位置等因素分成若干小组，每个小组维持着一个全局的两级Bloom-filter阵列，分布的存储在各MDS节点上</li>
+<li>优点
+<ul>
+<li>客户请求到来时，MDS首先查询本地的部分Bloom-filter阵列，命中则直接将请求重定向，否则首先在组内组播查询，若再不命中则在组外广播。这样的设计<strong>显著减少了HBA系统中客户请求广播带来的网络负载</strong></li>
+</ul></li>
+</ul></li>
+</ul>
+<p>元数据管理方式对比</p>
+<ul>
+<li><em>静态目录子树分割</em>与<em>静态哈希</em>是最<strong>基本</strong>的元数据分配策略，管理简单而易于实施，但在目录结构或名称发生变化时会导致大量元数据迁移，MDS集群节点的加入与删除也会导致元数据的重新分配，因此可扩展性较差。</li>
+<li>HBA与G-HBA则为元数据管理发展了一种新的设计思路，既在原有元数据分配策略的基础上建立一个逻辑层，充分利用客户访问的时间局部性，结合Bloom-filter结构的高速查询，使客户请求能够快速定位，<strong>显著的分担了MDS的工作负载，提高了MDS集群的整体性能</strong>。</li>
+<li>LH策略、动态目录子树分割与动态哈希在前两种基本策略基础上进行了改进，通过使用延迟更新策略、元数据查找表、负载动态调整等方法，使元数据管理获得更有效的管理，但是也不可避免的<strong>继承了</strong>静态目录子树分割与静态哈希的<strong>缺点</strong>。</li>
+</ul>
+<p>Bloom Filter</p>
+<p>误判率为： <span class="math display">\[
+f = (1- (1-\frac{1}{m})^{nk})^k = (1-e^{-\frac{kn}{m}})^k = (1-p)^k
+\]</span> 最优的哈希函数个数 <span class="math display">\[
+g = \ln f = k\ln(1-e^{-\frac{kn}{m}})
+\]</span></p>
+<p><span class="math display">\[
+\frac{\partial g}{\partial k} = \ln(1-e^{-\frac{kn}{m}}) + \frac{kn}{m}\frac{e^{-\frac{kn}{m}}}{1-e^{-\frac{kn}{m}}} = \ln(1-p) + \frac{kn}{m}\frac{p}{1-p}
+\]</span></p>
+<p>令<span class="math inline">\(\frac{\partial g}{\partial k} = 0\)</span>，解得：<span class="math inline">\(k = \frac{m}{n}\ln2\)</span> <span class="math display">\[
+f_{min} = (1-e^{-\ln2})^{\frac{m}{n}\ln2} = (\frac{1}{2})^{\frac{m}{n}\ln2} = (0.6185)^{\frac{m}{n}}
+\]</span> 应用</p>
+<ul>
+<li>字典存储</li>
+<li>数据库</li>
+<li>分布式缓存</li>
+<li>P2P/Overlay网络应用</li>
+</ul>
+<h2><span id="重复数据删除">重复数据删除</span></h2>
+<p><strong>为什么重复数据删除？</strong></p>
+<ul>
+<li>高效地节约存储空间，数据保存时间更长，或者备份更多</li>
+<li>减少网络中数据的传输量，也可以提高备份恢复的性能</li>
+<li>广域网环境，减少数据传输量的意义就更加明显，可以更容易地实现远程备份或容灾</li>
+<li>帮助用户节约时间和成本
+<ul>
+<li>数据的恢复速度更快</li>
+<li>随着备份存储设备的减少，空间、电力、散热的成本消耗也在降低</li>
+</ul></li>
+</ul>
+<p><strong>重删流程</strong></p>
+<ul>
+<li>文件数据流分块。</li>
+<li>数据块哈希指纹。</li>
+<li>指纹查找。</li>
+<li>数据存储</li>
+</ul>
+<p><img src="/images/物联网存储技术/重删流程图.png"></p>
+<p><strong>应用</strong></p>
+<ul>
+<li>备份和归档系统。</li>
+<li>主存储文件系统。</li>
+<li>内存的缓存设计。</li>
+<li>虚拟机存储优化。</li>
+</ul>
+<p><strong>重复数据删除的粒度</strong></p>
+<ul>
+<li>文件级
+<ul>
+<li>通过检查文件的属性来确定重复文件。</li>
+<li>这种方法去重的<strong>效果不如</strong>其他粒度级别</li>
+<li>但是<strong>技术比较简单，而且速度快</strong>。</li>
+</ul></li>
+<li>数据块级
+<ul>
+<li>定长分块</li>
+<li>变长分块</li>
+<li>将数据切分成大小相同的块。每个块都被赋予一个“指纹”，通过“指纹”与数据索引（指纹库）的比较判断是否为重复数据。</li>
+<li>如果块分割的越小，块数量相应就越多，索引也就越多。（产生较高的数据去重比率）。</li>
+<li>不过，我们还要评估一个重要的指标—就是<strong>I/O的压力</strong>，它<strong>与数据比较的频度成正比</strong>，加之数据块越小索引就越大，这可能导致备份性能的下降。</li>
+</ul></li>
+<li>字节级
+<ul>
+<li>通过在新旧文件之间进行逐个字节的比较实现的。</li>
+<li>对性能的影响却非常大。</li>
+</ul></li>
+<li>粒度越小，重复数据删除所带来的元数据越多</li>
+</ul>
+<p><strong>重复数据删除时间</strong></p>
+<ul>
+<li><strong>在线</strong>机制是指在<strong>数据到达存储设备之前</strong>对相同的数据进行删除，存储设备上仅存储唯一的不重复的数据。</li>
+<li><strong>离线</strong>的实现机制是事先采用一个磁盘缓冲区，<strong>先</strong>将所有到达的数据<strong>缓暂存</strong>到一个磁盘缓冲区中，等所有的数据全部写完之后，<strong>在系统空闲的时刻</strong>，将磁盘缓冲区的数据重新读取出来再<strong>查找和删除其重复的数据</strong>。</li>
+</ul>
+<p><strong>重复数据删除位置</strong></p>
+<p>数据的传输和存储分为两端，一个为数据的发送方，即源端；另一个为数据的接收方和存储方，即目标端。</p>
+<ul>
+<li>源端重复数据删除。
+<ul>
+<li><strong>在数据开始传送之前</strong>，在源端将重复的数据进行删除，即重复的数据不需要进行传输和存储。</li>
+</ul></li>
+<li>目标端重复数据删除。
+<ul>
+<li><strong>在目标端的存储设备</strong>上删除重复的数据。在这种实现机制下，重复数据删除所带来的实现开销全部集中在目标端，源端不需要做任何的有关于重复数据删除的操作。</li>
+</ul></li>
+</ul>
+<p><strong>变长分块分块算法</strong></p>
+<ul>
+<li>基于内容的分块算法</li>
+<li>Rabin 指纹分块算法</li>
+<li>Hash算法
+<ul>
+<li>MD表示消息摘要(Message Digest，简记为MD)，MD5以512比特一块的方式处理输入的消息文本，每个块又划分为16个32比特的子块。算法的输出是由4个32比特的块组成，将它们级联成一个128比特的摘要值。</li>
+<li>重复删除技术通常采用MD-5 (a 128 字节的散列) 或 SHA-1 (a 160字节的散列) 算法</li>
+<li>发生散列冲突的概率小于行星碰撞地球</li>
+<li>hash碰撞并不意味着数据会全部丢失。数据被错误识别的这个文件会被破坏。所有其它的数据会被正确地恢复。</li>
+</ul></li>
+</ul>
+<p><strong>问题与挑战</strong></p>
+<ul>
+<li>可扩展性</li>
+<li>吞吐率</li>
+<li>内存开销</li>
+<li>恢复性能</li>
+</ul>
+<p><strong>总结</strong></p>
+<ul>
+<li>重删分块算法
+<ul>
+<li>定长&amp;变长</li>
+<li>分块大小</li>
+</ul></li>
+<li>哈希指纹算法
+<ul>
+<li>SHA-1、MD5</li>
+<li>写吞吐率</li>
+<li>文件大小</li>
+<li>哈希算法</li>
+</ul></li>
+<li>读性能
+<ul>
+<li>文件碎片</li>
+</ul></li>
+<li>分块算法，仍然继续。</li>
+<li>哈希摘要，已经成熟。</li>
+<li>指纹查找，依旧挑战。</li>
+<li>数据读取，潜在问题。</li>
+</ul>
+<h2><span id="固态存储技术">固态存储技术</span></h2>
+<p><strong>半导体存储设备</strong></p>
+<ul>
+<li>闪存（Flash）
+<ul>
+<li>电容性</li>
+</ul></li>
+<li>相变存储器（PCM）
+<ul>
+<li>电阻性</li>
+</ul></li>
+</ul>
+<p><strong>SSD优势</strong></p>
+<ul>
+<li>SSD没有机械部件，抗震动</li>
+<li>SSD不需要马达，低能耗</li>
+<li>SSD高性能</li>
+<li>SSD价格在不断下降</li>
+</ul>
+<p><strong>固态存储相关技术</strong></p>
+<ul>
+<li>SSD：Solid State Disk 固态盘
+<ul>
+<li>基本存储介质是NAND FLASH</li>
+<li>由一个嵌入式控制器控制NAND FLASH的操作</li>
+<li>RAM作为buffer</li>
+<li>通过IDE,SATA,PCI-e等总线对外提供块接口</li>
+<li>读请求：块级接口</li>
+<li>写请求：扇区为单位</li>
+<li>先擦后写</li>
+<li>主要模块
+<ul>
+<li>数据缓存管理模块
+<ul>
+<li>好的buffer策略能够提高SSD的整体性能</li>
+</ul></li>
+<li>闪存翻译层模块 FTL (Flash Translation Layer)
+<ul>
+<li>Address Mapping (地址映射)
+<ul>
+<li>&lt;lsn, size&gt; -&gt; &lt;package，die，plane，block，page&gt;</li>
+<li>页级映射（好，长，大，大，高）</li>
+<li>块级映射（差，短，小，小，低）</li>
+<li>混合映射（较差....）</li>
+</ul></li>
+<li>Wear leveling (损耗平衡)
+<ul>
+<li>动态损耗平衡
+<ul>
+<li>在请求到达时，选取擦除次数较少的块作为请求的物理地址。</li>
+</ul></li>
+<li>静态损耗平衡
+<ul>
+<li>将冷数据从原块取出，存放在擦除次数过多的块，原来存放冷数据的块被释放出来，接受热数据的擦写。</li>
+</ul></li>
+</ul></li>
+<li>Garbage collection (垃圾回收)
+<ul>
+<li>SSD在使用过程中，会产生大量失效页，在SSD的容量到达一定阈值时，需要调用GC函数，清除所有失效页，以增加可用空间</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>SCM：Storage-Class Memory 存储级内存
+<ul>
+<li>非易失</li>
+<li>零或低空闲能耗</li>
+<li>类似磁盘一样的容量</li>
+<li>接近DRAM的存取延迟</li>
+<li>字节级编址</li>
+<li>集成SCM的策略
+<ul>
+<li>缓存策略</li>
+<li>存储替代策略</li>
+<li>内存替代混合策略</li>
+<li>单级存储策略</li>
+</ul></li>
+</ul></li>
+</ul>
+<p><strong>SSD的接口标准</strong></p>
+<ul>
+<li>目前：IDE和SATA</li>
+<li>将来：PCI-E</li>
+</ul>
+<p><strong>性能标准</strong></p>
+<ul>
+<li>测试前提
+<ul>
+<li>读写比例（R/W：75/25, 50/50）</li>
+<li>请求块大小（2KB、128KB）</li>
+<li>测试过程中是否调用过GC操作</li>
+<li>保留空间是多少（20%）</li>
+</ul></li>
+</ul>
+<p>能耗</p>
+<ul>
+<li>产品标称上的功率不一定能够反映SSD真实的能耗。<strong>因为不同的SSD的内部结构可能有所差别，而且智能的功耗管理系统在SSD实际运行时会对能耗有影响。</strong></li>
+<li>因此，能反映能耗的指标是：<strong>完成相同的IO访问请求，所消耗的总能量</strong>，或者是<strong>单位能耗所能完成的IO访问数</strong>。</li>
+</ul>
+<p><strong>自适应的动态缓存管理算法</strong></p>
+<ul>
+<li>核心思想：利用两次突发性请求周期间的相对空闲时间段，以及固态盘内的空闲资源，提前写回固态盘缓存中的部分数据。</li>
+<li>提前写回的优势在于：当后续写请求没有命中缓存时，可将之前提前写回的数据直接删除，腾出空间后，将该写请求的数据直接保存在缓存中，避免了实时的缓存数据写回闪存导致这个写请求的延时。</li>
+<li>组成
+<ol type="1">
+<li>动态阈值调整算法</li>
+<li>动态内存分区调整算法</li>
+</ol></li>
+</ul>
+<h2><span id="溯源数据的高效存储管理及应用">溯源数据的高效存储管理及应用</span></h2>
+<p><strong>溯源的概念及研究的意义</strong></p>
+<ul>
+<li>在系统领域，一个数据的溯源是<strong>所有影响这个数据最终状态的进程和数据</strong></li>
+<li>溯源揭示了数据对象的过去或产生过程，使得人们对复杂的海量数据本身的分析和理解更加透彻</li>
+</ul>
+<p><strong>溯源数据的存储</strong></p>
+<p>该溯源图信息可用Key-Value数据库（例如BerkeleyDB或Redis），或采用图数据库（例如Neo4j）进行存储。</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">数据库名称</th>
+<th style="text-align: center;">数据表记录</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">ProvenanceDB</td>
+<td style="text-align: center;">&lt;pnode号，属性信息&gt;</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">NameDB</td>
+<td style="text-align: center;">&lt;Name，pnode号&gt;</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">ParentDB</td>
+<td style="text-align: center;">&lt;子pnode号，父pnode号，time&gt;</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">ChildDB</td>
+<td style="text-align: center;">&lt;父pnode号，子pnode号，time&gt;</td>
+</tr>
+</tbody>
+</table>
+<p><strong>溯源的主要应用领域</strong></p>
+<ul>
+<li>监控加工环节</li>
+<li>重现实验结果</li>
+<li>跟踪犯罪行为</li>
+<li>审计财务账目</li>
+<li>可以采用溯源存储系统的技术手段来管理物理网中的溯源信息，对实际物品/操作进行管控</li>
+<li>利用溯源手段，对物联网中的物品进行追踪，是记录物品流向的重要手段</li>
+</ul>
+<p><strong>重大挑战：数据量大</strong></p>
+<ul>
+<li>数据的每次读写操作都会产生溯源数据，从而导致溯源数据量巨大，通常是原始数据量的10倍以上</li>
+<li>当把一个大的溯源图压缩的足够小到能放在内存中时，对于溯源的高效查询是非常重要的</li>
+<li>为什么需要压缩？为什么程序运行慢？（内存占比高）</li>
+</ul>
+<p><strong>传统数据压缩方法</strong></p>
+<ul>
+<li>gzip: window size 64KB</li>
+<li>bzip2: window size 900KB</li>
+<li>7Z: window size 1GB</li>
+<li>缺点：窗口之外的数据无法压缩</li>
+<li>使用经典的压缩工具，如bzip、zblic等，可以最大限度地压缩溯源，但这些工具导致的溯源信息很难被查询。</li>
+</ul>
+<p>迁移压缩</p>
+<ul>
+<li>将相似的溯源信息重组到一起，再应用压缩器进行压缩</li>
+</ul>
+<p><strong>通过挖掘溯源的基本特征来进行压缩</strong></p>
+<ul>
+<li>web压缩和字典编码结合的方法来进行压缩
+<ul>
+<li>充分分析和挖掘了溯源数据的基本特征</li>
+<li>充分利用了 web图和溯源图在结构上的相似性，并挖掘了溯源节点属性中所存在的大量重复性的字符串信息</li>
+</ul></li>
+</ul>
+<p><strong>溯源的基本特征</strong></p>
+<ul>
+<li>溯源数据的组成
+<ul>
+<li>身份信息 (节点属性)+祖先信息（边上信息）</li>
+</ul></li>
+<li>溯源图中包含有大量重复性信息</li>
+<li>溯源图和web图都具有以下两个特征
+<ul>
+<li><strong>局部性</strong>
+<ul>
+<li>web图：一个网页链接通常会指向同一个URL域中的网页。</li>
+<li>溯源图：一个进程(溯源节点)依赖于很多库文件，这些库文件通常在同一目录。这些库文件代表的溯源节点编号在同一区段。</li>
+</ul></li>
+<li><strong>相似性</strong>
+<ul>
+<li>web图：两个邻近的网页很有可能拥有相同的邻居。</li>
+<li>溯源图： 两个进程（溯源节点）依赖于同一个库文件。</li>
+</ul></li>
+</ul></li>
+<li>溯源数据需要被查询</li>
+</ul>
+<p><strong>Web图压缩和字典编码（Web+Dictionary）</strong></p>
+<ul>
+<li>利用溯源图和web图的相似性，充分挖掘溯源图中数据存在的局部性和相似性，来压缩祖先信息</li>
+<li>字典编码可将身份信息和祖先信息边上存在的任何重复性字符串进行编码，具有极其灵活以及足够细粒度的编码方式</li>
+</ul>
+<p><strong>溯源trace和溯源图，以及web图之间的映射</strong></p>
+<p><img src="/images/物联网存储技术/relationship.png"></p>
+<ul>
+<li>溯源trace中的标记“A INPUT[ANC] B” 表示 <strong>B是A的一个祖先</strong>，这意味着溯源图中有一条<strong>从 A 指向 B</strong>的边.</li>
+</ul>
+<p><strong>web图压缩</strong></p>
+<ul>
+<li><p>溯源数据</p>
+<ul>
+<li>15.1 INPUT [ANC] 3.1</li>
+<li>15.1 INPUT [ANC] 11.0</li>
+<li>15.1 INPUT [ANC] 13.1</li>
+<li>15.1 INPUT [ANC] 14.1</li>
+<li>15.1 INPUT [ANC] 17.1</li>
+<li>16.1 INPUT [ANC] 11.0</li>
+<li>16.1 INPUT [ANC] 14.1</li>
+<li>16.1 INPUT [ANC] 19.1</li>
+<li>16.1 INPUT [ANC] 20.1</li>
+<li>16.1 INPUT [ANC] 21.1</li>
+<li>16.1 INPUT [ANC] 33.1</li>
+</ul></li>
+<li><p>邻接表</p>
+<table>
+<thead>
+<tr class="header">
+<th>Node</th>
+<th>outd</th>
+<th>ancestors</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>15</td>
+<td>5</td>
+<td>3, 11, 13, 14, 17</td>
+</tr>
+<tr class="even">
+<td>16</td>
+<td>6</td>
+<td>11, 14, 19, 20, 21, 33</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>寻找相似祖先列表</p>
+<table>
+<thead>
+<tr class="header">
+<th>node</th>
+<th>outd</th>
+<th>ref.</th>
+<th>copy list</th>
+<th>ancestors</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>15</td>
+<td>5</td>
+<td>0=15-15</td>
+<td></td>
+<td>3, 11, 13, 14, 17</td>
+</tr>
+<tr class="even">
+<td>16</td>
+<td>6</td>
+<td>1=16-15</td>
+<td>01010</td>
+<td>19, 20, 21, 33</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>编码连续的祖</p>
+<p>#intervals表示有几个连续的串</p>
+<p>Left extreme表示跟Node的差距</p></li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>node</th>
+<th>outd</th>
+<th>ref</th>
+<th>copy list</th>
+<th>inter</th>
+<th>left</th>
+<th>len</th>
+<th>res</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>15</td>
+<td>5</td>
+<td>0</td>
+<td></td>
+<td>1</td>
+<td>-2</td>
+<td>2</td>
+<td>3,11,17</td>
+</tr>
+<tr class="even">
+<td>16</td>
+<td>6</td>
+<td>1</td>
+<td>01010</td>
+<td>1</td>
+<td>3</td>
+<td>3</td>
+<td>33</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>用祖先节点之间的间距进行编码</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>node</th>
+<th>outd</th>
+<th>ref</th>
+<th>copy list</th>
+<th>inter</th>
+<th>left</th>
+<th>len</th>
+<th>res</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>15</td>
+<td>5</td>
+<td>0</td>
+<td></td>
+<td>1</td>
+<td>-2</td>
+<td>2</td>
+<td>-12,8,6</td>
+</tr>
+<tr class="even">
+<td>16</td>
+<td>6</td>
+<td>1</td>
+<td>01010</td>
+<td>1</td>
+<td>3</td>
+<td>3</td>
+<td>17</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>每个节点的编码：<span class="math inline">\(r\ [b\ B_1 … B_b] i\ E_1 L_1 …E_i L_i R_1 … R_k\)</span>
+<ul>
+<li>r: 参考号</li>
+<li>b: copy list中bit的数量</li>
+<li><span class="math inline">\(B_1…B_b\)</span>: copy list中bit位的值</li>
+<li>i: interval的个数</li>
+<li><span class="math inline">\(E_1…E_i\)</span>: Left Extremes</li>
+<li><span class="math inline">\(L_1…L_i\)</span>: Length</li>
+<li><span class="math inline">\(R_1…R_k\)</span>: Residuals</li>
+</ul></li>
+</ul>
+<p><strong>字典编码</strong></p>
+<ul>
+<li>用较小的整数将重复性字符串进行编码</li>
+<li>可将身份信息上的重复性字符串（如进程执行参数和环境变量）、以及祖先边上的重复性字符串（如时间信息）进行编码</li>
+<li>具有极其灵活以及足够细粒度的编码方式（可找出相同字符串，或者字符串中的相同前缀、后缀）</li>
+</ul>
+<p><img src="/images/物联网存储技术/diccode.png"></p>
+<p><strong>入侵检测中的溯源</strong></p>
+<p>例子：一个远程的攻击者，通过攻击主机上的<code>vsftpd-2.3.4</code>的backdoor漏洞，获得根用户访问权限。然后入侵者以<code>root</code>权限登陆 <code>shell</code>，并通过<code>vi</code>命令篡改了文件<code>f1</code>和<code>f2</code>。</p>
+<p><img src="/images/物联网存储技术/attack.png"></p>
+<p>进行计算机取证</p>
+<ul>
+<li>怎么入侵</li>
+<li>入侵后都干了什么（修改文件，泄漏秘密，安装后门等）</li>
+<li>修补系统漏洞，尝试恢复入侵者造成的修改</li>
+</ul>
+<p>发现入侵检测点</p>
+<ul>
+<li>文件系统完整性检查（Tripwire，AIDE）</li>
+<li>网络检测</li>
+<li>沙盒</li>
+</ul>
+<p>分析入侵行为</p>
+<ul>
+<li>系统/网络日志（Snort，Ethereal）</li>
+<li>磁盘状态（The Coroner’s Toolkit）</li>
+</ul>
+<p>当前取证方法的不足</p>
+<ul>
+<li>系统日志记录不够全面，缺乏必要信息</li>
+<li>网络消息可能被加密</li>
+<li>磁盘状态仅显示了文件的最终状态</li>
+</ul>
+<p>基于溯源的入侵检测总体设计</p>
+<ul>
+<li><p>收集器</p>
+<ul>
+<li>实时监控应用，生成溯源信息</li>
+<li>截获系统调用，跟踪收集文件、进程和网络socket的溯源信息</li>
+<li>修剪大量繁杂的溯源信息来避免误检。</li>
+<li>使用结构化的key-value 数据库来记录和查询入侵信息</li>
+<li>溯源数据库
+<ul>
+<li>Pnode节点号唯一的标识了每个对象</li>
+<li>ParentDB 和 ChildDB 分别存储了一个节点的父节点和子节点</li>
+<li>RuleDB 存储了代表对象之间依赖性关系的经常性事件</li>
+</ul></li>
+</ul></li>
+<li><p>检测器</p>
+<ul>
+<li><p>从溯源中抽取依赖性信息，建立规则库和检测入侵</p></li>
+<li><p>规则建立</p>
+<ul>
+<li>通过存储经常性事件依赖性关系生成规则，并编码规则</li>
+<li><ol type="1">
+<li>多次运行一个正常的程序来获取它的溯源信息R</li>
+</ol></li>
+<li><ol start="2" type="1">
+<li>对于每个R, 划分为 <span class="math inline">\(R=\{Dep_1, …Dep_n\}\)</span>, 其中<span class="math inline">\(Dep_i = (A, B)\)</span>表示 A是 B的父节点</li>
+</ol></li>
+<li><ol start="3" type="1">
+<li>将每个<span class="math inline">\(Dep_i\)</span>使用字典编码方法来减少在A和B中重复的字符串</li>
+</ol></li>
+<li><ol start="4" type="1">
+<li>将所有这些<span class="math inline">\(Dep_i\)</span>放进规则库<span class="math inline">\(G\)</span>, 即<span class="math inline">\(G= \{Dep_1, … Dep_k\}\)</span>.</li>
+</ol></li>
+</ul>
+<p><img src="/images/物联网存储技术/rule.png"></p></li>
+<li><p>路径匹配</p>
+<ul>
+<li>基于溯源的路径匹配算法</li>
+<li><ol type="1">
+<li>获取所检测程序的溯源信息R, 将它表示为<span class="math inline">\(R= \{Dep_1, … Dep_n\}\)</span></li>
+</ol></li>
+<li><ol start="2" type="1">
+<li>对于R中的每个<span class="math inline">\(Dep_i\)</span> , 如果,<span class="math inline">\(Dep_i = (A, B) \in G\)</span> 则设置它的可疑度<span class="math inline">\(d_i = 0\)</span>, 否则设置可疑度为1</li>
+</ol></li>
+<li><ol start="3" type="1">
+<li>寻找R中长度为W的路径, 将路径表示为 <span class="math inline">\((Dep_1, … Dep_w)\)</span>, 将路径决策值p表示为<span class="math inline">\(p = \frac{\sum_{i=1}^wd_i}{W}\)</span></li>
+</ol></li>
+<li><ol start="4" type="1">
+<li>设置阈值T, 如果 P&gt; T, 则警报会响起，相应的溯源路径会输出, 程序被判断为不正常.</li>
+</ol></li>
+</ul></li>
+<li><p>警报输出</p>
+<ul>
+<li>提供直截了当的入侵路径信息来减少误检和帮助取证分析。</li>
+</ul></li>
+</ul></li>
+<li><p>分析器</p>
+<ul>
+<li>分析入侵的系统漏洞和入侵来源</li>
+</ul></li>
+</ul>
+<p><strong>优化、过滤溯源图</strong></p>
+<ol type="1">
+<li><p>忽略一些特定的对象</p>
+<p>比如login进程会读写文件/var/run/utmp，导致新的login进程依赖于之前的login进程；Mount、umount会写文件/etc/mtab，而bash进程在产生时会读取该文件，导致依赖于mount进程；</p></li>
+<li><p>隐藏只被读的文件</p>
+<p>通常是库文件或者配置文件</p></li>
+<li><p>过滤”辅助”进程</p>
+<p>Bash进程产生id进程、consoletype进程和dircolors进程</p></li>
+</ol>
+<h2><span id="名词解释">名词解释</span></h2>
+<table>
+<thead>
+<tr class="header">
+<th>中文</th>
+<th>英文</th>
+<th>缩写</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>元数据服务器</td>
+<td>Metadata server</td>
+<td>MDS</td>
+</tr>
+<tr class="even">
+<td>对象存储</td>
+<td>Object-based Storage</td>
+<td>OBS</td>
+</tr>
+<tr class="odd">
+<td>对象存储设备</td>
+<td>Object-based Storage Device</td>
+<td>OSD</td>
+</tr>
+<tr class="even">
+<td>元数据查找表</td>
+<td>Metadata Look-up Table</td>
+<td>MLT</td>
+</tr>
+<tr class="odd">
+<td>闪存翻译层</td>
+<td>Flash Translation Layer</td>
+<td>FTL</td>
+</tr>
+<tr class="even">
+<td>消息摘要</td>
+<td>Message Digest</td>
+<td>MD</td>
+</tr>
+<tr class="odd">
+<td>相变存储器</td>
+<td>Phase-change Memory</td>
+<td>PCM</td>
+</tr>
+<tr class="even">
+<td>地址映射</td>
+<td>Address mapping</td>
+<td>AM</td>
+</tr>
+<tr class="odd">
+<td>损耗平衡</td>
+<td>Wear leveling</td>
+<td>WL</td>
+</tr>
+<tr class="even">
+<td>垃圾回收</td>
+<td>Garbage Collection</td>
+<td>GC</td>
+</tr>
+<tr class="odd">
+<td>存储级内存</td>
+<td>Storage-Class Memory</td>
+<td>SCM</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Bloom-Filter/">Bloom Filter</a><a href="/tags/本科课程/">本科课程</a><a href="/tags/物联网/">物联网</a><a href="/tags/对象存储/">对象存储</a><a href="/tags/重复数据删除/">重复数据删除</a><a href="/tags/元数据管理/">元数据管理</a><a href="/tags/SSD/">SSD</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

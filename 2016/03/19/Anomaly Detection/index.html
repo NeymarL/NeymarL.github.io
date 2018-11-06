@@ -1,0 +1,319 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    Anomaly Detection | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="Anomaly Detection">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      Anomaly Detection</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/03/19/Anomaly Detection/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-03-19T12:32:00.000Z">
+          2016-03-19
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <!-- toc -->
+<ul>
+<li><a href="#problem-motivation">Problem Motivation</a></li>
+<li><a href="#gaussian-distribution">Gaussian Distribution</a></li>
+<li><a href="#algorithm">Algorithm</a></li>
+<li><a href="#developing-and-evaluating-an-anomaly-detection-system">Developing and Evaluating an Anomaly Detection System</a></li>
+<li><a href="#anomaly-detection-vs-supervised-learning">Anomaly Detection vs. Supervised Learning</a></li>
+<li><a href="#choosing-what-features-to-use">Choosing What Features to Use</a></li>
+<li><a href="#multivariate-gaussian-distribution">Multivariate Gaussian Distribution</a></li>
+<li><a href="#anomaly-detection-using-the-multivariate-gaussian-distribution">Anomaly Detection using the Multivariate Gaussian Distribution</a></li>
+</ul>
+<!-- tocstop -->
+<a id="more"></a>
+<h1><span id="problem-motivation">Problem Motivation</span></h1>
+<p>Just like in other learning problems, we are given a dataset <span class="math inline">\({x^{(1)}, x^{(2)},\dots,x^{(m)}}\)</span>.</p>
+<p>We are then given a new example, <span class="math inline">\(x_{test}\)</span>, and we want to know whether this new example is abnormal/anomalous.</p>
+<p>We define a &quot;model&quot; <span class="math inline">\(p(x)\)</span> that tells us the probability the example is not anomalous. We also use a threshold <span class="math inline">\(\epsilon\)</span> (epsilon) as a dividing line so we can say which examples are anomalous and which are not.</p>
+<p>A very common application of anomaly detection is detecting fraud: * $x^{(i)} = $ features of user <span class="math inline">\(i\)</span>'s activities * Model <span class="math inline">\(p(x)\)</span> from the data. * Identify unusual users by checking which have <span class="math inline">\(p(x) &lt; \epsilon\)</span>.</p>
+<p>If our anomaly detector is flagging <strong>too many</strong> anomalous examples, then we need to <strong>decrease</strong> our threshold <span class="math inline">\(\epsilon\)</span></p>
+<h1><span id="gaussian-distribution">Gaussian Distribution</span></h1>
+<p>The Gaussian Distribution is a familiar bell-shaped curve that can be described by a function <span class="math inline">\(\mathcal{N}(\mu,\sigma^2)\)</span></p>
+<p>Let <span class="math inline">\(x \in \mathbb{R}\)</span>. If the probability distribution of <span class="math inline">\(x\)</span> is Gaussian with mean <span class="math inline">\(\mu\)</span>, variance <span class="math inline">\(\sigma^2\)</span>, then: <span class="math display">\[ x \sim \mathcal{N}(\mu, \sigma^2)\]</span></p>
+<p>The little <span class="math inline">\(\sim\)</span> or 'tilde' can be read as &quot;distributed as.&quot;</p>
+<p>The Gaussian Distribution is parameterized by a mean and a variance.</p>
+<p>Mu, or <span class="math inline">\(\mu\)</span>, describes the center of the curve, called the mean. The width of the curve is described by sigma, or <span class="math inline">\(\sigma\)</span>, called the standard deviation.</p>
+<p>The full function is as follows: <span class="math display">\[\large p(x;\mu,\sigma^2) = \dfrac{1}{\sigma\sqrt{(2\pi)}}e^{-\dfrac{1}{2}(\dfrac{x - \mu}{\sigma})^2}\]</span> We can estimate the parameter <span class="math inline">\(\mu\)</span> from a given dataset by simply taking the average of all the examples: <span class="math display">\[\mu = \dfrac{1}{m}\displaystyle \sum_{i=1}^m x^{(i)}\]</span> We can estimate the other parameter, <span class="math inline">\(\sigma^2\)</span>, with our familiar squared error formula: <span class="math display">\[\sigma^2 = \dfrac{1}{m}\displaystyle \sum_{i=1}^m(x^{(i)} - \mu)^2\]</span></p>
+<h1><span id="algorithm">Algorithm</span></h1>
+<p>Given a training set of examples, <span class="math inline">\(\lbrace x^{(1)},\dots,x^{(m)}\rbrace\)</span> where each example is a vector, <span class="math inline">\(x \in \mathbb{R}^n\)</span>. <span class="math display">\[p(x) = p(x_1;\mu_1,\sigma_1^2)p(x_2;\mu_2,\sigma^2_2)\cdots p(x_n;\mu_n,\sigma^2_n)\]</span></p>
+<p>In statistics, this is called an &quot;independence assumption&quot; on the values of the features inside training example <span class="math inline">\(x\)</span>.</p>
+<p>More compactly, the above expression can be written as follows: <span class="math display">\[ p(x) = \displaystyle \prod^n_{j=1} p(x_j;\mu_j,\sigma_j^2)\]</span></p>
+<p><strong>The algorithm</strong></p>
+<ol type="1">
+<li>Choose features <span class="math inline">\(x_i\)</span> that you think might be indicative of anomalous examples.</li>
+<li>Fit parameters <span class="math inline">\(\mu_1,\dots,\mu_n,\sigma_1^2,\dots,\sigma_n^2\)</span>.</li>
+<li>Calculate <span class="math inline">\(\mu_j = \dfrac{1}{m}\displaystyle \sum_{i=1}^m x_j^{(i)}\)</span></li>
+<li>Calculate <span class="math inline">\(\sigma^2_j = \dfrac{1}{m}\displaystyle \sum_{i=1}^m(x_j^{(i)} - \mu_j)^2\)</span></li>
+<li>Given a new example <span class="math inline">\(x\)</span>, compute <span class="math inline">\(p(x)\)</span>: <span class="math display">\[p(x) = \displaystyle \prod^n_{j=1} p(x_j;\mu_j,\sigma_j^2) = \prod\limits^n_{j=1} \dfrac{1}{\sqrt{2\pi}\sigma_j}exp(-\dfrac{(x_j - \mu_j)^2}{2\sigma^2_j})\]</span></li>
+<li>Anomaly if <span class="math inline">\(p(x) &lt; \epsilon\)</span></li>
+</ol>
+<p>A vectorized version of the calculation for <span class="math inline">\(\mu\)</span> is <span class="math display">\[\mu = \dfrac{1}{m}\displaystyle \sum_{i=1}^m x^{(i)}\]</span></p>
+<p>You can vectorize <span class="math inline">\(\sigma^2\)</span> similarly.</p>
+<h1><span id="developing-and-evaluating-an-anomaly-detection-system">Developing and Evaluating an Anomaly Detection System</span></h1>
+<p>To evaluate our learning algorithm, we take some labeled data, categorized into anomalous and non-anomalous examples (<span class="math inline">\(y = 0\)</span> if normal, <span class="math inline">\(y = 1\)</span> if anomalous).</p>
+<p>Among that data, take a large proportion of <strong>good</strong>, non-anomalous data for the training set on which to train <span class="math inline">\(p(x)\)</span>.</p>
+<p>Then, take a smaller proportion of mixed anomalous and non-anomalous examples (you will usually have many more non-anomalous examples) for your cross-validation and test sets.</p>
+<p>For example, we may have a set where 0.2% of the data is anomalous. We take 60% of those examples, all of which are good (<span class="math inline">\(y=0\)</span>) for the training set. We then take 20% of the examples for the cross-validation set (with 0.1% of the anomalous examples) and another 20% from the test set (with another 0.1% of the anomalous).</p>
+<p>In other words, we split the data 60/20/20 training/CV/test and then split the anomalous examples 50/50 between the CV and test sets.</p>
+<p><strong>Algorithm evaluation</strong>:</p>
+<ol type="1">
+<li>Fit model <span class="math inline">\(p(x)\)</span> on training set <span class="math inline">\(\lbrace x^{(1)},\dots,x^{(m)} \rbrace\)</span></li>
+<li>On a cross validation/test example <span class="math inline">\(x\)</span>, predict:
+<ul>
+<li>If <span class="math inline">\(p(x) &lt; \epsilon\)</span> (anomaly), then <span class="math inline">\(y = 1\)</span></li>
+<li>If <span class="math inline">\(p(x) \geq \epsilon\)</span> (normal), then <span class="math inline">\(y = 0\)</span></li>
+</ul></li>
+</ol>
+<p>Possible evaluation metrics * True positive, false positive, false negative, true negative. * Precision/recall * <span class="math inline">\(F_1\)</span> score</p>
+<p>Note that we use the cross-validation set to choose parameter <span class="math inline">\(\epsilon\)</span></p>
+<h1><span id="anomaly-detection-vs-supervised-learning">Anomaly Detection vs. Supervised Learning</span></h1>
+<p>When do we use anomaly detection and when do we use supervised learning?</p>
+<p><strong>Use anomaly detection when...</strong></p>
+<ul>
+<li>We have a very small number of positive examples (<span class="math inline">\(y=1\)</span> ... 0-20 examples is common) and a large number of negative (<span class="math inline">\(y=0\)</span>) examples.</li>
+<li>We have many different &quot;types&quot; of anomalies and it is hard for any algorithm to learn from positive examples what the anomalies look like; future anomalies may look nothing like any of the anomalous examples we've seen so far.</li>
+</ul>
+<p><strong>Use supervised learning when...</strong> * We have a large number of both positive and negative examples. In other words, the training set is more evenly divided into classes. * We have enough positive examples for the algorithm to get a sense of what new positives examples look like. The future positive examples are likely similar to the ones in the training set.</p>
+<h1><span id="choosing-what-features-to-use">Choosing What Features to Use</span></h1>
+<p>The features will greatly affect how well your anomaly detection algorithm works.</p>
+<p>We can check that our features are gaussian by plotting a histogram of our data and checking for the bell-shaped curve.</p>
+<p>Some transforms we can try on an example feature <span class="math inline">\(x\)</span> that does not have the bell-shaped curve are: * <span class="math inline">\(log(x)\)</span> * <span class="math inline">\(log(x+1)\)</span> * <span class="math inline">\(log(x + c)\)</span> for some constant * <span class="math inline">\(\sqrt{x}\)</span> * <span class="math inline">\(x^{1/3}\)</span></p>
+<p>We can play with each of these to try and achieve the gaussian shape in our data.</p>
+<p>There is an <strong>error analysis procedure</strong> for anomaly detection that is very similar to the one in supervised learning.</p>
+<p>Our goal is for <span class="math inline">\(p(x)\)</span> to be large for normal examples and small for anomalous examples.</p>
+<p>One common problem is when <span class="math inline">\(p(x)\)</span> is similar for both types of examples. In this case, you need to examine the anomalous examples that are giving high probability in detail and try to figure out new features that will better distinguish the data.</p>
+<p>In general, choose features that might take on unusually large or small values in the event of an anomaly.</p>
+<h1><span id="multivariate-gaussian-distribution">Multivariate Gaussian Distribution</span></h1>
+<p>The multivariate gaussian distribution is an extension of anomaly detection and may (or may not) catch more anomalies.</p>
+<p>Instead of modeling <span class="math inline">\(p(x_1),p(x_2),\dots\)</span> separately, we will model <span class="math inline">\(p(x)\)</span> all in one go. Our parameters will be: <span class="math inline">\(\mu \in \mathbb{R}^n\)</span> and <span class="math inline">\(\Sigma \in \mathbb{R}^{n \times n}\)</span> <span class="math display">\[p(x;\mu,\Sigma) = \dfrac{1}{(2\pi)^{n/2} |\Sigma|^{1/2}} exp(-1/2(x-\mu)^T\Sigma^{-1}(x-\mu))\]</span></p>
+<p>The important effect is that we can model oblong gaussian contours, allowing us to better fit data that might not fit into the normal circular contours.</p>
+<p>Varying <span class="math inline">\(\Sigma\)</span> changes the shape, width, and orientation of the contours. Changing <span class="math inline">\(\mu\)</span> will move the center of the distribution.</p>
+<h1><span id="anomaly-detection-using-the-multivariate-gaussian-distribution">Anomaly Detection using the Multivariate Gaussian Distribution</span></h1>
+<p>When doing anomaly detection with multivariate gaussian distribution, we compute <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\Sigma\)</span> normally. We then compute <span class="math inline">\(p(x)\)</span> using the new formula in the previous section and flag an anomaly if <span class="math inline">\(p(x) &lt; \epsilon\)</span>.</p>
+<p>The original model for <span class="math inline">\(p(x)\)</span> corresponds to a multivariate Gaussian where the contours of <span class="math inline">\(p(x;\mu,\Sigma)\)</span> are axis-aligned.</p>
+<p>The multivariate Gaussian model can automatically capture correlations between different features of x.</p>
+<p>However, the <strong>original model</strong> maintains some advantages: it is <strong>computationally cheaper</strong> (no matrix to invert, which is costly for large number of features) and it performs well even with <strong>small training set size</strong> (in multivariate Gaussian model, it should be greater than the number of features for <span class="math inline">\(\Sigma\)</span> to be invertible).</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Machine-Learning/">Machine Learning</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

@@ -1,0 +1,298 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    正则化解决过度拟合问题 | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="正则化解决过度拟合问题">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      正则化解决过度拟合问题</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/02/07/正则化解决过度拟合问题/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-02-07T02:10:00.000Z">
+          2016-02-07
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <blockquote>
+<p>前言：通常一个学习演算法是借由训练范例来训练的。亦即预期结果的范例是可知的。而学习者则被认为须达到可以预测出其它范例的正确的结果，因此，应适用于一般化的情况而非只是训练时所使用的现有资料（根据它的归纳偏向）。然而，学习者却会去适应训练资料中太特化但又随机的特征，特别是在当学习过程太久或范例太少时。在过适的过程中，当预测训练范例结果的表现增加时，应用在未知资料的表现则变更差。——From <a href="https://zh.wikipedia.org/zh-hans/%E9%81%8E%E9%81%A9?oldformat=true" target="_blank" rel="noopener">WikiPedia</a></p>
+</blockquote>
+<a id="more"></a>
+<!-- toc -->
+<ul>
+<li><a href="#过度拟合overfitting问题">过度拟合(Overfitting)问题</a></li>
+<li><a href="#代价函数cost-function">代价函数（Cost Function）</a></li>
+<li><a href="#正则化线性回归">正则化线性回归</a>
+<ul>
+<li><a href="#梯度下降gradient-descent">梯度下降(Gradient Descent)</a></li>
+<li><a href="#正规方程normal-equation">正规方程(Normal Equation)</a></li>
+</ul></li>
+<li><a href="#正则化逻辑回归">正则化逻辑回归</a>
+<ul>
+<li><a href="#代价函数">代价函数</a></li>
+<li><a href="#梯度下降">梯度下降</a></li>
+</ul></li>
+</ul>
+<!-- tocstop -->
+<h2><span id="过度拟合overfitting问题">过度拟合(Overfitting)问题</span></h2>
+<p>正则化(Regularzation)就是被设计为解决过度拟合问题的。</p>
+<p>在一个函数拟合数据集的时候会出现三种情况：欠拟合(<strong>high bias</strong> or <strong>underfitting</strong>)、正好拟合和过拟合(<strong>overfitting</strong> or <strong>high variance</strong>)。</p>
+<ul>
+<li><p>欠拟合(<strong>high bias</strong> or <strong>underfitting</strong>)是我们的假想函数对数据趋势拟合程度非常糟糕，造成这种情况通常是由于函数太简单或者使用的参数非常少；</p></li>
+<li><p>过拟合(<strong>overfitting</strong> or <strong>high variance</strong>)是假想函数对训练数据拟合的非常好，但是对未知数据的预测却不尽如人意，通常是由假象函数非常复杂并且使用的参数非常多，使函数产生许多不必要的波浪。</p></li>
+</ul>
+<p>解决过度拟合问题主要有两个方法： 1. 减少特征（参数）的数量 * 自己决定保留哪些特征 * 用一些选择算法来决定保留哪些特征 2. 正则化 * 保留所有特征（参数），但是减小参数<span class="math inline">\(\theta_j\)</span>的值。</p>
+<h2><span id="代价函数cost-function">代价函数（Cost Function）</span></h2>
+<p>假设我们用一个二次函数来拟合一些数据,它给了我们一个对数据很好的拟合，然而如果我们用一个更高次的多项式去拟合，比如 <span class="math inline">\(θ_0+θ_1x+θ_2x^2+θ_3x^3+θ_4x^4\)</span>，我们最终可能得到一个曲线能非常好地拟合训练集，但是它过度拟合了数据，一般性并不是很好。</p>
+<p>让我们考虑下面的假设：我们想要加上惩罚项从而使参数 <span class="math inline">\(θ_3\)</span> 和 <span class="math inline">\(θ_4\)</span> 足够的小，而避免直接删掉它们，只需如下修改代价函数： <span class="math display">\[\min_θ \frac{1}{2m}(\sum^m_{i=1}(h_θ(x^{(i)})−y^{(i)})^2+1000⋅θ^2_3+1000⋅θ^2_4)\]</span></p>
+<p>我们对代价函数添加一些了项：加上 1000 乘以 <span class="math inline">\(θ_3\)</span> 的平方，再加上 1000 乘以 <span class="math inline">\(θ_4\)</span> 的平方，1000 只是我随便写的某个较大的数字而已。现在，如果我们要最小化这个函数，为了使这个新的代价函数最小化，我们要让 <span class="math inline">\(θ_3\)</span> 和 <span class="math inline">\(θ_4\)</span> 尽可能得小，对吧？如果我们这么做了，<span class="math inline">\(θ_3\)</span> 和 <span class="math inline">\(θ_4\)</span>可能会趋近于０，结果接近成一个二次函数。</p>
+<p>更一般地可以表明，这些参数的值越小通常对应于越光滑的函数，也就是更加简单的函数。因此，就不易发生过拟合的问题。</p>
+<p>由于在实际应用中参数可能很多，比如有100个，需要用正则化，但是我不知道具体哪个参数或哪几个参数需要缩小，所以我们只能让所有参数从<span class="math inline">\(θ_1\)</span> <span class="math inline">\(θ_2\)</span> <span class="math inline">\(θ_3\)</span> 直到 <span class="math inline">\(θ_{100}\)</span> 的值变小。(顺便说一下，按照惯例来讲，我们从第一个这里开始，所以我实际上没有去惩罚 <span class="math inline">\(θ_0\)</span> , 因此 <strong><span class="math inline">\(θ_0\)</span> 的值是大的</strong>, 这就是一个约定。)</p>
+<p>所以代价函数被修改为： <span class="math display">\[\min_θ \frac{1}{2m}[\sum^m_{i=1}(h_θ(x^{(i)})−y^{(i)})^2+\lambda \sum^n_{j=1}\theta^2_j]\]</span></p>
+<p>其中 <span class="math inline">\(\lambda\)</span> 为<strong>正则化参数(regularization parameter)</strong>。</p>
+<p><span class="math inline">\(\lambda\)</span> 要做的就是控制在两个不同目标中的<strong>平衡</strong>关系。第一个目标就是我们想要使<strong>假设更好地拟合训练数据</strong>，我们希望假设能够很好的适应训练集; 而第二个目标是我们想要<strong>保持参数值较小</strong>。通过正则化目标函数，它会找到这两者之间的平衡，从而保持假设的形式相对简单, 来避免过度的拟合。</p>
+<p>不过，如果 <span class="math inline">\(\lambda\)</span> 设置过大，假想函数可能会过于光滑平坦而导致欠拟合(underfitting)。</p>
+<h2><span id="正则化线性回归">正则化线性回归</span></h2>
+<p>对于线性回归的求解，我们之前推导了两种学习算法，一种基于<strong>梯度下降</strong>，一种基于<strong>正规方程</strong>。我们将继续把这两个算法推广到<strong>正则化线性回归</strong>中去 。</p>
+<h3><span id="梯度下降gradient-descent">梯度下降(Gradient Descent)</span></h3>
+<p>因为我们不惩罚第零项参数，所以我们把梯度下降的迭代方程中更新 <span class="math inline">\(\theta_0\)</span> 和更新其他参数分开，变为如下形式： <span class="math inline">\(Repeat\{\)</span> <span class="math display">\[\theta_0 := \theta_0 - \alpha \frac{1}{m} \sum^m_{i = 1} (h_\theta(x^{(i)}) - y^{(i)})x_0^{(i)}\]</span> <span class="math display">\[\theta_j := \theta_j - \alpha [(\frac{1}{m} \sum^m_{i = 1} (h_\theta(x^{(i)}) - y^{(i)})x_j^{(i)}) + \frac{\lambda}{m}\theta_j]\]</span> <span class="math inline">\(\}\)</span></p>
+<p>这一项 <span class="math inline">\(\frac{\lambda}{m}\theta_j\)</span> 就是正则化。</p>
+<p>第二个方程也可以合并同类项变成： <span class="math display">\[\theta_j := \theta_j(1 - \alpha\frac{\lambda}{m}) - \alpha \frac{1}{m} \sum^m_{i = 1} (h_\theta(x^{(i)}) - y^{(i)})x_j^{(i)}\]</span></p>
+<p>由于 <span class="math inline">\(α\frac{λ}{m}\)</span> 通常是很小的，所以方程的第一项 <span class="math inline">\(1 - \alpha\frac{\lambda}{m}\)</span> 一般来说将是一个比1小一点点的值。我们可以把它想成一个像0.99一样的数字，所以对 <span class="math inline">\(θ_j\)</span> 更新的结果可以看作是被替换为 <span class="math inline">\(θ_j\)</span> 的0.99倍，也就是 <span class="math inline">\(θ_j\)</span> 乘以0.99把 <span class="math inline">\(θ_j\)</span> 向 0 压缩了一点点，所以这使得 <span class="math inline">\(θ_j\)</span> 小了一点，更正式地说 θj 的平方范数更小了。另外，方程的第二项实际上跟我们加入了正则项之前一样。</p>
+<h3><span id="正规方程normal-equation">正规方程(Normal Equation)</span></h3>
+<p>正则化的正规方程如下： <span class="math display">\[\theta = (X^TX + \lambda \cdot L)^{-1}X^Ty\]</span> 其中，<span class="math display">\[L = \begin{bmatrix}
+0     \\
+&amp; 1 \\
+&amp; &amp; 1 \\
+ &amp; &amp; &amp; \ddots &amp; \\
+  &amp; &amp;  &amp; &amp; 1
+\end{bmatrix}\]</span> 它的维度是<span class="math inline">\((n+1)×(n+1)\)</span>。</p>
+<p>即使 <span class="math inline">\(X^TX\)</span> 是不可逆的，正则化之后，即加上 <span class="math inline">\(\lambda \cdot L\)</span> 之后，该矩阵 <span class="math inline">\(X^TX + \lambda \cdot L\)</span> 一定是可逆的。</p>
+<h2><span id="正则化逻辑回归">正则化逻辑回归</span></h2>
+<h3><span id="代价函数">代价函数</span></h3>
+<p>复习一下逻辑回归的代价函数： <span class="math display">\[J(\theta) = -\frac{1}{m}\sum^{m}_{i = 1}[y^{(i)}\log(h_\theta(x^{(i)})) + (1-y^{(i)})\log(1-h_\theta(x^{(i)}))]\]</span></p>
+<p>我们通过在最后多加上一项来完成正则化： <span class="math display">\[J(\theta) = -\frac{1}{m}\sum^{m}_{i = 1}[y^{(i)}\log(h_\theta(x^{(i)})) + (1-y^{(i)})\log(1-h_\theta(x^{(i)}))] + \frac{\lambda}{2m}\sum^{n}_{j=1}\theta_j^2\]</span></p>
+<p>向量形式为： <span class="math display">\[J(\theta) = -\frac{1}{m}(\log(g(X\theta))^Ty + \log(1-g(X\theta))^T(1-y)) + \frac{\lambda}{2m}temp^Ttemp\]</span> 其中 <span class="math inline">\(temp = \theta;temp(1) = 0;\)</span></p>
+<p><strong>注意从1开始而不是从0开始！</strong></p>
+<h3><span id="梯度下降">梯度下降</span></h3>
+<p><span class="math inline">\(Repeat\{\)</span> <span class="math display">\[\theta_0 := \theta_0 - \alpha \frac{1}{m} \sum^m_{i = 1} (h_\theta(x^{(i)}) - y^{(i)})x_0^{(i)}\]</span> <span class="math display">\[\theta_j := \theta_j - \alpha [(\frac{1}{m} \sum^m_{i = 1} (h_\theta(x^{(i)}) - y^{(i)})x_j^{(i)}) + \frac{\lambda}{m}\theta_j]\]</span> <span class="math inline">\(\}\)</span></p>
+<p>除了 <span class="math inline">\(h_\theta\)</span> 表示不同以外，其他与线性回归的方程一样。</p>
+<p>最后关于梯度（偏导数）的向量形式： <span class="math display">\[\frac{\partial}{\partial\theta}J(\theta) = \frac{1}{m}[X^T(g(X\theta) - \overrightarrow{y}) + \lambda_v .* \theta]\]</span> 其中<span class="math inline">\(\lambda_v = \begin{bmatrix} 0 &amp; \lambda &amp; \lambda &amp; \cdots &amp; \lambda \\ \end{bmatrix}^T\)</span></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Regularization/">Regularization</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

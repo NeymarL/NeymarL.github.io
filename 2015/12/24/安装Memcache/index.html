@@ -1,0 +1,280 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    安装Memcache | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="安装Memcache">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      安装Memcache</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2015/12/24/安装Memcache/" rel="bookmark">
+        <time class="entry-date published" datetime="2015-12-24T01:14:40.000Z">
+          2015-12-24
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>http://php.net/manual/zh/book.memcache.php</p>
+<a id="more"></a>
+<blockquote>
+<p>服务器端主要是安装memcache服务器端，目前的最新版本是 memcached-1.3.0 。 下载：http://www.danga.com/memcached/dist/memcached-1.2.2.tar.gz 另外，Memcache用到了libevent这个库用于Socket的处理，所以还需要安装libevent，libevent的最新版本是libevent-1.3。（如果你的系统已经安装了libevent，可以不用安装） 官网：http://www.monkey.org/<sub>provos/libevent/ 下载：http://www.monkey.org/</sub>provos/libevent-1.3.tar.gz</p>
+</blockquote>
+<p>用wget指令直接下载这两个东西.下载回源文件后。 1. 先安装libevent。这个东西在配置时需要指定一个安装路径，即<code>./configure –prefix=/usr</code>；然后<code>make</code>；然后<code>make install</code>； 2. 再安装memcached，只是需要在配置时需要指定libevent的安装路径即<code>./configure –with-libevent=/usr</code>；然后<code>make &amp;&amp; make install</code>； 这样就完成了Linux下Memcache服务器端的安装。详细的方法如下：</p>
+<h4><span id="分别把memcached和libevent下载回来放到-tmp-目录下">分别把memcached和libevent下载回来，放到 <code>/tmp</code> 目录下：</span></h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># cd /tmp</span><br><span class="line"># wget http://www.danga.com/memcached/dist/memcached-1.2.0.tar.gz</span><br><span class="line"># wget http://www.monkey.org/~provos/libevent-1.2.tar.gz</span><br></pre></td></tr></table></figure>
+<h4><span id="先安装libevent">先安装libevent：</span></h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># tar zxvf libevent-1.2.tar.gz</span><br><span class="line"># cd libevent-1.2</span><br><span class="line"># ./configure –prefix=/usr</span><br><span class="line"># make</span><br><span class="line"># make install</span><br></pre></td></tr></table></figure>
+<h4><span id="测试libevent是否安装成功">测试libevent是否安装成功：</span></h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># ls -al /usr/lib | grep libevent</span><br><span class="line">lrwxrwxrwx 1 root root 21 11?? 12 17:38 libevent-1.2.so.1 -&gt; libevent-1.2.so.1.0.3</span><br><span class="line">-rwxr-xr-x 1 root root 263546 11?? 12 17:38 libevent-1.2.so.1.0.3</span><br><span class="line">-rw-r–r– 1 root root 454156 11?? 12 17:38 libevent.a</span><br><span class="line">-rwxr-xr-x 1 root root 811 11?? 12 17:38 libevent.la</span><br><span class="line">lrwxrwxrwx 1 root root 21 11?? 12 17:38 libevent.so -&gt; libevent-1.2.so.1.0.3</span><br></pre></td></tr></table></figure>
+<h4><span id="安装memcached同时需要安装中指定libevent的安装位置">安装memcached，同时需要安装中指定libevent的安装位置：</span></h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># cd /tmp</span><br><span class="line"># tar zxvf memcached-1.2.0.tar.gz</span><br><span class="line"># cd memcached-1.2.0</span><br><span class="line"># ./configure –with-libevent=/usr</span><br><span class="line"># make</span><br><span class="line"># make install</span><br></pre></td></tr></table></figure>
+<h4><span id="测试是否成功安装memcached">测试是否成功安装memcached：</span></h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># ls -al /usr/local/bin/mem*</span><br><span class="line">-rwxr-xr-x 1 root root 137986 11?? 12 17:39 /usr/local/bin/memcached</span><br><span class="line">-rwxr-xr-x 1 root root 140179 11?? 12 17:39 /usr/local/bin/memcached-debug</span><br></pre></td></tr></table></figure>
+<h3><span id="安装memcache的php扩展">安装Memcache的PHP扩展</span></h3>
+<h4><span id="在httppeclphpnetpackagememcache-选择相应想要下载的memcache版本">在http://pecl.php.net/package/memcache 选择相应想要下载的memcache版本。</span></h4>
+<h4><span id="安装php的memcache扩展">安装PHP的memcache扩展</span></h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">tar vxzf memcache-2.2.1.tgz</span><br><span class="line">cd memcache-2.2.1</span><br><span class="line">/usr/local/php/bin/phpize</span><br><span class="line">./configure --enable-memcache --with-php-config=/usr/bin/php-config --with-zlib-dir</span><br><span class="line">make</span><br><span class="line">make install</span><br><span class="line"></span><br><span class="line">// 若 phpize没有找到</span><br><span class="line">// 解决方法：</span><br><span class="line">yum install php-devel</span><br></pre></td></tr></table></figure>
+<h4><span id="上述安装完后会有类似这样的提示">上述安装完后会有类似这样的提示：</span></h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Installing shared extensions: </span><br><span class="line">/...</span><br><span class="line">/usr/local/php/lib/php/extensions/no-debug-non-zts-2007xxxx/</span><br></pre></td></tr></table></figure>
+<h4><span id="把phpini中的extension_dir-修改为">把php.ini中的extension_dir = “./”修改为</span></h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">extension_dir = “/usr/local/php/lib/php/extensions/no-debug-non-zts-2007xxxx/”</span><br></pre></td></tr></table></figure>
+<h4><span id="添加一行来载入memcache扩展">添加一行来载入memcache扩展：</span></h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">extension=memcache.so</span><br></pre></td></tr></table></figure>
+<h3><span id="memcached的基本设置">memcached的基本设置</span></h3>
+<h4><span id="启动memcache的服务器端">启动Memcache的服务器端：</span></h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># /usr/local/bin/memcached -d -m 10 -u root -l 127.0.0.1 -p 12000 -c 256 -P /tmp/memcached.pid</span><br><span class="line"></span><br><span class="line">若出现错误：/usr/local/bin/memcached: error while loading shared libraries: libevent-1.3.so.1: cannot open shared object file: No such file or directory</span><br><span class="line"></span><br><span class="line">直接设置链接</span><br><span class="line"></span><br><span class="line">#ln -s /usr/local/libevent/lib/libevent-1.3.so.1 /lib64/libevent-1.3.so.1</span><br></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li>-d选项是启动一个守护进程，</li>
+<li>-m是分配给Memcache使用的内存数量，单位是MB，我这里是10MB，</li>
+<li>-u是运行Memcache的用户，我这里是root，</li>
+<li>-l是监听的服务器IP地址</li>
+<li>-p是设置Memcache监听的端口，我这里设置了12000，最好是1024以上的端口，</li>
+<li>-c选项是最大运行的并发连接数，默认是1024，我这里设置了256，按照你服务器的负载量来设定，</li>
+<li>-P是设置保存Memcache的pid文件，我这里是保存在 <code>/tmp/memcached.pid</code></li>
+</ul>
+</blockquote>
+<h4><span id="如果要结束memcache进程执行">如果要结束Memcache进程，执行：</span></h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># kill `cat /tmp/memcached.pid`</span><br></pre></td></tr></table></figure>
+<p>也可以启动多个守护进程，不过端口不能重复。</p>
+<h4><span id="重启机器">重启机器</span></h4>
+<h3><span id="memcache环境测试">Memcache环境测试：</span></h3>
+<p>运行下面的php文件，如果有输出This is a test!，就表示环境搭建成功。 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt; ?php</span><br><span class="line">$mem=newMemcache;</span><br><span class="line">$mem-&gt;connect(“<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>”, <span class="number">12000</span>);</span><br><span class="line">$mem−&gt;set(′key′,‘Thisisatest!′,<span class="number">0</span>,<span class="number">60</span>);</span><br><span class="line">$val = $mem−&gt;get(′key′);</span><br><span class="line"><span class="keyword">echo</span> $val;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/踩坑现场/">踩坑现场</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/后台开发/">后台开发</a><a href="/tags/Linux/">Linux</a><a href="/tags/Memcache/">Memcache</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

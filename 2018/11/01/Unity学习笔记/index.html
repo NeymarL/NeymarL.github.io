@@ -1,0 +1,305 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    Unity学习笔记 | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="Unity学习笔记">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      Unity学习笔记</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2018/11/01/Unity学习笔记/" rel="bookmark">
+        <time class="entry-date published" datetime="2018-11-01T02:41:47.000Z">
+          2018-11-01
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p><strong>记录一些小功能的实现</strong></p>
+<!-- toc -->
+<ul>
+<li><a href="#实现相机跟随">实现相机跟随</a></li>
+<li><a href="#拖动图标在场景生成物体">拖动图标在场景生成物体</a></li>
+<li><a href="#技能冷却效果">技能冷却效果</a></li>
+<li><a href="#鼠标点击选中场景中的物体">鼠标点击选中场景中的物体</a></li>
+<li><a href="#2d人物朝左朝右">2D人物朝左朝右</a></li>
+</ul>
+<!-- tocstop -->
+<a id="more"></a>
+<h2><span id="实现相机跟随">实现相机跟随</span></h2>
+<ul>
+<li>方法一
+<ul>
+<li>把相机设置为目标的Child</li>
+</ul></li>
+<li>方法二
+<ul>
+<li>设置好距目标的距离和角度，根据数学关系计算出相机位置</li>
+</ul></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">float distance = 15;	// 距离</span><br><span class="line">float rot = 0;			// 横向角度</span><br><span class="line">GameObject target;		// 目标物体</span><br><span class="line">float roll = 30f * Mathf.PI * 2 / 360; 	// 纵向角度</span><br><span class="line"></span><br><span class="line">void LateUpdate () &#123;</span><br><span class="line">	Vector3 targetPos = target.transform.position;</span><br><span class="line">	Vector3 cameraPos;</span><br><span class="line">	float d = distance * Mathf.Cos (roll);</span><br><span class="line">	float height = distance * Mathf.Sin (roll);</span><br><span class="line">	cameraPos.x = targetPos.x + d * Mathf.Cos (rot);</span><br><span class="line">	cameraPos.z = targetPos.z + d * Mathf.Sin (rot);</span><br><span class="line">	cameraPos.y = targetPos.y + height;	</span><br><span class="line">	Camera.main.transform.position = cameraPos;</span><br><span class="line">	Camera.main.transform.LookAt (target.transform);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>相机随鼠标旋转</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">void Rotate()</span><br><span class="line">&#123;</span><br><span class="line"> 	float w = Input.GetAxis (&quot;Mouse X&quot;) * rotSpeed;</span><br><span class="line">	rot -= w;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void Roll()</span><br><span class="line">&#123;</span><br><span class="line">	float w = Input.GetAxis (&quot;Mouse Y&quot;) * rollSpeed * 0.5f;</span><br><span class="line">	roll -= w;</span><br><span class="line">	if (roll &gt; maxRoll) &#123;</span><br><span class="line">		roll = maxRoll;</span><br><span class="line">	&#125;</span><br><span class="line">	if (roll &lt; minRoll) &#123;</span><br><span class="line">		roll = minRoll;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void LateUpdate () &#123;</span><br><span class="line">	Rotate();</span><br><span class="line">  	Roll();</span><br><span class="line">	....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2><span id="拖动图标在场景生成物体">拖动图标在场景生成物体</span></h2>
+<p><strong>拖动UI</strong></p>
+<p>新建<code>Drag</code>类，继承<code>IBeginDragHandler, IDragHandler, IEndDragHandler</code>，实现拖动UI功能有三个接口：</p>
+<ul>
+<li><code>public void OnBeginDrag (PointerEventData eventData)</code></li>
+<li><code>public void OnDrag (PointerEventData eventData)</code></li>
+<li><code>public void OnEndDrag (PointerEventData eventData)</code></li>
+</ul>
+<p>在<code>Drag</code>类里实现这三个接口即可实现想要的拖动效果，最后不用忘了把<code>Drag</code>脚本添加到想要被拖动的UI物体上。</p>
+<p><strong>在场景中生成物体</strong></p>
+<p>要实现这个功能:</p>
+<ul>
+<li>首先在<code>OnBeginDrag</code>中生成新的<code>GameObject</code>；</li>
+<li>然后在<code>OnDrag</code>中，根据鼠标在场景里的位置调整<code>GameObject</code>的位置，再检测<code>GameObject</code>的collider有无和其他物体碰撞；</li>
+<li>最后在<code>OnEndDrag</code>中，如果<code>GameObject</code>的最终位置合法，则不再移动；否则销毁物体，生成失败。</li>
+</ul>
+<h2><span id="技能冷却效果">技能冷却效果</span></h2>
+<p><strong>定时器</strong></p>
+<p>实现冷却效果计时器必不可少，实现方法也很简单，只需两个变量：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bool timerStarted = false;</span><br><span class="line">float remain = 10f;</span><br></pre></td></tr></table></figure>
+<p>然后在<code>Update</code>中作如下更新：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">void Update ()</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    if (timerStarted) &#123;</span><br><span class="line">		remain -= Time.deltaTime;</span><br><span class="line">        if (remain &lt;= 0) &#123;</span><br><span class="line">            CloseTimer();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>UI效果</strong></p>
+<p>Button的层次如下：</p>
+<ul>
+<li><p><code>Button</code></p>
+<ul>
+<li><p><code>Image</code>：按钮显示的图标</p></li>
+<li><p><code>Mask</code>：可以用按钮的默认背景；调整颜色和透明度；ImageType为filled；通过调整Fill Amount来实现转动效果</p>
+<p><img src="/images/Screen%20Shot%202018-10-30%20at%204.09.00%20PM.png"></p></li>
+<li><p><code>CD Text</code>：显示剩余冷却时间</p></li>
+</ul></li>
+</ul>
+<p><strong>Note</strong>：在开始冷却的同时，应把设置<code>btn.interactable = false;</code>，否则按钮可以在冷却过程中再次被点击。</p>
+<p>这里Button的<code>OnClick</code>绑定了两个函数，分别给<code>CharacterController</code>实现技能效果，和给<code>UIManager</code>实现UI动效：</p>
+<p><img src="/images/btnclick.png"></p>
+<h2><span id="鼠标点击选中场景中的物体">鼠标点击选中场景中的物体</span></h2>
+<p>思路：从点击位置向场景发射射线，检测是否击中物体</p>
+<p>实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">void MousePick () &#123;</span><br><span class="line">    if (Input.GetMouseButtonUp (0)) &#123;</span><br><span class="line">        // 发射射线</span><br><span class="line">        Ray myRay = Camera.main.ScreenPointToRay (Input.mousePosition);</span><br><span class="line">        // 选择想被选中的layer</span><br><span class="line">        int layerMask = LayerMask.GetMask (&quot;Building&quot;);</span><br><span class="line">        // 检测碰撞</span><br><span class="line">        RaycastHit2D hit = Physics2D.Raycast (new Vector2 (myRay.origin.x, myRay.origin.y),</span><br><span class="line">            Vector2.down, Mathf.Infinity, layerMask);</span><br><span class="line">        if (hit.collider) &#123;</span><br><span class="line">            // 检测到碰撞，选中该物体</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2><span id="2d人物朝左朝右">2D人物朝左朝右</span></h2>
+<p>思路：如果原sprite朝右，那么只要把transform的<code>scale.x</code>变成<code>-1</code>就是朝左了。</p>
+<p><img src="/images/facingside.png"></p>
+<p>实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">void LateUpdate () &#123;</span><br><span class="line">    Vector3 localScale = _transform.localScale;</span><br><span class="line"></span><br><span class="line">    if (_vx &gt; 0) &#123; // moving right so face right</span><br><span class="line">        _facingRight = true;</span><br><span class="line">    &#125; else if (_vx &lt; 0) &#123; // moving left so face left</span><br><span class="line">        _facingRight = false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // check to see if scale x is right for the player</span><br><span class="line">    // if not, multiple by -1 which is an easy way to flip a sprite</span><br><span class="line">    if ((_facingRight) &amp;&amp; (localScale.x &lt; 0) || </span><br><span class="line">        ((localScale.x &gt; 0)) &#123;</span><br><span class="line">        localScale.x *= -1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // update the scale</span><br><span class="line">    _transform.localScale = localScale;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>未完待续</strong></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/踩坑现场/">踩坑现场</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Unity/">Unity</a><a href="/tags/C/">C#</a><a href="/tags/Game-Dev/">Game Dev</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

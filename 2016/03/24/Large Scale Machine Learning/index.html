@@ -1,0 +1,282 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    Large Scale Machine Learning | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="Large Scale Machine Learning">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      Large Scale Machine Learning</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/03/24/Large Scale Machine Learning/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-03-24T14:32:00.000Z">
+          2016-03-24
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <!-- toc -->
+<ul>
+<li><a href="#stochastic-gradient-descent">Stochastic Gradient Descent</a></li>
+<li><a href="#mini-batch-gradient-descent">Mini-Batch Gradient Descent</a>
+<ul>
+<li><a href="#stochastic-gradient-descent-convergence">Stochastic Gradient Descent Convergence</a></li>
+</ul></li>
+<li><a href="#online-learning">Online Learning</a></li>
+<li><a href="#map-reduce-and-data-parallelism">Map Reduce and Data Parallelism</a></li>
+</ul>
+<!-- tocstop -->
+<a id="more"></a>
+<p>We mainly <strong>benefit</strong> from a very large dataset when our algorithm has <strong>high variance</strong> when <span class="math inline">\(m\)</span> is small. Recall that if our algorithm has high bias, more data will not have any benefit.</p>
+<p>Datasets can often approach such sizes as <span class="math inline">\(m = 100,000,000\)</span>. In this case, our gradient descent step will have to make a summation over all one hundred million examples. We will want to try to avoid this -- the approaches for doing so are described below.</p>
+<h1><span id="stochastic-gradient-descent">Stochastic Gradient Descent</span></h1>
+<p>Stochastic gradient descent is an alternative to classic (or batch) gradient descent and is more efficient and scalable to large data sets.</p>
+<p>Stochastic gradient descent is written out in a different but similar way: <span class="math display">\[ cost(\theta,(x^{(i)}, y^{(i)})) = \dfrac{1}{2}(h_{\theta}(x^{(i)}) - y^{(i)})^2 \]</span></p>
+<p>The only difference in the above cost function is the elimination of the <span class="math inline">\(m\)</span> constant within <span class="math inline">\(\dfrac{1}{2}\)</span>. <span class="math display">\[ J_{train}(\theta) = \dfrac{1}{m} \displaystyle \sum_{i=1}^m cost(\theta, (x^{(i)}, y^{(i)})) \]</span></p>
+<p><span class="math inline">\(J_{train}\)</span> is now just the average of the cost applied to all of our training examples.</p>
+<p>The algorithm is as follows 1. Randomly 'shuffle' the dataset 2. For <span class="math inline">\(i = 1\dots m\)</span> <span class="math display">\[\Theta_j := \Theta_j - \alpha (h_{\Theta}(x^{(i)}) - y^{(i)}) \cdot x^{(i)}_j\]</span> (for <span class="math inline">\(j = 0,\dots,n\)</span>)</p>
+<p>This algorithm will only try to <strong>fit one training example at a time</strong>.</p>
+<p>This way we can make progress in gradient descent without having to scan all <span class="math inline">\(m\)</span> training examples first.</p>
+<p>Stochastic gradient descent will be unlikely to converge at the global minimum and will instead <strong>wander around it randomly</strong>, but usually yields a result that is close enough.</p>
+<p>Stochastic gradient descent will usually take 1-10 passes through your data set to get near the global minimum.</p>
+<h1><span id="mini-batch-gradient-descent">Mini-Batch Gradient Descent</span></h1>
+<p>Mini-batch gradient descent can sometimes be even faster than stochastic gradient descent. Instead of using all <span class="math inline">\(m\)</span> examples as in batch gradient descent, and instead of using only 1 example as in stochastic gradient descent, we will use some in-between number of examples <span class="math inline">\(b\)</span>.</p>
+<p>Typical values for <span class="math inline">\(b\)</span> range from 2-100 or so.</p>
+<p>For example, with <span class="math inline">\(b = 10\)</span> and <span class="math inline">\(m = 1000\)</span>: Repeat: For <span class="math inline">\(i = 1,11,21,31,\dots,991\)</span>: <span class="math display">\[\theta_j := \theta_j - \alpha \dfrac{1}{10} \displaystyle \sum_{k=i}^{i+9} (h_\theta(x^{(k)}) - y^{(k)})x_j^{(k)}\]</span> (for each <span class="math inline">\(j = 0, \dots, n\)</span>)</p>
+<p>We're simply summing over ten examples at a time.</p>
+<p>The advantage of computing more than one example at a time is that we can use vectorized implementations over the <span class="math inline">\(b\)</span> examples.</p>
+<h2><span id="stochastic-gradient-descent-convergence">Stochastic Gradient Descent Convergence</span></h2>
+<p>How do we choose the learning rate <span class="math inline">\(\alpha\)</span> for stochastic gradient descent? Also, how do we debug stochastic gradient descent to make sure it is getting as close as possible to the global optimum?</p>
+<p>One strategy is to plot the average cost of the hypothesis applied to every 1000 or so training examples. We can compute and save these costs during the gradient descent iterations.</p>
+<p>With a smaller learning rate, it is <strong>possible</strong> that you may get a slightly better solution with stochastic gradient descent. That is because stochastic gradient descent will oscillate and jump around the global minimum, and it will make smaller random jumps with a smaller learning rate.</p>
+<p>If you increase the number of examples you average over to plot the performance of your algorithm, the plot's line will become smoother.</p>
+<p>With a very small number of examples for the average, the line will be too noisy and it will be difficult to find the trend.</p>
+<p>One strategy for trying to actually converge at the global minimum is to slowly decrease <span class="math inline">\(\alpha\)</span> over time. For example <span class="math display">\[\alpha = \dfrac{const1}{iterationNumber + const2}\]</span>.</p>
+<p>However, this is not often done because people don't want to have to fiddle with even more parameters.</p>
+<h1><span id="online-learning">Online Learning</span></h1>
+<p>With a continuous stream of users to a website, we can run an endless loop that gets <span class="math inline">\((x,y)\)</span>, where we collect some user actions for the features in <span class="math inline">\(x\)</span> to predict some behavior <span class="math inline">\(y\)</span>.</p>
+<p>You can update <span class="math inline">\(\theta\)</span> for each individual <span class="math inline">\((x,y)\)</span> pair as you collect them. This way, you can adapt to new pools of users, since you are continuously updating theta.</p>
+<h1><span id="map-reduce-and-data-parallelism">Map Reduce and Data Parallelism</span></h1>
+<p>We can divide up batch gradient descent and dispatch the cost function for a subset of the data to many different machines so that we can train our algorithm in parallel.</p>
+<p>You can split your training set into <span class="math inline">\(z\)</span> subsets corresponding to the number of machines you have. On each of those machines calculate <span class="math inline">\(\displaystyle \sum_{i=p}^{q}(h_{\theta}(x^{(i)}) - y^{(i)}) \cdot x_j^{(i)}\)</span>, where we've split the data starting at <span class="math inline">\(p\)</span> and ending at <span class="math inline">\(q\)</span>.</p>
+<p>MapReduce will take all these dispatched (or 'mapped') jobs and 'reduce' them by calculating: <span class="math display">\[ \Theta_j := \Theta_j - \alpha \dfrac{1}{z}(temp_j^{(1)} + temp_j^{(2)} + \cdots + temp_j^{(z)})\]</span> For all <span class="math inline">\(j = 0, \dots, n\)</span>.</p>
+<p>This is simply taking the computed cost from all the machines, calculating their average, multiplying by the learning rate, and updating theta.</p>
+<p>Your learning algorithm is MapReduceable if it can be expressed as <strong>computing sums of functions over the training set</strong>. Linear regression and logistic regression are easily parallelizable.</p>
+<p>For neural networks, you can compute forward propagation and back propagation on subsets of your data on many machines. Those machines can report their derivatives back to a 'master' server that will combine them.</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/MapReduce/">MapReduce</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

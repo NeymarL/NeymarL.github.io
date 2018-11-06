@@ -1,0 +1,1158 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    射频识别技术（RFID） | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="射频识别技术（RFID）">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      射频识别技术（RFID）</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/01/08/RFID/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-01-08T04:08:47.000Z">
+          2017-01-08
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p><strong>目录</strong></p>
+<!-- toc -->
+<ul>
+<li><a href="#第一章-物联网识别技术">第一章 物联网识别技术</a>
+<ul>
+<li><a href="#物联网基本概念">物联网基本概念</a></li>
+<li><a href="#物联网识别技术">物联网识别技术</a></li>
+<li><a href="#传统自动识别技术">传统自动识别技术</a></li>
+</ul></li>
+<li><a href="#第二章-条形码基本概念">第二章 条形码基本概念</a>
+<ul>
+<li><a href="#条形码barcode基本知识">条形码(Barcode)基本知识</a></li>
+<li><a href="#商品条码">商品条码</a>
+<ul>
+<li><a href="#ean-13码">EAN-13码</a></li>
+<li><a href="#ean-8码">EAN-8码</a></li>
+<li><a href="#upc-a">UPC-A</a></li>
+<li><a href="#upc-e码">UPC-E码</a></li>
+<li><a href="#库德巴条码">库德巴条码</a></li>
+<li><a href="#128条码">128条码</a></li>
+</ul></li>
+<li><a href="#isbn码和issn码">ISBN码和ISSN码</a>
+<ul>
+<li><a href="#isbn">ISBN</a></li>
+<li><a href="#issn">ISSN</a></li>
+</ul></li>
+<li><a href="#快速响应矩阵码">快速响应矩阵码</a></li>
+</ul></li>
+<li><a href="#第三章-条码识别技术及应用">第三章 条码识别技术及应用</a></li>
+<li><a href="#第四章-射频识别技术">第四章 射频识别技术</a>
+<ul>
+<li><a href="#rfid系统组成及特点">RFID系统组成及特点</a></li>
+<li><a href="#rfid技术的理论基础">RFID技术的理论基础</a>
+<ul>
+<li><a href="#数据传输原理">数据传输原理</a></li>
+<li><a href="#能量传输原理">能量传输原理</a></li>
+<li><a href="#数据传输编码">数据传输编码</a></li>
+<li><a href="#数据校验方法">数据校验方法</a></li>
+</ul></li>
+<li><a href="#rfid系统工程">RFID系统工程</a>
+<ul>
+<li><a href="#rfid系统性能指标">RFID系统性能指标</a></li>
+</ul></li>
+<li><a href="#rfid技术的应用发展面临的问题">RFID技术的应用发展面临的问题</a></li>
+</ul></li>
+<li><a href="#第五章-电子标签">第五章 电子标签</a>
+<ul>
+<li><a href="#电子标签的组成及工作原理">电子标签的组成及工作原理</a>
+<ul>
+<li><a href="#mifare-1射频卡的结构">Mifare 1射频卡的结构</a></li>
+<li><a href="#mifare-1射频卡的特点">Mifare 1射频卡的特点</a></li>
+<li><a href="#mifare-1射频卡的存储结构">Mifare 1射频卡的存储结构</a></li>
+</ul></li>
+<li><a href="#电子标签种类">电子标签种类</a>
+<ul>
+<li><a href="#按能量来源分类">按能量来源分类</a></li>
+<li><a href="#按工作频率分类">按工作频率分类</a></li>
+<li><a href="#按标签读写方式分类">按标签读写方式分类</a></li>
+<li><a href="#按标签用途分类">按标签用途分类</a></li>
+<li><a href="#按标签功能分类">按标签功能分类</a></li>
+</ul></li>
+<li><a href="#双频rfid系统">双频RFID系统</a>
+<ul>
+<li><a href="#有源系统">有源系统</a></li>
+<li><a href="#无源系统">无源系统</a></li>
+<li><a href="#双频rfid系统的应用">双频RFID系统的应用</a></li>
+</ul></li>
+<li><a href="#电子标签协议">电子标签协议</a></li>
+<li><a href="#电子标签的天线">电子标签的天线</a></li>
+<li><a href="#电子标签信息的写入方式">电子标签信息的写入方式</a></li>
+<li><a href="#电子标签性能因素">电子标签性能因素</a></li>
+</ul></li>
+<li><a href="#第六章-读写器">第六章 读写器</a>
+<ul>
+<li><a href="#读写器的工作原理">读写器的工作原理</a>
+<ul>
+<li><a href="#读写器工作流程">读写器工作流程</a></li>
+</ul></li>
+<li><a href="#读写器天线">读写器天线</a>
+<ul>
+<li><a href="#读写器的天线种类">读写器的天线种类</a></li>
+</ul></li>
+<li><a href="#读写器的发展趋势">读写器的发展趋势</a></li>
+<li><a href="#作业">作业</a></li>
+</ul></li>
+<li><a href="#第七章-rfid技术标准体系">第七章 RFID技术标准体系</a>
+<ul>
+<li><a href="#rfid标准体系">RFID标准体系</a></li>
+</ul></li>
+<li><a href="#第八章-rfid系统关键技术">第八章 RFID系统关键技术</a>
+<ul>
+<li><a href="#rfid系统的安全技术">RFID系统的安全技术</a>
+<ul>
+<li><a href="#rfid系统的安全需求">RFID系统的安全需求</a></li>
+<li><a href="#rfid安全技术">RFID安全技术</a></li>
+</ul></li>
+<li><a href="#多标签识别技术">多标签识别技术</a></li>
+<li><a href="#多读写器防碰撞技术">多读写器防碰撞技术</a></li>
+</ul></li>
+<li><a href="#第九章-rfid应用系统的构建">第九章 RFID应用系统的构建</a>
+<ul>
+<li><a href="#电子标签选择">电子标签选择</a></li>
+<li><a href="#读写器选择">读写器选择</a></li>
+</ul></li>
+<li><a href="#第十章-rfid技术应用">第十章 RFID技术应用</a>
+<ul>
+<li><a href="#基于rfid的典型物联网系统epc">基于RFID的典型物联网系统EPC</a></li>
+</ul></li>
+<li><a href="#电子钱包">电子钱包</a></li>
+<li><a href="#rfid术语">RFID术语</a></li>
+</ul>
+<!-- tocstop -->
+<a id="more"></a>
+<h2><span id="第一章-物联网识别技术">第一章 物联网识别技术</span></h2>
+<h3><span id="物联网基本概念">物联网基本概念</span></h3>
+<ul>
+<li>物联网就是“物物相连的互联网”，其目标是将所有物体联系起来形成一个庞大的<strong>物物相连</strong>的互联网络。
+<ul>
+<li>第一，物联网的<strong>核心和基础仍然是互联网</strong>，是在互联网基础上的延伸和扩展的网络;</li>
+<li>第二，其用户端延伸和扩展到了<strong>任何物体与物体之间</strong>，进行信息交换和通信。</li>
+</ul></li>
+<li>物联网的实施需要三个步骤
+<ul>
+<li>物体标识</li>
+<li>感知与获取</li>
+<li>通信与计算</li>
+</ul></li>
+<li>层次-P3
+<ul>
+<li>感知层</li>
+<li>网络层</li>
+<li>应用层</li>
+</ul></li>
+</ul>
+<h3><span id="物联网识别技术">物联网识别技术</span></h3>
+<p>物能够开口说话的条件</p>
+<ol type="1">
+<li>要有相应的接收器</li>
+<li>要有数据传输通路</li>
+<li>要有一定的存储功能</li>
+<li>要有中央处理器</li>
+<li>要有操作系统</li>
+<li>要有专门的应用程序</li>
+<li>要有数据发送器</li>
+<li>遵循物联网的各种协议</li>
+<li>在世界网络中有可被识别的唯一编号</li>
+</ol>
+<h3><span id="传统自动识别技术">传统自动识别技术</span></h3>
+<ul>
+<li>磁条技术 以前银行卡</li>
+<li>生物特征识别技术 指纹识别，虹膜识别</li>
+<li>语音识别技术<br>
+</li>
+<li>图像识别技术 车牌识别、遥感技术、医用图像处理</li>
+<li>光学字符识别技术 传真、扫描和复印</li>
+<li>条码识别技术 超市商品</li>
+<li>IC卡识别技术 手机卡、公交卡</li>
+</ul>
+<h2><span id="第二章-条形码基本概念">第二章 条形码基本概念</span></h2>
+<h3><span id="条形码barcode基本知识">条形码(Barcode)基本知识</span></h3>
+<p>条码技术包括：</p>
+<ul>
+<li>编码技术</li>
+<li>符号技术</li>
+<li>识读技术</li>
+<li>印刷技术</li>
+<li>检测技术</li>
+</ul>
+<p>条码的分类</p>
+<ul>
+<li>按条码的长度可分为：
+<ul>
+<li>定长条码
+<ul>
+<li>如EAN-13</li>
+</ul></li>
+<li>非定长条码
+<ul>
+<li>如EAN-128</li>
+</ul></li>
+</ul></li>
+<li>按排列方式可分为：
+<ul>
+<li>连续型条码：每个条码字符之间不存在间隔</li>
+<li>非连续型条码：每个条码字符之间存在间隔</li>
+</ul></li>
+<li>从校验方式可分为：
+<ul>
+<li>自校验型条码</li>
+<li>非自校验型条码</li>
+</ul></li>
+<li>按维数可分为：
+<ul>
+<li>一维码</li>
+<li>二维码</li>
+<li>三维码</li>
+</ul></li>
+</ul>
+<h3><span id="商品条码">商品条码</span></h3>
+<ul>
+<li>EAN-13</li>
+<li>EAN-8</li>
+<li>UPC-A</li>
+<li>UPC-E</li>
+</ul>
+<h4><span id="ean-13码">EAN-13码</span></h4>
+<p>European Article Number 欧洲物品编码</p>
+<ul>
+<li>共13位代码</li>
+<li>比较通用</li>
+<li>主要应用于超市和其他零售业</li>
+</ul>
+<p>编码</p>
+<ul>
+<li>前缀码</li>
+<li>厂商识别代码</li>
+<li>商品项目代码</li>
+<li>校验码</li>
+</ul>
+<p>结构</p>
+<ul>
+<li>左侧空白区</li>
+<li>起始符</li>
+<li>左侧数据符</li>
+<li>中间分隔符</li>
+<li>右侧数据符</li>
+<li>校验符</li>
+<li>终止符</li>
+<li>右侧空白区</li>
+</ul>
+<h4><span id="ean-8码">EAN-8码</span></h4>
+<ul>
+<li>共8位数，包括国别码2位，产品代码5位及检查码1位</li>
+<li>左右资料编码规则同EAN-13</li>
+<li>条码面积小</li>
+</ul>
+<h4><span id="upc-a">UPC-A</span></h4>
+<p>UPC-A商品条码是用来表示UCC-12商品标识代码的条码符号，由美国统一代码委员会(UCC)制定的一种条码码制。</p>
+<ul>
+<li>结构基本与EAN-13相同，12位</li>
+<li>UPC-A条码是EAN-13码的一种特殊形式，UPC-A条码与EAN-13码中N1=0兼容</li>
+</ul>
+<h4><span id="upc-e码">UPC-E码</span></h4>
+<p>在特定条件下，12位的UPC-A条码可以被表示为一种<strong>缩短形式</strong>的条码符号即UPC-E条码</p>
+<ul>
+<li>不含中间分隔符和校验符</li>
+</ul>
+<h4><span id="库德巴条码">库德巴条码</span></h4>
+<ul>
+<li>库德巴条码是一种条、空均表示信息的非连续型、非定长、具有自校验功能的双向条码。它由条码字符及对应的供人识别字符组成。</li>
+<li>它的字符集共包括16个字符: 即数字字符0<sub>9(10个数字)、英文字母A</sub>D(4个字母)和特殊字符“+”(加号) 、“-” (减号)、“$”(美元符号)、“:”(冒号)、“/”(斜杠)、“·”(圆点)。</li>
+<li>库德巴条码由左侧空白区、起始符、数据符、终止符及右侧空白区构成</li>
+</ul>
+<h4><span id="128条码">128条码</span></h4>
+<p>EAN-128码开始于1981年推出，是一种长度可变、连续性的字母数字条码，较为复杂，但其所能支持的字符比其他一维条码多，有不同的编码方式可供交互运用，因此其应用弹性较大。</p>
+<ul>
+<li>可应用於货运栈版标签、携带式资料库、连续性资料段、流通配送标签等</li>
+<li>UCC/EAN-128条码是唯一能够表示应用标识的条码符号。UCC/EAN-128 可编码的信息包括项目标识、计量、数量、日期、交易参考信息、位置等</li>
+</ul>
+<h3><span id="isbn码和issn码">ISBN码和ISSN码</span></h3>
+<ul>
+<li>ISBN (International Standard Book Number)
+<ul>
+<li><strong>国际标准书号</strong></li>
+</ul></li>
+<li>ISSN(International Standard Serial Number)
+<ul>
+<li><strong>国际标准期刊号</strong></li>
+</ul></li>
+</ul>
+<h4><span id="isbn">ISBN</span></h4>
+<ul>
+<li>2007.1.1前，ISBN由10位数字组成，分四个部分:组号(国家、地区、语言的代号)，出版社号，书序号和检验码。</li>
+<li>2007.1.1起，实行新版ISBN，由13位数字组成，分为5段，即在原来的10位数字前加上3位EAN图书产品代码“978”</li>
+<li>目的和作用
+<ul>
+<li>有助于简化图书发行及管理手续，便于出版品统计及国际交流。</li>
+<li>世界各地的出版机构、书商、及图书馆都可以利用国际标准书号迅速而有效的识别某一本书及其版本、装订形式。</li>
+<li>不论原书是以何种文字书写，都可用电报或电话传真订购，并以电脑作业处理。</li>
+</ul></li>
+</ul>
+<h4><span id="issn">ISSN</span></h4>
+<ul>
+<li>常见的期刊、杂志、丛刊、年刊等大都属于国际标准期刊号的编号与编码范围。每一种期刊在注册登记时，就得到一个永久专属的 ISSN ，<strong>一个 ISSN 只对应一个刊名;而一个刊名也只有一个ISSN</strong>。</li>
+<li>当该刊名变更时，就得另申请一个 ISSN 。如果期刊停刊，那么被删除的 ISSN 也不会被其他期刊再使用。</li>
+</ul>
+<h3><span id="快速响应矩阵码">快速响应矩阵码</span></h3>
+<p>QR Code - Quick Response</p>
+<ul>
+<li>超高速识读</li>
+<li>可靠性高、成本低</li>
+<li>数据容量大</li>
+<li>全方位识读</li>
+<li>能够有效地表示中国汉字、日本汉字、图像<em>???</em></li>
+<li>保密防伪性强、使用方便</li>
+</ul>
+<h2><span id="第三章-条码识别技术及应用">第三章 条码识别技术及应用</span></h2>
+<p>相关术语</p>
+<ul>
+<li>条码识读器(Barcode Reader)</li>
+<li>扫描器(Scanner)</li>
+<li>译码(Decode)</li>
+<li>译码器(Decoder)</li>
+<li>首读率(FirstReadRate)</li>
+<li>误码率(Misread Rate)</li>
+<li>拒识率(Non-read Rate)</li>
+</ul>
+<h2><span id="第四章-射频识别技术">第四章 射频识别技术</span></h2>
+<h3><span id="rfid系统组成及特点">RFID系统组成及特点</span></h3>
+<p>组成</p>
+<ul>
+<li>电子标签</li>
+<li>读写器</li>
+<li>数据管理系统</li>
+</ul>
+<p>与条码识别技术的根本差别</p>
+<ul>
+<li>条码技术是一种<strong>光学技术</strong></li>
+<li>RFID是一种<strong>无线电技术</strong></li>
+</ul>
+<p>特点</p>
+<ol type="1">
+<li>识别速度快、识别距离远</li>
+<li>体积小型化，形状多样化，易封装</li>
+<li>抗污染能力和耐久性</li>
+<li>可重复使用</li>
+<li>穿透性和无屏障阅读</li>
+<li>数据的记忆容量大</li>
+<li>安全性较高</li>
+</ol>
+<h3><span id="rfid技术的理论基础">RFID技术的理论基础</span></h3>
+<p>RFID技术作为一种非接触式的自动识别技术，其数据通信基础就是读写器与电子标签之间的<strong>无线载波通信技术</strong>。</p>
+<h4><span id="数据传输原理">数据传输原理</span></h4>
+<p>在RFID系统中，读写器和电子标签之间的通信通过电磁波来实现。</p>
+<ul>
+<li>按照通信距离，可以划分为<strong>近场和远场</strong>。相应的，读写器和电子标签之间的数据交换方式被划分:
+<ol type="1">
+<li>负载调制
+<ol type="1">
+<li>负载调制就是利用负载的某些差异或负载的变动而使源的某种或某些参数发生相应改变的过程或效应</li>
+</ol></li>
+<li>反向散射调制
+<ol type="1">
+<li>雷达原理模型，发射出去的电磁波，碰到目标后反射，同时携带回目标信息，依据的是<strong>电磁波的空间传播规律</strong></li>
+</ol></li>
+</ol></li>
+</ul>
+<h4><span id="能量传输原理">能量传输原理</span></h4>
+<ul>
+<li>无源RFID系统的电子标签通过电磁场供电，电子标签的功耗越大，读写距离越近，性能越差</li>
+</ul>
+<h4><span id="数据传输编码">数据传输编码</span></h4>
+<p>数据编码是将数据表示成适当的信号形式，以便数据的传输和处理。在数据传输系统中，有三种数据编码技术:</p>
+<ul>
+<li>数字数据的模拟信号编码
+<ul>
+<li>幅移键控(ASK)法</li>
+<li>频移键控(FSK)法 (Frequency Shift Keying)</li>
+<li>相移键控(PSK)法 (Phase Shift Keying)</li>
+</ul></li>
+<li>数字数据的数字信号编码
+<ul>
+<li>脉冲编码调制PCM(Pulse Code Modulation)技术</li>
+</ul></li>
+<li>模拟数据的数字信号编码
+<ul>
+<li>为了高信号抗干扰能力，并且便于信号接收同步，通常采用更为有效的信号编码方法 (不归零码、差分不归零码、曼彻斯特码及差分曼彻斯特码等)</li>
+</ul></li>
+</ul>
+<p><img src="/images/code.png"></p>
+<p>优缺点</p>
+<p>选择编码方式的考虑因素</p>
+<ul>
+<li>编码方式的选择要考虑电子标签能量的来源</li>
+<li>编码方式的选择要考虑数据的校验和保护</li>
+<li>编码方式的选择要考虑数据的检测错误能力</li>
+</ul>
+<h4><span id="数据校验方法">数据校验方法</span></h4>
+<ul>
+<li>奇偶校验（Parity Check）</li>
+<li>纵向冗余校验（Longitudinal Redundancy Check, LRC）</li>
+<li>循环冗余码校验（Cyclic Redundancy Check, CRC）</li>
+</ul>
+<h3><span id="rfid系统工程">RFID系统工程</span></h3>
+<p>RFID系统借助空间传输通道工作的过程可归结为三种事件模型:能量、时序和数据。能量是时序得以实现的基础，时序是数据交换的实现方式，数据交换是目的。</p>
+<h4><span id="rfid系统性能指标">RFID系统性能指标</span></h4>
+<ol type="1">
+<li>数据传输速率
+<ol type="1">
+<li>只读速率</li>
+<li>无限读写速率</li>
+<li>有限读写速率</li>
+</ol></li>
+<li>读写距离</li>
+<li>电子标签与天线间的射频载波频率</li>
+<li>多标签读写特性</li>
+<li>电子标签存储容量</li>
+<li>工作方式
+<ol type="1">
+<li>全双工(Full Duplex，FDX)</li>
+<li>半双工(Half Duplex，HDX)</li>
+<li>时序(Sequence，SEQ)</li>
+</ol></li>
+<li>RFID系统的接口形式
+<ul>
+<li>RS232, RS482, RJ45, 韦根, 无线网络</li>
+</ul></li>
+<li>数据载体
+<ol type="1">
+<li>EEPROM:电可擦可编程只读存储器（主要使用）</li>
+<li>FRAM: Ferroelectric Random Access Memory铁电随机存取存储器</li>
+<li>SRAM: 静态随机存取存储器</li>
+</ol></li>
+<li>状态模式</li>
+<li>能量供应方式</li>
+</ol>
+<h3><span id="rfid技术的应用发展面临的问题">RFID技术的应用发展面临的问题</span></h3>
+<ol type="1">
+<li>标准制定问题</li>
+<li>标签成本问题</li>
+<li>关键技术问题
+<ul>
+<li>如多标签识别问题、防碰撞技术问题、高速运动中的对象识别问题等等</li>
+</ul></li>
+<li>安全与隐私问题</li>
+</ol>
+<h2><span id="第五章-电子标签">第五章 电子标签</span></h2>
+<h3><span id="电子标签的组成及工作原理">电子标签的组成及工作原理</span></h3>
+<p><strong>电子标签=天线(或线圈)+标签芯片</strong></p>
+<ul>
+<li>标签芯片相当于一个单片系统(SoC):收发功能+存贮功能</li>
+</ul>
+<p>从纯技术的角度来说，射频识别技术的核心在电子标签，阅读器是根据电子标签的设计而设计的。</p>
+<p>标签芯片一般<strong>由编码/解码器、电源、解调器、存储器、控制器和负载调制</strong>组成。</p>
+<h4><span id="mifare-1射频卡的结构">Mifare 1射频卡的结构</span></h4>
+<p> Mifare 1 IC射频卡采用先进的芯片工艺制作，内建有高速的CMOS、EEPROM和MCU等，卡片的电气部分:</p>
+<ul>
+<li>天线:卡片的天线是只有几组绕线的线圈。</li>
+<li>ASIC:卡片的ASIC由一个高速(106KB波特率)的RF接口，一个控制单元和一个8K位EEPROM组成。</li>
+</ul>
+<h4><span id="mifare-1射频卡的特点">Mifare 1射频卡的特点</span></h4>
+<ul>
+<li><p>M1卡所具有的独特的Mifare射频接口标准已被制定为国际标准ISO/IEC 14443 TYPE A 标准。</p></li>
+<li><p>M1卡上具有先进的数据通信加密和双向验证密码系统，而且具有防冲突功能，能在同一时间处理读写器天线的有效工作距离内冲突的多张卡片。</p></li>
+<li><p>M1卡与读写器通信使用握手式半双工通信协议，卡片上有高速的CRC协处理器，符合CCITT标准。</p></li>
+<li><p>卡片制造时具有唯一的卡片系列号，没有重复的相同的两张Mifare卡片。</p></li>
+<li><p>卡片上内建8 K 位 EEPROM 存储容量，并划分为16个扇区，每个扇区划分为4个数据存储块，每个扇区可由多种方式的密码管理。</p></li>
+<li><p>卡片上还内建有增值/减值的专项的数学运算电路，非常适合公交、地铁等行业的检票、收费系统等典型的快捷交易，时间最长不超过100 ms。</p></li>
+</ul>
+<h4><span id="mifare-1射频卡的存储结构">Mifare 1射频卡的存储结构</span></h4>
+<p>M1卡的存储容量为8192位×1位字长，即1K×8位字长。采用EEPROM作为存储介质。</p>
+<p>整个结构划分为16个扇区，编号为0~15;</p>
+<ul>
+<li>每个扇区由4块(Block)，分别为块0、块1、块2、块3，每块有16个字节，一个扇区共有64个字节</li>
+<li>实际中，也可将16个扇区的64个块按绝对地址编号为0~63。</li>
+<li>第0扇区的块0(即绝对地址0块)，它用于存放厂商代码，已经固化，不可更改。其中字节0~3为卡的序列号;字节4为序列号的校验码;字节5为卡片大小的数值;字节6和字节7为卡的类型号，即Tag type字节;其他字节由厂商另加定义。</li>
+</ul>
+<h3><span id="电子标签种类">电子标签种类</span></h3>
+<h4><span id="按能量来源分类">按能量来源分类</span></h4>
+<ul>
+<li>获取电能方式
+<ul>
+<li>无源标签（主流）</li>
+<li>半有源标签</li>
+<li>有源标签</li>
+</ul></li>
+<li>使用电能方式
+<ul>
+<li>被动式标签
+<ul>
+<li>必须利用读写器的载波来调制自身的信号，标签产生电能的装置是天线和线圈</li>
+</ul></li>
+<li>半被动式标签
+<ul>
+<li>电子标签本身带有电池，但是标签并不通过自身能量主动发送数据给读写器，电池只负责对标签内部电路供电</li>
+</ul></li>
+<li>主动式标签
+<ul>
+<li>有源系统，用自身能量主动地发送数据给读写器</li>
+</ul></li>
+</ul></li>
+</ul>
+<h4><span id="按工作频率分类">按工作频率分类</span></h4>
+<ul>
+<li>低频电子标签（30～300kHz）
+<ul>
+<li>低频标签一般为无源式电子标签，其工作能量通过电感耦合方式从读写器耦合线圈的辐射近场中获得</li>
+<li>优势
+<ul>
+<li>标签芯片一般采用普通的CMOS工艺，具有省电、廉价的特点;</li>
+<li>工作频率不受无线电频率管制约束;</li>
+<li>可以穿透水、有机组织、木材等，粘附在装有水、动物组织、金属、木材和液体的容器上</li>
+<li>非常适合近距离、低速度、数据量要求较少的识别应用等</li>
+</ul></li>
+<li>劣势
+<ul>
+<li>数据传输速率最低，标签存贮数据量也较少，只能适合低速、近距离识别应用</li>
+<li>低频电子标签灵活性差，不易被识别;</li>
+<li>与超高频标签相比:标签天线匝数更多，成本更高一些;</li>
+<li>低频标签没有防碰撞能力，读取电子标签数据时只能一对一进行读取，不可能同时读取多个标签</li>
+</ul></li>
+<li>主要应用
+<ul>
+<li>牧业的管理系统</li>
+<li>汽车防盗和无钥匙开门系统的应用</li>
+<li>马拉松赛跑系统的应用</li>
+<li>动停车场收费和车辆管理系统</li>
+<li>动加油系统的应用</li>
+<li>酒店门锁系统的应用</li>
+<li>门禁和安全管理系统</li>
+</ul></li>
+</ul></li>
+<li>中高频电子标签（3～30MHz，典型13.56MHz）
+<ul>
+<li>无源，与低频原理一样</li>
+</ul></li>
+<li>超高频标签（300～1000MHz）
+<ul>
+<li>433MHz频率用于主动式标签，而860~960MHz频段大部分用于被动式标签和一些半被动式标签</li>
+<li>860~960MHz这一频段常常可认为是一个单独的频率900MHz或者915MHz。工作在这一频段的标签和读写器称为超高频标签和超高频读写器</li>
+</ul></li>
+<li>微波标签
+<ul>
+<li>微波频段从1~10GHz，但RFID应用公使用其中的两个频段:2.45GHz和5.8GHz</li>
+</ul></li>
+</ul>
+<h4><span id="按标签读写方式分类">按标签读写方式分类</span></h4>
+<ul>
+<li>只读标签
+<ul>
+<li>内部只有只读存储器(Read Only Memory, ROM)</li>
+</ul></li>
+<li>可读可写标签
+<ul>
+<li>随机存取器(Random Access Memory, RAM)</li>
+</ul></li>
+<li>一次写入多次读出标签
+<ul>
+<li>一次写入多次读出(Write Once Read Many, WORM)</li>
+</ul></li>
+</ul>
+<h4><span id="按标签用途分类">按标签用途分类</span></h4>
+<p>很多，如温度、振动、双频防盗等</p>
+<h4><span id="按标签功能分类">按标签功能分类</span></h4>
+<ul>
+<li>1位电子标签🏷️
+<ul>
+<li>只能表示两个状态1和0</li>
+<li>它是最早的商用电子标签，主要应用在20世纪60年代的商品电子监视器(EAS)中。它<strong>不需要芯片</strong>，可以采用<strong>射频法</strong>、微波法、分频法、电磁法和声磁法等方法进行工作。</li>
+</ul></li>
+<li>声表面波标签
+<ul>
+<li>声表面波(Surface Acoustic Wave, SAW)</li>
+</ul></li>
+<li>无芯片标签
+<ul>
+<li>不含有IC芯片的电子标签，如前两个</li>
+</ul></li>
+<li>芯片标签
+<ul>
+<li>天线、射频电路和控制电路组成，具有存储功能</li>
+</ul></li>
+<li>微处理器标签
+<ul>
+<li>拥有独立的CPU和操作系统</li>
+<li>集成各类传感器检测功能，无线通信功能</li>
+</ul></li>
+</ul>
+<h3><span id="双频rfid系统">双频RFID系统</span></h3>
+<h4><span id="有源系统">有源系统</span></h4>
+<p>双频电子标签由<strong>嵌入式处理器</strong>和<strong>软件、卡内发射和接收天线</strong>、<strong>收发电路以及高能电池</strong>组成。</p>
+<p>双频电子标签工作在两个频点上，平时处于<strong>睡眠状态</strong>，当进入系统工作区后，被发射天线(路标)发出的低频无线电信号激活，发射出惟一的加密识别码无线电信号。</p>
+<p>可以解决传统有源电子标签<strong>耗电大和控制距离</strong>两大难题 。</p>
+<h4><span id="无源系统">无源系统</span></h4>
+<ul>
+<li>与有源双频系统相比，无源双频系统具有体积小、系统紧凑和成本低廉等特点。</li>
+<li>采用双频技术的RFID系统同时具有低频和高频系统各自的优点，即具有较强的穿透能力、较远的识别距离和高速的识别能力。</li>
+</ul>
+<h4><span id="双频rfid系统的应用">双频RFID系统的应用</span></h4>
+<p>双频(Dual Frequency，DF)</p>
+<ol type="1">
+<li><p>供应链管理包括木质托盘、集装箱、水果箱、纸卷跟</p>
+<p>踪等方面</p></li>
+<li><p>人员自由流跟踪与个性化身份认证</p></li>
+<li><p>动物跟踪与识别包括羊群、牛群、猪、马以及野生动物的跟踪与识别</p></li>
+<li><p>采矿作业与地下路网管理</p></li>
+<li><p>运动计时</p></li>
+</ol>
+<h3><span id="电子标签协议">电子标签协议</span></h3>
+<ul>
+<li>ISO/IEC 14443(A/B)</li>
+<li>ISO/IEC 15693</li>
+<li>ISO/IEC 18000-6(A/B)</li>
+<li>EPCglobal Generation2(Gen2)</li>
+</ul>
+<h3><span id="电子标签的天线">电子标签的天线</span></h3>
+<p>天线是发射和接收电磁波的一个重要的无线电设备，主要是将接收到的电磁波转换成电流信号，或者将电流信号转换成电磁波。</p>
+<h3><span id="电子标签信息的写入方式">电子标签信息的写入方式</span></h3>
+<p>电子标签作为标识对象的核心部件，其内部信息要在使用前或使用过程中通过一定的方式写入到标签存储芯片中。其信息的写入方式大致可以分为以下三种类型:</p>
+<ul>
+<li>  (1)电子标签在出厂时，即已将完整的标签信息写入标签。这种情况下，应用过程中，电子标签一般具有只读功能。</li>
+<li>  (2)电子标签信息的写入采用有线接触方式实现，一般称这种标签信息写入装置为编程器。这种接触式的电子标签信息写入方式通常具有多次改写的能力。</li>
+<li>  (3)电子标签在出厂后，允许用户通过专用设备以无接触的方式向电子标签中写入数据信息。这种专用写入功能通常与电子标签读取功能结合在一起形成电子标签读写器。</li>
+</ul>
+<h3><span id="电子标签性能因素">电子标签性能因素</span></h3>
+<ol type="1">
+<li>能量来源</li>
+<li>电子标签的方向和位置</li>
+<li>电子标签的放置</li>
+<li>标签堆垛(Tag Stacking)</li>
+<li>标签的极化方向</li>
+<li>标签的移动速度</li>
+<li>环境因素</li>
+<li>读取和写入</li>
+</ol>
+<h2><span id="第六章-读写器">第六章 读写器</span></h2>
+<h3><span id="读写器的工作原理">读写器的工作原理</span></h3>
+<p>硬件</p>
+<ul>
+<li>所有的读写器硬件均可简化为<strong>天线</strong>、<strong>高频接口</strong>、<strong>控制单元</strong>和<strong>外围接口</strong>四个基本模块。
+<ul>
+<li>外围接口：RS232, RS485, RJ45, 无线网络接口</li>
+</ul></li>
+</ul>
+<p>软件</p>
+<ul>
+<li>控制软件</li>
+<li>导入软件</li>
+<li>解码器</li>
+</ul>
+<h4><span id="读写器工作流程">读写器工作流程</span></h4>
+<p>RFID系统数据采集一般有两种工作模式:</p>
+<ul>
+<li>一是以读写器为主的工作模式，多用于无源标签</li>
+<li>二是以标签为主的工作模式，必须是有源标签</li>
+</ul>
+<h3><span id="读写器天线">读写器天线</span></h3>
+<p>天线的主要参数包括:工作频率、频带宽度、方向性增益、极化方式、波瓣宽度。</p>
+<ol type="1">
+<li><p>天线的工作频率和频带宽度</p>
+<p>天线的工作频率和频带宽度应当符合RFID系统的频率范围要求，如天线可以工作在860-960MHz频率范围之间。</p></li>
+<li><p>天线的增益</p>
+<p>天线的增益是指在输入功率相等的条件下，实际天线与理想的辐射单元在空间同一点处所产生的信号的功率密度之比，它定量地描述了天线集中辐射输入功率的程度。</p></li>
+<li><p>天线的极化方向</p>
+<p>天线向周围空间辐射电磁波，电磁波由电场和磁场构成。电场的方向就是天线极化方向，天线的极化方式分为<strong>线极化(水平极化和垂直极化)和圆极化(左旋极化和右旋极化)</strong>两种。</p></li>
+<li><p>天线的波瓣宽度</p></li>
+</ol>
+<h4><span id="读写器的天线种类">读写器的天线种类</span></h4>
+<ol type="1">
+<li>线圈天线</li>
+<li>微带贴片天线</li>
+<li>偶极子天线</li>
+<li>隧道天线</li>
+<li>天线阵列</li>
+</ol>
+<h3><span id="读写器的发展趋势">读写器的发展趋势</span></h3>
+<ol type="1">
+<li>多功能</li>
+<li>智能多天线端口</li>
+<li>多种数据接口</li>
+<li>多制式兼容</li>
+<li>小型化</li>
+<li>多频段兼容</li>
+<li>低成本</li>
+<li>新技术</li>
+</ol>
+<h3><span id="作业">作业</span></h3>
+<p>6-3 在一RFID应用系统中，读写器主要实现哪些功能？</p>
+<ol type="1">
+<li>与电子标签的通信功能</li>
+<li>与计算机之间的通信功能</li>
+<li>多标签同时读取，防碰撞</li>
+<li>校验读写过程中的错误信息</li>
+<li>对于有源电子标签，能够读其电量🔋</li>
+</ol>
+<p>6-7 如何衡量读写器天线的性能好坏？</p>
+<p>根据工作频率、频带宽度、方向性增益、极化方式和波瓣宽度来衡量。</p>
+<p>6-8 对于分体式读写器，在读写器和天线之间的连接时应该注意哪些问题？</p>
+<p>避免使用非屏蔽电缆，否则会产生不良效应。</p>
+<h2><span id="第七章-rfid技术标准体系">第七章 RFID技术标准体系</span></h2>
+<p>国际非电离辐射保护委员会(International Commission on Non-ionizing Radiation Protection，ICNIRP)</p>
+<p>RFID标准体系结构</p>
+<ul>
+<li>RFID技术标准</li>
+<li>RFID应用标准</li>
+<li>RFID数据内容标准</li>
+<li>RFID性能标准</li>
+</ul>
+<h3><span id="rfid标准体系">RFID标准体系</span></h3>
+<p><strong>ISO/IEC 10536</strong></p>
+<ul>
+<li>密耦合集成电路卡(Contactless Integrated Circuit Card，CICC)</li>
+</ul>
+<p><strong>ISO/IEC 14443</strong></p>
+<ul>
+<li>近耦合集成电路卡 (Proximity Integrated Circuit Card，PICC )</li>
+<li>Type A卡
+<ul>
+<li>Mifare Light、MIFARE1、Mifare2 (即:Mifare Pro)等。在亚洲等地区，Type A技术和产品占据了很大的市场份额</li>
+<li>NFC逐渐成为智能手机标配功能。国内NFC应用最为广泛的将是Type A，如Mifare、NFC Tag、移动支付等</li>
+</ul></li>
+<li>Type B卡
+<ul>
+<li>二代居民身份证</li>
+<li>TYPE B与TYPE A相比，由于调制深度和编码方式的不同，具有传输能量不中断、速率更高、抗干扰能力更强的优点</li>
+</ul></li>
+<li>物理特性</li>
+<li>空中接口和初始化</li>
+<li>防冲突和传输协议</li>
+<li>扩展命令集和安全特性</li>
+<li>超短距离智慧卡标准</li>
+</ul>
+<p><strong>ISO/IEC 15693</strong></p>
+<ul>
+<li>疏耦合集成电路卡(Vicinity Integrated Circuit Card，VICC)</li>
+<li>ISO/IEC 15693采用的载波频率仍为13.56MHz，主要包括物理特性、空中接口和初始化、防冲突和传输协议、扩展命令集和安全特性四个部分</li>
+<li>短距离智慧卡标准</li>
+</ul>
+<p><strong>ISO/IEC 18000</strong></p>
+<ul>
+<li>单品管理</li>
+<li>供应链和物流</li>
+</ul>
+<p>全球贸易项目代码(Global Trade Item Number)</p>
+<p><strong>EPC 电子标签的存储结构</strong></p>
+<p>符合EPC Class1 Gen2(简称C1G2)协议V109版的EPC电子标签的存储结构是相同的。只是不同厂家的Tag存储器容量大小不同 EPC 标签分为四个独立的存储区块(Bank)。</p>
+<p><img src="/images/EPC.png"></p>
+<p>标签芯片内部带有一定容量的非易失性存储器，按照EPCGlobal C1G2协议，四个独立的存储区块(Bank):</p>
+<ul>
+<li>Reserved区(Bank00)：存储Kill Password(灭活口令)和AccessPassword(访问口令)。(4 words)</li>
+<li>EPC区(Bank01)：存储EPC编码，EPCGlobal根据不同的应用领域制定了不同规则的国际通用编码，长度在96位以上。(16bytes)</li>
+<li>TID区(Bank10)：存储标签识别号码，每个TID号码都在标签出厂时设定，是世界唯一的。(12words、24bytes)</li>
+<li>User区(Bank11)：存储用户自定义的数据。(32words)</li>
+</ul>
+<p>• 此外还有各区块的Lock(锁定)状态位等用到的也是存储性质的单元</p>
+<p><strong>TID(Tag identifier)数据信息涵义</strong></p>
+<p><img src="/images/TID.png"></p>
+<ul>
+<li>TID的数据格式统一为E2xxxxxxx(此处x并不与实际数据存在一一对应的关系)</li>
+<li>003(十六进制)表示芯片商代号，各支持Gen2协议的芯片商向EPCglobal申请获得唯一的代号，常见厂商码见下表</li>
+<li>412(十六进制)表示标签型号(具体代表某大类物品)</li>
+<li>之后为标签序列号
+<ul>
+<li>不同标签的TID均不相同，利用TID可以保证每一标签的唯一性并标识出该标签的制造商、制造批次等信息</li>
+</ul></li>
+</ul>
+<h2><span id="第八章-rfid系统关键技术">第八章 RFID系统关键技术</span></h2>
+<h3><span id="rfid系统的安全技术">RFID系统的安全技术</span></h3>
+<p>针对RFID系统的安全攻击手段和方式主要分为以下两种:</p>
+<ol type="1">
+<li>对RFID系统进行破坏、扰乱的攻击
+<ul>
+<li>通过干扰、阻塞无线信道或其它手段，产生异常环境，使RFID发生故障，或进行拒绝服务的攻击等</li>
+<li>通过对标签的屏蔽和失调来使得标签无效，例如在天线周围覆盖一层金属箔，使得天线无法工作</li>
+<li>还有的是进行永久性的破坏，例如对标签的微芯片进行机械的拆除，或者是将标签放在微波炉等的强磁场环境下，这些都会对标签进行永久性的破坏，当然标签内的数据也会永远的丢失</li>
+<li>在标签附近放一个阻塞标签，不断地发射干扰信号，使RFID系统不能正常通信，此时服务就会终止，妨碍读写器对合法标签的读写</li>
+<li>对于这一类的攻击，目前还没有有效的对策来解决</li>
+</ul></li>
+<li>对通信数据的采集、复制和修改
+<ul>
+<li>对于这一类攻击，加密程序就是很好的解决方法，例如对于读写器和标签之间的相互认证，读写器和标签之间的数据传输的加密，以及周期性的密钥更新</li>
+<li>存在的问题就是运用了加密协议后会大大增加能量的消耗，因此被动电子标签技术目前还没有运用加密协议</li>
+</ul></li>
+</ol>
+<h4><span id="rfid系统的安全需求">RFID系统的安全需求</span></h4>
+<ol type="1">
+<li>机密性</li>
+<li>完整性</li>
+<li>可用性</li>
+<li>真实性</li>
+<li>隐私性</li>
+</ol>
+<h4><span id="rfid安全技术">RFID安全技术</span></h4>
+<ol type="1">
+<li>物理安全机制
+<ul>
+<li>Kill命令</li>
+<li>法拉第笼</li>
+<li>主动干扰法</li>
+<li>阻塞标签</li>
+<li>只读标签</li>
+<li>动态频率法</li>
+<li>天线能量分析法</li>
+<li>指令识别法</li>
+</ul></li>
+<li>逻辑安全机制
+<ul>
+<li>访问控制</li>
+<li>认证</li>
+<li>加密算法</li>
+</ul></li>
+</ol>
+<h3><span id="多标签识别技术">多标签识别技术</span></h3>
+<p>无线电通信系统中，多路存取方法的解决方式一般具有以下几种方式:</p>
+<ul>
+<li>空分多路法(Space Division Multiple Access，SDMA)</li>
+<li>频分多路法(Frequency Division Multiple Access，FDMA)</li>
+<li>码分多路法(Code Division Multiple Access，CDMA)</li>
+<li>时分多路法(Time Division Multiple Access，TDMA)</li>
+</ul>
+<p><strong>多标签碰撞</strong></p>
+<p>在<strong>信道共用</strong>、<strong>信号频率</strong>相同的情况下，多个电子标签<strong>同时</strong>向读写器发送信号，这些信号就会相互干扰而产生信道争夺的情况，产生数据碰撞。</p>
+<ol type="1">
+<li>空分多路SDMA</li>
+<li>频分多路FDMA
+<ul>
+<li>频分多路法是把若干个使用不同载波频率的传输通路同时供给通信用户使用的技术</li>
+</ul></li>
+<li>码分多路CDMA
+<ul>
+<li>码分多路法是一种共享信道的方法，每个用户可在同一时间使用同样的频带进行通信。但使用的是基于码型的分割信道的方法，即每个用户分配一个地址码，各个码型互不重叠，通信各方之间不会相互干扰，且抗干拢能力强</li>
+</ul></li>
+<li>时分多路TDMA
+<ul>
+<li>时分复用(Time division Multiplexing-TDM)是利用各信号的抽样值在时间上不相互重叠来达到在同一信道中传输多路信号的一种方法。</li>
+</ul></li>
+</ol>
+<p>综合分析来看</p>
+<ul>
+<li>SDMA 法由于其复杂的天线系统产生的高费用，使得其应用不是很广泛</li>
+<li>FDMA法因其读写器的费用比较高，电子标签的差异也要求较高，应用也受到了限制</li>
+<li>CDMA法的频带利用率低、信道容量较小、地址码选择较难、接收时地址码捕获时间较长，其通信频带及技术复杂性等使得它很难在RFID系统中推广应用</li>
+</ul>
+<p>因此，在RFID系统中，<strong>TDMA应用比较广泛</strong>。</p>
+<h3><span id="多读写器防碰撞技术">多读写器防碰撞技术</span></h3>
+<p>随着RFID系统的大规模应用，越来越多的应用场合(如物流供应链管理，位置跟踪等)需要RFID读写器网络来监视整个覆盖的区域，可能会出现在一定范围内多个读写器阅读同一个标签的情况。</p>
+<p>阅读器的信号区有可能出现相互重叠，则读写器之间会互相干扰，其中任一个阅读器与标签的通信，可能会严重干扰其他阅读器对该标签的正常读取，这种多阅读器间的读写冲突问题称为<strong>阅读器防碰撞问题</strong>。</p>
+<p>读写器的碰撞问题分为两类:</p>
+<ul>
+<li>读写器与读写器之间的干扰问题
+<ul>
+<li>当一个读写器发送一个信号而与另一个读写器的工作相干扰时，读写器之间的频率干扰就产生了</li>
+<li>当一个读写器发送的信号有足够的强度，并且被第二个读写器收到时，就掩盖了或阻塞了它与标签的通信</li>
+</ul></li>
+<li>多读写器到标签之间的干扰问题
+<ul>
+<li>当一个标签处在多个读写器的查询区域中，由于各读写器的相互干扰，有可能使得没有一个读写器可以读到该区域的标签</li>
+</ul></li>
+</ul>
+<h2><span id="第九章-rfid应用系统的构建">第九章 RFID应用系统的构建</span></h2>
+<p><strong>实施RFID应用系统的流程</strong></p>
+<ul>
+<li>阶段0 - 启动</li>
+<li>阶段1
+<ul>
+<li>现场调研</li>
+<li>业务分析、总体方案规划</li>
+<li>实践检验</li>
+</ul></li>
+<li>阶段2 项目试点</li>
+<li>阶段3 正式项目</li>
+</ul>
+<h3><span id="电子标签选择">电子标签选择</span></h3>
+<p>在进行标签选择时，需要考虑的标签技术参数有: 能量要求、容量要求、工作频率、数据传输速率、读/写速度、读/写方式、识读距离、标签外形、数据安全性要求等。</p>
+<ol type="1">
+<li>标签的类型</li>
+<li>标签的形状和尺寸</li>
+<li>关于标签的加工</li>
+<li>如何在国外适用</li>
+</ol>
+<h3><span id="读写器选择">读写器选择</span></h3>
+<p>读写器的技术参数包括: 工作频率、输出功率、数据传输速率、I/O端口形式、读写器是否可调等</p>
+<ol type="1">
+<li>适用形态
+<ul>
+<li>固定读写器</li>
+<li>手持式读写器</li>
+</ul></li>
+<li>输入／输出的类型</li>
+<li>天线的选择</li>
+<li>读取的性能</li>
+</ol>
+<h2><span id="第十章-rfid技术应用">第十章 RFID技术应用</span></h2>
+<h3><span id="基于rfid的典型物联网系统epc">基于RFID的典型物联网系统EPC</span></h3>
+<p>EPC系统是在计算机互联网的基础上，利用RFID、无线数据通信等技术，通过全球统一标识系统编码技术给每一个实体对象一个唯一代码，构造了一个实现全球物品信息实时共享的物联网。</p>
+<p><img src="/images/EPC1.png"></p>
+<p><img src="/images/EPC2.png"></p>
+<h2><span id="电子钱包">电子钱包</span></h2>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2B 00 00 00 D4 FF FF FF 2B 00 00 00 09 F6 09 F6</span><br><span class="line">充值金额      充值金额取反  余额        块号      块号取反</span><br></pre></td></tr></table></figure>
+<p>前四个字节为实际充值数据，如这里的 2B 00 00 00，接下来四个字节为它的取反，即 D4 FF FF FF，接下来四个字节是卡内实际金额，即 2B 00 00 00，后面的四个字节分为两个字节一组，这两组完全一样，为 09 F6 09 F6，其中09是绝对块号，即扇区号*4+块号，所以实际是第二扇区第一块，最后 F6 = FF - 09。</p>
+<h2><span id="rfid术语">RFID术语</span></h2>
+<ul>
+<li>ISBN (International Standard Book Number) - 国际标准书号</li>
+<li>ISSN (International Standard Serial Number) - 国际标准期刊号</li>
+<li>FSK (Frequency Shift Keying) - 频移键控法</li>
+<li>PSK (Phase Shift Keying) - 相移键控法</li>
+<li>PCM (Pulse Code Modulation) - 脉冲编码调制技术</li>
+<li>PC (Parity Check) - 奇偶校验</li>
+<li>LRC (Longitudinal Redundancy Check) - 纵向冗余校验</li>
+<li>CRC (Cyclic Redundancy Check) - 循环冗余码校验</li>
+<li>FDX (Full Duplex) - 全双工</li>
+<li>HDX (Half Duplex) - 半双工</li>
+<li>SEQ (Sequence) - 时序</li>
+<li>FRAM (Ferroelectric Random Access Memory) - 铁电随机存取存储器</li>
+<li>ROM (Read Only Memory) - 只读存储器</li>
+<li>RAM (Random Access Memory) - 随机存取器</li>
+<li>WORM (Write Once Read Many) - 一次写入多次读出</li>
+<li>DF (Dual Frequency) - 双频</li>
+<li>TS (Tag Stacking) - 标签堆垛</li>
+<li>ICNIRP (International Commission on Non-ionizing Radiation Protection) - 国际非电离辐射保护委员会</li>
+<li>SAW (Surface Acoustic Wave) - 声表面波</li>
+<li>CICC (Contactless Integrated Circuit Card) - 耦合集成电路卡</li>
+<li>PICC (Proximity Integrated Circuit Card) - 近耦合集成电路卡</li>
+<li>VICC (Vicinity Integrated Circuit Card) - 疏耦合集成电路卡</li>
+<li>SDMA (Space Division Multiple Access) - 空分多路法</li>
+<li>FDMA (Frequency Division Multiple Access) - 频分多路法</li>
+<li>CDMA (Code Division Multiple Access) - 码分多路法</li>
+<li>TDMA (Time Division Multiple Access) - 时分多路法</li>
+<li>TDM (Time division Multiplexing) - 时分复用</li>
+<li>MOM (Message-Oriented Middleware) - 面向消息的中间件</li>
+<li>EMS (Event Management System) - 事件管理系统</li>
+<li>RIED (Real-time In-Memory Event Database) - 实时内存事件数据库</li>
+<li>TMS (Task Management System) - 任务管理系统</li>
+<li>ERP (Enterprise Resource Planning) - 企业资源规划</li>
+<li>MES (Management Execution System) - 管理执行系统</li>
+<li>SOAP (Simple Object Access Protocol) - 简单对象访问协议</li>
+<li>RFU (Reserved for Future ISO/IEC Use) - 保留供将来使用</li>
+<li>SOF (Start Of Frame, Type B) - 帧的开始，类型 B</li>
+<li>EOF (end of frame) - 帧结束</li>
+<li>AFI (application family identifier) - 应用族识别符，应用的卡预选准则</li>
+<li>VCD (vicinity coupling device) - 附近式耦合设备</li>
+<li>ONS (Object Name Server) - 对象名称解析服务</li>
+<li>PML (Physical Markup Language) - 物理标识语言</li>
+</ul>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/本科课程/">本科课程</a><a href="/tags/物联网/">物联网</a><a href="/tags/RFID/">RFID</a><a href="/tags/QR-Code/">QR-Code</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

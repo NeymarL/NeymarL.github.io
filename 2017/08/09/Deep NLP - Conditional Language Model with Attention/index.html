@@ -1,0 +1,400 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    Deep NLP - Conditional Language Model with Attention | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="Deep NLP - Conditional Language Model with Attention">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      Deep NLP - Conditional Language Model with Attention</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/08/09/Deep NLP - Conditional Language Model with Attention/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-08-09T14:30:19.000Z">
+          2017-08-09
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <!-- toc -->
+<ul>
+<li><a href="#machine-translation-with-attention">Machine translation with attention</a>
+<ul>
+<li><a href="#with-concatenation">With Concatenation</a></li>
+<li><a href="#with-convolutional-nets">With Convolutional Nets</a></li>
+<li><a href="#with-bidirectional-rnns">With Bidirectional RNNS</a></li>
+<li><a href="#attention">Attention</a></li>
+</ul></li>
+<li><a href="#image-caption-generation-with-attention">Image caption generation with attention</a></li>
+</ul>
+<!-- tocstop -->
+<a id="more"></a>
+<h2><span id="machine-translation-with-attention">Machine translation with attention</span></h2>
+<p><strong>Problems about conditioning with vectors</strong></p>
+<ul>
+<li>We are compressing a lot of information in a finite-sized vector.</li>
+<li>Gradients have a long way to travel. Even LSTMs forget!</li>
+</ul>
+<p><strong>Solution</strong></p>
+<ul>
+<li>Represent a source sentence as a matrix
+<ul>
+<li>Solve the capacity problem</li>
+</ul></li>
+<li>Generate a target sentence from a matrix
+<ul>
+<li>Solve the gradient flow problem</li>
+</ul></li>
+</ul>
+<p><strong>Sentences as Matrices</strong></p>
+<p><img src="/images/NLP/sentence_mat.png"></p>
+<p>Question: <strong>How do we build these matrices?</strong></p>
+<h3><span id="with-concatenation">With Concatenation</span></h3>
+<ul>
+<li>Each word type is represented by an n-dimensional vector</li>
+<li>Take all of the vectors for the sentence and concatenate them into a matrix</li>
+<li>Simplest possible model
+<ul>
+<li>So simple that no one publish how well/badly it works!</li>
+</ul></li>
+</ul>
+<p><img src="/images/NLP/With_Concatenation.png"></p>
+<h3><span id="with-convolutional-nets">With Convolutional Nets</span></h3>
+<ul>
+<li>Apply convolutional networks to transform the naive concatenated matrix to obtain a context-dependent matrix</li>
+<li>Note: convnets usually have a &quot;pooling&quot; operation at the top level that results in a fixed-sized representation. For sentences, leave this out.</li>
+<li>Papers
+<ul>
+<li><strong>Gehring et al., ICLR 2016</strong></li>
+<li><strong>Kalchbrenner and Blunsom, 2013</strong></li>
+</ul></li>
+</ul>
+<p><img src="/images/NLP/With%20CNN.png"></p>
+<h3><span id="with-bidirectional-rnns">With Bidirectional RNNS</span></h3>
+<ul>
+<li>By far the most widely used matrix representation, due to <strong>Bahdanau et al (2015)</strong></li>
+<li>One column per word</li>
+<li>Each column (word) has two halves concatenated together:
+<ul>
+<li>a “forward representation”, i.e., a word and its left context</li>
+<li>a “reverse representation”, i.e., a word and its right context</li>
+</ul></li>
+<li>Implementation: bidirectional RNNs (GRUs or LSTMs) to read f from left to right and right to left, concatenate representations</li>
+</ul>
+<p><img src="/images/NLP/With_BiRNN.png"></p>
+<p><strong>Where are we in 2017?</strong></p>
+<p>There are lots of ways to construct <span class="math inline">\(F\)</span></p>
+<ul>
+<li><p>Very little systematic work comparing them</p></li>
+<li><p>There are many more undiscovered things out there</p>
+<ul>
+<li>convolutions are particularly interesting and under-explored</li>
+<li><strong>syntactic</strong> information can help (<strong>Sennrich &amp; Haddow, 2016</strong>; <strong>Nadejde et al., 2017</strong>), but many more integration stregration strategies are possible</li>
+</ul></li>
+<li><p>try something with phrase types instead of word types?</p>
+<p>Multi-word expressions are a pain in the neck .</p></li>
+</ul>
+<h3><span id="attention">Attention</span></h3>
+<p>Bahdanau et al. (2015) were the ﬁrst to propose using <strong>attention</strong> for translating from matrix-encoded sentences.</p>
+<p><strong>High-Level Idea</strong></p>
+<ul>
+<li>Generate the output sentence word by word using an RNN</li>
+<li>At each output position <span class="math inline">\(t\)</span>, the RNN receives two inputs (in addition to any recurrent inputs)
+<ul>
+<li>a ﬁxed-size vector embedding of the previously generated output symbol <span class="math inline">\(e_{t-1}\)</span></li>
+<li>a ﬁxed-size vector encoding a “view” of the input matrix</li>
+</ul></li>
+<li>How do we get a ﬁxed-size vector from a matrix that changes over time?
+<ul>
+<li>Bahdanau et al: do <strong>a weighted sum of the columns</strong> of <span class="math inline">\(F\)</span> (i.e., words) based on how important they are at the current time step. (i.e., just a matrix-vector product <span class="math inline">\(Fa_t\)</span> )</li>
+<li>The weighting of the input columns at each time-step (<span class="math inline">\(a_t\)</span>) is called <strong>attention</strong></li>
+</ul></li>
+</ul>
+<p><img src="/images/NLP/BA.png"></p>
+<p><strong>Compute Attention</strong></p>
+<p>At each time step (one time step = one output word), we want to be able to “attend” to different words in the source sentence</p>
+<ul>
+<li>We need a weight for every column: this is an |<span class="math inline">\(f\)</span>|-length vector a <span class="math inline">\(a_t\)</span></li>
+<li>Here is Bahdanau et al.’s solution
+<ul>
+<li>Use an RNN to predict model output, call the hidden states <span class="math inline">\(s_t\)</span></li>
+<li>At time <span class="math inline">\(t\)</span> compute the <strong>expected input embedding</strong> <span class="math inline">\(r_t = Vs_{t-1}\)</span></li>
+<li>Take the dot product with every column in the source matrix to compute the <strong>nonlinear attention energy</strong>. <span class="math inline">\(e_t = v^T\tanh(WF+r_t)\)</span></li>
+<li>Exponentiate and normalize to 1: <span class="math inline">\(a_t = softmax(u_t)\)</span></li>
+<li>Finally, the input source vector for time t is <span class="math inline">\(c_t = Fa_t\)</span></li>
+</ul></li>
+</ul>
+<p>The overall algorithm:</p>
+<p><img src="/images/NLP/algorithm.png"></p>
+<p>Add attention to seq2seq translation: <strong>+11 BLEU</strong></p>
+<p><em>Model Variant</em></p>
+<p><img src="/images/NLP/variant.png"></p>
+<p><strong>Summary</strong></p>
+<ul>
+<li>Attention is closely related to “pooling” operations in convnets (and other architectures)</li>
+<li>Bahdanau’s attention model seems to only cares about “content”
+<ul>
+<li>No obvious bias in favor of diagonals, short jumps, fertility, etc.</li>
+<li>Some work has begun to add other “structural” biases (Luong et al., 2015; Cohn et al., 2016), but there are lots more opportunities</li>
+</ul></li>
+<li>Attention weights provide interpretation you can look at</li>
+</ul>
+<h2><span id="image-caption-generation-with-attention">Image caption generation with attention</span></h2>
+<p><img src="/images/NLP/imggen.png"></p>
+<p><strong>Regions in ConvNets</strong></p>
+<p>Each point in a “higher” level of a convnet deﬁnes spatially localised feature vectors(/matrices).</p>
+<p>Xu et al. calls these “<em>annotation vectors</em>”, <span class="math inline">\(a_i\)</span> , <span class="math inline">\(i\in \{1, . . . , L\}\)</span></p>
+<p><img src="/images/NLP/a1.png"></p>
+<p><img src="/images/NLP/a2.png"></p>
+<p>Attention “weights” ( <span class="math inline">\(a_t\)</span> ) are computed using exactly the <strong>same</strong> technique as discussed above.</p>
+<ul>
+<li><p>Deterministic <strong>soft</strong> attention (Bahdanau et al., 2014)</p>
+<p><span class="math inline">\(c_t = Fa_t\)</span></p></li>
+<li><p>Stochastic <strong>hard</strong> attention (Xu et al., 2015)</p>
+<p><span class="math inline">\(s_t \sim Categorical(a_t)\)</span></p>
+<p><span class="math inline">\(c_t = F_{:,s_t}\)</span></p></li>
+</ul>
+<p><em>Learning Hard Attention</em></p>
+<p>The loss is computed by following equation: <span class="math display">\[
+\begin{align}
+L &amp; = -\log p(w|x) \\
+&amp; = -\log\sum_s p(w,s|x) \\
+&amp;= -\log\sum_sp(s|x)p(w|x, s)
+\end{align}
+\]</span> where <span class="math inline">\(x\)</span> is the input image, <span class="math inline">\(s\)</span> is the generated context, and <span class="math inline">\(w\)</span> is the caption.</p>
+<p>According to <em>Jensen's inequality</em>, <span class="math display">\[
+\begin{align}
+L &amp;= -\log\sum_sp(s|x)p(w|x, s)\\
+&amp;≤-\sum_s p(s|x)\log p(w|x, s)\\
+&amp;\approx -\frac{1}{N}\sum_{i=1}^Np(s^{(i)}|x)\log p(w|x, s)
+\end{align}
+\]</span> Sample <span class="math inline">\(N\)</span> sequences of attention decisions from the model, the gradient is the probability of this sequence scaled by the log probability of generating the target words using that sequence of attention decisions.</p>
+<p>This is equivalent to using the <strong>REINFORCE</strong> algorithm (Williams, 1992) using the log probability of the observed words as a “<strong>reward function</strong>”. REINFORCE a <em>policy gradient</em> algorithm used for reinforcement learning.</p>
+<p><img src="/images/NLP/imgeg.png"></p>
+<p><strong>Summary</strong></p>
+<ul>
+<li>Signiﬁcant performance improvements
+<ul>
+<li>Better performance over vector-based encodings</li>
+<li>Better performance with smaller training data sets</li>
+</ul></li>
+<li>Model interpretability</li>
+<li>Better gradient ﬂow</li>
+<li>Better capacity (especially obvious for translation)</li>
+</ul>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/NLP/">NLP</a><a href="/tags/NMT/">NMT</a><a href="/tags/Attention/">Attention</a><a href="/tags/Deep-NLP/">Deep NLP</a><a href="/tags/Machine-Translation/">Machine Translation</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

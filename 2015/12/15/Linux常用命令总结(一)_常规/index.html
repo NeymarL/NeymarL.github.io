@@ -1,0 +1,425 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    Linux常用命令总结(一)：常规 | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="Linux常用命令总结(一)：常规">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      Linux常用命令总结(一)：常规</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2015/12/15/Linux常用命令总结(一)_常规/" rel="bookmark">
+        <time class="entry-date published" datetime="2015-12-15T04:20:40.000Z">
+          2015-12-15
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <blockquote>
+<p>Linux常用命令总结</p>
+</blockquote>
+<a id="more"></a>
+<h2><span id="man-在线参考手册的接口">man - 在线参考手册的接口</span></h2>
+<blockquote>
+<p>man是系统的手册分页程序。指定给man的页选项通常是程序、工具或函数名。程序将显示找到的相关手册页。如果指定了章节，man将只在手册的指定章节搜索。默认将按预定的顺序查找。</p>
+</blockquote>
+<p><em>常用的手册章节及类型：</em> * 1 可执行程序或shell命令 * 5 文件格式和规范，如/etc/passwd * 8 系统管理命令（通常只针对root用户）</p>
+<blockquote>
+<p>一个手册页面包含若干个小节。 小节通常包括：NAME, 概述(SYNOPSIS), 配置(CONFIGURATION), 描述(DESCRIPTION), 选项(OPTIONS), 退出状态(EXIT STATUS), 返回值(RETURN VALUE), 错误(ERRORS), 环境(ENVIRONMENT), 文件(FILES), 版本(VERSIONS), 符合标准(CONFORMING TO), 注(NOTES), 缺陷(BUGS), 示例(EXAMPLE), 作者(AUTHORS), 和 亦见(SEE ALSO).</p>
+</blockquote>
+<p><em>概述小节规范：</em> * 加粗文本 原样显示的样式。 * 倾斜文本 替换为相应的参数。 * [-abc] [ ] 内的任意/全部参数都是可选的。 * -a|-b 以 | 分隔的选项可以一起使用。 * 参数 ... 参数 可以重复。 * [表达式] ... [ ] 内的整个 表达式 可以重复。</p>
+<p><em>查询数据方法：</em> 1. 先查看NAME的项目，约略看一下这个数据的意思。 2. 再仔细看一下DESCROPTION，这个部分会提到很多相关的资料与用法，从这个地方可以学到很多细节。 3. 而如果对这个命令其实很熟悉了，那么主要就是查询关于OPTIONS的部分了。可以知道每个选项的意义，这样就可以执行比较细部的内容。 4. 最后会看一下跟这个资料相关的还有哪些东西可以使用的。</p>
+<p><strong>man的参数</strong> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">man -k printf #在系统说明文件中，只要有printf这个关键字就将该说明列出来。</span><br><span class="line">man -f smail  #查找smail 引用的手册页并输出找到的任何概述</span><br></pre></td></tr></table></figure></p>
+<p><strong>man page 中常用按键</strong> | 空格键, [Page Down] | 向下翻一页 | | :-------- | :--------| | [Page Up] | 向上翻一页 | | [Home] | 去第一页 | | [End] | 去最后一页 | |<strong>/string</strong> |<strong>向下查询string字符串</strong> | | ?string | 向上查询string字符串 | |<strong>n, N</strong>| <strong>查询时, 利用n来继续下一个查询,N来进行反向查询</strong> | | q | 退出man page|</p>
+<h2><span id="nano-简单的文本编辑器">nano - 简单的文本编辑器</span></h2>
+<p><em>用法</em> <code>nano  文件名      打开一个文本文件</code></p>
+<p><em>nano的几个重要的组合键</em> |[Ctrl] + G | 取得在线帮助| | :-------- | :--------| |[Ctrl] + X | 离开nano，若有修改会提示是否需要保存| |[Ctrl] + O | 保存文件| |[Ctrl] + R | 从其他文件读入数据| |[Ctrl] + W | 查询字符串| |[Ctrl] + C | 说明目前光标所在行列等信息| |[Ctrl] + 行号 | 可以让光标移动到该行| |[Alt] + M | 可以支持鼠标来移动光标功能|</p>
+<h2><span id="ls-列出目录内容">ls - 列出目录内容</span></h2>
+<p><em>描述：</em> <strong>列出当前目录（默认）文件信息，如果没指定排序规则的话就按照字母顺序排序。</strong></p>
+<p><em>用法：</em> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ls   [-aAdfFhilnrRSt]   目录名称</span><br><span class="line">ls   [--color=&#123;never, auto, always&#125; ]  目录名称</span><br><span class="line">ls   [--full-time]   目录名称</span><br></pre></td></tr></table></figure></p>
+<p><em>参数： </em><br>
+|-a, -all | 列出包括隐藏文件(即 “.”开头的文件名)| | :-------- | :--------| |-A | 列出全部文件连同隐藏文件但不包括 . 与 ..| |<strong>-d </strong>| <strong>仅列出目录，而不是列出目录里文件数据</strong>| | -f | 直接列出结果，不排序| | -F | 根据文件、目录等信息给予附加数据结构, 例如 * 代表可执行文件； / 代表目录| | -h | 将文件容量以人类较易读的方式列出来(GB, KB等)| | -i | 列出inode号码| |<strong>-l</strong> | <strong>列出长数据串， 包含文件的属性与权限等数据</strong>| | -r | 将排序结果反序输出| | -t | 按时间排序| | -s | 显示文件大小| | -S | 按文件大小排序| | --sort=WORD|按WORD方式排序,WORD取值：none (-U), extension (-X), size (-S), time (-t), version (-v)| | --full-time |以完整的时间模式（包含年月日时分）输出|</p>
+<p>注：<code>ll = ls -l</code></p>
+<p><strong>ls -al 文件信息详解</strong></p>
+<p><strong>表示列出所有的文件详细的权限与属性（包含隐藏文件）</strong> 例如： <code>-rw-------  1 neymar neymar     2532 10月 13 23:42 .bash_history</code> * 第一列代表这个文件的类型与权限 * 第一个字符若是[d]则是目录，若是[-]则是文件接下来的字符，三个为一组，且均为”rwx”的组合。其中<strong>[r]</strong>代表可读(read)，<strong>[w]</strong>代表可写(write), <strong>[x]</strong>代表可执行(execute),如果没有权限就会出现<strong>[-]</strong>。 * 第一组为 <em>文件所有者</em> 的权限 * 第二组为 <em>同用户组</em> 的权限 * 第三组为 <em>其他非本用户组</em> 的权限 * 第二列表示有多少文件名连接到此节点 * 第三列表示这个文件（目录）的”所有者账号“ * 第四列表示这个文件的所属用户组 * 第五列表示这个文件的容量大小，默认单位为B * 第六列为这个文件的最近修改日期 * 第七列为文件名</p>
+<h2><span id="chgrp-改变文件所属用户组-change-group">chgrp - 改变文件所属用户组 change group</span></h2>
+<p><em>用法：</em> <code>chgrp [-R] 用户组名 目录/文件名</code> <em>参数：</em> * -R : 进行递归的持续更改，也即连同子目录下所有文件、目录都更新成这个用户组</p>
+<p><em>注意：</em>要改变的组名必须再/etc/group文件内存在才行，否则就会显示错误</p>
+<h2><span id="chown-改变文件所有者和用户组-change-owner">chown - 改变文件所有者和用户组 change owner</span></h2>
+<p><em>用法：</em> <code>chown [-R] 账号名称:组名 文件或目录</code> <em>注意：</em>用户必须是已经存在于系统中的账号，也就是在/etc/passwd这个文件中有记录的用户名才能改变</p>
+<h2><span id="chmod-改变权限">chmod - 改变权限</span></h2>
+<p><strong>数字类型改变文件权限：</strong> * r : 4<br>
+* w : 2<br>
+* x : 1 <code>chmod [-R] xyz 文件或目录</code> <em>xyz : 数字类型权限属性，为rwx属性值相加</em></p>
+<p>例：<code>chmod 777 .bashrc</code></p>
+<p><strong>符号类型改变文件权限：</strong> | | | u | | | | | :-------- | :--------| :------- | :--------| | | chmod | g | +(加入) | r | 文件或目录 | | |o | -(减去) | w | | |a | =(等于) | x |</p>
+<p><strong>user → u, group → g, others → o, all → a</strong></p>
+<p><em>例：</em> <code>chmod u=rwx,go=rx .bashrc</code></p>
+<h2><span id="cd-切换目录-change-directory">cd - 切换目录 Change Directory</span></h2>
+<p><em>用法：</em> <code>cd [相对路径或绝对路径]</code></p>
+<p><strong>特殊目录：</strong> * . 代表此层目录 * .. 代表上一层目录 * - 代表前一个工作目录 * ~ 代表目前用户身份所在的主文件夹 * ~account 代表account这个用户的主文件夹</p>
+<h2><span id="pwd-显示目前所在的目录-print-working-directory">pwd - 显示目前所在的目录 print working directory</span></h2>
+<p><em>用法：</em> <code>pwd   [-P]</code> <em>参数：</em> * -P : 显示出当前的路径，而非使用连接(link)路径</p>
+<h2><span id="mkdir-新建目录-make-directory">mkdir - 新建目录 make directory</span></h2>
+<p><em>用法：</em> <code>mkdir [-mp]  目录名称</code> <em>参数：</em> * -m : 配置文件夹的权限(数字方式) * -p : 帮助你直接将所需要的目录递归创建起来(不建议经常使用)</p>
+<h2><span id="rmdir-删除空目录-remove-directory">rmdir - 删除空目录 remove directory</span></h2>
+<p><em>用法：</em> <code>rmdir  [-p]   目录名称</code> <em>参数：</em> * -p : 连同上层空目录一起删除</p>
+<h2><span id="echo-显示打印出">echo - 显示,打印出</span></h2>
+<p><em>用法：</em> <code>echo   [-eE]  字符串</code> <code>echo   $variable</code> <em>参数：</em> * -e : 把 ”  “ 当做转义字符 * -E : 不把反斜扛当做转义字符（默认）</p>
+<h2><span id="cp-复制-copy">cp - 复制 copy</span></h2>
+<p><em>用法：</em> <code>cp  [-adfilprsu]   源文件  目标文件</code> <code>cp  [options]    source1  source2  source3.... directory</code> <em>参数：</em> * <strong>-a : 相当于 -pdr 的意思，数据特性完全复制（效果与身份有关）</strong> * -d : 若源文件为连接文件的属性(link file),则复制连接文件属性而非文件身 * -f : force，若目标文件已存在且无法开启，则删除后再试一次 * <strong>-i : 若目标文件已存在则会询问是否覆盖</strong> * -l : 进行硬连接(hard link)的连接文件创建，而非复制文件本身 * -p : 连同文件属性一起复制过去，而非使用默认属性（备份常用） * <strong>-r : 递归持续复制，用于目录的复制行为</strong> * -s : 复制成为符号链接文件(symbolic link)，即“快捷方式”文件 * -u : 若目标文件比源文件旧时才更新 <strong>注意：如果源文件有两个以上，则最后一个目的文件一定要是目录才行</strong></p>
+<h2><span id="rm-移除文件或目录">rm - 移除文件或目录</span></h2>
+<p><em>用法：</em> <code>rm  [-fir]  文件或目录</code> <em>参数：</em> * -f : force, 忽略不存在的文件，不会出现警告信息 * -i : 互动模式，在删除前会询问用户是否操作 * -r : 递归删除。最常用在目录的删除了。<strong>这是非常危险的参数。</strong></p>
+<h2><span id="mv-移动文件与目录或更名">mv - 移动文件与目录或更名</span></h2>
+<p><em>用法：</em> <code>mv  [-fiu]  source  destination</code> <code>mv  [option]  source1  source2  source3 …  directory</code> <em>参数：</em> * -f : force，如果目标文件已经存在，不会询问而直接覆盖 * -i : 若目标文件已经存在时，询问是否覆盖 * -u : 若目标文件存在且source比较新才会更新</p>
+<h2><span id="cat-查看文件内容-concatenate">cat - 查看文件内容 concatenate</span></h2>
+<p><em>用法：</em> <code>cat  [-AbEnTv]</code> <em>参数：</em> * -A : 相当于-vET的结合，可以列出一些特殊字符，而不是空白 * -b : 列出行号，仅针对非空白行 * -E : 将结尾的断行字符 $ 显示出来 * <strong>-n : 显示行号，连同空白符，与-b不同</strong> * -T : 将[Tab]按键以 ^I 显示出来 * -v : 列出一些看不见的特殊字符</p>
+<h2><span id="nl-添加行号打印">nl - 添加行号打印</span></h2>
+<p><em>用法：</em> <code>nl  [-bnw]  文件</code> <em>参数：</em> * -b : 指定行号的显示方式，主要有两种： * -b a : 表示无论是否为空行，也同样列出行号（类似与 cat -n） * -b t : 空行不列出行号（默认） * -n : 列出行号的表示方法，主要有三种： * -n ln : 行号在屏幕最左方显示 * -n rn : 行号在字段最右方显示，且不加0 * -n rz : 行号在字段最右方显示，加0 * -w : 行号字段占用位数</p>
+<h2><span id="more-可翻页查看">more - 可翻页查看</span></h2>
+<p><em>用法：</em> <code>more  文件名</code> <em>操作：</em> | 空格键 | 代表向下翻一页| | :-------- | :--------| | Enter | 代表向下滚动一行| | /字符串 | 向下查询”字符串“关键字| | :f | 立刻显示出文件名以及目前显示的行数| | q | 代表立刻立刻more，不再显示该文件内容| | b或[ctrl]-b | 代表往回翻页，不过这只对文件有用，对管道无用|</p>
+<h2><span id="less-一页一页翻动">less - 一页一页翻动</span></h2>
+<p><em>用法：</em> <code>less    文件名</code> <em>操作：</em> | 空格 | 向下翻动一页| | :-------- | :-------- | | [PageDown] | 向下翻动一页| | [PageUp] | 向上翻动一页| | /字符串 | 向下查询”字符串“| | ? 字符串 | 向上查询”字符串“| | n | 重复前一个查询| | N | 反向重复前一个查询| | q | 离开less|</p>
+<h2><span id="head-取出前面几行">head - 取出前面几行</span></h2>
+<p><em>用法：</em> <code>head    [-n  number]   文件</code> <em>参数：</em> * -n : 后面接数字，代表显示几行的意思（默认10行）</p>
+<h2><span id="tail-取出后面几行">tail - 取出后面几行</span></h2>
+<p><em>用法：</em> <code>tail   [-n  number]   文件</code> <em>参数：</em> * -n : 后面接数字，代表显示几行（默认10行） * -f : 表示持续检测后面所接的文件名，要等到按下[ctrl]-c才会结束tail的检测</p>
+<h2><span id="od-读取非纯文本文件">od - 读取非纯文本文件</span></h2>
+<p><em>用法：</em> <code>od  [-t  TYPE]   文件</code> <em>参数：</em> * -t : 后面接类型： * a : 利用默认的字符来输出 * c : 使用ASCII字符来输出 * d[size] : 利用十进制来输出数据，每个整数占用size bytes * f[size] : 利用浮点数来输出数据，每个数占size bytes * x[size] : 利用十六进制来输出数据，每个整数占size bytes</p>
+<h2><span id="touch-修改文件时间或创建新文件">touch - 修改文件时间或创建新文件</span></h2>
+<p><em>用法：</em> <code>touch  [-acdmt]   文件</code> <em>参数：</em> * -a : 仅修改访问时间 * -c : 仅修改文件时间，若该文件不存在则不创建新文件 * -d : 后面可以接欲修改的日期而不用目前的日期，也可以使用 –date=”日期或时间” * -m : 仅修改mtime * -t : 后面可以接欲修改时间而不是当前时间，格式为[YYMMDDhhmm]</p>
+<h2><span id="whereis-寻找特定文件">whereis -寻找特定文件</span></h2>
+<p><em>用法：</em> <code>whereis  [-bmsu]  文件或目录名</code> <em>参数：</em> * -b : 只查找二进制文件 * -m : 只查找在manual路径下的文件 * -s : 只找source源文件 * -u : 查找不在上述三个选项中的其他特殊文件 <strong>注：whereis是利用数据库查找文件而不是直接在硬盘里找</strong></p>
+<h2><span id="locate-查找文件">locate - 查找文件</span></h2>
+<p><em>用法：</em> <code>locate  [-ir]   keyword</code> <em>参数：</em> * -i : 忽略大小写差异 * -r : 后面可接正则表达式的显示方式 <strong>注：locate也是经由数据库查找，速度较快，更新数据库命令：<code>updatedb</code></strong></p>
+<h2><span id="find-在硬盘里寻找文件">find - 在硬盘里寻找文件</span></h2>
+<p><em>用法：</em> <code>find   [PATH]    [option]    [action]</code> <em>参数：</em> 1. 与时间有关的: 共有 -atime, -ctime 与 -mtime，下面以-mtime说明 * -mtime n : n为数字，意为查找在n天之前的那一天之内被更改过的文件 * -mtime +n : 列出在n天之前（不含n天本身）被更改过的文件名 * -mtine -n : 列出n天之内（包含第n天）被更改过的文件名 * -newer file : file为一个已存在文件，列出比file要新的文件名</p>
+<ol start="2" type="1">
+<li>与用户或用户组名有关的参数：
+<ul>
+<li><pre><code>   -uid   n   :  n为数字，这个数字是用户的账号ID，即UID，记录在/etc/passwd里面与账号名                         
+                        称对应的数字</code></pre></li>
+<li><pre><code>   -gid   n   :  n为数字，这个数字是用户组名的ID，即GID，这个GID记录在/etc/group中</code></pre></li>
+<li><pre><code>     -user  name  :  查找用户名为name的文件</code></pre></li>
+<li><pre><code>     -group  name :  查找用户组名为name的文件</code></pre></li>
+<li><pre><code>     -nouser          :    寻找文件所有者不在/etc/passwd的人</code></pre></li>
+<li><pre><code>     -nogroup       :    寻找用户组名不存在与/etc/group的人</code></pre></li>
+</ul></li>
+<li>与文件权限及名称有关的参数：
+<ul>
+<li><pre><code>     -name  filenname :  查找文件名为filename的文件</code></pre></li>
+<li><pre><code>      -size     [+-]SIZE   :   查找比SIZE还要大(+)或小(-)的文件，SIZE规格：c代表byte,k代 表kb</code></pre></li>
+<li><pre><code>      -type   TYPE  :  查找文件类型为TYPE的文件。类型主要有：一般正规文件(f),设备文件(b,c)目录(d)，连接文件(l)，socket(s)及FIFO(p)等</code></pre></li>
+<li><pre><code>       -perm  mode :  查找文件权限“刚好等于”mode的文件，这个mode类似于chmod的属性值</code></pre></li>
+<li><pre><code>       -perm  -mode : 查找文件权限：必须要全部包括mode的权限“的文件</code></pre></li>
+<li><pre><code>      -perm +mode : 查找文件权限”包含任一mode权限“的文件</code></pre></li>
+</ul></li>
+<li>其他可进行的操作：
+<ul>
+<li><pre><code>     -exec command  :  command为其他命令  -exec后面可再接其他命令来处理查找到的结果{}代表由find找到的内容，命令借书标志” \; ”例：`find / -perm +7000 -exec ls -l {} \;`</code></pre></li>
+<li><pre><code>      -print  :  将结果打印到屏幕上（默认）</code></pre></li>
+</ul></li>
+</ol>
+<h2><span id="vi-文本编辑器">vi -文本编辑器</span></h2>
+<p><strong>vi分为三种模式：一般模式，编辑模式与命令行模式。</strong></p>
+<blockquote>
+<p>一般模式：可以用上下左右键移动光标，删除字符或整行，也可以复制、粘贴文件数据 编辑模式：一般模式无法编辑内容，在一般模式中按下i,I,o,O等可以进入编辑模式 命令行模式：在一般模式中输入“ :, /, ? “三个中的任一字符就可以将光标移动到最下面一行，在此模式中可以提供查询数据操作，大量替换字符、离开vi、显示行号等操作</p>
+</blockquote>
+<p><strong>常用按键说明</strong> |移动光标方法| | | :-------- | :-------- | | h或左键头键 |光标向左移动一个字符| | j或向下箭头 |光标向下移动一个字符| | k或向上箭头| 光标向上移动一个字符| | l或向右箭头 |光标向右移动一个字符| | 数字+上下箭头 |向上下移动“数字”行| | [Crtl]+[f]、[PageDown] |向下翻一页| | [Ctrl]+[b]、[PageUp] |向上翻一页| | G |移动到这个文件的最后一行| | nG |n为数字，移动到这个文件的第n行| | gg | 移动到这个文件的第一行，相当于1G| | N[Enter] | n为数字。光标向下移动n行|</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">删除、复制与粘贴</th>
+<th style="text-align: left;"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">x</td>
+<td style="text-align: left;">在一行字当中，向后删除一个字符([Del])</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">X</td>
+<td style="text-align: left;">向前删除一个字符([Backspace])</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">dd</td>
+<td style="text-align: left;">删除光标所在的那一整行</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ndd</td>
+<td style="text-align: left;">n为数字，删除光标所在的下n行</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">yy</td>
+<td style="text-align: left;">复制光标所在那一行</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">nyy</td>
+<td style="text-align: left;">n为数字，复制光标向下的n行</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">p, P</td>
+<td style="text-align: left;">p为将已复制的数据在光标下一行粘贴， P为粘贴在光标上一行</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">u</td>
+<td style="text-align: left;">撤销</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">[Ctrl]+r 、.</td>
+<td style="text-align: left;">重做</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">进入插入或替换的编辑模式</th>
+<th style="text-align: left;"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">i, I</td>
+<td style="text-align: left;">i为从目前光标所在的下一个字符开始插入为所在目前所在行第一个非空格处插入</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">a, A</td>
+<td style="text-align: left;">a为从目前光标所在的下一个字符开始插入A为从目前光标所在行的最后一个字符开始插入</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">o, O</td>
+<td style="text-align: left;">o为在目前光标的下一行插入新的一行O为在目前光标的上一行插入新的一行</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">r, R</td>
+<td style="text-align: left;">r只会替换光标所在的那一个字符一次；R会一直替换光标所在的那个文字,直到按下[ESC]</td>
+</tr>
+</tbody>
+</table>
+<p><strong>命令行的保存、离开等命令</strong> * :w 保存 * :w! 强制保存，与文件权限有关 * :q 离开vi * :wq 保存并离开，wq!为强制保存后离开 * :! command 暂时离开vi到命令行下执行command命令 * :set nu 显示行号 * :set nonu 取消显示行号</p>
+<h2><span id="paste-将多个文件的同一行贴在一起中间用tab隔开">paste -将多个文件的同一行贴在一起，中间用[tab]隔开</span></h2>
+<p><em>用法：</em> <code>paste  [-d]  file1  file2</code> <em>参数：</em> * -d : 后面可以接分隔字符，默认是以[tab]来分隔的 * - : 如果file部分写成 - ，表示来自stdin的数据</p>
+<h2><span id="passwd-设置修改密码">passwd -设置/修改密码</span></h2>
+<p><em>用法：</em> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">passwd   [--stdin]  # 所有人均可使用来改自己密码</span><br><span class="line">passwd   [-l] [-u] [--stdin] [-S] [-n 日数] [-x 日数] [-w 日数] [-i 日期]   账号  # root功能</span><br></pre></td></tr></table></figure></p>
+<p><em>参数：</em> * --stdin : 可以来自前一个管道的数据，作为密码输入，对shell script有帮助 * -l : Lock，会将/etc/shadow第二列最前面加上！使密码失效 * -u : 与-l相对，Unlock * -S : 列出密码相关参数，即shadow文件内的大部分信息 * -n : 后面接天数，shadow的第4字段，多久不可修改密码的天数 * -x : 后面接天数，shadow的第5字段，多久内必须要改动密码 * -w : 后面接天数，shadow的第6字段，密码过期前的警告天数 * -i : 后面接日期，密码失效日期 &gt;注：<strong>给一般账号新建密码需要使用”passwd 账号“的格式，使用”passwd“表示修改自己的密码</strong></p>
+<h2><span id="sudo-以其他用户身份执行命令">sudo - 以其他用户身份执行命令</span></h2>
+<p><em>用法：</em> <code>sudo  [-b]  [-u  用户账号]</code> <em>参数：</em> * -b : 将后续的命令让系统自行执行，而不与目前的shell产生影响 * -u : 后面接欲切换的用户，若无此项则代表切换身份root &gt;注： * sudo的执行仅需要自己的密码即可 * 仅有/etc/sudoers内的用户才能够执行sudo这个命令</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Linux/">Linux</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

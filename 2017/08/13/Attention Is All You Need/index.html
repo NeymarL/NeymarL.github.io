@@ -1,0 +1,353 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    Paper Reading - Attention Is All You Need | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="Paper Reading - Attention Is All You Need">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      Paper Reading - Attention Is All You Need</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/08/13/Attention Is All You Need/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-08-13T01:30:19.000Z">
+          2017-08-13
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>Google的<a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">这篇论文</a>提出了一个只使用Attention机制的神经翻译模型，该模型依旧采用编码器-解码器（Encoder-Decoder）架构，但未使用RNN和CNN。文章的主要目的是在减少计算量和提高并行效率的同时不损害最终的实验结果，创新之处在于提出了两个新的Attention机制，分别叫做 Scaled Dot-Product Attention 和 Multi-Head Attention.</p>
+<a id="more"></a>
+<h2><span id="整体框架">整体框架</span></h2>
+<figure>
+<img src="/images/at_all.png" alt="整体框架"><figcaption>整体框架</figcaption>
+</figure>
+<ul>
+<li>输入：一个句子 <span class="math inline">\(z = (z_1, …, z_n)\)</span>，它是原始句子 <span class="math inline">\(x = (x_1, …, x_n)\)</span> 的 Embedding，其中 <span class="math inline">\(n\)</span> 是句子长度。</li>
+<li>输出：翻译好的句子 <span class="math inline">\((y_1, …, y_m)\)</span></li>
+</ul>
+<h3><span id="encoder">Encoder</span></h3>
+<ul>
+<li>输入 <span class="math inline">\(z \in R^{n \times d_{model}}\)</span></li>
+<li>输出大小不变</li>
+<li>Positional Encoding</li>
+<li>6个Block
+<ul>
+<li>Multi-Head Self-Attention</li>
+<li>Position-wise Feed Forward</li>
+<li>Residual connection
+<ul>
+<li>LayerNorm(x + Sublayer(x))</li>
+<li>引入了残差，尽可能保留原始输入x的信息</li>
+</ul></li>
+<li><span class="math inline">\(d_{model} = 512\)</span></li>
+</ul></li>
+</ul>
+<h3><span id="decoder">Decoder</span></h3>
+<ul>
+<li>Positional Encoding</li>
+<li>6个Block
+<ul>
+<li>Multi-Head Self Attention (with mask)
+<ul>
+<li>采用 0-1mask 消除右侧单词对当前单词 attention 的影响</li>
+</ul></li>
+<li>Multi-Head Self Attention (with encoder)
+<ul>
+<li>使用Encoder的输出作为一部分输入</li>
+</ul></li>
+<li>Position-wise Feed Forward</li>
+<li>Residual connection</li>
+</ul></li>
+</ul>
+<h3><span id="multi-head-self-attention">Multi-Head Self Attention</span></h3>
+<p><img src="/images/at_attention.png"></p>
+<p><strong>Multi-Head Attention</strong></p>
+<p>输入 <span class="math inline">\(Q \in R^{n \times d_{model}}\)</span>、<span class="math inline">\(K \in R^{n \times d_{model}}\)</span>、<span class="math inline">\(V \in R^{n \times d_{model}}\)</span>，分别代表query、key-value pair。这里的 key, value, 和 query 需要解释一下，这里把 attention 抽象为对 value (<span class="math inline">\(V\)</span>) 的每个 token 进行加权，而加权的 weight就是 attention weight，而 attention weight 就是根据 query 和 key 计算得到，其意义为：<strong>为了用 value 求出 query 的结果, 根据 query 和 key 来决定注意力应该放在 value 的哪部分</strong>。以前的 attention 是用 LSTM 做 encoder，也就是用它来生成 key 和 value ，然后由 decoder 来生成 query。具体到 Bahdanau 的论文 Neural machine translation by jointly learning to align and translate，key 和 value 是一样的，都是文中的 <span class="math inline">\(h\)</span>，而 query 是文中的 <span class="math inline">\(s\)</span>。而在这篇论文中：</p>
+<ul>
+<li>在encoder块中，key, value, query 同为<code>encoder_input</code>（上一层的输出），因为是<a href="https://github.com/dennybritz/deeplearning-papernotes/blob/master/notes/self_attention_embedding.md" target="_blank" rel="noopener">self-attention</a>，可以理解为生成对这个句子的编码，可以全面获取输入序列中positions之间依赖关系。</li>
+<li>在decoder块中，第一层Multi-Head Attention的输入都为<code>decoder_input</code>；第二层的 <span class="math inline">\(Q\)</span> 为前一层的输出，<span class="math inline">\(K, V\)</span> 为encoder的输出。可以理解为，比如刚翻译完主语，接下来想要找谓语，【找谓语】这个信息就是 query，然后 key 是源句子的编码，通过 query 和 key 计算出 attention weight （应该关注的谓语的位置），最后和 value （源句子编码）计算加权和。</li>
+</ul>
+<p>然后把 <span class="math inline">\(Q, K, V\)</span> 线性映射 <span class="math inline">\(h\)</span> 次，分别映射到 <span class="math inline">\(d_k, d_k, d_v\)</span> 维度，总的attention为每个映射的attention连接起来（这 <span class="math inline">\(h\)</span> 个attention可以并行计算），即：</p>
+<p><img src="/images/at_multi.png"></p>
+<p>其中，投影的参数矩阵 <span class="math inline">\(W^Q_i \in R^{d_{model} \times d_k}\)</span>, <span class="math inline">\(W^K_i \in R^{d_{model} \times d_k}\)</span>, <span class="math inline">\(W^V_i \in R^{d_{model} \times d_v}\)</span>. 在论文中 <span class="math inline">\(h = 8\)</span>，<span class="math inline">\(d_k = d_v = \frac{d_{model}}{h} = 64\)</span>，所以这层的输出和输入大小相同。</p>
+<p>这些线性映射使得模型可以从不同的子空间的不同位置中学习注意力！</p>
+<p><strong>Scaled Dot-Product Attention</strong></p>
+<p>上式中的attention正是Scaled Dot-Product Attention，它也接收 <span class="math inline">\(Q, K, V\)</span> 三个参数，计算方法如下： <span class="math display">\[
+Attention(Q, K, V) = softmax(\frac{QK^T}{\sqrt{d_k}})V
+\]</span> Dot-Product指的是 <span class="math inline">\(QK^T\)</span>，scaled是指除以了 <span class="math inline">\(\sqrt{d_k}\)</span> （因为假设两个 <span class="math inline">\(d_k\)</span> 维向量每个分量都是一个相互独立的服从标准正态分布的随机变量，那么他们的点乘的方差就是 <span class="math inline">\(d_k\)</span>，每一个分量除以 <span class="math inline">\(\sqrt{d_k}\)</span> 可以让点乘的方差变成 1）。</p>
+<p>总共有两种流行的attention计算方法：</p>
+<ul>
+<li>additive attention
+<ul>
+<li>通过一个小型神经网络计算注意力</li>
+</ul></li>
+<li>dot-product attention
+<ul>
+<li>上面的方法</li>
+</ul></li>
+</ul>
+<p>其中第二种方法比第一种方法快很多，第一种方法在 <span class="math inline">\(d_k\)</span> 较大时比第二种方法表现好，论文作者觉得可能是因为dot-product使梯度变得很大以至于失去作用，所以进行了scale。</p>
+<p><strong>可视化 self-attention</strong></p>
+<p><img src="/images/attn_vis.png"></p>
+<p><img src="/images/attn_vis2.png"></p>
+<h3><span id="position-wise-feed-forward-networks">Position-wise Feed-Forward Networks</span></h3>
+<p><span class="math display">\[
+FFN(x) = \max(0, xW_1 + b_1)W_2 + b_2
+\]</span></p>
+<p>这是一个 MLP （多层）网络，上层的输出中，每个 <span class="math inline">\(d_{model}\)</span> 维向量 <span class="math inline">\(x\)</span> 在此先由 <span class="math inline">\(xW_1+b_1\)</span> 变为 <span class="math inline">\(d_{ff}\)</span> 维的 <span class="math inline">\(x&#39;\)</span>，再经过 <span class="math inline">\(\max(0, x&#39;)W_2+b_2\)</span> 回归 <span class="math inline">\(d_{model}\)</span> 维。之后再是一个 residual connection。输出大小和输入大小一样，都 <span class="math inline">\(\in R^{n \times d_{model}}\)</span>.</p>
+<h3><span id="positional-encoding">Positional Encoding</span></h3>
+<p>因为这个网络没有 recurrence（因为decoder在训练时给ground truth做为输入，这样生成不同位置的词是可以并行的）和 convolution，为了表示词在序列中的位置信息，要用一种特殊的位置编码。</p>
+<p>本篇论文中使用 <span class="math inline">\(\sin\)</span> 和 <span class="math inline">\(\cos\)</span> 来编码： <span class="math display">\[
+\begin{array}{lcl}
+PE_{(pos, 2i)}        &amp; = &amp; \sin(\frac{pos}{10000^{2i/d_{model}}})\\
+PE_{(pos, 2i+1)}        &amp; = &amp; \cos(\frac{pos}{10000^{2i/d_{model}}})
+\end{array}
+\]</span> 其中，<span class="math inline">\(pos\)</span> 代表位置，<span class="math inline">\(i\)</span> 代表维度（<span class="math inline">\([0, d_{model}-1]\)</span>）。</p>
+<p>这样做的目的是因为正弦和余弦函数具有周期性，对于固定长度偏差 <span class="math inline">\(k\)</span>（类似于周期），<span class="math inline">\(pos+k\)</span> 位置的 PE 可以表示成关于 <span class="math inline">\(pos\)</span> 位置 PE 的一个线性变换（<span class="math inline">\(\sin(pos + k) =\sin(pos)\cos(k)+\sin(k)\cos(pos)\)</span>），这样可以方便模型学习词与词之间的一个相对位置关系。</p>
+<p>另一种解释，来自 <a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&amp;mid=2650728452&amp;idx=4&amp;sn=fcc845a7ff15e6ceb331161d71899402&amp;chksm=871b2c7ab06ca56c9d746a2c2977578ec391ed526ec05d7b1da1910d1987597b5801ac6f98d1&amp;mpshare=1&amp;scene=23&amp;srcid=0701ZtSHzIyPmVKwYJdpsdvM%23rd" target="_blank" rel="noopener">WarBean</a> ：</p>
+<blockquote>
+<p>每两个维度构成一个二维的单位向量，总共有 <span class="math inline">\(d_{model} / 2\)</span> 组。每一组单位向量会随着 <span class="math inline">\(pos\)</span> 的增大而旋转，但是旋转周期不同，按照论文里面的设置，最小的旋转周期是 <span class="math inline">\(2\pi\)</span>，最大的旋转周期是 <span class="math inline">\(10000 \times 2\pi\)</span>。至于为什么说相邻 <span class="math inline">\(k\)</span> 步的 position embedding 可以用一个线性变换对应上，是因为上述每组单位向量的旋转操作可以用表示为乘以一个 2 x 2 的旋转矩阵。</p>
+</blockquote>
+<h3><span id="特点">特点</span></h3>
+<ol type="1">
+<li><p>训练阶段完全可并行（因为decoder在训练时给ground truth做为输入，这样生成不同位置的词是可以并行的，而encoder一次处理一整个句子）</p></li>
+<li><p>解决 long dependency 的问题</p>
+<blockquote>
+<p>传统的用RNN建模语言的时序特征，前面的单词信息都依次feed到后面一个单词，这种信息的堆叠感觉有点浪费，而且反而把信息糅杂在一起不好区分，虽然decoder阶段对每个单词对应的encoder输出位置做attention，但每个encoder输出已经夹杂了前面单词的信息。同时前面单词信息往后传，走的路径比较长，也就是long dependency的问题，虽然LSTM/GRU这种结构能一定程度上解决，但是毕竟不能完全去掉 long dependency。而conv在处理dependency问题时，利用卷积的感受野receptive field，通过堆叠卷积层来扩大每个encoder输出位置所覆盖单词的范围，每个单词走的路径大致是logk(n)步，缩短了dependency的长度。而这篇论文的做法是直接用encoder或者decoder的层与层之间直接用attention，句子中的单词dependency长度最多只有1，减少了信息传输路径。而且这种attention的方式直接可以挖掘句子内部单词与单词的语义组合关系，将它作为一个语义整体，使得翻译时更好地利用单词组合甚至是短语的信息，更好地decode出语义匹配的目标语言单词（转自<a href="https://www.zhihu.com/question/61077555/answer/183884003" target="_blank" rel="noopener">谭旭</a>）</p>
+</blockquote></li>
+</ol>
+<p><img src="/images/path_table.png"></p>
+<h3><span id="开源代码分析">开源代码分析</span></h3>
+<p>代码来自：https://github.com/jadore801120/attention-is-all-you-need-pytorch</p>
+<p>使用 PyTorch 框架</p>
+<p><strong>Encoder</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Encoder</span><span class="params">(nn.Module)</span>:</span></span><br><span class="line">    <span class="string">''' A encoder model with self attention mechanism. '''</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, n_src_vocab, n_max_seq, n_layers=<span class="number">6</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">                 n_head=<span class="number">8</span>, d_k=<span class="number">64</span>, d_v=<span class="number">64</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">        		 d_word_vec=<span class="number">512</span>, d_model=<span class="number">512</span>, </span></span></span><br><span class="line"><span class="function"><span class="params">                 d_inner_hid=<span class="number">1024</span>, dropout=<span class="number">0.1</span>)</span>:</span></span><br><span class="line">        <span class="comment"># .....</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, src_seq, src_pos)</span>:</span></span><br><span class="line">        <span class="comment"># Word embedding look up</span></span><br><span class="line">        enc_input = self.src_word_emb(src_seq)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Position Encoding addition</span></span><br><span class="line">        enc_input += self.position_enc(src_pos)</span><br><span class="line">        enc_outputs, enc_slf_attns = [], []</span><br><span class="line"></span><br><span class="line">        enc_output = enc_input</span><br><span class="line">        enc_slf_attn_mask = </span><br><span class="line">        		get_attn_padding_mask(src_seq, src_seq)</span><br><span class="line">        <span class="comment"># 对每一层计算 encoder output 和 self-attention</span></span><br><span class="line">        <span class="keyword">for</span> enc_layer <span class="keyword">in</span> self.layer_stack:</span><br><span class="line">            enc_output, enc_slf_attn = enc_layer(</span><br><span class="line">                enc_output, slf_attn_mask=enc_slf_attn_mask)</span><br><span class="line">            <span class="comment"># 把每层的输出添加到总输出列表</span></span><br><span class="line">            enc_outputs += [enc_output]</span><br><span class="line">            enc_slf_attns += [enc_slf_attn]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> enc_outputs, enc_slf_attns</span><br></pre></td></tr></table></figure>
+<p><strong>Positional Encoding</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">position_encoding_init</span><span class="params">(n_position, d_pos_vec)</span>:</span></span><br><span class="line">    <span class="string">''' Init the sinusoid position encoding table '''</span></span><br><span class="line">	<span class="comment"># 对每个位置进行编码，位置0为全0，其他位置按照相应公式计算</span></span><br><span class="line">    position_enc = np.array([</span><br><span class="line">        [pos / np.power(<span class="number">10000</span>, <span class="number">2</span>*i/d_pos_vec) </span><br><span class="line">        	<span class="keyword">for</span> i <span class="keyword">in</span> range(d_pos_vec)]</span><br><span class="line">        <span class="keyword">if</span> pos != <span class="number">0</span> <span class="keyword">else</span> np.zeros(d_pos_vec) </span><br><span class="line">        	<span class="keyword">for</span> pos <span class="keyword">in</span> range(n_position)])</span><br><span class="line">	<span class="comment"># dim 2i</span></span><br><span class="line">    position_enc[<span class="number">1</span>:, <span class="number">0</span>::<span class="number">2</span>] = np.sin(position_enc[<span class="number">1</span>:, <span class="number">0</span>::<span class="number">2</span>]) </span><br><span class="line">    <span class="comment"># dim 2i+1</span></span><br><span class="line">    position_enc[<span class="number">1</span>:, <span class="number">1</span>::<span class="number">2</span>] = np.cos(position_enc[<span class="number">1</span>:, <span class="number">1</span>::<span class="number">2</span>]) </span><br><span class="line">    <span class="keyword">return</span> torch.from_numpy(position_enc)</span><br></pre></td></tr></table></figure>
+<p><strong>Scaled Dot-Product Attention</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ScaledDotProductAttention</span><span class="params">(nn.Module)</span>:</span></span><br><span class="line">    <span class="string">''' Scaled Dot-Product Attention '''</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, d_model, attn_dropout=<span class="number">0.1</span>)</span>:</span></span><br><span class="line">        super(ScaledDotProductAttention, self).__init__()</span><br><span class="line">        self.temper = np.power(d_model, <span class="number">0.5</span>)</span><br><span class="line">        self.dropout = nn.Dropout(attn_dropout)</span><br><span class="line">        self.softmax = BottleSoftmax()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, q, k, v, attn_mask=None)</span>:</span></span><br><span class="line">        attn = torch.bmm(q, k.transpose(<span class="number">1</span>, <span class="number">2</span>)) / self.temper</span><br><span class="line">        ...</span><br><span class="line">        attn = self.softmax(attn)</span><br><span class="line">        attn = self.dropout(attn)</span><br><span class="line">        output = torch.bmm(attn, v)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> output, attn</span><br></pre></td></tr></table></figure>
+<p>从中可见，self-attention 指 softmax 操作之后的部分，层输出是 <span class="math inline">\(attention \times V\)</span>。</p>
+<p><strong>Encoder layer</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EncoderLayer</span><span class="params">(nn.Module)</span>:</span></span><br><span class="line">    <span class="string">''' Compose with two layers '''</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, d_model, d_inner_hid, n_head, d_k, d_v,</span></span></span><br><span class="line"><span class="function"><span class="params">                 dropout=<span class="number">0.1</span>)</span>:</span></span><br><span class="line">        super(EncoderLayer, self).__init__()</span><br><span class="line">        self.slf_attn = MultiHeadAttention(</span><br><span class="line">            n_head, d_model, d_k, d_v, dropout=dropout)</span><br><span class="line">        self.pos_ffn = PositionwiseFeedForward(d_model, </span><br><span class="line">                                              d_inner_hid, </span><br><span class="line">                                              dropout=dropout)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, enc_input, slf_attn_mask=None)</span>:</span></span><br><span class="line">        <span class="comment"># Q, K, V 都是 enc_input</span></span><br><span class="line">        enc_output, enc_slf_attn = self.slf_attn(</span><br><span class="line">            enc_input, enc_input, enc_input,</span><br><span class="line">            attn_mask=slf_attn_mask)</span><br><span class="line">        enc_output = self.pos_ffn(enc_output)</span><br><span class="line">        <span class="keyword">return</span> enc_output, enc_slf_attn</span><br></pre></td></tr></table></figure>
+<p>可见，传给 <code>MultiHeadAttention</code> 的<span class="math inline">\(Q, K, V\)</span> 都是 <code>enc_input</code>。</p>
+<p><strong>Decoder Layer</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DecoderLayer</span><span class="params">(nn.Module)</span>:</span></span><br><span class="line">    <span class="string">''' Compose with three layers '''</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, d_model, d_inner_hid, n_head, d_k, d_v, dropout=<span class="number">0.1</span>)</span>:</span></span><br><span class="line">        <span class="comment"># ....</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, dec_input, enc_output, </span></span></span><br><span class="line"><span class="function"><span class="params">                slf_attn_mask=None, dec_enc_attn_mask=None)</span>:</span></span><br><span class="line">        <span class="comment"># 第一个attention层接收的 Q, K, V 都是 dec_input</span></span><br><span class="line">        dec_output, dec_slf_attn = self.slf_attn(</span><br><span class="line">            dec_input, dec_input, dec_input, </span><br><span class="line">            attn_mask=slf_attn_mask)</span><br><span class="line">        <span class="comment"># 第二个attention层接收的 Q 是 dec_output，</span></span><br><span class="line">        <span class="comment"># K 和 V 是 enc_output</span></span><br><span class="line">        dec_output, dec_enc_attn = self.enc_attn(</span><br><span class="line">            dec_output, enc_output, enc_output, </span><br><span class="line">            attn_mask=dec_enc_attn_mask)</span><br><span class="line">        dec_output = self.pos_ffn(dec_output)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> dec_output, dec_slf_attn, dec_enc_attn</span><br></pre></td></tr></table></figure>
+<p><strong>Transformer</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Transformer</span><span class="params">(nn.Module)</span>:</span></span><br><span class="line">    <span class="string">''' 完整的 transformer '''</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">            self, n_src_vocab, n_tgt_vocab, n_max_seq,</span></span></span><br><span class="line"><span class="function"><span class="params">        	n_layers=<span class="number">6</span>, n_head=<span class="number">8</span>, d_word_vec=<span class="number">512</span>, d_model=<span class="number">512</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">        	d_inner_hid=<span class="number">1024</span>, d_k=<span class="number">64</span>, d_v=<span class="number">64</span>, dropout=<span class="number">0.1</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">        	proj_share_weight=True, embs_share_weight=True)</span>:</span></span><br><span class="line"></span><br><span class="line">        super(Transformer, self).__init__()</span><br><span class="line">        <span class="comment"># 初始化 encoder</span></span><br><span class="line">        self.encoder = Encoder(</span><br><span class="line">            n_src_vocab, n_max_seq, n_layers=n_layers,</span><br><span class="line">            n_head=n_head, d_word_vec=d_word_vec, </span><br><span class="line">            d_model=d_model, d_inner_hid=d_inner_hid,</span><br><span class="line">            dropout=dropout)</span><br><span class="line">        <span class="comment"># 初始化 decoder</span></span><br><span class="line">        self.decoder = Decoder(</span><br><span class="line">            n_tgt_vocab, n_max_seq, n_layers=n_layers,</span><br><span class="line">            n_head=n_head, d_word_vec=d_word_vec, </span><br><span class="line">            d_model=d_model, d_inner_hid=d_inner_hid,</span><br><span class="line">            dropout=dropout)</span><br><span class="line">      	<span class="comment"># ....</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, src, tgt)</span>:</span></span><br><span class="line">        src_seq, src_pos = src</span><br><span class="line">        tgt_seq, tgt_pos = tgt</span><br><span class="line"></span><br><span class="line">        tgt_seq = tgt_seq[:, :<span class="number">-1</span>]</span><br><span class="line">        tgt_pos = tgt_pos[:, :<span class="number">-1</span>]</span><br><span class="line">		<span class="comment"># 编码</span></span><br><span class="line">        enc_outputs, enc_slf_attns = self.encoder(src_seq,</span><br><span class="line">                                                  src_pos)</span><br><span class="line">        <span class="comment"># 解码</span></span><br><span class="line">        dec_outputs, dec_slf_attns, dec_enc_attns =</span><br><span class="line">        	self.decoder( tgt_seq, tgt_pos, src_seq,</span><br><span class="line">                         enc_outputs)</span><br><span class="line">        dec_output = dec_outputs[<span class="number">-1</span>]</span><br><span class="line"></span><br><span class="line">        seq_logit = self.tgt_word_proj(dec_output)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> seq_logit.view(<span class="number">-1</span>, seq_logit.size(<span class="number">2</span>))</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/NLP/">NLP</a><a href="/tags/NMT/">NMT</a><a href="/tags/Attention/">Attention</a><a href="/tags/Deep-NLP/">Deep NLP</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

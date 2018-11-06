@@ -1,0 +1,278 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    Combined Multi-dimension Bloom Filter | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="Combined Multi-dimension Bloom Filter">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      Combined Multi-dimension Bloom Filter</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/04/19/Combined Multi-dimension Bloom Filter/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-04-19T15:25:19.000Z">
+          2017-04-19
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>​ A Bloom filter is a space-efficient probabilistic data structure, conceived by Burton Howard Bloom in 1970, that is used to test whether an element is a member of a set. False positive matches are possible, but false negatives are not – in other words, a query returns either &quot;possibly in set&quot; or &quot;definitely not in set&quot;. Elements can be added to the set, but not removed (though this can be addressed with a &quot;counting&quot; filter); the more elements that are added to the set, the larger the probability of false positives.</p>
+<a id="more"></a>
+<h2><span id="standard-bloom-filter">Standard Bloom Filter</span></h2>
+<p>​ Let’s briefly review the standard bloom filter. A bloom filter is used to represent a set <span class="math inline">\(S = \{s_1, s_2, ...,s_n\}\)</span> with a m-bit array and each bit of which is denoted by <span class="math inline">\(BF[0], BF[1], …, BF[m-1]\)</span>. Initially, the m-bit array is initiated with 0 and we define hash functions. Each of them can reflect each element <span class="math inline">\(x \in S\)</span> to a number <span class="math inline">\(h_i(x) \in \{0, 1, ..., m-1\}\)</span> randomly, where <span class="math inline">\(i \in \{0, 1, .., k-1\}\)</span>. Whenever inserting an element, hashing it with the <span class="math inline">\(k\)</span> hash functions, so we get <span class="math inline">\(k\)</span> indexes. Then letting <span class="math inline">\(BF[h_i(x)] = 1\)</span> for each <span class="math inline">\(i \in \{0, 1, .., k-1\}\)</span>. Given an element <span class="math inline">\(y\)</span>, we check each <span class="math inline">\(BF[h_i(y)]\)</span> , if all of them equal to <span class="math inline">\(1\)</span> , then we assume is in the set <span class="math inline">\(S\)</span> even though it may actually not. Hence a Bloom Filter may yield false positives. However, if there is one of them equals to <span class="math inline">\(0\)</span>, then the element <span class="math inline">\(y\)</span> is definitely not in the set <span class="math inline">\(S\)</span> .</p>
+<p>​ For example, after inserting <span class="math inline">\(x,y,z\)</span> , if we want to figure out whether <span class="math inline">\(w\)</span> is in the set, since <span class="math inline">\(BF[h_2(w)] = 0\)</span> , the Bloom Filter will tell us is not in the set, as illustrated in the figure Figure 1.</p>
+<p><img src="/images/figure1.png"></p>
+<p>​ <strong>Figure 1 An example of Bloom Filter</strong></p>
+<p>​ In order to analyze the possibility that a Bloom Filter gives a false positive, we denote a Bloom Filter with a three-element tuple <span class="math inline">\((n,m,k)\)</span> and further assume that each <span class="math inline">\(\{0, 1, ..., m-1\}\)</span> hash function is uniform distributed, which means the number in has equal possibility to be chosen by a hash function. Therefore, given a hash function, the possibility of one specific position in BF equals to 0 is: <span class="math display">\[
+1 - \frac{1}{m}
+\]</span> Then, with respect to all hash functions, the possibility becomes to: <span class="math display">\[
+(1-\frac{1}{m})^k
+\]</span> After inserted elements, the possibility is: <span class="math display">\[
+(1-\frac{1}{m})^{nk}
+\]</span> If a specific item leads the Bloom Filter to yield a false positive, all of the results of must equal to 1, whose possibility is: <span class="math display">\[
+[1-(1-\frac{1}{m})^{nk}]^k
+\]</span> According to the definition of , we can approximately represent the possibility as: <span class="math display">\[
+f_{BBF} = [1-(1+\frac{1}{(-m)})^{(-m)\frac{nk}{(-m)}}]^k \approx (1-e^{-\frac{kn}{m}})^k
+\]</span> The standard Bloom Filter is basic for extension of Bloom Filters. From now on, it is termed basic Bloom Filter (BBF).</p>
+<h2><span id="multi-dimension-bloom-filter">Multi-dimension Bloom Filter</span></h2>
+<p>​ In order to store multi-dimension data, for example <span class="math inline">\(l\)</span> dimensions, we can simply use <span class="math inline">\(l\)</span> basic Bloom Filters to store each dimension, which called a Multi-dimension Bloom Filter (MDBF). When we want to identify whether element <span class="math inline">\(x\)</span> is in the set, just compute <span class="math inline">\(BBF_1[x_0], ..., BBF_l[x_{l-1}]\)</span>, if all of them equal to <span class="math inline">\(1\)</span>, then we consider <span class="math inline">\(x\)</span> is one of the elements of the set. Similarly as the basic Bloom Filter, such multi-dimension Bloom Filter may also yield a false positive. However, if one of them equals to <span class="math inline">\(0\)</span>, the element <span class="math inline">\(x\)</span> certainly not belong to this set. Figure 2 illustrates that how a MDBF works.</p>
+<p><img src="/images/figure2.png"></p>
+<p>​ <strong>Figure 2 Multi-dimension Bloom Filter illustration</strong></p>
+<p>​ Nonetheless, the false positive rate of such MDBF is not as ideal as expected, because it may give a false positive even if none of the basic Bloom Filters makes a false decision. For example, we have a set <span class="math inline">\(S = \{(red, blue), (blue, black)\}\)</span> and we want to figure out whether <span class="math inline">\((red, black)\)</span> is in <span class="math inline">\(S\)</span>. So the first BBF would say that is an attribute of the set and the second BBF says <span class="math inline">\(black\)</span> is also an attribute of <span class="math inline">\(S\)</span>, so the MDBF thinks <span class="math inline">\((red, black)\)</span> is a member of <span class="math inline">\(S\)</span>, which is obviously a false positive. Therefore, we need another Bloom Filter or couple of Bloom Filters to represent the combined information of each dimensional attribute to reduce the error rate.</p>
+<h2><span id="combined-multi-dimension-bloom-filter">Combined Multi-dimension Bloom Filter</span></h2>
+<p>​ The ideal MDBF produces a false positive only when all of the basic Bloom Filters yield false positives, so the error rate of an ideal -dimension MDBF is: <span class="math display">\[
+f_{iMDBF} = (f_{BBF})^l = (1-e^{-\frac{kn}{m}})^{kl}
+\]</span> ​ To achieve such false positive rate, we need not only store the attribute of each dimension, but also have to store the relationship among all dimensions. One way to do this is adding a combined Bloom Filter to represent the combination of each attribute, which is called combined multi-dimension Bloom Filter (CMDBF). The question is how to represent such combined information. A simple solution is using the result of XOR different dimensional attributes’ hashing indexes as the hash index of the combined Bloom Filter, which is <span class="math inline">\(CBF[h_{1,i}[x_0]\oplus h_{2,i}[x_1] ... \oplus h_{l,i}[x_{l-1}]]=1\)</span> for <span class="math inline">\(i \in \{0, 1, ..,k-1\}\)</span>, where <span class="math inline">\(CBF\)</span> refers to the combined Bloom Filter, as illustrated in Figure 3.</p>
+<p><img src="/images/figure3.png"></p>
+<p>​ <strong>Figure 3 Combined Multi-dimension Bloom Filter illustration</strong></p>
+<p>​ Obviously, the error rate of CMDBF is lower than MDBF since CMDBF has a combined Bloom Filter to represent the relationship among all the dimensions. CMDBF will make a false positive when some of the basic Bloom Filters make mistakes as well as the combined Bloom Filter yields a false decision.</p>
+<p>​ Let’s mathematically compute the error rate of CMDBF, we represent a CMDBF by a 4-tuple <span class="math inline">\((n,m,k,l)\)</span>, where <span class="math inline">\(n\)</span> represents the number of elements in the set, <span class="math inline">\(m\)</span> represents the size of a basic Bloom Filter, <span class="math inline">\(k\)</span> represents the number of hash functions each basic Bloom Filter has, and <span class="math inline">\(l\)</span> represents the dimensions of the elements. Since <span class="math display">\[
+h_{1,i}[x_0], h_{2,i}[x_1] ... , h_{l,i}[x_{l-1}] \sim U(0, m-1)
+\]</span> where , therefore, <span class="math display">\[
+h_{1,i}[x_0]\oplus h_{2,i}[x_1] ... \oplus h_{l,i}[x_{l-1}]\sim U(0,m-1)
+\]</span> So, the false positive rate of CBF equals to that of BBF, <span class="math display">\[
+f_{CBF} = f_{BBF} =  (1-e^{-\frac{kn}{m}})^k
+\]</span> Then, the error rate of CMDBF is <span class="math display">\[
+f_{CMDBF} = f_{MDBF}f_{CBF} = f_{MDBF}(1-e^{-\frac{kn}{m}})^k
+\]</span> Since <span class="math inline">\(0&lt;(1-e^{-\frac{kn}{m}})^k&lt;1\)</span>, the false positive rate of CMDBF is lower than that of MDBF.</p>
+<h2><span id="conclusion">Conclusion</span></h2>
+<p>​ Even though the combined multi-dimension Bloom Filter consumes more space of a m-bit array, it can represent the multi-dimension elements as a whole entity rather than represents it as many independent attributes, which contributes to a lower false positive rate significantly.</p>
+<h2><span id="references">References</span></h2>
+<p>[1] DEKE G, HONGHUI C, JIE W, et al. Theory and network application of dynamic bloom filters[A]. Proc of IEEE Infocom Barcelona[C]. Spain, 2006. 1-12.</p>
+<p>[2] XIE Kun, QIN Zheng, et al. Combine multi-dimension Bloom filter for membership queries. Journal on Communications.</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Data-Structure/">Data Structure</a><a href="/tags/Bloom-Filter/">Bloom Filter</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

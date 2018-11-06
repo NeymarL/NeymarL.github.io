@@ -1,0 +1,1012 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    物联网中间件技术 | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="物联网中间件技术">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      物联网中间件技术</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/06/25/物联网中间件技术/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-06-25T06:08:47.000Z">
+          2017-06-25
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p><strong>目录</strong></p>
+<!-- toc -->
+<ul>
+<li><a href="#绪论">绪论</a></li>
+<li><a href="#中间件的工作原理">中间件的工作原理</a></li>
+<li><a href="#j2ee简介">J2EE简介</a></li>
+<li><a href="#j2ee-ejb构件基础">J2EE-EJB构件基础</a></li>
+<li><a href="#ejb构件开发">EJB构件开发</a></li>
+<li><a href="#rfid中间件">RFID中间件</a></li>
+</ul>
+<!-- tocstop -->
+<a id="more"></a>
+<h2><span id="绪论">绪论</span></h2>
+<p><strong>中间件</strong>定义</p>
+<ul>
+<li>一种独立的软件或者服务，物联网服务可以借助中间件在不同的系统之间共享资源。它能提供透明的数据传输能力，承担物理空间到信息空间的映射，实现对物理对象的感知和信息获取、清洗、融合等。</li>
+<li>Software that connects two otherwise separate applications.</li>
+<li>是一种独立的系统软件或服务程序，分布式应用软件借助这种软件在不同的技术之间共享资源；中间件位于客户机/服务器的操作系统之上，<em>管理计算资源和网络通信</em> <img src="/images/物联网中间件技术/DraggedImage.png"></li>
+<li>左中右的中：位于应用系统间, <em>提供通信服务</em></li>
+<li>上中下的中：位于应用系统和操作系统间，提供<em>应用编程接口(抽象)</em>并管理计算资源</li>
+</ul>
+<p><em>分布式软件结构</em></p>
+<ul>
+<li>两层结构 <img src="/images/物联网中间件技术/DraggedImage-1.png">
+<ul>
+<li>客户程序直接访问数据库，用户界面代码和业务逻辑代码交织在一起</li>
+<li><em>问题</em>
+<ul>
+<li>客户端负担重</li>
+<li>客户端可移植性不好</li>
+<li>系统可维护性不好</li>
+<li>数据安全性不好</li>
+</ul></li>
+</ul></li>
+<li><strong>三层结构</strong> <img src="/images/物联网中间件技术/DraggedImage-2.png">
+<ul>
+<li>将业务逻辑代码移到中间层</li>
+<li>客户程序<em>只能通过中间层间接地访问数据库</em>，即
+<ul>
+<li>降低了客户端的负担</li>
+<li>改善了其可移植性</li>
+<li>提高了系统的数据安全性</li>
+</ul></li>
+<li>业务逻辑代码与用户界面代码<em>相对独立</em>，也在很大程度上<em>提高了系统的可维护性</em></li>
+</ul></li>
+</ul>
+<p><em>分类</em></p>
+<ul>
+<li>消息中间件(MOM:Message-oriented Middleware)</li>
+<li>数据库中间件(Database Middleware)</li>
+<li>远程过程调用中间件(RPC: Remote process Call)</li>
+<li>对象请求代理中间件(ORB: Object Request Broker)</li>
+<li>事务请求代理中间件(TP Monitor: Transaction Process Monitor)</li>
+</ul>
+<p><em>物联网中间件</em> <img src="/images/物联网中间件技术/DraggedImage-3.png"></p>
+<ul>
+<li><em>功能</em>
+<ul>
+<li><strong>屏蔽异构性</strong>
+<ul>
+<li>计算机硬件之间的异构性</li>
+<li>物联网异构性</li>
+</ul></li>
+<li>实现互操作
+<ul>
+<li>实现各应用系统和应用平台之间互操作</li>
+</ul></li>
+<li>信息预处理
+<ul>
+<li>过滤海量信息，统计分析融合成有意义事件再传输给应用系统</li>
+</ul></li>
+<li>可扩展性</li>
+</ul></li>
+<li><em>OPC</em>
+<ul>
+<li>OPC是<em>连接</em>数据源(<em>OPC服务器</em>)和数据使用者(<em>OPC应用程序</em>)之间的<em>软件接口标准</em>。</li>
+</ul></li>
+<li><em>CEP</em>
+<ul>
+<li><em>复杂事件处理(Complex Event Progressing)</em>技术是一种新兴的基于<strong>事件流</strong>的技术
+<ul>
+<li>通过分析事件间的<em>关系</em>，利用<em>过滤、关联、聚合</em>等技术最终由简单事件<em>产生高级事件</em>或商业流程。</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2><span id="中间件的工作原理">中间件的工作原理</span></h2>
+<p><em>构件</em> <img src="/images/物联网中间件技术/DraggedImage-4.png"></p>
+<ul>
+<li><em>接口</em>：定义分布式对象能力的约定。构件之间可见的只有接口，通常是跨语言的</li>
+<li><em>数据类型</em>：分布式对象交互需定义在分布式对象之间传输的数据类型。需要一种独立于语言和平台的数据类型系统</li>
+<li><em>编组与解组</em>：串行化流数据与程序员处理的有类型数据之间需 编组与解组</li>
+<li><em>对象句柄</em>：对象句柄是对<em>远端分布式对象的引用</em></li>
+<li><em>对象创建</em>：创建一个新的分布式对象实例的机制</li>
+<li><em>对象调用</em>：分布式对象的调用的机制</li>
+</ul>
+<p><em>中间件</em></p>
+<ul>
+<li>抽取软件的<em>共性成分</em>由<strong>系统级软件</strong>完成， 向开发人员屏蔽系统低层的复杂度，从而在高层保持整体复杂度的相对稳定</li>
+<li>依据所抽取出的应用软件中的<strong>不同共性</strong>设计与实现不同类型的<em>中间件</em>
+<ul>
+<li>数据访问中间件：支撑应用程序访问数据库，对异构环境下的数据库实现联接</li>
+<li>消息中间件：为应用程序提供发送和接收异步消息支持</li>
+</ul></li>
+</ul>
+<p><em>集成中间件</em></p>
+<ul>
+<li><strong>功能</strong>
+<ul>
+<li><em>提供构件运行环境</em>
+<ul>
+<li>管理构件的<em>实例及其生命周期、管理构件的元信息</em>等</li>
+</ul></li>
+<li><em>提供互操作机制</em>
+<ul>
+<li>开发人员在开发与调用分布式对象时，无需自己编写<em>处理底层通信</em>的代码</li>
+</ul></li>
+<li><em>提供公共服务</em>
+<ul>
+<li><em>公共服务</em>又称为系统级服务，指由中间件(应用服务器 )实现的、应用程序使用的软件系统中<em>共性程度高</em>的功能成分
+<ul>
+<li>事务服务</li>
+<li>安全服务</li>
+<li>命名服务</li>
+<li>持久性服务</li>
+<li>消息服务</li>
+<li>分布式垃圾回收服务</li>
+<li>资源管理服务</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<p><em>Stub/Skeleton</em> <img src="/images/物联网中间件技术/DraggedImage-5.png"></p>
+<ol type="1">
+<li><em>客户程序</em>将调用请求发送给<em>客户端桩</em>，对于客户程序来说，<strong>桩</strong>就是服务程序在客户端的代理</li>
+<li><em>客户端桩</em>负责将远程调用请求进行编组并通过通信总线发送给<em>服务端</em></li>
+<li>调用请求经通信总线传送到<em>服务端框架</em></li>
+<li><em>服务端框架</em>将调用请求解组并分派给<em>真正的远程对象实现(服务程序)</em></li>
+<li><em>服务程序</em>完成客户端的调用请求，将结果返回给<em>服务端框架</em></li>
+<li><em>服务端框架</em>将调用结果编组并通过通信总线发送给<em>客户端桩</em></li>
+<li><em>客户端桩</em>将调用结果解组并返回给<em>客户程序</em></li>
+<li><em>客户程序</em>得到调用结果</li>
+</ol>
+<h2><span id="j2ee简介">J2EE简介</span></h2>
+<p><img src="/images/物联网中间件技术/DraggedImage-6.png"></p>
+<p>构件／容器结构</p>
+<ul>
+<li>构成J2EE 应用系统的<em>构件</em>都<em>运行在</em>某种J2EE <em>容器</em>中</li>
+<li>容器
+<ul>
+<li>为构件提供公共服务</li>
+<li>为构件之间的交互或者是构件访问后台数据提供支持</li>
+<li>提供运行环境</li>
+</ul></li>
+</ul>
+<p><em>J2EE应用构件</em> <img src="/images/物联网中间件技术/DraggedImage-7.png"></p>
+<ul>
+<li>客户端构件
+<ul>
+<li>Applets
+<ul>
+<li>Applet 是具有图形用户界面的特殊的Java 类</li>
+<li>运行在Web浏览器中</li>
+<li>运行在支持Applet编程模型的容器中</li>
+<li>在J2EE 应用中Applets 一般用来提供用户界面</li>
+<li>Applet类自身不包含main 入口函数，它被容器调度执行</li>
+<li>无需安装，从Web上下载运行在浏览器上</li>
+</ul></li>
+<li>Application Clients
+<ul>
+<li>Application Client 指有图形用户界面的独立 Java 程序</li>
+<li>与applet 不同，Application Client 通常包含main 入口函数且需要在 每个使用的客户端 机器上安装</li>
+</ul></li>
+<li>很多 J2EE 应用中均<em>不使用</em>Application Client 或 Applet 作为客户端程序，客户端的用户界面一般由<em>Web 页面</em>来提供</li>
+</ul></li>
+<li>服务器端构件
+<ul>
+<li>Web构件
+<ul>
+<li>Servlets</li>
+<li>JSP
+<ul>
+<li>一类特殊的<em>HTML文档</em></li>
+<li>通过在HTML 文档中嵌入JSP 特定的标签来允许程序员在页面中加入<em>Java 代码</em>来<em>动态</em>生成页面内容</li>
+</ul></li>
+</ul></li>
+<li>EJB构件
+<ul>
+<li>实体构件</li>
+<li>会话构件</li>
+<li>消息驱动构件</li>
+</ul></li>
+</ul></li>
+</ul>
+<p><em>J2EE应用开发</em></p>
+<ul>
+<li>应用程序基本结构 <img src="/images/物联网中间件技术/DraggedImage-8.png">
+<ul>
+<li>Java目标文件：<code>.jar</code>文件，用来打包EJB构件、Application Client以及它们需要的辅助Java目标文件</li>
+<li>Web目标文件：<code>.war</code>文件，用来 打包Web 构件(Servlet、JSP)以及静态页面相关的文件(如HTML 文档、图片等)</li>
+<li>企业目标文件：<code>.ear</code>的文件， 用来打包完整的J2EE 应用</li>
+</ul></li>
+<li>一个完整的J2EE应用中可以包含若干个Java目标文件和若干个Web目标文件</li>
+<li>在打包 Java 目标文件、Web 目标文件与企业目标文件时都需要提供相应的<em>部署描述符</em></li>
+<li><strong>部署描述符</strong>
+<ul>
+<li>Deployment Descriptor，简称DD</li>
+<li>一个布署描述符是一个XML格式的文件，该文件中描述了当前模块中所<em>包含的内容(构件或模块)</em>所<strong>需要的环境</strong></li>
+<li>EJB 模块的布署描述符——<code>ejb-jar.xml</code>
+<ul>
+<li><em>同一EJB 模块</em>中的所有EJB 构件<em>共享</em>该模块的布署描述符</li>
+<li>描述每一个EJB 构件的<em>Home接口、 Remote 接口以及真正提供服务的类</em>的<strong>名字</strong></li>
+<li>描述<strong>构件类型及需要容器提供的服务</strong>：如果是Session Beans，说明是<em>哪种类型</em>的Session Bean;如果是Entity Bean，说明是否需要容器提供的 <em>持久性管理服务及相关的信息</em>;说明该EJB 是否需要由容器来<em>控制事务</em>，如果需要，怎样控制;说明该EJB 的<em>安全控制策略</em>等等。</li>
+<li>当这些相关的特性发生变化时，可以<strong>不</strong>修改EJB 的源程序，而仅通过<em>修改部署描述符</em>就可以使得EJB 去适应新的环境。</li>
+</ul></li>
+<li>Web 模块的布署描述符——<code>web.xml</code>
+<ul>
+<li><em>同一Web 模块</em>中的所有构件<em>共享</em>该模块的布署描述符</li>
+<li>首先描述<em>当前模块包含的构件</em>(包括Servlet、JSP、表态页面等);</li>
+<li>为当前模块中的构件说明<em>安全控制规则</em>;</li>
+<li>由于J2EE 应用的Web 模块中经常需要配置应用使用的<em>用户认证方式</em>，因为在典型的J2EE 应用中，客户端通常通过浏览器直接访问Web 模块中的构件，Web 模块中的构件首先与访问者接触，因此通常在Web模块中完成对用户身份的认证。</li>
+</ul></li>
+<li>J2EE 应用的布署描述符——<code>application.xml</code>
+<ul>
+<li>描述当前应用中包含的<em>所有模块</em></li>
+<li>还可能定义应用使用的<em>安全性角色</em></li>
+</ul></li>
+</ul></li>
+<li>MVC <img src="/images/物联网中间件技术/DraggedImage-9.png"></li>
+</ul>
+<p><em>思考题</em></p>
+<ul>
+<li>J2EE 应用中构件/容器能够为应用构件提供哪些好处?
+<ul>
+<li>为应用构件提供公共服务</li>
+<li>为应用构件之间的交互或者是应用构件访问后台数据提供支持</li>
+<li>提供应用构件运行环境</li>
+</ul></li>
+<li>组成 J2EE 应用的应用构件主要有哪几种？每种应用构件在J2EE 应用中的基本作用是什么？
+<ul>
+<li>两种：客户端构件和服务端构件</li>
+<li>基本作用：
+<ul>
+<li>客户端构件：提供图形用户界面，调用后台接口</li>
+<li>服务端构件：提供数据服务、业务逻辑等</li>
+</ul></li>
+</ul></li>
+<li>请简单描述 J2EE 应用程序的基本结构，说明布署描述符的主要作用
+<ul>
+<li>基本结构：Java目标文件、Web目标文件、企业目标文件和部署描述符</li>
+<li>部署描述符作用
+<ul>
+<li>描述当前模块中所<em>包含的内容(构件或模块)</em>所<strong>需要的环境</strong></li>
+<li>描述<strong>构件类型及需要容器提供的服务</strong></li>
+</ul></li>
+</ul></li>
+</ul>
+<h2><span id="j2ee-ejb构件基础">J2EE-EJB构件基础</span></h2>
+<p><em>EJB构件概述</em></p>
+<ul>
+<li>EJB 构件是由公共服务框架自动管理的分布式的服务端商业构件
+<ul>
+<li>分布式对象技术-提供分布式对象的支持</li>
+<li>服务端构件技术-提供服务端构件管理的支持</li>
+<li>CTM(ComponentTransactionMonitor)技术-提供公共服务框架的支持</li>
+</ul></li>
+<li>特点
+<ul>
+<li><em>公共服务框架</em>
+<ul>
+<li>提供大量系统级服务</li>
+<li>开发者关注商业逻辑实现，提高开发效率</li>
+</ul></li>
+<li><em>平台独立性</em>
+<ul>
+<li>沿袭了JAVA的平台无关性</li>
+</ul></li>
+<li><em>封装特性</em>
+<ul>
+<li>定义标准服务API 来封装现有的基础性服务</li>
+</ul></li>
+<li><em>可定制性</em>
+<ul>
+<li>修改EJB 构件的运行时配置以满足特定用户的需求</li>
+</ul></li>
+<li><em>协议无关性</em>
+<ul>
+<li>支持客户端通过多种EJB 访问EJB 构件</li>
+</ul></li>
+<li><em>通用性</em>
+<ul>
+<li>方便支持不同规模的应用系统，即可以在任何时间增加客户系统，而不需修改核心的应用系统</li>
+<li>系统资源可伸缩性</li>
+</ul></li>
+</ul></li>
+</ul>
+<p><em>EJB与Java Bean的比较</em></p>
+<ul>
+<li><em>用途及功能</em>
+<ul>
+<li>EJB 构件通常用于<em>服务端应用开发</em></li>
+<li>Java Bean 构件通常用于<em>客户端应用开发</em>或作为服务端<em>EJB 构件的补充</em></li>
+<li>Java Bean <em>不能</em>使用Java 企业版平台提供的公共服务框架的支持</li>
+</ul></li>
+<li><em>部署&amp;定制</em>
+<ul>
+<li>EJB 构件是<em>可布署的</em>，即EJB 构件可以作为独立的软件单元 被布署到EJB 应用服务器上，是应用构件</li>
+<li>Java Bean 是开发构件，<em>不能被部署为独立的单元</em></li>
+<li>EJB 构件是部署时<em>可定制的</em></li>
+<li>Java Bean 构件的定制通常仅发生在<em>开发阶段</em>，部署时不能对其进行定制</li>
+</ul></li>
+<li><em>远程访问能力</em>
+<ul>
+<li>EJB 构件是分布式对象，可以被客户应用或者其它EJB构件<em>进行远程访问</em></li>
+<li>普通的Java Bean 构件只能<em>在其构成的应用中使用</em>，不能提供远程访问的能力</li>
+</ul></li>
+<li><em>终端可见性</em>
+<ul>
+<li>EJB 构件是服务端构件，运行在服务端，没有人机交互界面，<em>对终端用户不可见</em></li>
+<li><em>部分JavaBeans 构件对终端用户可见</em>，如GUI 应用中 使用的按钮构件等</li>
+</ul></li>
+</ul>
+<p><em>EJB体系结构</em></p>
+<ul>
+<li>EJB容器
+<ul>
+<li>EJB 容器为EJB 构件<em>提供运行环境</em>并<em>管理运行于其中的EJB</em></li>
+<li>EJB 容器为EJB 的执行<em>提供系统级的服务</em></li>
+</ul></li>
+<li>EJB服务器
+<ul>
+<li>EJB 服务器是遵循EJB 定义的构件模型的CTM 实现，<em>一个EJB 服务器可以包含一个或多个EJB 容器</em>，EJB 服务器<em>为EJB 容器的运行提供公共服务框架</em>。</li>
+</ul></li>
+<li>EJB客户端
+<ul>
+<li>EJB 客户端泛指<em>调用EJB 构件提供业务操作的软件实体</em>，EJB 构件的客户端可以有多种形式
+<ul>
+<li>可以是独立的Java程序也可以是其他EJB</li>
+</ul></li>
+</ul></li>
+<li><strong>Enterprise Java Bean</strong>
+<ul>
+<li>开发者实现的核心构件EJB</li>
+<li>是EJB 客户端所调用的操作的<em>真正实现者</em></li>
+<li>可以被部署到EJB 应用服务器上，用来组装大型的EJB 应用</li>
+</ul></li>
+<li><em>Home接口</em>
+<ul>
+<li>Home 接口(Home Interface)包含<em>EJB 生命周期管理</em>相关的方法，客户程序使用Home接口<em>创建或删除EJB 的实例</em></li>
+<li><em>每个Home 接口都依赖于一个类(bean)来提供 Home 接口中约定的功能</em>，该类由容器自动生成，程序员只需定义接口</li>
+</ul></li>
+<li><em>Remote接口</em>
+<ul>
+<li>Remote 接口包含EJB 实现的商业方法的声明， 它实际上<em>约定了EJB 所提供的服务</em></li>
+<li>实现接口的类由容器自动生成，但<em>真正的操作是由EJB构件实现的</em></li>
+<li>客户程序只能通过Remote 接口来<em>间接地访问EJB 实现 的商业方法</em>，不能直接进行调用</li>
+</ul></li>
+<li>LocalHome/Local接口
+<ul>
+<li><code>LocalHome = Home, Local = Remote</code></li>
+<li>与Home接口和Remote相比，本地接口的不同之处在于 客户应用通过<em>本地接口</em>发起的调用是<strong>进程内的本地调用</strong>， 因此比远程接口调用有<em>更高的效率</em></li>
+</ul></li>
+<li>￼每个EJB 构件<em>都</em>有一对<em>对应的Home 接口与 Remote 接口</em>和/或一对对应的LocalHome接口与 Local 接口，从这种意义上讲，我们通常认为一个<em>完整的EJB 构件</em>包含：
+<ul>
+<li><strong>Enterprise Bean类</strong>
+<ul>
+<li><em>实现业务逻辑</em></li>
+</ul></li>
+<li><strong>Home接口</strong>
+<ul>
+<li><em>定义创建、查找EJB的方法</em></li>
+</ul></li>
+<li><strong>Remote接口</strong>
+<ul>
+<li><em>定义在bean中实现业务逻辑的方法</em></li>
+</ul></li>
+</ul></li>
+</ul>
+<p><em>EJB构件开发</em> <img src="/images/物联网中间件技术/DraggedImage-10.png"></p>
+<ul>
+<li>会话构件(Session Bean)
+<ul>
+<li>Session bean 存在于客户应用与应用服务器<strong>交互</strong>的时间段内，是用来和客户端做交互的</li>
+<li>和实体Bean 相比，Session bean 中的<strong>数据不保存在数据库中</strong></li>
+<li>Session bean 又可分为两类
+<ul>
+<li><em>有状态的Session Bean</em> 要跨方法调用<em>保存会话状态</em>，一个有状态的 Session Bean 实例<em>同时只处理一个客户应用的请求</em>，典型地如网上购物系统中提供购物车功能的Session Bean</li>
+<li><em>无状态的Session Bean</em>在方法调用中间<em>不维护任何状态</em>，一个无状态的Session bean 实例可以<em>同时处理多个客户应用的请求</em>，典型地如网上证券系统中提供股票信息查询功能的Session Bean</li>
+</ul></li>
+</ul></li>
+<li>实体构件(Entity Bean)
+<ul>
+<li><em>Entity Bean 代表数据库中的记录</em>，在EJB 中是用来封装数据库操作的，与Session Bean相比，逻辑上可以认为Entity Bean 在数据库中的数据存在期间都会存在</li>
+<li>同样与数据库中的数据类似，Entity Bean <em>可以被多个客户应用共享访问</em></li>
+</ul></li>
+<li>消息驱动构件(Message Driven Bean)
+<ul>
+<li>Message Driven Bean 主要用来处理异步消息，因此通常在异步编程模式下使用</li>
+</ul></li>
+<li><em>会话构件与实体构件</em>
+<ul>
+<li>客户端<em>通过会话bean连接服务器</em>，<em>会话bean通过实体bean访问数据库</em>，这使得既可以保存客户端的信息又可以保存数据库记录的信息</li>
+<li>会话bean经常用于涉及<em>多个实体bean</em>的业务处理和控制逻辑</li>
+</ul></li>
+<li>Hello World Session Bean例子 <img src="/images/物联网中间件技术/DraggedImage-11.png"></li>
+<li><strong>EJB构件访问流程</strong> <img src="/images/物联网中间件技术/DraggedImage-12.png"></li>
+<li>EJB构件的实现步骤
+<ol type="1">
+<li>创建Remote接口</li>
+<li>创建Home接口</li>
+<li>创建Bean的实现类</li>
+<li>编译Remote接口、Home接口、bean实现类</li>
+<li>创建部署描述符</li>
+<li>将以上三个文件与部署描述符文件打包为一个 ejb-jar文件</li>
+<li>部署EJB构件</li>
+</ol></li>
+</ul>
+<p><strong>接口设计原则</strong></p>
+<ul>
+<li>Remote接口设计原则
+<ul>
+<li>继承性约束
+<ul>
+<li>每个Remote 接口必须继承<em>EJBObject</em> 接口</li>
+<li>包含用于<em>管理实现remote 接口的EJB 对象的方法</em></li>
+</ul></li>
+<li>方法对应规则
+<ul>
+<li>Remote 接口中出现的<em>每一个方法的声明</em>都必须在相应的<em>Enterprise Bean类中有一个对应方法的实现</em></li>
+<li>其中每个方法的<strong>参数和返回值必须完全相同</strong>，抛出的<strong>异常必须匹配</strong>
+<ul>
+<li>匹配的含义是指<em>接口</em>中方法抛出<em>异常的集合</em>必须<strong>包含</strong> <em>Bean 类中</em>对应方法抛出<em>异常的集合</em></li>
+<li>即接口方法中出现的异常，Bean类中可以出现，也可以不出现，但是<em>不允许Bean 类中方法抛出接口对应方法中没有声明的异常</em></li>
+</ul></li>
+</ul></li>
+<li>RMI 约束
+<ul>
+<li>Remote 接口中的方法<strong>必须抛出RemoteException 异常</strong>，该异常报告网络通信错误</li>
+<li>方法定义中的<em>参数与返回值必须是合法</em>的Java RMI 类型的参数/返回值</li>
+</ul></li>
+</ul></li>
+<li>Home接口设计原则
+<ul>
+<li>继承性约束
+<ul>
+<li>每个Home 接口必须继承<em>EJBHome</em> 接口</li>
+<li>其中包含了<em>Enterprise Bean 生命周期管理的方法</em></li>
+</ul></li>
+<li>方法对应规则
+<ul>
+<li>Home 接口中的每个<em>create</em> 方法都必须在相应的<br>
+Enterprise Bean 类中有一个对应的<em>ejbCreate</em> 方法</li>
+<li>匹配同上</li>
+</ul></li>
+<li>RMI约束
+<ul>
+<li><em>RemoteException</em>同上</li>
+<li>Home 接口中的每个<em>create 方法</em>必须抛出 <em>CreateException</em>异常，该异常用于报告EJB 实例的初始化错误</li>
+</ul></li>
+</ul></li>
+</ul>
+<p><em>Enterprise Bean 类设计原则</em></p>
+<ul>
+<li>接口约束
+<ul>
+<li>Enterprise bean 类必须实现<em>EnterpriseBean接口</em></li>
+<li><code>EnterpriseBean</code>接口中定义了Enterprise Bean <em>生命周期管理的方法</em>，实现该接口是Enterprise Bean 与普通java bean 的重要区别</li>
+</ul></li>
+<li>可见性约束
+<ul>
+<li>Enterprise bean 类必须定义为<em>public 类</em></li>
+</ul></li>
+<li>商用方法约束
+<ul>
+<li>Enterprise bean 类<strong>必须实现Remote 接口中定义的业务逻辑</strong>操作</li>
+</ul></li>
+<li>生命周期管理方法约束
+<ul>
+<li>Enterprise Bean 类<strong>必须实现</strong>Home 接口中定义的create 方法对应的 <strong>ejbCreate 方法</strong></li>
+</ul></li>
+</ul>
+<p><em>思考与练习！</em></p>
+<ul>
+<li>EJB 构件与普通的Java Bean 有哪些主要区别? 他们分别适合于什么场合的开发? 见前面</li>
+<li>EJB 体系结构中基于Stub/Skeleton 结构与客户端交互的直接构件不是EJB，而是容器自动生成的对象，采用这样的结构有什么好处? 不会</li>
+<li>在 EJB 体系结构中，Home 接口与Remote 接口的主要作用是什么?为什么还要引入LocalHome 与Local 接口，这对接口使用时有哪些限制? 见前面</li>
+<li><em>EJB构件的访问流程? </em> <img src="/images/物联网中间件技术/DraggedImage-13.png">
+<ol type="1">
+<li>查找Home对象的引用</li>
+<li>JNDI返回Home对象的引用</li>
+<li>向Home接口请求一个EJB对象</li>
+<li>Home对象创建一个EJB对象</li>
+<li>Home对象返回给客户的EJB对象的引用</li>
+<li>客户端通过Remote接口调用bean方法</li>
+<li>EJB对象请求Enterprise Bean调用bean实例的相应方法</li>
+<li>Enterprise Bean返回调用结果给EJB对象</li>
+<li>EJB对象把返回值返回给客户端</li>
+</ol></li>
+</ul>
+<h2><span id="ejb构件开发">EJB构件开发</span></h2>
+<p><em>无状态会话Bean</em></p>
+<ul>
+<li>无状态会话Bean每次调用只对客户提供业务逻辑， 但<em>不保存客户端的任何数据状态</em></li>
+<li>无状态会话Bean的状态，被保持在客户端，容器不负责管理</li>
+<li>用途
+<ul>
+<li>如果<em>数据</em>实际上是<em>瞬时映像</em>，则建议使用无状态会话 Bean</li>
+<li>如果<em>数据状态</em>非常<em>敏感</em>，则<em>不</em>要使用无状态会话 Bean，这些情况可以使用有状态会话Bean，将用户状态保存到服务器中</li>
+</ul></li>
+<li>无状态会话Bean：生命周期由<em>容器</em>控制</li>
+<li>当部署一个EJB时，容器会为这个Bean分配几个实例到<em>组件池</em>中</li>
+<li>当客户请求一个Bean时，J2EE服务器将一个<em>预先被实例化</em>的Bean分配出去</li>
+<li>空闲的Bean
+<ul>
+<li>不在方法或事务中</li>
+<li>客户长时间不用</li>
+</ul></li>
+<li>如果全部实例都已用完，则会自动生成一个新的实例放到池中，并分配给请求者</li>
+<li>举例：<em>返回服务端当前系统时间</em>
+<ul>
+<li>Remote接口（回忆设计原则） <img src="/images/物联网中间件技术/DraggedImage-14.png"></li>
+<li>Home接口
+<ul>
+<li>Home 接口中包含EJB 构件<em>生命周期管理</em>的相关方法，客户程序使用Home Interface <em>创建、查找或删除</em>EJB 的实例 <img src="/images/物联网中间件技术/DraggedImage-15.png"></li>
+<li>由于<em>无状态会话构件</em>的对象可能<em>被多个客户端共享</em>地访问 ，因此 EJB 规范<strong>不允许某个客户端使用特定的参数初始化</strong>无状态会话构件的对象，进而使得无状态会话构件Home 接口中<strong>只能包含没有参数的create 方法</strong></li>
+</ul></li>
+<li>Enterprise Bean 类
+<ul>
+<li>Enterprise Bean 类首先要按照Remote 接口的约定<em>实现商业方法getCurTime</em>，其次要实现 Home 接口中<code>create</code> 方法对应的<em><code>ejbCreate</code> 方法与会话构件生命周期相关的方法</em> <img src="/images/物联网中间件技术/DraggedImage-16.png"></li>
+</ul></li>
+</ul></li>
+</ul>
+<p><em>EJB生命周期管理</em></p>
+<ul>
+<li>与普通的 Java 类相比，Enterprise Bean 类中多 出了<code>ejbCreate</code>、<code>ejbRemove</code>、<code>ejbPassivate</code>、 <code>ejbActivate</code>、<code>setSessionContext</code> 等EJB 生命周 期管理相关的方法</li>
+<li>无状态会话构件的生命周期
+<ul>
+<li><em>方法就绪状态</em>
+<ul>
+<li>方法就绪状态表明对应无状态会话构件对象已被创建，可以为客户端提供服务</li>
+</ul></li>
+<li><em>不存在状态</em>
+<ul>
+<li>不存在状态表明EJB 容器中不存在对应无状态会话构件的实例 ，处于不存在状态的<em>实例还未被创建</em> <img src="/images/物联网中间件技术/DraggedImage-17.png"></li>
+</ul></li>
+<li>无状态的会话构件<strong>实例的创建和删除都是由容器自动控制 </strong>，容器也<em>不</em>允许客户端调用Home 接口中的<code>remove</code> 方法来删除实例</li>
+</ul></li>
+</ul>
+<p><em>思考</em></p>
+<ul>
+<li>EJB构件的实现步骤？</li>
+<li>如果没有Home接口和Remote接口，开发人员需要做哪些工作?</li>
+</ul>
+<p><em>有状态会话Bean</em></p>
+<ul>
+<li>该EJB 构件实现网上购物系统中购物车的基本功能，包括添加商品、去除商品、查找商品、清空 购物车、提交商品等</li>
+<li>由于该构件的实例(对象)<em>需要保存与特定客户端相关的会话状态</em>，即特定客户所选择的商品等相关信息，因此设计为<em>有状态的会话构件</em>。</li>
+<li>Remote接口 <img src="/images/物联网中间件技术/DraggedImage-18.png"></li>
+<li>Home接口 <img src="/images/物联网中间件技术/DraggedImage-19.png"></li>
+<li>Enterprise Bean 类 <img src="/images/物联网中间件技术/DraggedImage-20.png"> <img src="/images/物联网中间件技术/DraggedImage-21.png"> <img src="/images/物联网中间件技术/DraggedImage-22.png"></li>
+<li><em>生命周期</em>
+<ul>
+<li>方法就绪状态</li>
+<li>不存在状态
+<ul>
+<li>实例未被创建</li>
+</ul></li>
+<li>钝化状态
+<ul>
+<li>对应有状态会话构件对象已被转移至<em>持久存储介质</em>，暂时不能使用 <img src="/images/物联网中间件技术/DraggedImage-23.png"></li>
+</ul></li>
+<li>因为<em>有状态会话构件</em>需<em>保存与特定客户端相关的中间状态</em>， 因此每个实例/对象都是被一个客户端所专用的。这就使得每个客户端都需要一个专门的有状态会话bean 来为它服务，则很有可能在服务端<em>同时存在大量的EJB 实例</em>，从而导致服务端<em>内存开销太大</em>。</li>
+<li>为了<em>限制服务端内存使用总量</em>，当EJB 实例的数量过多时， 容器仅仅会在内存中保留那些正在使用或者刚被使用的实例 ，会<em>把其它的实例转移到持久存储介质</em>上(不是删除)，此时被转移到持久存储介质上的实例会从<em>方法就绪状态</em>进入<em>钝化状态</em>。</li>
+<li>当客户端出现<em>超时</em>时，容器会把持久存储介质中的实例<em>删除</em>掉，该实例进入<em>不存在状态</em></li>
+<li>只要有新的客户端请求，容器就会创建新的实例</li>
+</ul></li>
+</ul>
+<p><em>实体构件与持久化技术</em> <img src="/images/物联网中间件技术/DraggedImage-24.png"> 基于<em>实体构件</em>的支持，业务逻辑构件<em>以对象的方式</em>看待与处理数据库中的数据，从而大致简化数据库开发的目的。</p>
+<p>常用的Java持久化方案</p>
+<ul>
+<li>基于DAO和JDBC
+<ul>
+<li>这种方案通过DAO来实现数据的持久化操作，具体实现时，<em>DAO通过JDBC来完成对数据库的访问</em>。这种方案 <em>要求开发人员对JDBC 的底层信息要比较熟悉</em>。</li>
+</ul></li>
+<li><strong>基于ORM</strong>
+<ul>
+<li>ORM的全称为Object Relational Mapping，其基本思想将关系型数据库中的数据利用某种机制<em>映射为Java 对象</em>，在业务逻辑构件看来，数据库中的数据以Java 对象的形式出现，通常<em>每个对象对应数据库中的一条记录</em>，因此数据库操作也就转换成了对Java 对象的操作。而这种数据与 Java 对象之间的映射通常可以获得自动化机制的支持，从而将开发人员从基于JDBC 的复杂开发中解脱出来</li>
+</ul></li>
+</ul>
+<p><em>实体构件</em></p>
+<ul>
+<li>最典型的情况是一个<code>EntityBean</code>和数据库中有一个<em>表</em>相对应，而<code>EntityBean</code>的每一个<em>实例</em>对应表中的<em>一行</em>数据</li>
+<li><em>EntityBean和SessionBean的不同之处</em>
+<ul>
+<li>EntityBean是持久性的
+<ul>
+<li>应用程序结束或者服务器终止EntityBean的状态仍然保留</li>
+</ul></li>
+<li>允许共享访问
+<ul>
+<li>EntityBean可以被多客户端所共享</li>
+</ul></li>
+<li>拥有主键并且会参与和其他EntityBean的关联</li>
+</ul></li>
+<li>用途
+<ul>
+<li>Bean代表一个商务<em>实体</em>而不是一个过程
+<ul>
+<li>例如表示<em>信用卡</em>的<code>CreditCardEJB</code>要做成<code>EntityBean</code>， 而<em>信用卡核实</em>的<code>VerifierEJB</code>就只能做成<code>Session Bean</code></li>
+</ul></li>
+<li>Bean的状态是需要<em>持久存储</em>的</li>
+<li>持久性管理机制
+<ul>
+<li>BMP：Bean管理的持久性
+<ul>
+<li>相关数据库操作<em>由开发人员在构件实现代码中通过JDBC 编程实现</em></li>
+<li>须在EntityBean中手工编写访问数据库的代码</li>
+</ul></li>
+<li><em>CMP：容器管理的持久性</em>
+<ul>
+<li>相关数据库操作由容器自动完成，<em>容器会自动生成访问数据库的代码</em></li>
+<li>开发者无需为数据库访问编码</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>生命周期
+<ul>
+<li>就绪状态
+<ul>
+<li>实体构件实例建立了与EJB对象的关联，已经和数据库记录对应起来，可以处理客户应用的请求</li>
+</ul></li>
+<li>不存在状态</li>
+<li>池状态
+<ul>
+<li>实体构件的实例存在于实例池中，容器<em>新创建的实例</em>会进入这个状态 <img src="/images/物联网中间件技术/DraggedImage-25.png"></li>
+</ul></li>
+<li>客户端程序调用Home接口中的方法<em>创建或查找</em>到某个实体构件实例时，该实例会从<em>池状态</em>进入<em>就绪状态</em></li>
+</ul></li>
+<li><em>EBJ 1.1实体构件</em>
+<ul>
+<li>封装数据库税率表中的数据操作 <img src="/images/物联网中间件技术/DraggedImage-26.png"></li>
+<li>Remote接口 <img src="/images/物联网中间件技术/DraggedImage-27.png"></li>
+<li>Home接口 <img src="/images/物联网中间件技术/DraggedImage-28.png"> Home 接口中的操作实际用于数据库表中<em>记录</em>的创建 (插入)、查找与删除</li>
+<li>Enterprise Bean 类 <img src="/images/物联网中间件技术/DraggedImage-29.png"></li>
+</ul></li>
+<li><em>EJB 2.0实体构件</em>
+<ul>
+<li><strong>区别</strong>
+<ul>
+<li>Enterprise Bean 类的区别
+<ul>
+<li>在 EJB1.1 中，Enterprise Bean 类由开发人员定义</li>
+<li>在EJB2.0 中，Enterprise Bean 类由容器生成，开发人员仅定义一个抽象基类</li>
+</ul></li>
+<li>Enterprise Bean 数据成员的区别
+<ul>
+<li>在EJB2.0 中与<em>数据库字段对应的Bean属性不由用户定义</em>， 用户仅定义对应的<code>set</code>和<code>get</code>方法，具体属性的定义由容器生成，这样容器可以对属性进行优化</li>
+<li>在EJB2.0 的CMP构件中，还有一种特殊的字段，<em>cmr ( Container Managed Relationship)字段</em>，用于关联其它的表(实体构件)。在组装/ 部署时，<em>可以设置由容器自动维护表之间的关联关系</em></li>
+</ul></li>
+<li>接口区别
+<ul>
+<li>EJB2.0 引入了<em>本地接口</em>，实体构件的进程内客户端可以通过本地接口获得更好的调用效率</li>
+</ul></li>
+</ul></li>
+<li>订单表与送货地址表结构 <img src="/images/物联网中间件技术/DraggedImage-30.png"> 可以为地址EJB提供本地接口，订单EJB可通过地址 EJB 的<em>本地接口获得较高的访问效率</em></li>
+<li>地址EJB: Local接口 <img src="/images/物联网中间件技术/DraggedImage-31.png"></li>
+<li>地址EJB: LocalHome接口 <img src="/images/物联网中间件技术/DraggedImage-32.png"></li>
+<li>地址EJB: Enterprise Bean类的抽象基类 <img src="/images/物联网中间件技术/DraggedImage-33.png"> <img src="/images/物联网中间件技术/DraggedImage-34.png"></li>
+<li>订单EJB:Remote 接口 <img src="/images/物联网中间件技术/DraggedImage-35.png"></li>
+<li>订单EJB: Home 接口 <img src="/images/物联网中间件技术/DraggedImage-36.png"></li>
+<li>订单EJB: Enterprise Bean类的抽象基类 <img src="/images/物联网中间件技术/DraggedImage-37.png"> …. 定义一个 <em>CMR(Container Managed Relationship)字段</em>对应的一对<code>set</code>与<code>get</code>方法，CMR字段的类型为所关联的实体构件的<em>Remote或 Local接口</em></li>
+</ul></li>
+</ul>
+<p><em>思考题</em></p>
+<ol type="1">
+<li>有状态会话构件与无状态会话构件有什么区别? 请分别从定义、生命周期、开发与部署的角度进行描述。</li>
+<li>什么是有状态会话构件的生命周期的”钝化“状态?作用是什么?</li>
+<li>实体构件包括哪两种持久性管理机制?</li>
+<li>EJB2.x 的实体构件与EJB1.x 的实体构件有哪些主要区别?</li>
+<li><p>以下为实现可供客户端远程访问的网上购物系统中购物车功能的EJB构件的Home 接口与Remote 接口代码，请分别指出代码中违背设计原则之处 。(16分) Remote接口: <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> shopping;</span><br><span class="line"><span class="keyword">import</span> javax.ejb.*;</span><br><span class="line"><span class="keyword">import</span> java.rmi.*;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ShoppingBag</span> <span class="keyword">extends</span> <span class="title">EJBLocalObject</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addCom</span> <span class="params">(Commodity comm)</span>  <span class="keyword">throws</span> RemoteException</span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeComm</span> <span class="params">(Commodity comm)</span> </span></span><br><span class="line"><span class="function">				<span class="keyword">throws</span> NoSuchCommodityException</span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">commit</span><span class="params">()</span> <span class="keyword">throws</span> BagEmptyException</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Home接口: <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> shopping;</span><br><span class="line"><span class="keyword">import</span> javax.ejb.*;</span><br><span class="line"><span class="keyword">import</span> java.rmi.*;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ShoppingBagHome</span> <span class="keyword">extends</span> <span class="title">EJBLocalHome</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> ShoppingBag <span class="title">create</span><span class="params">(String customerName)</span> </span></span><br><span class="line"><span class="function">						<span class="keyword">throws</span> RemoteException</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+答：
+<ol type="1">
+<li><code>public interface ShoppingBag extends EJBLocalObject</code>违反继承性约束，应继承<code>EJBObject</code></li>
+<li>函数<code>removeComm</code>和<code>commit </code>违反RMI约束，应抛出<code>RemoteException </code>异常</li>
+<li><code>public interface ShoppingBagHome extends EJBLocalHome</code>违反继承性约束，应继承<code>EJBHome</code>4. 函数<code>create</code>违反RMI约束，还应抛出<code>CreateException</code>异常</li>
+</ol></li>
+</ol>
+<h2><span id="rfid中间件">RFID中间件</span></h2>
+<p><em>RFID系统构成</em></p>
+<ul>
+<li>电子标签</li>
+<li>读写器</li>
+<li>系统高层
+<ul>
+<li>计算机网络 <img src="/images/物联网中间件技术/DraggedImage-38.png"></li>
+</ul></li>
+</ul>
+<p><em>RFID中间件的必要性</em></p>
+<ul>
+<li>数据采集点分散，读写器矩阵、标签打印或贴标等设备多样，<em>众多底层硬件设备需统一管理</em></li>
+<li>一个RFID系统可能服务于多个后台系统，需对<em>RFID端口与后台系统的对应关系进行统一管理</em></li>
+<li>RFID系统的原始数据采集是分散的，需<em>分布式处理的系统结构</em></li>
+<li>后台应用系统的现有统一接口不能满足<em>读写器设备</em>及其<em>数据采集场景</em>的<em>多样性需求</em></li>
+<li>不断增加的RFID数据采集端口的<em>海量数据</em> ，并不是后台应用系统所直接需要的，必须经<em>过滤分类、统计分析处理</em>之后，才能提交使用</li>
+<li>随着应用的<em>扩张</em>需求，读写器数量和种类 会更新或增加，后端应用程序也会增加或改变，其数据结构或格式也会发生变化</li>
+</ul>
+<p><em>RFID中间件概念</em> 在RFID应用中，为RFID硬件和应用程序交互<strong>提供通用服务</strong>(具有标准的程序接口和协议)，<em>实现后台网络与RFID读写器无缝连接的一项重要技术</em>。</p>
+<p><em>RFID中间件功能</em></p>
+<ul>
+<li><em>硬件管理</em>
+<ul>
+<li>RFID基础设施管理</li>
+<li>连接RFID读写器，读取RFID标签数据</li>
+<li>控制RFID读写设备按照预定的方式工作，保证不同读写设备之间能很好的配合协调</li>
+</ul></li>
+<li><em>数据采集</em></li>
+<li><em>数据处理</em>
+<ul>
+<li>加工处理来自读写器的所有信息和事件流</li>
+<li>对标签数据进行过滤、分组和计数，以减少发往信息网络系统的数据量</li>
+<li>并防止错误识读、多读信息。按照一定的规则筛选过滤数据 ，去除阅读器产生的冗余、错误的标签数据。将真正有效的数据传送给后台的信息系统</li>
+<li>生成报告时只上传关心的数据(分组统计)</li>
+</ul></li>
+<li>数据传输
+<ul>
+<li>为分布式异构环境下的应用程序提供可靠数据通信服务，保证读写器和企业级分布式应用系统平台之间的<em>可靠通信</em></li>
+</ul></li>
+</ul>
+<p><em>EPC GLOBAL</em></p>
+<ul>
+<li>组成
+<ul>
+<li>电子产品编码EPC <img src="/images/物联网中间件技术/DraggedImage-39.png">
+<ul>
+<li>Header (8bit) - Tag version number</li>
+<li>EPC Manager (28bit) - Manufacturer ID</li>
+<li>Object class (24bit) - Manufacturer’s product ID</li>
+<li>Serial Number (36bit) - Unit ID</li>
+</ul></li>
+<li>识别系统（读写器和电子标签）</li>
+<li>中间件</li>
+<li><em>物联网名称解析服务 IOT-NS</em>
+<ul>
+<li>将电子标签识别ID号转换成对应的<em>统一资源标识符 (URI)</em></li>
+</ul></li>
+<li><em>物联网信息发布服务 IOT-IS</em>
+<ul>
+<li>对物联网中的信息进行处理和发布</li>
+<li>网上存放物品信息的计算机称为<em>物联网信息服务器</em></li>
+</ul></li>
+</ul></li>
+<li>构成 <img src="/images/物联网中间件技术/DraggedImage-40.png"></li>
+<li>技术规范
+<ul>
+<li>标签编码规范</li>
+<li>射频标签逻辑通信接口规范</li>
+<li>Savant中间件规范</li>
+<li>ONS对象名称解析服务规范</li>
+<li>PML语言</li>
+</ul></li>
+</ul>
+<p><em>Savant</em></p>
+<ul>
+<li>SAVANT是Auto-ID Center提出的<em>分层、模块化的中间件组件</em>，是具有<em>数据捕获、监控、传送</em>功能的数据挖掘工具</li>
+<li>处理模块与外部世界的联系就通过2个规范中定义的接口实现
+<ul>
+<li><em>Reader接口</em>：提供与标签阅读器的联系</li>
+<li><em>应用接口</em>：提供与外部应用软件的联系 <img src="/images/物联网中间件技术/DraggedImage-41.png"></li>
+</ul></li>
+<li>RFID中间件和EPCIS捕获应用之间，定义了<em>RFID事件过滤和采集接口(ALE) </em> <img src="/images/物联网中间件技术/DraggedImage-42.png">
+<ul>
+<li>基本操作
+<ul>
+<li>应用发一个请求到ALE的接口要求读或写标签，ALE Engine处理从读写器传回来的数据产生报告返回给应用</li>
+</ul></li>
+<li>请求模式 <img src="/images/物联网中间件技术/DraggedImage-43.png"> <img src="/images/物联网中间件技术/DraggedImage-44.png"> <img src="/images/物联网中间件技术/DraggedImage-45.png"></li>
+</ul></li>
+</ul>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/本科课程/">本科课程</a><a href="/tags/物联网/">物联网</a><a href="/tags/中间件/">中间件</a><a href="/tags/Java/">Java</a><a href="/tags/EJB/">EJB</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

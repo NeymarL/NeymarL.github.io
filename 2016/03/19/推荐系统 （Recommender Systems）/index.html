@@ -1,0 +1,292 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    推荐系统 （Recommender Systems） | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="推荐系统 （Recommender Systems）">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      推荐系统 （Recommender Systems）</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/03/19/推荐系统 （Recommender Systems）/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-03-19T14:32:00.000Z">
+          2016-03-19
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <!-- toc -->
+<ul>
+<li><a href="#problem-formulation">Problem Formulation</a></li>
+<li><a href="#content-based-recommendations">Content Based Recommendations</a></li>
+<li><a href="#collaborative-filtering">Collaborative Filtering</a>
+<ul>
+<li><a href="#collaborative-filtering-algorithm">Collaborative Filtering Algorithm</a>
+<ul>
+<li><a href="#vectorization-low-rank-matrix-factorization">Vectorization: Low Rank Matrix Factorization</a></li>
+<li><a href="#implementation-detail-mean-normalization">Implementation Detail: Mean Normalization</a></li>
+</ul></li>
+</ul></li>
+</ul>
+<!-- tocstop -->
+<a id="more"></a>
+<h1><span id="problem-formulation">Problem Formulation</span></h1>
+<p>Recommendation is currently a very popular application of machine learning.</p>
+<p>Say we are trying to recommend movies to customers. We can use the following definitions * $n_u = $ number of users * $n_m = $ number of movies * <span class="math inline">\(r(i,j) = 1\)</span> if user <span class="math inline">\(j\)</span> has rated movie <span class="math inline">\(i\)</span> * $y(i,j) = $ rating given by user <span class="math inline">\(j\)</span> to movie <span class="math inline">\(i\)</span> (defined only if <span class="math inline">\(r(i,j) = 1\)</span>)</p>
+<h1><span id="content-based-recommendations">Content Based Recommendations</span></h1>
+<p>We can introduce two features, <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> which represents how much romance or how much action a movie may have (on a scale of <span class="math inline">\(0 - 1\)</span>).</p>
+<p>One approach is that we could do linear regression for every single user. For each user <span class="math inline">\(j\)</span>, learn a parameter <span class="math inline">\(\theta^{(j)} \in \mathbb{R}^3\)</span>. Predict user <span class="math inline">\(j\)</span> as rating movie <span class="math inline">\(i\)</span> with <span class="math inline">\((\theta^{(j)})^Tx^{(i)}\)</span> stars.</p>
+<ul>
+<li>$^{(j)} = $ parameter vector for user <span class="math inline">\(j\)</span></li>
+<li>$x^{(i)} = $ feature vector for movie <span class="math inline">\(i\)</span></li>
+<li>For user <span class="math inline">\(j\)</span>, movie <span class="math inline">\(i\)</span>, predicted rating: <span class="math inline">\((\theta^{(j)})^T(x^{(i)})\)</span></li>
+<li>$m^{(j)} = $ number of movies rated by user <span class="math inline">\(j\)</span></li>
+</ul>
+<p>To learn <span class="math inline">\(\theta^{(j)}\)</span>, we do the following <span class="math display">\[min_{\theta^{(j)}} = \dfrac{1}{2}\displaystyle \sum_{i:r(i,j)=1} ((\theta^{(j)})^T(x^{(i)}) - y^{(i,j)})^2 + \dfrac{\lambda}{2} \sum_{k=1}^n(\theta_k^{(j)})^2\]</span> This is our familiar linear regression. The base of the first summation is choosing all <span class="math inline">\(i\)</span> such that <span class="math inline">\(r(i,j) = 1\)</span>.</p>
+<p>To get the parameters for all our users, we do the following: <span class="math display">\[min_{\theta^{(1)},\dots,\theta^{(n_u)}} = \dfrac{1}{2}\displaystyle \sum_{j=1}^{n_u} \sum_{i:r(i,j)=1} ((\theta^{(j)})^T(x^{(i)}) - y^{(i,j)})^2 + \dfrac{\lambda}{2} \sum_{j=1}^{n_u} \sum_{k=1}^n(\theta_k^{(j)})^2\]</span> We can apply our linear regression gradient descent update using the above cost function.</p>
+<p>The only real difference is that we eliminate the constant <span class="math inline">\(\dfrac{1}{m}\)</span>.</p>
+<h1><span id="collaborative-filtering">Collaborative Filtering</span></h1>
+<p><strong>协同过滤</strong></p>
+<p>It can be very difficult to find features such as &quot;amount of romance&quot; or &quot;amount of action&quot; in a movie. To figure this out, we can use <strong>feature finders</strong>.</p>
+<p>We can let the users tell us how much they like the different genres, providing their parameter vector immediately for us.</p>
+<p>To infer the features from given parameters, we use the squared error function with regularization over all the users: <span class="math display">\[min_{x^{(1)},\dots,x^{(n_m)}} \dfrac{1}{2} \displaystyle \sum_{i=1}^{n_m} \sum_{j:r(i,j)=1} ((\theta^{(j)})^T x^{(i)} - y^{(i,j)})^2 + \dfrac{\lambda}{2}\sum_{i=1}^{n_m} \sum_{k=1}^{n} (x_k^{(i)})^2\]</span></p>
+<p>You can also randomly guess the values for theta to guess the features repeatedly. You will actually converge to a good set of features.</p>
+<h2><span id="collaborative-filtering-algorithm">Collaborative Filtering Algorithm</span></h2>
+<p>To speed things up, we can simultaneously minimize our features and our parameters:</p>
+<p><span class="math display">\[ \large J(x,\theta) = \dfrac{1}{2} \displaystyle \sum_{(i,j):r(i,j)=1}((\theta^{(j)})^Tx^{(i)} - y^{(i,j)})^2 + \dfrac{\lambda}{2}\sum_{i=1}^{n_m} \sum_{k=1}^{n} (x_k^{(i)})^2 + \dfrac{\lambda}{2}\sum_{j=1}^{n_u} \sum_{k=1}^{n} (\theta_k^{(j)})^2\]</span></p>
+<p>It looks very complicated, but we've only <strong>combined the cost function</strong> for <strong>theta</strong> and the cost function for <strong>x</strong>.</p>
+<p>Because the algorithm can learn them itself, the bias units where <span class="math inline">\(x_0 = 1\)</span> have been removed, therefore <span class="math inline">\(x \in \mathbb{R}^n\)</span> and <span class="math inline">\(\theta \in \mathbb{R}^n\)</span>.</p>
+<p>These are the steps in the algorithm:</p>
+<ol type="1">
+<li>Initialize <span class="math inline">\(x^{(i)},...,x^{(n_m)},\theta^{(1)},...,\theta^{(n_u)}\)</span> to small random values. This serves to break symmetry(对称性) and ensures that the algorithm learns features <span class="math inline">\(x^{(i)},...,x^{(n_m)}\)</span> that are different from each other.</li>
+<li>Minimize <span class="math inline">\(J(x^{(i)},...,x^{(n_m)},\theta^{(1)},...,\theta^{(n_u)})\)</span> using gradient descent (or an advanced optimization algorithm). E.g. for every <span class="math inline">\(j=1,...,n_u,i=1,...n_m\)</span>: <span class="math display">\[x_k^{(i)} := x_k^{(i)} - \alpha\left (\displaystyle \sum_{j:r(i,j)=1}{((\theta^{(j)})^T x^{(i)} - y^{(i,j)}) \theta_k^{(j)}} + \lambda x_k^{(i)} \right)\]</span> <span class="math display">\[\theta_k^{(j)} := \theta_k^{(j)} - \alpha\left (\displaystyle \sum_{i:r(i,j)=1}{((\theta^{(j)})^T x^{(i)} - y^{(i,j)}) x_k^{(i)}} + \lambda \theta_k^{(j)} \right)\]</span></li>
+<li>For a user with parameters <span class="math inline">\(\theta\)</span> and a movie with (learned) features <span class="math inline">\(x\)</span>, predict a star rating of <span class="math inline">\(\theta^Tx\)</span>.</li>
+</ol>
+<h3><span id="vectorization-low-rank-matrix-factorization">Vectorization: Low Rank Matrix Factorization</span></h3>
+<p><strong>低秩矩阵分解</strong></p>
+<p>Given matrices <span class="math inline">\(X\)</span> (each row containing features of a particular movie) and <span class="math inline">\(\Theta\)</span> (each row containing the weights for those features for a given user), then the full matrix <span class="math inline">\(Y\)</span> of all predicted ratings of all movies by all users is given simply by: <span class="math inline">\(Y = X\Theta^T\)</span>.</p>
+<p>Predicting how similar two movies <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> are can be done using the distance between their respective feature vectors <span class="math inline">\(x\)</span>. Specifically, we are looking for a small value of <span class="math inline">\(||x^{(i)} - x^{(j)}||\)</span>.</p>
+<h3><span id="implementation-detail-mean-normalization">Implementation Detail: Mean Normalization</span></h3>
+<p>If the ranking system for movies is used from the previous lectures, then new users (who have watched no movies), will be assigned new movies incorrectly. Specifically, they will be assigned <span class="math inline">\(\theta\)</span> with all components equal to zero due to the minimization of the regularization term. That is, we assume that the new user will rank all movies 0, which does not seem intuitively correct.</p>
+<p>We rectify this problem by normalizing the data relative to the mean. First, we use a matrix Y to store the data from previous ratings, where the <span class="math inline">\(i\)</span>th row of Y is the ratings for the <span class="math inline">\(i\)</span>th movie and the <span class="math inline">\(j\)</span>th column corresponds to the ratings for the <span class="math inline">\(j\)</span>th user.</p>
+<p>We can now define a vector <span class="math display">\[\mu = [\mu_1, \mu_2, \dots , \mu_{n_m}] \]</span> such that <span class="math display">\[\mu_i = \frac{\sum_{j:r(i,j)=1}{Y_{i,j}}}{\sum_{j}{r(i,j)}}\]</span></p>
+<p>Which is effectively the mean of the previous ratings for the <span class="math inline">\(i\)</span> th movie (where only movies that <strong>have been watched by users are counted</strong>). We now can normalize the data by subtracting <span class="math inline">\(u\)</span>, the mean rating, from the actual ratings for each user (column in matrix <span class="math inline">\(Y\)</span>):</p>
+<p>As an example, consider the following matrix <span class="math inline">\(Y\)</span> and mean ratings <span class="math inline">\(\mu\)</span>: <span class="math display">\[Y = \begin{bmatrix} 5 &amp; 5 &amp; 0 &amp; 0 \newline 4 &amp; ? &amp; ? &amp; 0 \newline 0 &amp; 0 &amp; 5 &amp; 4 \newline 0 &amp; 0 &amp; 5 &amp; 0 \newline \end{bmatrix}, \quad \mu = \begin{bmatrix} 2.5 \newline 2 \newline 2.25 \newline 1.25 \newline \end{bmatrix} \]</span> The resulting <span class="math inline">\(Y&#39;\)</span> vector is: <span class="math display">\[ Y&#39; = \begin{bmatrix} 2.5 &amp; 2.5 &amp; -2.5 &amp; -2.5 \newline 2 &amp; ? &amp; ? &amp; -2 \newline -.2.25 &amp; -2.25 &amp; 3.75 &amp; 1.25 \newline -1.25 &amp; -1.25 &amp; 3.75 &amp; -1.25 \end{bmatrix} \]</span></p>
+<p>Now we must slightly modify the linear regression prediction to include the mean normalization term: <span class="math display">\[(\theta^{(j)})^T x^{(i)} + \mu_i\]</span> Now, for a new user, the initial predicted values will be equal to the <span class="math inline">\(\mu\)</span> term instead of simply being initialized to zero, which is more accurate.</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Recommender-Systems/">Recommender Systems</a><a href="/tags/Collaborative-Filtering/">Collaborative Filtering</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

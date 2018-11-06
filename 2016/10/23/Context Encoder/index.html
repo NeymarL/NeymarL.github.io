@@ -1,0 +1,285 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    Paper Reading - Context Encoder | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="Paper Reading - Context Encoder">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      Paper Reading - Context Encoder</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/10/23/Context Encoder/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-10-22T16:12:06.000Z">
+          2016-10-23
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>前两天看了一下Context Encoder的相关论文，这个东西可以用于理解图片的语义，比如<strong>填补图片的缺失区域</strong>。我只研究出了它大概怎么做的，有些细节还没搞懂，以此记录一下。</p>
+<a id="more"></a>
+<h2><span id="overall">Overall</span></h2>
+<p>整体网络由两部分构成，分别是编码器(Encoder)和解码器(Decoder)，中间由Channel-wise fully-connected layer 连接，如下图所示。</p>
+<p><img src="/images/CD-structure.png"></p>
+<h2><span id="encoder">Encoder</span></h2>
+<p>编码器用于从图片提取高维特征，其结构来自 <em>AlexNet</em> 的前5个卷积层和相应的池化层(<em>pool5</em>)，并随机初始化权重。</p>
+<h2><span id="channel-wise-fully-connected-layer">Channel-wise fully-connected layer</span></h2>
+<p>为了能综合各个 feature map 的信息，通常是用全连接层(fully-connected layer)来做，但是这么做的话参数太多了，训练比较困难，于是就采用分组的策略。</p>
+<p>假设有 <span class="math inline">\(m\)</span> 个 feature map，每个feature map的大小是 <span class="math inline">\(n*n\)</span>，该层输出也是 <span class="math inline">\(m\)</span> 个 feature map，每个大小为 <span class="math inline">\(n*n\)</span>， 但是与全连接不同的是，每个feature map 只和自己全连接，不和其他feature map连接，这样的话需要的参数是 <span class="math inline">\(mn^4\)</span>，相较于全连接层的 <span class="math inline">\(m^2n^4\)</span>。</p>
+<h2><span id="decoder">Decoder</span></h2>
+<p>解码器是使用编码器的特征生成缺失的图像。生成图像使用 <em>up-convolutinal/upsampling layers</em>，每层后跟一个线性整流(ReLU)层。</p>
+<p>up-convolutinal可以被理解为先反池化再卷积(<em>unpooling+convolution</em>)。反池化就是池化的逆过程，把一个大小为 <span class="math inline">\(s*s\)</span> 的feature map反池化，只需把每个像素变为 <span class="math inline">\(s*s\)</span> 的像素块，只有每个块左上脚的像素和原来一样，其他值为0，如 <span class="math inline">\(s = 2\)</span> 的反池化如下图(左)所示：</p>
+<p><img src="/images/unpooling.png"></p>
+<p>它还可以被理解成是步长(stride)为小数的卷积层：正常的卷积层步长为一个整数 <span class="math inline">\(f\)</span>，那么逆卷积层(<em>deconvolutin/up-convolutinal layers</em>) 就相当于是步长为 <span class="math inline">\(\frac{1}{f}\)</span> 的卷积层。实现逆卷积层的一个自然办法就是实现一个步长为 <span class="math inline">\(f\)</span> 的向后卷积(<em>backwards convolution</em>)，只用简单地 reverses the forward and backward passes of convolution(论文里这么写的，不是很懂什么意思)。</p>
+<p>解码可以通过添加一系列这样的 <em>upsampling layers</em> 实现，直到生成的图像达到目标大小。</p>
+<h2><span id="loss-function">Loss function</span></h2>
+<p>整个网络的损失函数由两部分组成，一部分是重建损失(<em>reconstruction loss</em>)，另一部分是对抗损失(<em>adversarial loss</em>)。</p>
+<p><strong>重建损失</strong>是一个L2损失，为了捕获缺失区域的整体结构并且保持上下文的连续性，但是L2损失在预测时趋向于均值，如果只用L2损失，预测出来就非常模糊，如下图(c)所示。<strong>对抗损失</strong>就是为了使预测结果更加真实，它有从分布中挑选出一个特定模式的效果。</p>
+<p><img src="/images/loss.png"></p>
+<p>对于每个图片 <span class="math inline">\(x\)</span>，送给整个编码器 <span class="math inline">\(F\)</span> 去训练，产生最终结果记为 <span class="math inline">\(F(x)\)</span>。令 <span class="math inline">\(\hat{M}\)</span> 为一个二进制掩码矩阵，图片的缺失区域值为1，其他区域为0 。那么我们实际送给编码器训练的图片就是 <span class="math inline">\((1-\hat{M})\odot x\)</span> ，其中 <span class="math inline">\(\odot\)</span> 为按位相乘。</p>
+<p><strong>Reconstruction Loss</strong></p>
+<p>那么重建损失的表达式就为： <span class="math display">\[
+L_{rec}(x) = ||\hat{M}\odot(x-F((1-\hat{M})\odot x))||^2_2
+\]</span> 论文中说使用L1损失和L2损失差别不大。尽管这个损失很简单，但它能促使解码器生成预测目标的大致轮廓，一般不能生成高频的细节，如上图(c)所示。我们觉得出现这种情况是因为预测一个分布的平均值对L2损失来说更加“安全”，因为这样能最小化每个像素的平均误差，但这样就会导致模糊的结果。</p>
+<p><strong>Adverarial Loss</strong></p>
+<p>为了减轻上面的问题，我们又加了一个对抗损失。</p>
+<p>对抗损失基于 <em>Generative Adversarial Networks(GAN)</em>，原始GAN是这样的：为了一个使<strong>生成模型</strong> <span class="math inline">\(G\)</span> 学习某种数据分布，GAN同时训练一个与之对抗的<strong>判别模型</strong> <span class="math inline">\(D\)</span> 来提供 <span class="math inline">\(G\)</span> 的损失。<span class="math inline">\(G\)</span> 和 <span class="math inline">\(D\)</span> 都是 parametric function，其中 <span class="math inline">\(G\)</span> 是一个从噪声分布 <span class="math inline">\(Z\)</span> 到数据分布 <span class="math inline">\(\chi\)</span> 的映射。学习过程就是判别模型 <span class="math inline">\(D\)</span> 接收 <span class="math inline">\(G\)</span> 的输出和真实样例作为输入，并尝试区分它们，输出哪个是真实样本哪个是生成出来的，而 <span class="math inline">\(G\)</span> 的目标就是通过输出结果尽可能接近“真实”来混淆 <span class="math inline">\(D\)</span> 的判断。</p>
+<p>所以 GAN 的目标就为： <span class="math display">\[
+\min_G\max_D E_{x\in \chi}[\log(D(x))] + E_{z\in Z}[\log(1-D(G(z)))]
+\]</span> 这里边的 <span class="math inline">\(E\)</span> 是什么意思没有搞懂，感觉不像是数学期望的意思。如果把 <span class="math inline">\(G\)</span> 和 <span class="math inline">\(D\)</span> 的目标分开来写的话，那 <span class="math inline">\(D\)</span> 的目标就是： <span class="math display">\[
+\max_D E_{x\in \chi}[\log(D(x))] + E_{z\in Z}[\log(1-D(G(z)))]
+\]</span> <span class="math inline">\(G\)</span> 的目标是： <span class="math display">\[
+\max_G E_{z\in Z}[\log(D(G(z)))]
+\]</span> 回到我们的问题，所以 context encoder 的对抗损失就是： <span class="math display">\[
+L_{adv} = \max_D E_{x\in \chi}[\log(D(x)) + \log(1-D(F((1-\hat{M})\odot x)))]
+\]</span> 这个目标使得整个编码器的输出看起来更加真实。</p>
+<p><strong>Joint Loss</strong></p>
+<p>所以整体的损失函数就定义为： <span class="math display">\[
+L = \lambda_{rec}L_{rec} + \lambda_{adv}L_{adv}
+\]</span> 在填补图片缺失区域这个问题中，超参数的选择分别为 <span class="math inline">\(\lambda_{rec} = 0.99\)</span> 和 <span class="math inline">\(\lambda_{adv} = 0.01\)</span>。</p>
+<p>整个模型的大概怎么做的就是这样了，具体细节还需要在看论文和代码。</p>
+<p>附：</p>
+<p><img src="/images/network.png"></p>
+<p>​ 针对Inpainting任务的具体模型</p>
+<h2><span id="reference">Reference</span></h2>
+<p><a href="https://arxiv.org/pdf/1604.07379v1" target="_blank" rel="noopener">Context Encoders: Feature Learning by Inpainting</a></p>
+<p><a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=2&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwi5yYCF4O7PAhUJlZQKHc1wB-YQFggvMAE&amp;url=https%3A%2F%2Farxiv.org%2Fpdf%2F1406.2661&amp;usg=AFQjCNErq4Snyx25yb_clgYjWGAiFMYkow&amp;sig2=4ULZmy8sVRVUdboTQI-aKw" target="_blank" rel="noopener">I. Goodfellow, J. Pouget-Abadie, M. Mirza, B. Xu, D. Warde-Farley, S. Ozair, A. Courville, and Y. Bengio. Generative adversarial nets. In NIPS, 2014.</a></p>
+<p><a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=2&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwi79s6p4O7PAhUHspQKHfVzC2IQFggwMAE&amp;url=https%3A%2F%2Farxiv.org%2Fpdf%2F1411.5928&amp;usg=AFQjCNGPEI4w9KrBWZcicHemUf7CaHwZOw&amp;sig2=M2UUrea6sVMh7z5WUoxK_g" target="_blank" rel="noopener">A. Dosovitskiy, J. T. Springenberg, and T. Brox. Learning togenerate chairs with convolutional neural networks. CVPR,2015.</a></p>
+<p><a href="http://www.cv-foundation.org/openaccess/content_cvpr_2015/html/Long_Fully_Convolutional_Networks_2015_CVPR_paper.html" target="_blank" rel="noopener">J. Long, E. Shelhamer, and T. Darrell. Fully convolutional networks for semantic segmentation. In CVPR, 2015</a></p>
+<p><a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwjFnubk4O7PAhXBmpQKHcnVBWkQFggfMAA&amp;url=https%3A%2F%2Fpapers.nips.cc%2Fpaper%2F4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf&amp;usg=AFQjCNFlGsSmTUkJw0gLJ0Ry4cm961B7WA&amp;sig2=_qDaDLGSlvAoxbyfkxLeGA" target="_blank" rel="noopener">A. Krizhevsky, I. Sutskever, and G. E. Hinton. ImageNet classification with deep convolutional neural networks. In NIPS, 2012</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/CV/">CV</a><a href="/tags/CNN/">CNN</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

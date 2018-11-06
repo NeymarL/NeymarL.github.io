@@ -1,0 +1,1979 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    计算机网络 | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="计算机网络">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      计算机网络</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/06/30/计算机网络/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-06-30T02:41:47.000Z">
+          2017-06-30
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p><strong>目录</strong></p>
+<!-- toc -->
+<ul>
+<li><a href="#计算机网络概论">计算机网络概论</a>
+<ul>
+<li><a href="#计算机网络的定义">计算机网络的定义</a></li>
+<li><a href="#因特网的结构">因特网的结构</a></li>
+<li><a href="#协议分层与服务模型">协议分层与服务模型</a></li>
+<li><a href="#分组交换网的性能指标">分组交换网的性能指标</a></li>
+</ul></li>
+<li><a href="#数据通信基础">数据通信基础</a>
+<ul>
+<li><a href="#交换技术">交换技术</a></li>
+<li><a href="#接入网">接入网</a></li>
+<li><a href="#物理层概述">物理层概述</a></li>
+</ul></li>
+<li><a href="#直接连接的网络">直接连接的网络</a>
+<ul>
+<li><a href="#链路层概述">链路层概述</a></li>
+<li><a href="#成桢">成桢</a></li>
+<li><a href="#差错检测和纠错技术">差错检测和纠错技术</a></li>
+<li><a href="#可靠传输原理">可靠传输原理</a></li>
+<li><a href="#多路访问协议">多路访问协议</a></li>
+<li><a href="#以太网">以太网</a></li>
+<li><a href="#链路层交换机">链路层交换机</a></li>
+</ul></li>
+<li><a href="#网络互联">网络互联</a>
+<ul>
+<li><a href="#网络层概述">网络层概述</a></li>
+<li><a href="#网络服务模型">网络服务模型</a></li>
+<li><a href="#网际协议ip">网际协议（IP）</a></li>
+<li><a href="#路由选择协议及其算法">路由选择协议及其算法</a></li>
+<li><a href="#路由器的工作原理">路由器的工作原理</a></li>
+</ul></li>
+<li><a href="#端到端协议">端到端协议</a>
+<ul>
+<li><a href="#运输层协议概述">运输层协议概述</a></li>
+<li><a href="#多路复用与多路分解">多路复用与多路分解</a></li>
+<li><a href="#udp">UDP</a></li>
+<li><a href="#tcp">TCP</a></li>
+<li><a href="#tcp拥塞控制">TCP拥塞控制</a></li>
+</ul></li>
+<li><a href="#网络应用协议">网络应用协议</a>
+<ul>
+<li><a href="#域名系统dns">域名系统DNS</a></li>
+<li><a href="#http">HTTP</a></li>
+</ul></li>
+</ul>
+<!-- tocstop -->
+<a id="more"></a>
+<h2><span id="计算机网络概论">计算机网络概论</span></h2>
+<h3><span id="计算机网络的定义">计算机网络的定义</span></h3>
+<p>网络实体可抽象为两种基本构件:</p>
+<ul>
+<li><em>结点(node)</em>(亦称节点):计算设备</li>
+<li><em>链路(link)</em>:物理媒体</li>
+</ul>
+<p>构成网络的方式</p>
+<ol type="1">
+<li>直接相连
+<ul>
+<li>由某种物理媒体直接相连所有主机组成</li>
+<li>分类
+<ul>
+<li>物理链路与一对结点相连: <em>点到点链路(point-to-point link) </em></li>
+<li>多结点共享同一物理链路: <em>多路访问链路(multiple access) </em></li>
+<li><img src="/images/计算机网络/DraggedImage.png"></li>
+</ul></li>
+</ul></li>
+<li>网络云
+<ul>
+<li>网络云表示任何类型的</li>
+<li>网络通常采用<em>分组交换</em>技术</li>
+<li>主机间接连通的第一种方法</li>
+<li><img src="/images/计算机网络/DraggedImage-1.png"></li>
+</ul></li>
+<li>网络云互联
+<ul>
+<li><em>递归地连接网络云</em>形成更大规模的网络，有很好的扩展性由网络云构建成网络称为互联网</li>
+<li>连接两个或多个网络云的结点称<strong>路由器</strong></li>
+<li>主机间接连通的第二种方法</li>
+<li><img src="/images/计算机网络/DraggedImage-2.png"></li>
+</ul></li>
+</ol>
+<p>两种数据传递方法</p>
+<ul>
+<li>电路交换(circuit switching)
+<ul>
+<li>主要用于电话网，在发送方和接收方之间通过多台交换机建立一条连接(电路circuit)</li>
+</ul></li>
+<li>分组交换(packet switching)
+<ul>
+<li>主要用于计算机网络分组(packets) 长报文(message)划分为等长的短段，并为每个段加上首部</li>
+</ul></li>
+</ul>
+<p>网络服务</p>
+<ul>
+<li>网络服务是向用户所提供的有用网络功能，由运行在网络中不同主机上的网络应用程序协作提供。</li>
+<li><strong>应用程序运行在端系统上</strong>，而不运行在交换机和路由器上</li>
+</ul>
+<h3><span id="因特网的结构">因特网的结构</span></h3>
+<ul>
+<li>网络边缘(edge):
+<ul>
+<li>应用与主机</li>
+</ul></li>
+<li>网络核心(core):
+<ul>
+<li>路由器(网络的网络)</li>
+</ul></li>
+<li>接入网(access network):
+<ul>
+<li>连接两者的通信链路</li>
+<li>将端系统连接到其<em>边缘路由器(edge router)</em>的物理链路及设备的集合</li>
+</ul></li>
+<li><strong>端到端原则</strong>
+<ul>
+<li><strong>边缘智能，核心简单</strong></li>
+<li>将复杂的网络功能置于边缘（如差错控制、流量控制和应用等）</li>
+<li>相对简单的分组交付功能置于核心（如分组的选路和转发功能）</li>
+</ul></li>
+</ul>
+<p><img src="/images/计算机网络/DraggedImage-3.png"></p>
+<ul>
+<li>因特网的核心
+<ul>
+<li>在中心: “第一层”ISP (如UUNet, BBN/Genuity, Sprint, AT&amp;T), 覆盖国家/国际</li>
+<li>第二层” ISP: 较小的(常为区域的) ISP(如中国电信、中国 网通、中国移动)</li>
+<li>第三层” ISP和本地ISP</li>
+</ul></li>
+</ul>
+<p><img src="/images/计算机网络/DraggedImage-4.png"></p>
+<h3><span id="协议分层与服务模型">协议分层与服务模型</span></h3>
+<p>网络协议</p>
+<ul>
+<li>为进行网络中的数据交换而建立的规则、标准或约定即称为<em>网络协议(network protocol) </em></li>
+<li>网络协议3要素:
+<ul>
+<li>语法 :数据与控制信息的结构或格式</li>
+<li>语义:发出何种控制信息，完成何种动作以及做出何种响应</li>
+<li>定时:事件实现顺序的详细说明</li>
+</ul></li>
+</ul>
+<p>作业</p>
+<ol type="1">
+<li>网络有哪些构件?主机之间互联有哪几种方式? 端系统上的现代操作系统通常定义了哪些编程开发接口?</li>
+<li>参见图1-11，因特网具有大致分层的ISP等级结构。由此回答:为何说因特网是网络的网络?每层ISP是否大致与地理范围对应?内容提供商正在以何种方式改变因特网 的结构?</li>
+<li>什么叫做网络协议?构成协议的几个要素是什么?是否可以缺失其中的某个要素?请举例说明原因。</li>
+</ol>
+<p><img src="/images/计算机网络/DraggedImage-5.png" title="网络结构"></p>
+<p>网络分层</p>
+<ul>
+<li><strong>分而治之</strong></li>
+<li><strong>协议是</strong>“<em>水平的</em>”，<strong>服务是</strong>“<em>垂直的</em>”</li>
+<li>体系结构 <img src="/images/计算机网络/DraggedImage-6.png"></li>
+</ul>
+<p><strong>端到端原则</strong></p>
+<ul>
+<li>如果在较高层能够完善地实现某种功能，就无需再由较低层提供这种功能</li>
+</ul>
+<h3><span id="分组交换网的性能指标">分组交换网的性能指标</span></h3>
+<p>时延和丢包的产生 <img src="/images/计算机网络/DraggedImage-7.png"></p>
+<p><em>流量强度</em></p>
+<ul>
+<li>R = 链路带宽 (bps)</li>
+<li>L = 分组长度 (比特)</li>
+<li>a = 平均分组到达速率</li>
+<li>流量强度 = <span class="math inline">\(La / R\)</span>
+<ul>
+<li>La/R -&gt; 0: 平均排队时延小</li>
+<li>La/R -&gt; 1: 时延急剧变大</li>
+<li>La/R &gt; 1: 更多“工作”到达，超出了服务能 力，平均时延无穷大!</li>
+<li><img src="/images/计算机网络/DraggedImage-8.png"></li>
+</ul></li>
+</ul>
+<p><em>节点时延</em></p>
+<ul>
+<li><img src="/images/计算机网络/DraggedImage-9.png"></li>
+<li>dproc = 处理时延
+<ul>
+<li>通常几个微秒或更少</li>
+</ul></li>
+<li>dqueue = 排队时延
+<ul>
+<li>取决于拥塞</li>
+</ul></li>
+<li>dtrans = 传输时延(发送时延)= <em>L/R</em>
+<ul>
+<li>对低速链路很大</li>
+</ul></li>
+<li>dprop = 传播时延
+<ul>
+<li>几微秒到几百毫秒</li>
+</ul></li>
+<li><img src="/images/计算机网络/DraggedImage-10.png"></li>
+</ul>
+<p>丢包率</p>
+<ul>
+<li>在一定的时段内在两结点间传输过程<em>丢失分组数量</em>与<em>总的分组发送数量</em>的比率</li>
+<li>IP网丢包主要原因
+<ul>
+<li>路由器无法容纳到达的分组，只能丢弃(drop) 到达的分组</li>
+</ul></li>
+</ul>
+<p>带宽和吞吐量</p>
+<ul>
+<li>网络带宽
+<ul>
+<li>链路在<em>一段特定的时间</em>内所能<em>传送的比特数</em>的额定值</li>
+</ul></li>
+<li>吞吐量
+<ul>
+<li>网络在单位时间内无差错地传输数据的能力</li>
+</ul></li>
+<li>瓶颈链路
+<ul>
+<li>路径中可用带宽最小的链路</li>
+</ul></li>
+<li>可用带宽
+<ul>
+<li>带宽与干扰流量之差</li>
+</ul></li>
+</ul>
+<p>跳与路径</p>
+<ul>
+<li>路径可以定义为形式为 <span class="math inline">\([h_0, l_1, h_1, ..., l_n，h_n]\)</span> 的序列，是单向的</li>
+<li>对于端到端路径而言，h0和hn是端系统，而 h1...hn-1 是路由器。每个&lt;li，hi&gt;二元组被称为一“跳”</li>
+<li><img src="/images/计算机网络/DraggedImage-11.png"></li>
+</ul>
+<p>时延与带宽乘积</p>
+<ul>
+<li>物理意义
+<ul>
+<li><strong>管道能够容纳的比特数</strong></li>
+</ul></li>
+</ul>
+<p>作业</p>
+<ol type="1">
+<li>数据在各层之间的传递过程中，各层协议的首部起着什么作 用?“水平的”协议和“垂直的”服务之间有什么关系?</li>
+<li>TCP/IP体系结构具有哪些层次?该体系结构的主要特点是什 么?</li>
+<li>考虑一个长度为L的分组从端系统A开始，经一段链路传送到一 台分组交换机，并从该分组交换机经第二段链路传送到目的端 系统。令di、si和Ri表示链路i的长度、传播速度和传输速率 (i=1,2)。该分组交换机对每个分组的时延为dproc。假定没有 排队时延，根据di、si、Ri (i=1,2)和L，该分组总的端到端时延 是什么?现在假定该分组是1,000字节，分组交换机的处理时延 是1 ms，第一段链路的长度是4,000km，并且最后一段链路的 长度是1,000km。对于这些值，该端到端时延为多少?</li>
+</ol>
+<h2><span id="数据通信基础">数据通信基础</span></h2>
+<h3><span id="交换技术">交换技术</span></h3>
+<p>电路交换</p>
+<ul>
+<li>具有“<em>连接建立-数据传输-连接释放</em>”三个步骤，以<em>分时</em>的方式共享通信资源</li>
+<li>优点
+<ul>
+<li>独占资源，通信质量有保证</li>
+<li>传输时延小，通信中无拥塞</li>
+</ul></li>
+<li>缺点:
+<ul>
+<li>建连时间较长，工作过程复杂</li>
+<li>有时工作效率较低:计算机通信</li>
+</ul></li>
+<li><img src="/images/计算机网络/DraggedImage-12.png"></li>
+</ul>
+<p>报文交换</p>
+<ul>
+<li>优点:
+<ul>
+<li><em>无连接</em>，报文发给相邻结点，报文存储后再选择合适出口向后转发，直至目的结点</li>
+<li>以“<em>存储转发</em>”为特征</li>
+</ul></li>
+<li>缺点
+<ul>
+<li>对报文长度不加限制，中间结点<em>存储空间很大</em></li>
+<li>长时间占用某段线路，导致报文在中间结点<em>时延非常大</em></li>
+</ul></li>
+<li><img src="/images/计算机网络/DraggedImage-13.png"></li>
+</ul>
+<p>分组交换</p>
+<ul>
+<li>“存储转发”能逐段并行利用线路，而长报文降低了系统效率</li>
+<li>改进措施:
+<ul>
+<li>长报文分为较短数据块(分组)</li>
+<li>仅引入较小时延</li>
+<li><img src="/images/计算机网络/DraggedImage-14.png"></li>
+</ul></li>
+<li>统计复用
+<ul>
+<li>按需使用链路带宽资源</li>
+<li>链路传输能力逐分组地被共享，以链路的最大传输速率传输</li>
+<li>每段链路传输速率不一定相同</li>
+</ul></li>
+</ul>
+<h3><span id="接入网">接入网</span></h3>
+<p>点对点接入</p>
+<ul>
+<li>经调制解调器拨号
+<ul>
+<li>最高达56Kbps直接接入到路由器(经常较少)</li>
+<li><em>不能同时上网和打电话</em></li>
+</ul></li>
+<li><em>ADSL: 不对称数字用户线</em>
+<ul>
+<li>最高达1Mbps上行(典型&lt;256kbps)</li>
+<li>最高达8Mbps下行(典型&lt;1Mbps)</li>
+</ul></li>
+</ul>
+<p>电缆调制解调器</p>
+<ul>
+<li><em>HFC: 混合光纤同轴</em>
+<ul>
+<li><em>不对称</em>:最高达30Mbps下行, 2 Mbps上行</li>
+</ul></li>
+<li>电缆和光缆的网络将家庭连到ISP的路由器
+<ul>
+<li>家庭共享到路由器的接入</li>
+</ul></li>
+</ul>
+<p>公司/大学局域网 (LAN)</p>
+<ul>
+<li>将端系统连接到边缘路由器</li>
+</ul>
+<p>以太网</p>
+<ul>
+<li>共享或专用链路连接端系统和路由器</li>
+<li>10 Mbs, 100Mbps, 千兆以 太网</li>
+</ul>
+<h3><span id="物理层概述">物理层概述</span></h3>
+<p>物理层作用</p>
+<ul>
+<li>定义在连接各种计算机的传输媒体上原始比特的交互方式及其接口，<em>不关心具体的物理设备或具体的传输媒体</em></li>
+<li><em>屏蔽</em>掉种类繁多的物理设备和传输媒体的<em>差异</em>，使这些差异对上面的数据链路层透明</li>
+</ul>
+<p>物理层协议</p>
+<ul>
+<li>机械特性</li>
+<li>电气特性</li>
+<li>功能特性</li>
+<li>规程特性</li>
+<li>使用相同的物理层标准，互联设备之间能够交互比特</li>
+</ul>
+<p>作业</p>
+<ol type="1">
+<li>假定用户共享一条2 Mbps链路。同时假定当每个用户传输 时连续以1 Mbps传输，但每个用户仅传输20%的时间。
+<ol type="a">
+<li>当使用电路交换时，能够支持多少用户?</li>
+<li>对于该问题的遗留问题，假定使用分组交换。为什么如果两个或更少的用户同时传输的话，在链路前面基本上没有排队时延?为什么如果3个用户同时传输的话，将有排队时延? c.求出某指定用户正在传输的概率。d. 假定现在有3个用户。求出在任何给定的时间，所有3个用户在同时传输的概率。求出排队增长的时间比率。 <em>答</em>：</li>
+<li>当使用电路交换时，信道带宽需要用户独占，最多智能支持2个用户;</li>
+<li>因为2Mbps链路仅能容纳两个或更少的用户同时以1Mbps连续传输时， 这时统计上会有资源富余，而当 3 个用户同时传输时，统计上便会出现供不应求 的现象，导致排队时延。</li>
+</ol></li>
+<li>ADSL的上下行带宽为何设计为不对称?</li>
+<li>当前无线接入所使用的WiFi技术基于何种标准?为何3G技术经常要与WiFi技术配合使用?</li>
+</ol>
+<h2><span id="直接连接的网络">直接连接的网络</span></h2>
+<p>机制</p>
+<ul>
+<li>成桢</li>
+<li>查错检测和纠错</li>
+<li>可靠数据传输</li>
+<li>多路访问</li>
+</ul>
+<p>设备</p>
+<ul>
+<li>以太网</li>
+<li>局域网交换机</li>
+</ul>
+<h3><span id="链路层概述">链路层概述</span></h3>
+<p>链路层协议</p>
+<ul>
+<li>通过<em>单段链路</em>，<em>点到点</em>传送上层数据报</li>
+<li>链路两端结点间交互的帧格式，发送和接收帧时的操作</li>
+</ul>
+<p>两种网络链路类型</p>
+<ul>
+<li>点对点链路和广播链路 链路层环境重要特点</li>
+<li>一条路径上的不同链路可运行不同的链路层协议</li>
+<li>链路层协议提供的服务可以不同</li>
+<li>通信环境较为简单</li>
+</ul>
+<p>链路层服务的设计问题</p>
+<ol type="1">
+<li><em>帧访问链路</em>
+<ul>
+<li>用<strong>媒体访问控制(MAC)</strong>地址标识源、目的地</li>
+</ul></li>
+<li>相连节点间的<em>可靠交付</em></li>
+<li>流量控制</li>
+<li>查错检测</li>
+<li>纠错</li>
+</ol>
+<h3><span id="成桢">成桢</span></h3>
+<p><em>面向比特的协议</em></p>
+<ul>
+<li>面向比特的协议把帧看成比特的集合</li>
+<li><img src="/images/计算机网络/DraggedImage-15.png"></li>
+<li>帧的开始和结束：<code>01111110</code></li>
+<li><em>比特填充 (bit stuffing)法</em>(用于发送前/接收后)
+<ul>
+<li>发送方：若报文中5个连续1，则插入一个0</li>
+<li>接收方：收到5个连续1：
+<ul>
+<li>如果后面为0 ，去掉；</li>
+<li>如果后面为1，再后为0，则帧结束;否则出错</li>
+</ul></li>
+</ul></li>
+</ul>
+<p><em>PPP协议</em></p>
+<ul>
+<li>点对点协议</li>
+<li>家庭主机点对点链路的链路层协议</li>
+<li><img src="/images/计算机网络/DraggedImage-16.png"></li>
+</ul>
+<p><em>面向字节的协议</em></p>
+<ul>
+<li>每帧都看成是字节的集合</li>
+<li>保留一组字符为控制字符</li>
+<li><em>效率较低，目前已很少使用</em></li>
+<li>DLE字符的“转义”作用</li>
+</ul>
+<h3><span id="差错检测和纠错技术">差错检测和纠错技术</span></h3>
+<p>处理帧差错的两种方法</p>
+<ol type="1">
+<li>检错重发
+<ul>
+<li>差错率低效果好</li>
+<li>适合<em>链路差错率</em>很<em>低</em>的场合，如有线通信</li>
+</ul></li>
+<li>前向纠错（Forward Error Correction, FEC ）
+<ul>
+<li>纠错通过额外信息“预先”进行</li>
+<li>时效性好</li>
+<li>适合<em>对时间要求</em>很<em>高</em>的场合，如航天和实时控制</li>
+</ul></li>
+</ol>
+<p><strong>差错检测</strong></p>
+<ul>
+<li>EDC= 差错检测和纠错比特 (冗余)</li>
+<li>D = 数据由差错校验保护，可能包括首部字段</li>
+<li>奇偶校验
+<ul>
+<li>单比特奇偶校验
+<ul>
+<li>检测单个比特差错</li>
+</ul></li>
+<li>二维比特奇偶校验
+<ul>
+<li>检测和<em>纠正</em>单个比特差错</li>
+</ul></li>
+</ul></li>
+<li><strong>互联网校验和</strong>
+<ul>
+<li>目标:检测传输段中的“差错”(如比特翻转) (注意: 仅用于运输层)</li>
+<li>发送方：
+<ul>
+<li>将段内容作为16比特整数序列来处理</li>
+<li>检验和: <em>段内容相加(补码和) </em></li>
+<li>发送方将检验和的值取反放入 UDP 检验和字段</li>
+</ul></li>
+<li>接收方：
+<ul>
+<li>计算接收到段的检验和</li>
+<li>检查是否计算的检验和等于检验和字段的值:
+<ul>
+<li>NO – 检测到差错</li>
+<li>YES – 没有检测到差错，仍可能有错</li>
+</ul></li>
+</ul></li>
+<li>注意:当作加法时，最高位进比特位的进位需要加到结果中</li>
+<li><img src="/images/计算机网络/DraggedImage-17.png"></li>
+</ul></li>
+<li><strong>CRC</strong>
+<ul>
+<li><img src="/images/计算机网络/DraggedImage-18.png"></li>
+<li>将数据比特D看作一个二进制数</li>
+<li>选择r+1比特模式(生成式)G
+<ul>
+<li>目标:选择r个CRC 比特R, 使得 &lt;D,R&gt; 被G整除 (以2为模)</li>
+<li>接收方知道G, 用G除以&lt;D,R&gt;。如果有非零余数:检测到差错!</li>
+<li>能够检测所有小于r+1比特的突发差错</li>
+</ul></li>
+<li><img src="/images/计算机网络/DraggedImage-19.png"></li>
+</ul></li>
+</ul>
+<h3><span id="可靠传输原理">可靠传输原理</span></h3>
+<p><em>SW0协议</em></p>
+<ul>
+<li><strong>信道不丢包</strong></li>
+<li>停止等待(stop-and-wait, SW)协议</li>
+<li>方案
+<ul>
+<li>接到正确PKT，发送一个肯定确认(ACK)</li>
+<li>收到错误PKT，发送一个 否定确认(NAK)，重传原 PKT</li>
+</ul></li>
+<li>问题：若信道丢包，则发送方会一致等待接收方的确认到来，从而产生<em>协议死锁</em></li>
+<li><img src="/images/计算机网络/DraggedImage-20.png"></li>
+</ul>
+<p><em>SW1协议</em></p>
+<ul>
+<li><strong>信道丢包</strong></li>
+<li>解决方案: <em>增加超时定时器</em></li>
+<li>每发PKT，启动超时定时器，称为<em>超时重传机制</em></li>
+<li>重传时间略大于RTT</li>
+<li>问题：当确认分组丢失时，接收方会收到两个同样的PKT</li>
+<li><img src="/images/计算机网络/DraggedImage-21.png"></li>
+</ul>
+<p><em>SW2协议</em></p>
+<ul>
+<li>解决方案: 增加一种新机制：<strong>发送序号</strong></li>
+<li>序号只需1比特，因为它可以让接收方知道发送方是否在重传前一个分组</li>
+<li>问题：若ACK迟到，则发送方判断包超时重发，结果刚发完就收到了ACK，SW2无法知道这个ACK确认的是哪个包</li>
+<li><img src="/images/计算机网络/DraggedImage-22.png"></li>
+</ul>
+<p><em>SW3协议</em>(rdt2.2)</p>
+<ul>
+<li>解决方案: 增加<strong>确认序号机制</strong>，分辨出确认对应哪个分组</li>
+<li>综合以上机制为SW协议，或自动重传请求 (ARQ, Automatic Repeat Request)
+<ul>
+<li>差错检测</li>
+<li>接收方确认</li>
+<li>重传</li>
+<li>定时器</li>
+<li>序号</li>
+</ul></li>
+<li>发送方FSM <img src="/images/计算机网络/DraggedImage-23.png"></li>
+</ul>
+<p>作业</p>
+<ol type="1">
+<li>链路层协议能够向网络层提供哪些可能的服务? 举例说明链路层协议相应的服务 答：链路层协议能够向网络层提供的服务包括:<em>成帧、差错检测、可靠交付、 媒体访问、流量控制</em>。 例如，HDLC 协议提供了数据链路层的成帧和 CRC 检测功能等。</li>
+<li>考虑4 bit的生成多项式G(x)=x3+1，假设数据M(x) 的值为10101010。附加比特R(x)的值是什么?</li>
+</ol>
+<p><em>流水线可靠数据传输协议</em></p>
+<ul>
+<li>流水线: 发送方允许发送多个传输中、未应答的分组
+<ul>
+<li>必须增加序号范围</li>
+<li>发送方和/或接收方设有缓冲</li>
+</ul></li>
+<li>例子 <img src="/images/计算机网络/DraggedImage-24.png"></li>
+</ul>
+<p><strong>回退N步 (Go-Back-N, GBN)</strong></p>
+<ul>
+<li>发送方
+<ul>
+<li>在分组首部需要K比特序号，2的k次方=N</li>
+<li>“窗口”最大为N, 允许N个连续的没有应答分组</li>
+<li><img src="/images/计算机网络/DraggedImage-25.png"></li>
+<li>ACK(n)：确认所有（包括序号n）的分组-&gt;<strong>累计ACK</strong>
+<ul>
+<li>可能收到重复的分组</li>
+</ul></li>
+<li>对每个传输分组用<em>同一个计时器</em></li>
+<li>timeout(n)：重传窗口中的<em>分组n及所有更高序号的分组</em></li>
+<li>发送窗口为3，序号为0, 1, 2, 3 <img src="/images/计算机网络/DraggedImage-26.png"></li>
+</ul></li>
+<li>接收方
+<ul>
+<li>接收方根据滑动窗口的序号按序接收分组，<em>窗口内连续</em></li>
+<li>窗口中<em>失序分组及后面将被丢弃</em></li>
+<li>接收方采用<strong>累积确认</strong>的方式，可以不一一确认</li>
+<li>GBN协议的接收窗口的长度为1
+<ul>
+<li>如果允许接收窗口的长度大于1，就不必重发已发送过的N个分组，于是得到选择重传协议</li>
+</ul></li>
+</ul></li>
+</ul>
+<p><strong>选择重传 (Selective Repeat, SR)</strong></p>
+<ul>
+<li>接收方分别确认所有正确接收的报文段
+<ul>
+<li><em>缓存分组</em>, 以便最后按序交付给上层</li>
+</ul></li>
+<li>发送方只需要<em>重传没有收到ACK的分组</em>
+<ul>
+<li>发送方定时器<em>对每个没有确认的分组计时</em></li>
+</ul></li>
+<li>发送窗口
+<ul>
+<li>N个连续的序号</li>
+<li>也需要限制已发送但尚未应答分组的序号</li>
+<li><strong>窗口长度小于等于序号空间的一半</strong></li>
+</ul></li>
+<li><img src="/images/计算机网络/DraggedImage-27.png"></li>
+<li>发送方
+<ul>
+<li>上层传来数据：
+<ul>
+<li>如果窗口中下一个序号可用, 发送报文段</li>
+</ul></li>
+<li>timeout(n)：重传分组n，重启计时器</li>
+<li>ACK(n)：在[发送基，发送基+N\]
+<ul>
+<li>标记分组 n 已经收到</li>
+<li>如果n 是最小未收到应答的分组，向前滑动窗口基指针到下一个未确认序号</li>
+</ul></li>
+</ul></li>
+<li>接收方
+<ul>
+<li>分组n在[接收基，接收基+N-1\]
+<ul>
+<li>发送ACK(n)</li>
+<li>失序：缓存</li>
+<li>按序：交付(也交付所有缓存的按序分组),向前滑动窗口到下一个未收到报文段的序号</li>
+</ul></li>
+<li>分组n在[接收基-N，接收基-1\]
+<ul>
+<li>发送ACK(n)</li>
+</ul></li>
+<li>其他：忽略</li>
+</ul></li>
+<li><img src="/images/计算机网络/DraggedImage-28.png"></li>
+</ul>
+<p>作业</p>
+<ol type="1">
+<li>在课件中给出了SW3的发送方FSM，请画出协议SW3的接收方的FSM。 <img src="/images/计算机网络/DraggedImage-29.png"></li>
+<li>考虑讨论流水线时的例子，网络跨越国家的例子。窗口长度设置成多少时，才能使该信道的利用率超过90%?</li>
+<li>考虑一种GBN协议，其发送方窗口为3，序号范围为1,024。假设在时刻t， 接收方期待的下一个有序分组的序号是k。假设介质不会对报文重新排序。 回答以下问题:
+<ol type="a">
+<li>在t时刻，发送方窗口内的报文序号可能是多少?为什么? b.在t时刻，在当前传播回到发送方的所有可能报文中，ACK字段中所有可能值是多少?为什么?</li>
+</ol></li>
+</ol>
+<h3><span id="多路访问协议">多路访问协议</span></h3>
+<p>多个发送/接收结点<em>同时使用广播信道</em>，如何协调它们<em>共享</em>一个信道 ？</p>
+<p>信道只有一个，访问结点多个，如何设计共享算法？</p>
+<ul>
+<li>当多个结点频繁访问信道
+<ul>
+<li>协同结点无碰撞，统一控制效率高</li>
+</ul></li>
+<li>当大量结点偶尔访问信道
+<ul>
+<li>结点随机占资源，简单算法解碰撞</li>
+</ul></li>
+</ul>
+<p>多路访问协议</p>
+<ul>
+<li>信道划分
+<ul>
+<li>将信道划分为较小的“段” (<em>时隙，频率，编码</em>) 为每个结点分配一部分专用</li>
+</ul></li>
+<li>轮流
+<ul>
+<li>结点轮流，信息较多的轮流发送的时间较长</li>
+</ul></li>
+<li>随机访问
+<ul>
+<li>不划分信道，允许碰撞</li>
+<li>设法从“碰撞”恢复</li>
+<li>大量结点以小概率发送分组
+<ul>
+<li>以信道全部速率R传输</li>
+<li>结点间无优先权协调</li>
+</ul></li>
+<li>随机访问MAC协议定义了:
+<ul>
+<li>如何检测碰撞</li>
+<li>如何从碰撞中恢复 (例如，经延迟后重新传输)</li>
+</ul></li>
+<li>随机访问MAC协议的实例:
+<ul>
+<li>ALOHA</li>
+<li>时隙ALOHA</li>
+<li>CSMA, CSMA/CD, CSMA/CA</li>
+</ul></li>
+</ul></li>
+</ul>
+<p><em>信道划分MAC协议: TDMA</em></p>
+<ul>
+<li>“循环”访问信道</li>
+<li>每个站点在每个循环中获得固定长度时隙(长度=分组传输时间)</li>
+<li>不使用的时隙则空闲</li>
+</ul>
+<p><em>信道划分MAC协议: FDMA</em></p>
+<ul>
+<li>信道频谱划分为频带</li>
+<li>每个站点分配固定的频带</li>
+<li>频带中未使用的传输时间空闲</li>
+</ul>
+<p><em>TDMA和FDMA特点</em></p>
+<ul>
+<li>消除了碰撞且公平
+<ul>
+<li>结点在每个帧时间内得到了专用的传输速率R/N bps</li>
+</ul></li>
+<li>若系统仅有少数几个有大量分组要发送的结点
+<ul>
+<li>分配的频率或时隙被浪费</li>
+</ul></li>
+<li>适合场合
+<ul>
+<li>所有结点都持续有大量数据发送</li>
+</ul></li>
+</ul>
+<p>轮流协议</p>
+<ul>
+<li>令牌传递（无中心）
+<ul>
+<li>控制令牌从一个结点顺序地传递到下一个</li>
+</ul></li>
+<li>轮询（有中心）
+<ul>
+<li>主结点“邀请”从结点依次传输</li>
+</ul></li>
+<li>适用于希望共享信道但却无法预测访问结点的数量的场景</li>
+</ul>
+<p><strong>ALOHA</strong></p>
+<ul>
+<li>非时隙ALOHA: 无同步要求
+<ul>
+<li><img src="/images/计算机网络/DraggedImage-30.png"></li>
+</ul></li>
+<li>时隙ALOHA
+<ul>
+<li><img src="/images/计算机网络/DraggedImage-31.png"></li>
+<li>效率：最大1/e=0.37</li>
+<li>优点
+<ul>
+<li>效率高</li>
+</ul></li>
+<li>缺点
+<ul>
+<li>有碰撞/空闲时隙，浪费时隙</li>
+<li>时钟同步困难</li>
+</ul></li>
+</ul></li>
+</ul>
+<p><strong>CSMA(载波侦听多路访问)</strong></p>
+<ul>
+<li><em>发前先听</em>
+<ul>
+<li>如果侦听到信道忙, 推迟传输</li>
+<li>如果侦听到信道空闲: 传输整个帧</li>
+<li><em>仍可出现碰撞</em>: 传播时延意味着两个结点也许不能听到其他结点传输</li>
+</ul></li>
+<li><em>边发边听</em>
+<ul>
+<li>发送时侦听到信道忙, 立即停止;</li>
+<li>转发强化冲突信号</li>
+</ul></li>
+</ul>
+<p><strong>CSMA/CD (碰撞检测)</strong></p>
+<ul>
+<li>在短时间内检测到碰撞</li>
+<li>碰撞的传输尽快结束，以减少信道浪费</li>
+<li>碰撞检测
+<ul>
+<li>在有线的LAN中容易: 测量信号强度，比较传输的和接收的信号</li>
+<li>在无线LAN中困难:碰撞可能听不到</li>
+</ul></li>
+<li><img src="/images/计算机网络/DraggedImage-32.png"></li>
+</ul>
+<p>协议比较</p>
+<ul>
+<li>信道划分MAC协议
+<ul>
+<li>在高负载时高效、公平地共享信道</li>
+<li>低负载时低效:信道访问中延时，当1个活跃结点时，甚至仅有分配了 1/N 带宽!</li>
+</ul></li>
+<li>随机访问MAC协议
+<ul>
+<li>低负载是有效:单个结点能够全面利用信道</li>
+<li>高负载:碰撞开销大</li>
+</ul></li>
+<li>轮流协议
+<ul>
+<li>兼有两方面的优点!</li>
+</ul></li>
+</ul>
+<p>作业</p>
+<ol type="1">
+<li>在分析多路访问协议时进行了哪些假设?现有的几十种多路访问协议是如何分类的?这种分类的方法与结点数 量和结点访问信道的频率是否有关?</li>
+<li><img src="/images/计算机网络/DraggedImage-33.png"></li>
+</ol>
+<h3><span id="以太网">以太网</span></h3>
+<p><em>以太网(Ethernet)帧结构</em></p>
+<ul>
+<li><img src="/images/计算机网络/DraggedImage-34.png"></li>
+<li>前导码
+<ul>
+<li>模式为10101010 的7个字节，后跟模式为 10101011 的一个字节</li>
+<li>用于同步接收方，发送方时钟速率</li>
+</ul></li>
+<li>地址: 6字节
+<ul>
+<li>如果适配器接收具有匹配的<em>目的地址</em>或<em>广播地址</em>(如ARP分组)的帧, 它将帧中的数据提交给网络层协议</li>
+<li>否则, 适配器丢弃帧</li>
+</ul></li>
+<li>类型: 指示较高层协议 (大多数为IP但也可以支持其他类型如 Novell IPX和AppleTalk)</li>
+<li>CRC: 在接收方核对;如果检测到差错，该帧被丢弃</li>
+</ul>
+<p><em>MAC地址</em></p>
+<ul>
+<li>LAN地址=物理地址=MAC地址，通常用6字节16进制表示
+<ul>
+<li>如1a-03-65-3F-2e-46</li>
+</ul></li>
+<li>共有2的48次方个LAN地址</li>
+<li>IEEE地址分配方式：固定前24 bit，公司生成后24 bit，每个适配器具有唯一MAC地址</li>
+<li>适配器的MAC地址具有扁平(没有层次)结构，且保持不变</li>
+</ul>
+<p><em>以太网协议(CSMA/CD)</em></p>
+<ul>
+<li><strong>无连接</strong>: 在发送和接收适配器之间没有握手</li>
+<li><strong>不可靠</strong>: 接收适配器不向发送适配器发送应答或否定应答</li>
+<li><strong>发前先听；边发边听；强化碰撞；指数后退</strong></li>
+<li>CSMA/CD
+<ol type="1">
+<li>适配器从网络层接收数据报并生成帧</li>
+<li>如果适配器感知信道空闲，它开始传输帧；如果它感知信道忙，等待信道空闲再传输</li>
+<li>当适配器传输整个帧时，一直在检测</li>
+<li>如果检测传输过程中的其他传输, 中止并发送强化冲突信号</li>
+<li>中止后, 适配器进入指数回退: 在第m次碰撞后, 适配器随机地从[0,1,2,…, 2^m-1]选择一个K值。适配器等待K·512 比特时间并返回到第2步</li>
+</ol></li>
+</ul>
+<p>特点</p>
+<ul>
+<li>强化冲突信号
+<ul>
+<li>确保所有的其他传输方都知道碰撞</li>
+<li>48 bit长</li>
+</ul></li>
+<li>比特时间
+<ul>
+<li>对10 Mbps 以太网传每比特需 0.1 μs</li>
+<li>对K=1023, 等待时间约为50 msec</li>
+</ul></li>
+<li>指数回退算法
+<ul>
+<li>目标：估计当前负载，适应重传尝试
+<ul>
+<li>重负载时，随机等待时间更长</li>
+</ul></li>
+<li>首次碰撞后: 从[0,1] 中 选择K；时延是K*512 bit 传输时间</li>
+<li>第二次碰撞后: 从[0,1,2,3]选择 K ……</li>
+<li>10次碰撞后, 从[0,1,2,3,4,…, 1023] 选择K</li>
+</ul></li>
+<li>效率 <img src="/images/计算机网络/DraggedImage-35.png"></li>
+</ul>
+<h3><span id="链路层交换机">链路层交换机</span></h3>
+<p>集线器</p>
+<ul>
+<li>将来自某链路的比特放大后从其他所有链路传出</li>
+<li>可能与来自其他结点的比特碰撞</li>
+<li>无帧缓存</li>
+<li>集线器相当于一根导线，碰撞检测由适配器完成</li>
+</ul>
+<p><strong>交换机</strong></p>
+<ul>
+<li>存储并转发以太网帧</li>
+<li>当帧在网段上转发时，检查帧首部并基于MAC目的地址，选择性地向一个或多个出链路转发帧</li>
+<li>当帧在网段上转发时，使用CSMA/CD 访问网段</li>
+<li>全双工、无碰撞</li>
+<li>透明性
+<ul>
+<li>主机不知道交换机存在</li>
+</ul></li>
+<li>即插即用, 自学习
+<ul>
+<li>交换机不必配置</li>
+</ul></li>
+<li>流量隔离
+<ul>
+<li>交换机将子网分割成LAN段</li>
+<li>交换机过滤分组:
+<ul>
+<li>相同LAN段的帧通常不在其他LAN段上转发</li>
+<li>段成为分离的碰撞域</li>
+</ul></li>
+</ul></li>
+</ul>
+<p><strong>交换机表</strong></p>
+<ul>
+<li>当收到帧时，交换机“学习”到发送方位置：入链路</li>
+<li>在交换机表中记录下发送方/位置对</li>
+<li>表结构：(MAC地址，接口，TTL)</li>
+</ul>
+<p>帧过滤/转发算法</p>
+<ol type="1">
+<li>记录与发送主机关联的链路</li>
+<li>使用MAC目的地址索引交换机表 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">if 找到目的地项</span><br><span class="line">then&#123;</span><br><span class="line">	 if 目的地位于帧到达的段</span><br><span class="line">		then 丢弃帧</span><br><span class="line">	else 在指示的接口转发该帧</span><br><span class="line">&#125;</span><br><span class="line">else 洪泛</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>作业</p>
+<ol type="1">
+<li>考虑某让所有结点直接与一个集线器相连的100 Mbps的100BASE-T以太网。为了获得0.5的效率，结点和集线器之间的最大距离是多少？假设帧长为64 byte并且中间没有转发器。这个最大距离也确保正在传输的结点A能够检测出当A在传输时是否有其他任何结点在传输吗？为什么？你得到的最大距离和实际的100 Mbps标准比较将有什么结论？ <em>只要T0&gt;2t(tao)就能检测出有其他节点传输</em>？</li>
+<li>考虑在图3-26环境中的交换机的情况。假定(i)A向D发送一个帧，(ii)D向A回答一个帧，(iii)C向D发送一个帧，(iv)D向C回答一个帧。该交换机表初始为空。显示在这些时间的前后该交换机表的状态。对于这些事件的每个，确定传输的帧在上面的转发的链路，并简要地论证你的答案。 <img src="/images/计算机网络/DraggedImage-36.png"></li>
+</ol>
+<h2><span id="网络互联">网络互联</span></h2>
+<h3><span id="网络层概述">网络层概述</span></h3>
+<p>异构网络</p>
+<ul>
+<li>在体系结构和通信协议方面具有差异的计算机网络</li>
+<li>在寻址方法、分组长度、路由选择、差错恢复等方面不同，无法直接通信</li>
+</ul>
+<p>互联互通需采用<em>网络层中继系统</em>对不同协议的语法、语义和时序进行转换</p>
+<ul>
+<li>IP具有统一的协议和地址，为全局性寻址和路由选择进而实现网络互联互通提供了可能</li>
+<li>IP网络是虚拟网络，提供全局性路由选择和转发功能，下层网络提供了分组传送交付功能</li>
+<li>路由器是连接异构网络的关键设备，至少有两个接口，最高层是网络层</li>
+<li>端系统有协议栈所有层次，沿途网络层协议的共同作用下，形成了主机到主机的端到端路径</li>
+</ul>
+<p>网络层服务</p>
+<ul>
+<li>底层直接连接的网络可为<em>异构</em>，网络层提供互联互通</li>
+<li>多条传送分组，需要网间路由器进行<em>分组转发</em>和<em>路由选择</em></li>
+<li>关键功能
+<ul>
+<li>转发</li>
+<li>路由选择</li>
+<li><em>路由</em>：分组从源到目的地所经过的端到端路径</li>
+</ul></li>
+</ul>
+<p>分组交付</p>
+<ul>
+<li>直接交付
+<ul>
+<li>在一个<em>直接连接的网络</em>上时，分组从一台主机上直接传送到另一台主机的过程</li>
+</ul></li>
+<li><em>间接交付</em>
+<ul>
+<li><em>不</em>在一个直接连接的网络上时，源主机必须先把分组发给一个路由器</li>
+<li>可能使用不同的网络地址</li>
+</ul></li>
+</ul>
+<h3><span id="网络服务模型">网络服务模型</span></h3>
+<p>网络服务模型与采取的链接方式有关</p>
+<ul>
+<li>面向连接服务
+<ul>
+<li>虚电路 (Virtual-Circuit, VC) 网络
+<ul>
+<li>连接</li>
+</ul></li>
+</ul></li>
+<li>无连接服务
+<ul>
+<li>数据报 (Datagram) 网络
+<ul>
+<li>在网络层无呼叫建立</li>
+<li>路由器:没有端到端连接的状态
+<ul>
+<li>无网络级“连接”的概念</li>
+</ul></li>
+<li>分组使用目的主机地址转发
+<ul>
+<li>在相同源和目的对可能采用不同的路径 <img src="/images/计算机网络/DraggedImage-37.png"></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<p>因特网IP服务模型（数据报网络）的优势</p>
+<ul>
+<li>简化了中继设备路由器的设计</li>
+<li>容易互联使用不同的链路层技术</li>
+<li>网络故障容易修复</li>
+<li>尽力而为
+<ul>
+<li>不可靠</li>
+<li>无连接</li>
+<li>服务是尽力而为的
+<ul>
+<li>编址方案</li>
+<li>提供标识因特网中所有主机的方法</li>
+</ul></li>
+</ul></li>
+<li><em>不可靠的、尽力而为和无连接分组交付系统</em> <img src="/images/计算机网络/DraggedImage-38.png"></li>
+</ul>
+<p>作业</p>
+<ol type="1">
+<li>根据图4-1，为什么说IP网络是一个虚拟网络? 如果IP网络不实际传输分组，那么它的作用是什么? 答：<em>直接连接的网络是能够实际传送分组的通信网</em>，<em>但</em>它们通常覆盖区域较小、<em>协议异构</em>且没有统一的地址，无法互联互通。设计了具有统一 IP 地址和规格的 IP 协议，其他<em>异构网络通过 IP 网络转换了格式进行中继</em>，使得它们能够网络互联互通。因此，<em>IP 网络</em>相当于在异构的直接连接的网络之上构建的一个虚拟网络，它<em>仅仅提供在各个异构子网之间</em> <strong>全局性路由选择和转发功能</strong>，而下面网络则提供了分组实际的通信功能。</li>
+<li>根据图4-2，试填写出路由器R3的转发表内容</li>
+<li>分组的直接交付和间接交付有什么区别与联系?在<br>
+交付过程中，它们分别要用到哪些层次的地址?</li>
+</ol>
+<h3><span id="网际协议ip">网际协议（IP）</span></h3>
+<p><em>IP数据报</em></p>
+<ul>
+<li><img src="/images/计算机网络/DraggedImage-39.png"></li>
+<li>分片和重新组装
+<ul>
+<li>MTU-最大传输长度</li>
+<li>大IP 数据报被分 割(“分段”)
+<ul>
+<li>一个长数据报分成几个短数据报</li>
+<li>仅在最后目的地“重新装配”</li>
+<li>IP首部比特用于标识、排序相关段 <img src="/images/计算机网络/DraggedImage-40.png"></li>
+</ul></li>
+</ul></li>
+</ul>
+<p><em>IP编址</em></p>
+<ul>
+<li>点分十进制记法</li>
+<li>IP地址: 对主机、路由器 接口的32 bit 标识符</li>
+<li>接口: 在主机/路由器和物理链路之间的连接
+<ul>
+<li>路由器通常具有多个接口</li>
+<li>主机可能具有多个接口</li>
+<li>IP编址与每个接口相联系</li>
+</ul></li>
+<li><em>子网掩码</em>
+<ul>
+<li>早期表示的IP地址 = {&lt;网络号&gt;, &lt;子网号&gt;, &lt;主机号&gt;\}</li>
+<li>例：192.168.143.3/27， 即子网掩码共有27个连续的1</li>
+</ul></li>
+<li>无类别域间路由选择（CIDR）
+<ul>
+<li>对于解决因特网路由器转发表空间急剧膨胀的问题至关重要</li>
+<li>IP地址 = {&lt;网络地址&gt;/&lt;前缀&gt;\} <img src="/images/计算机网络/DraggedImage-41.png"></li>
+<li><strong>最长前缀匹配原则</strong> <img src="/images/计算机网络/DraggedImage-42.png">
+<ul>
+<li>200.19.25.170前20 bit与表中的第一项 匹配，而该地址的前<em>23 bit</em>与表中的第二项匹配:应选择与表中的第二项相匹配</li>
+</ul></li>
+</ul></li>
+<li>特殊的IP地址 <img src="/images/计算机网络/DraggedImage-43.png"></li>
+<li>网络怎样得到IP地址的子网部分?
+<ul>
+<li>从它的ISP的地址空间得到分配的部分</li>
+</ul></li>
+<li>ISP怎样得到地址块?
+<ul>
+<li>从<em>因特网名字与号码分配团体( Internet Corporation for Assigned Names and Numbers,ICANN ) </em></li>
+</ul></li>
+</ul>
+<p><strong>DHCP: Dynamic Host Configuration Protocal</strong></p>
+<ul>
+<li>目的：使主机在它进入网络时从网络服务器动态获取其IP地址
+<ul>
+<li>能够更新IP和租用期</li>
+<li>允许地址重复</li>
+<li>支持移动用户</li>
+</ul></li>
+<li>概述
+<ul>
+<li>主机广播 <em>DHCP discover</em> 报文</li>
+<li>DHCP服务器用 <em>DHCP offer</em> 报文响应</li>
+<li>主机请求IP地址 <em>DHCP request</em> 报文</li>
+<li>DHCP服务器发送地址 <em>DHCP ack</em> 报文 <img src="/images/计算机网络/DraggedImage-44.png"></li>
+</ul></li>
+<li>不仅仅提供IP地址
+<ul>
+<li>IP地址</li>
+<li>客户第一跳路由器地址</li>
+<li>DNS服务器的名字和IP地址</li>
+<li>网络掩码</li>
+</ul></li>
+<li>详细过程
+<ul>
+<li>DHCP请求依次封装在UDP 中、IP中、802.3 Ethernet中</li>
+<li>以太网帧在LAN中广播 (dest: FFFFFFFFFFFF), 被运行DHCP服务器的主机名路由器收到</li>
+<li>Ethernet依次解封装到IP、 UDP、DHCP</li>
+</ul></li>
+</ul>
+<p><em>NAT 网络地址转换</em></p>
+<ul>
+<li>外部仅看到本地网络使用的一个IP地址
+<ul>
+<li>对ISP无需分配地址范围:对所有设备只用一个IP地址</li>
+<li>能够改变本地网络中的设备地址，而不必通知外部</li>
+<li>本地网络中的设备不显式地可寻址、由外部所见(增强安全性) <img src="/images/计算机网络/DraggedImage-45.png"></li>
+</ul></li>
+<li>争议
+<ul>
+<li>路由器的处理上升为第三层</li>
+<li>违反了端到端原则
+<ul>
+<li>应用设计者必须要考虑 NAT可能性，如 P2P应用程序</li>
+</ul></li>
+<li>地址短缺应当由IPv6来解决</li>
+</ul></li>
+</ul>
+<p><strong>ARP: Address Resolution Protocol</strong></p>
+<ul>
+<li>问题：虚拟网络IP地址与直接相连的网络MAC地 址如何打交道?</li>
+<li><em>链路层协议</em></li>
+<li>LAN上每个IP结点(主机、 路由器)都有ARP表</li>
+<li>ARP表: 结点的IP/MAC 地址映射
+<ul>
+<li><em>&lt;IP地址; MAC地址; TTL&gt;</em></li>
+<li>TTL (寿命): 地址映射被 B 忘记的时间(常为20分钟)</li>
+</ul></li>
+<li>节点在相同LAN
+<ul>
+<li>A向B发数据报, 且B的MAC地址不在A的ARP表中</li>
+<li>A广播ARP 请求分组, 包含B的IP地址</li>
+<li>目的地MAC地址 = FF-FF-FF-FF-FF-FF</li>
+<li>LAN上所有机器接收 ARP请求</li>
+<li>B接收ARP分组，用自己MAC地址回答A</li>
+<li>A在其ARP表中缓存(保存) IP与MAC的地址对，直到信息超时
+<ul>
+<li>软状态:除非不断更新信息，否则超时</li>
+<li>ARP是“<em>即插即用</em>”的 结点自行创建其ARP表，无需网络管理员干预 <img src="/images/计算机网络/DraggedImage-46.png"></li>
+</ul></li>
+</ul></li>
+<li>节点在不同LAN
+<ul>
+<li>A比较E的网络地址，发现不在相同网络，送路由器R(间接)</li>
+<li>A使用ARP从10.10.10.4得到R的MAC地址</li>
+<li>A生成以<em>R的MAC地址作</em>为目的地的<em>链路层帧</em>,帧包含<em>A到E</em> <strong>IP 数据报</strong></li>
+<li>A的适配器发送帧，R的适配器接收帧</li>
+<li>R从帧中看到它目的地是E，使用选路协议确定路由器端口</li>
+<li>R出端口发现E在右侧网络，用ARP得到E的MAC(直接)</li>
+<li>R生成包含A到E IP数据报的帧向E发送</li>
+<li>E收到来自A的IP分组 <img src="/images/计算机网络/DraggedImage-47.png"></li>
+</ul></li>
+</ul>
+<p><em>ICMP: Internet Control Message Protocol</em></p>
+<ul>
+<li>设计用于网 络维护和管理</li>
+<li>允许端系统或路由器报告差错情况，为网管人员提供适当的工具以查询网络结点的信息</li>
+<li><em>IP 数据报携带ICMP 报文</em></li>
+<li>Traceroute原理
+<ul>
+<li>源向目的地发送一系列UDP段
+<ul>
+<li>第一个 TTL = 1</li>
+<li>第二个 TTL= 2,</li>
+<li>......</li>
+<li>最后一跳为不可能的端口号</li>
+</ul></li>
+<li>当第n个数据报到达第n个路由器:
+<ul>
+<li>路由器丢弃数据报</li>
+<li>向源发送一个ICMP报文(类型11, 代码0) 报文包括路由器名字和IP地址</li>
+</ul></li>
+<li>当ICMP报文到达，源计算 RTT</li>
+<li>停止规则
+<ul>
+<li>UDP段最终到达目的地主机</li>
+<li>目的地返回ICMP “主机不可达”分组 (类型3, 代码3)</li>
+<li>当源得到该ICMP, 停止</li>
+</ul></li>
+</ul></li>
+</ul>
+<p>作业</p>
+<ol type="1">
+<li>从IP协议支持网络层编址和转发两大功能的角度看，IP协议数据报首部 至少要包括哪些字段?这些字段应当包括什么内容?</li>
+<li>考虑使用8 bit主机地址的数据报网络。假定一台路由器使用最长前缀匹 配并具有下列转发表: <img src="/images/计算机网络/DraggedImage-48.png"> 对这4个接口，给出相关的目的主机地址的范围和在该范围中的地址数量。</li>
+<li>在4-14网络环境中，若内网有30台主机从172.16.0.0/24地址块 中分配地址，公网地址为150.20.20.1。当内网主机浏览公网 Web网站(用80端口)和用FTP下载文件(用20端口)时，NAT的 端口随机申请。试填入NAT转换表的值。</li>
+<li>在图4-17所示的网络中，端系统A要与端系统E通信。试简述 它们之间具体的通信过程。</li>
+<li>设计ICMP用于处理网络管理问题的基本思路是什么? Traceroute程序的工作原理符合这个基本思路吗?</li>
+</ol>
+<h3><span id="路由选择协议及其算法">路由选择协议及其算法</span></h3>
+<p><strong>路由选择</strong></p>
+<ul>
+<li>节点是路由器</li>
+<li>边是物理链路</li>
+<li>链路代价：时延、费用或拥塞等级</li>
+<li>分类
+<ul>
+<li>分散
+<ul>
+<li>路由器知道物理相连的邻居、到邻居的链路费用</li>
+<li>计算的迭代过程，与邻居交换信息</li>
+<li><em>距离矢量（Distance-Vector, DV）算法</em></li>
+</ul></li>
+<li>全局
+<ul>
+<li>所有路由器具有完全的拓扑、链路费用信息</li>
+<li><em>链路状态（Link State algorithm, LS）算法</em></li>
+</ul></li>
+<li>静态</li>
+<li>动态</li>
+</ul></li>
+</ul>
+<p><strong>RIP：路由选择信息协议</strong></p>
+<ul>
+<li>距离矢量算法</li>
+<li>距离测度: 跳的数量(最大 = 15跳)</li>
+<li>特点
+<ul>
+<li>仅与相邻路由器交换信息</li>
+<li>交换本路由器选路表中的更新信息</li>
+<li>按固定时间间隔交换信息，约30秒</li>
+<li>根据更新信息，对本地RIP表进行处理</li>
+</ul></li>
+<li>思想
+<ul>
+<li>如果邻居知道到达目的地的距离，且自己知道到达邻居的距离，则能算出自己到达目的地的距离
+<ul>
+<li>每个结点周期性地向其邻居发送自己距离矢量</li>
+<li>当结点x接收到来自邻居的新DV估计，它使用Bellman-Ford方程更新其自己的DV <img src="/images/计算机网络/DraggedImage-49.png"></li>
+</ul></li>
+</ul></li>
+<li>每个结点： <img src="/images/计算机网络/DraggedImage-50.png"></li>
+<li>算法 <img src="/images/计算机网络/DraggedImage-51.png"></li>
+<li>问题
+<ul>
+<li>链路费用变化
+<ul>
+<li>好消息传播得快</li>
+<li>坏消息传播得慢—“<em>计数到无</em>”问题!P171</li>
+<li>在算法稳定前，反复迭代</li>
+</ul></li>
+</ul></li>
+<li>例子 <img src="/images/计算机网络/DraggedImage-52.png"></li>
+</ul>
+<p><strong>OSPF：开放最短路优先</strong></p>
+<ul>
+<li>使用<em>链路状态(link state)</em>算法:
+<ul>
+<li>网络拓扑和所有链路的费用都已知，可作为LS算法的输入</li>
+</ul></li>
+<li>LS算法依靠两种机制进行路由计算
+<ul>
+<li>LS信息的可靠传输</li>
+<li>积累的链路状态知识</li>
+</ul></li>
+<li>OSPF两个技术要点
+<ul>
+<li>使用洪泛链路状态信息的链路状态协议</li>
+<li>Dijkstra最低费用路径算法</li>
+</ul></li>
+<li>特色
+<ul>
+<li>安全性：所有OSPF报文经鉴别（以防攻击）</li>
+<li>允许多条费用相同的路径</li>
+<li>在大规模网络中，用层次的OSPF</li>
+</ul></li>
+<li>Dijkstra算法
+<ul>
+<li>知道网络所有结点的拓扑、链路费用</li>
+<li>从一个结点(源)到所有其他 结点计算最低费用路径</li>
+<li>迭代: k次迭代后，得知到k 个目的地的最低费用路径</li>
+<li><code>c(x,y)</code>: 从结点x到y的链路 费用; = ∞ 如果非直接邻居</li>
+<li><code>D(v)</code>:从源到目的地v路径费用的当前值</li>
+<li><code>p(v)</code>: 从源到v沿路径的前任结点</li>
+<li><code>N‘</code>: 已知在最小费用路径中的结点集合 <img src="/images/计算机网络/DraggedImage-53.png"></li>
+</ul></li>
+</ul>
+<p>BGP和层次路由选择</p>
+<ul>
+<li>先将某区域的路由器聚合成为 “自治系统” （AS）</li>
+<li>在相同AS中的路由器运行相同的路由选择协议</li>
+<li>不同的AS中的路由器通过AS间的路由选择协议选路</li>
+<li>BGP：边界网关协议</li>
+</ul>
+<h3><span id="路由器的工作原理">路由器的工作原理</span></h3>
+<p>功能</p>
+<ul>
+<li><strong>转发</strong>：两个异构通信子网中的分组经过路由器的帧格式转换，实现了异构网络的互联</li>
+<li><strong>路由选择</strong>：路由器通过执行路由选择协议，更新了转发表，并使分组到达正确的输出端口</li>
+</ul>
+<p>体系结构 <img src="/images/计算机网络/DraggedImage-54.png"></p>
+<ul>
+<li>输入接口卡 <img src="/images/计算机网络/DraggedImage-55.png"></li>
+<li>输出接口卡 <img src="/images/计算机网络/DraggedImage-56.png"></li>
+<li>控制器卡
+<ul>
+<li>维护本地路由转发表</li>
+<li>确定分组的输出接口</li>
+<li>执行路由器中的网络管理功能</li>
+</ul></li>
+<li>交换结构
+<ul>
+<li>内存交换</li>
+<li>经总线交换</li>
+<li>经互联网络交换</li>
+</ul></li>
+</ul>
+<p>作业</p>
+<ol type="1">
+<li>考虑图4-27上的网络。试用距离矢量算法给出结点b的距离表表项生成过程</li>
+<li>考虑图4-27的网络。用Dijkstra的最短路算法计算出从b到所有网络结点的最短路径。通过计算一个类似于表4-10的表， 给出该算法的工作过程</li>
+<li>BGP有哪些主要功能。描述在BGP中是如何检测路径中的环路 答：BGP 是 AS 之间供可达路径的分层路由选择协议。BGP 具有以下功能:
+<ol type="1">
+<li>从相邻 AS 处获得子网可达性信息;</li>
+<li>向本 AS 内部的所有路由器传播这些可达性信息;</li>
+<li>基于可达性信息和 AS 策略，决定到达子网的“好”路由。BGP 从相邻 AS 获得子网可达性信息，基于自己的策略，决定是否向其他 AS 通告， 一旦通告就承诺向该子网转发数据报;</li>
+<li>BGP 还向本 AS 内部的所有路由器传播相关可达性信息。 在 AS-PATH 属性包含了传递前缀的通告所经过的 AS，由此可以判断是否存 在环路。</li>
+</ol></li>
+<li>观察图4-30所示的路由器体系结构。如何体现出路由器具有互联异构网络、转发和选择路由等几项关键功能。 答：
+<ul>
+<li>互联异构网络:不同异构通信子网中的分组经过路由器的物理层、链路层和网络层功能转换，在 IP 层实现地址和报文结构的统一，能够进行统一寻址。</li>
+<li>转发:分组进入路由器不同输入接口卡后，通过将分组目的地址与转发表进行比较，经过交换结构后，由输出接口卡输出到不同路由器不同接口。</li>
+<li>路由选择:路由器接收来自不同路由器的路由选择报文，通过执行路由选择协议，更新了转发表内容，使分组能够到达正确的输出端口 。这些功能由路由器的控制器卡供，包括路由计算与更新、拓扑和地址信息交换。</li>
+</ul></li>
+</ol>
+<h2><span id="端到端协议">端到端协议</span></h2>
+<h3><span id="运输层协议概述">运输层协议概述</span></h3>
+<p>运输服务和协议</p>
+<ul>
+<li>为形形色色的应用层进程利用共同的网络层尽力而为服务，提供了<em>多路复用／分解</em>的功能，以及<strong>可靠传输、流量控制和网络拥塞控制</strong>功能</li>
+<li>可靠、按序的交付：TCP
+<ul>
+<li>面向连接服务</li>
+<li>可靠数据传送服务</li>
+<li>拥塞控制服务</li>
+<li>传送的数据单位是TCP报文段</li>
+</ul></li>
+<li>不可靠、不按序交付: UDP
+<ul>
+<li>扩展了尽力而为IP基本服务</li>
+<li>传送的数据单位是 UDP 报文或用户数据报</li>
+</ul></li>
+</ul>
+<h3><span id="多路复用与多路分解">多路复用与多路分解</span></h3>
+<p><em>端口</em></p>
+<ul>
+<li>定位器端口连同IP地址，唯一标识进程</li>
+<li>端口扩展了网络地址</li>
+<li>进程标识符标识本地进程</li>
+<li>端口号为16 bit的数，其大小在0到65535之间</li>
+<li>0到1023范围的端口号称为周知端口号</li>
+</ul>
+<p>进程通过<em>套接字(socket)</em>来描述网络两端进程间的通信链。</p>
+<p>UDP的多路复用／分解</p>
+<ul>
+<li>UDP套接字由二元组标识 ：<em>(目的地IP地址, 目的地端口号) </em></li>
+<li>具有<em>不同</em>源IP地址和/或源端口号的IP数据报可定向到<em>相同</em>的套接字</li>
+<li>主机上进程目的端口号相同，UDP套接字相同</li>
+<li>一个UDP套接字对应着一条UDP通信链</li>
+</ul>
+<p><em>TCP的多路复用／分解</em></p>
+<ul>
+<li>TCP套接字由四元组标识: <em>(源IP地址, 源端口号; 目的地IP地址, 目的端口号) </em></li>
+<li>服务器主机可能支持许多并行的TCP套接字
+<ul>
+<li>每个套接字由其自己的四元组标识</li>
+</ul></li>
+<li>Web服务器对每个连接的客户具有不同的套接字
+<ul>
+<li>如非持续HTTP将为每个请求具有不同的套接字</li>
+</ul></li>
+</ul>
+<h3><span id="udp">UDP</span></h3>
+<p>UDP优点</p>
+<ul>
+<li>无连接</li>
+<li>简单</li>
+<li>效率高</li>
+<li>面向报文</li>
+<li>没有拥塞控制</li>
+</ul>
+<p>UDP只做了运输协议的最少工作在IP之上加入<em>多路复用/多路分解</em>和<em>错误检测</em></p>
+<p>重要应用</p>
+<ul>
+<li>DNS</li>
+<li>RIP选路表更新报文</li>
+<li>网络管理数据</li>
+</ul>
+<p><img src="/images/计算机网络/DraggedImage-57.png"></p>
+<p>UDP校验和=互联网校验和</p>
+<p>作业</p>
+<ol type="1">
+<li>根据网络应用的时延和可靠性可以将它们分为几类?运输层是否应当由此设计几种不同的协议?因特网的运输层协议能够为网络应用提供哪些服务?不能够提供哪些服务? 答：<strong>不能够提供</strong>带宽和时延保证、安全性服务等</li>
+<li>可以认为端口号是一种地址吗?如果是，它是标识什么的地址?将端口号分为周知端口号和一般端口号有什么好处， 这与网络应用的模式有关系吗? 答：好处：<em>大大地降低了出处差错的可能性</em>。一般在 C/S 模式中，服务器端口通常使用周知端口好，而且必须要长期处于 打开状态，因此端口号划分与网络设计模式有关。</li>
+<li>给出标识图5-5中TCP套接字的所有四元组。与UDP套接字忽略了源端的标识信息相比，TCP的套接字标识能力是增强了还是削弱了?</li>
+</ol>
+<h3><span id="tcp">TCP</span></h3>
+<p>特点</p>
+<ul>
+<li>面向连接</li>
+<li>点对点</li>
+<li>全双工
+<ul>
+<li>MSS：最大报文段长度</li>
+<li>MTU：最大传输单元</li>
+</ul></li>
+<li>可靠的交付服务</li>
+<li>客户／服务器模式</li>
+<li>面向字节流</li>
+<li>流量控制</li>
+<li>拥塞控制</li>
+</ul>
+<p><img src="/images/计算机网络/DraggedImage-58.png"></p>
+<p>TCP 的首部包括以下内容：</p>
+<ol type="1">
+<li>源端口 source port</li>
+<li>目的端口 destination port</li>
+<li>序号 sequence number</li>
+<li>确认号 acknowledgment number</li>
+<li>数据偏移 offset</li>
+<li>保留 reserved</li>
+<li>标志位 tcp flags</li>
+<li>窗口大小 window size</li>
+<li>检验和 checksum</li>
+<li>紧急指针 urgent pointer</li>
+<li>选项 tcp options</li>
+</ol>
+<p><em>TCP可靠数据传输机制</em></p>
+<ul>
+<li>使用<em>序号、确认、超时重传、滑动窗口</em>等机制</li>
+<li>数据是无结构、有序的字节流
+<ul>
+<li>报文段的<em>序号</em>是该报文段字节流的<em>首字节编号</em></li>
+</ul></li>
+<li>TCP的高效载答机制
+<ul>
+<li>确认机制是<em>捎带(piggybacked)</em>的</li>
+<li>确认号是<em>期望收到的下一字节的编号</em></li>
+</ul></li>
+<li>累积确
+<ul>
+<li>确认号隐含表明了前面所有字节已正确收到</li>
+</ul></li>
+<li>对失序报文段的处理方式
+<ul>
+<li>未规定，可用“回退N步协议”和“选择重传协议”</li>
+</ul></li>
+<li>初始序号的选择
+<ul>
+<li>双方均可<em>随机地选择</em></li>
+</ul></li>
+<li>超时时限 &gt; RTT</li>
+<li>RTT估计值 = (1 - a) x RTT估计值 + a x RTT样本
+<ul>
+<li>指数加权移动平均</li>
+<li>典型值 a = 0.125</li>
+</ul></li>
+<li>RTT偏差</li>
+</ul>
+<p>作业</p>
+<ol type="1">
+<li>主机A和B经一条TCP连接通信，并且主机B已经收到了来自A的 到字节248的所有字节。假定主机A随后向主机B发送两个紧接 着的报文段。第一个和第二个报文段分别包含了40和60 byte的数据。在第一个报文段中，序号是249，源端口号是503, 目的地端口号是80。无论何时主机B接收到来自主机A的报文段，它都会发送确认。
+<ol type="a">
+<li>在从主机A发往B的第二个报文段中，序号、源端口号和目的端口号各是什么?</li>
+<li>如果第一个报文段在第二个报文段之前到达，在第一个到达报文段的确认中，确认号、源端口号和目的端口号各是什么?</li>
+<li>如果第二个报文段在第一个报文段之前到达，在第一个到达报文段的 确认中，确认号是什么?</li>
+<li>假定由A发送的两个报文段按序到达B。第一个确认丢失了而第二个确认在第一个超时间隔之后到达，如在下一页上的图中所显示的那样。 画出时序图，显示这些报文段和发送的所有其他报文段和确认。(假设没 有其他分组丢失。)对于你图上每个报文段，标出序号和数据的字节编号; 对于你增加的每个应答，标出确认号。</li>
+</ol></li>
+</ol>
+<p><em>TCP流量控制</em></p>
+<ul>
+<li>让<em>接收方控制</em>发送方</li>
+<li>控制方法：<em>发送方</em>维护一个<strong>接收窗口</strong></li>
+<li>工作原理
+<ul>
+<li>设置接收窗口Rwin
+<ul>
+<li>Rwin用于向发送方提示<em>接收方的缓存还有多大</em></li>
+<li><code>Rwin = RcvBuffer - [LastByteRcvd - LastByteRead]</code></li>
+</ul></li>
+<li>发送方不使接收缓存溢出
+<ul>
+<li><code>LastbyteSent - LastByteAcked ≤ Rwin</code></li>
+</ul></li>
+<li>使TCP缓存不溢出
+<ul>
+<li><code>LastbyteRcvd - LastByteRead ≤ RcvBuffer</code></li>
+</ul></li>
+<li>当接收窗口为<strong>0</strong>时，<em>A应当周期性地发送只有一个字节数据的报文段</em> <img src="/images/计算机网络/DraggedImage-59.png"></li>
+</ul></li>
+<li><em>流量控制与拥塞控制的区别</em>
+<ul>
+<li>流量控制是<strong>某TCP接收方</strong>针对<em>其发送方</em>所采取的措施</li>
+<li>拥塞控制是TCP发送方<em>针对网络拥堵</em>情况所采取的措施</li>
+</ul></li>
+</ul>
+<p><em>TCP连接管理</em></p>
+<ul>
+<li>三次握手
+<ol type="1">
+<li>客户向服务器发送TCP <em>SYN报文段</em>
+<ul>
+<li>指定初始序号</li>
+<li>没有数据</li>
+</ul></li>
+<li>服务器收到SYN 报文段, 用<em>SYN ACK报文段</em>回复
+<ul>
+<li>服务器为该连接分配缓冲区和变量</li>
+<li>指定服务器初始序号</li>
+</ul></li>
+<li>客户收到SYN ACK，用<em>ACK报文段</em>回复，可能包含数据 <img src="/images/计算机网络/DraggedImage-60.png"></li>
+</ol></li>
+<li>四次挥手
+<ol type="1">
+<li>客户机向服务器发送<em>FIN报文段</em>
+<ul>
+<li>客户不再发送数据</li>
+</ul></li>
+<li>服务器收到FIN后，返回<em>ACK报文段</em>
+<ul>
+<li>通知应用进程对方关闭连接</li>
+<li>服务器仍然可以发送数据</li>
+</ul></li>
+<li>服务器发送完数据，发送<em>FIN ACK报文段</em>
+<ul>
+<li>服务器释放连接，不再发送数据</li>
+</ul></li>
+<li>客户收到FIN ACK后，回复<em>ACK报文段</em>
+<ul>
+<li>等待超时，连接关闭</li>
+</ul></li>
+<li>服务器收到ACK后，连接关闭 <img src="/images/计算机网络/DraggedImage-61.png"></li>
+</ol></li>
+<li><em>为什么等待超时再关闭？</em>
+<ul>
+<li>确保全部接收服务器(B)发来的数据</li>
+<li>有可以最后一个ACK丢失。所以<em>TIME_WAIT状态就是用来重发可能丢失的ACK报文</em></li>
+</ul></li>
+</ul>
+<p><img src="/images/计算机网络/DraggedImage-62.png"></p>
+<p><em>拥塞控制原理</em> <img src="/images/计算机网络/DraggedImage-63.png"></p>
+<ul>
+<li>成因
+<ul>
+<li>当对网络中<em>某种资源的需求超过了其可用部分</em>。所出现的网络性能变差直至系统崩溃现象</li>
+<li><em>Σ对资源的需求 &gt; 可用资源</em></li>
+</ul></li>
+<li>思路
+<ul>
+<li>增加瓶颈资源</li>
+<li><strong>抑制流量注入</strong></li>
+<li>闭环控制</li>
+</ul></li>
+<li>方法
+<ul>
+<li>端到端的拥塞控制
+<ul>
+<li>不能从网络得到明确的反馈</li>
+<li>从端系统根据观察到的时延/丢失推断出拥塞</li>
+<li>TCP✅</li>
+</ul></li>
+<li>网络辅助的拥塞控制
+<ul>
+<li>路由器为端系统提供反馈</li>
+</ul></li>
+</ul></li>
+</ul>
+<p>作业</p>
+<ol type="1">
+<li>观察图5-9所示的TCP报文段结构，其中哪些字段分别与多路复用/分解功能有关?哪些字段分别与可靠数据传输功能有关?哪些字段分别与流量控制功能有关?哪些字段分别与拥塞控制传输功能有关? 答：源端口和目的端口；序号、确认号和检验和；窗口大小；序号和确认号</li>
+<li>TCP创建连接采用了三次握手过程。分析第三次握手有何作用?当TCP一端释放连接后，这端是否还能够发送报文段?此时，另一端是否还能够继续发送报文段? 答：<em>在 TCP 创建连接的三次握手过程中，第三次握手表明第一次握手的确 是自己发送的，以防止第一次握手是以前遗留的连接</em>。 <img src="/images/计算机网络/DraggedImage-64.png"></li>
+<li>网络拥塞的主要成因有哪些?它们带来的危害分别有哪些?有哪几种网络拥塞控制方法? 答：端到端；网络辅助</li>
+<li>分析产生网络拥塞条件的式(5-6)，其中的资源通常包括哪些内容?该公式能够为设计和解决网络管理和网络安全方案及问题提供哪些思路?</li>
+</ol>
+<h3><span id="tcp拥塞控制">TCP拥塞控制</span></h3>
+<p>TCP感知拥塞方法</p>
+<ul>
+<li>TCP拥塞控制：<strong>端系统</strong>采取措施使网络不致拥塞</li>
+<li><em>超时</em>：确认报文没有及时返回，判断报文段“丢失”，即出现了<em>网络拥塞</em></li>
+<li><em>冗余ACK</em>：多次收到对某个报文段的ACK
+<ul>
+<li>报文<em>未按序</em>达到，只能对按序接收到的最后一字节数据重复确认</li>
+</ul></li>
+<li>丢包事件
+<ul>
+<li>某TCP报文段<em>确认超时</em></li>
+<li>收到对相同报文段的<em>3个冗余ACK</em></li>
+</ul></li>
+<li>控制发送速率方法
+<ul>
+<li>维护一个<strong>拥塞窗口</strong><code>CWin</code></li>
+<li><code>发送窗口上限值 ≤ min{CWin, RWin}</code></li>
+</ul></li>
+</ul>
+<p><strong>TCP拥塞控制机制</strong></p>
+<ul>
+<li>基本思想
+<ul>
+<li>当<em>出现丢包事件</em>时，<strong>迅速</strong><em>减小拥塞窗口CWin</em> 的长度，使发送方降低其发送速率，而<em>一般情况下</em>则须<strong>谨慎</strong>地<em>增加 CWin</em> 的长度。</li>
+</ul></li>
+<li><strong>慢启动（SS）</strong>
+<ul>
+<li>基本思想
+<ul>
+<li>先<em>从较小</em>的拥塞窗口(如1个 MSS)<em>开始</em>，<em>逐步试探出</em>网络状态，而试探的增长速率要迅速，直至接近某个阈值</li>
+</ul></li>
+<li>连接开始时，拥塞窗口<code>CWin = 1 MSS</code></li>
+<li>以<em>指数率</em>快速增加速率，直到进入<strong>拥塞避免区域</strong>或<strong>发生丢包</strong>
+<ul>
+<li><strong> 每收到ACK</strong>，拥塞窗口<code>CWin = CWin + 1</code>，呈现倍增效果 <img src="/images/计算机网络/DraggedImage-65.png"></li>
+</ul></li>
+<li>总结：初始速率很低，但以指数率快速增加</li>
+</ul></li>
+<li><strong>加性增和乘性减（AIMD）</strong>
+<ul>
+<li>加性增
+<ul>
+<li>基本思想
+<ul>
+<li>当网络可能进入拥塞状态时，将<em>指数增长</em>的发送速率降低为<em>线性增长</em>的发送速率</li>
+</ul></li>
+<li>如<strong>没有</strong>检测到丢包事件， <strong>每个RTT</strong>时间拥塞窗口值<code>CWin = CWin + 1</code></li>
+<li><strong>状态变量ssthresh</strong>：从慢启动阶段进入拥塞避免阶段的<em>阈值</em></li>
+</ul></li>
+<li>乘性减
+<ul>
+<li>基本思想
+<ul>
+<li>急剧减小拥塞窗口</li>
+</ul></li>
+<li><strong>超时事件</strong>后：
+<ul>
+<li><code>ssthresh = CWin / 2</code></li>
+<li><code>CWin = 1</code></li>
+<li>重新进入<em>慢启动</em></li>
+</ul></li>
+<li>收到<strong>3个冗余ACK</strong>后（Reno）：
+<ul>
+<li><code>ssthresh = CWin / 2</code></li>
+<li><code>CWin = CWin / 2</code></li>
+<li>继续<em>加性增</em> <img src="/images/计算机网络/DraggedImage-66.png"></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>小结
+<ul>
+<li>当<code>CWin &lt; ssthresh</code>时，发送方处于<strong>慢启动</strong>阶段, CWin<strong>指数增长</strong></li>
+<li>当<code>CWin &gt; ssthresh</code>时，发送方处于<strong>拥塞避免</strong>阶 段, CWin<strong>线性增长</strong></li>
+<li>当出现<strong>3个冗余确认</strong>时, 阈值<code>ssthresh = CWin/2</code>，且<code>CWin = ssthresh</code>后<strong>线性增长</strong></li>
+<li>当<strong>超时</strong>发生时，阈值<code>ssthresh = CWin/2</code>，并 且<code>CWin = 1 MSS</code>后<strong>慢启动</strong> <img src="/images/计算机网络/DraggedImage-67.png"></li>
+</ul></li>
+<li>快速重传（Fast Retransmit）
+<ul>
+<li>一旦对某报文段收到了3个冗余ACK，可以在该报文段的<strong>定时器过期之前</strong>就重传丢失的报文段</li>
+</ul></li>
+<li>快速恢复（Fast Recovery）
+<ul>
+<li>对<em>TCP Tahoe</em>，当发生丢包事件，立即将拥塞窗口减 速至1 MSS，然后转入慢启动阶段</li>
+<li>对新版<em>TCP Reno</em>，一旦收到3个冗余ACK后， 取消慢启动并转入拥塞避免阶段</li>
+</ul></li>
+</ul>
+<p>TCP的公平性 <img src="/images/计算机网络/DraggedImage-68.png"> <img src="/images/计算机网络/DraggedImage-69.png"></p>
+<ul>
+<li>多媒体应用不希望用TCP</li>
+<li>TCP对用户公平且稳定网络，TCP友好(TCP friendly)</li>
+<li>不能防止2台主机之间打开多个并行连接</li>
+</ul>
+<p>作业</p>
+<ol type="1">
+<li>TCP拥塞控制的基本思想是什么?有哪些基本拥塞控制机 制?试简要阐述它们的基本思想</li>
+<li>考虑下图中TCP窗口长度作为时间的函数。 <img src="/images/计算机网络/DraggedImage-70.png"> 假设<em>TCP Reno</em>是一个经历如上所示行为的协议，回答下列问题。在各种情况中，请简要地论证你的回答
+<ol type="1">
+<li>指出当TCP慢启动运行时的时间间隔</li>
+<li>指出当TCP拥塞避免运行时的时间间隔</li>
+<li>在第16个传输轮回之后，报文段的丢失是根据3个重复确认还是根据超时 检测出来的?</li>
+<li>在第22个传输轮回之后，报文段的丢失是根据3个重复确认还是根据超时 检测出来的?</li>
+<li>在第一个传输轮回里，ssthresh的初始值设置为多少?</li>
+<li>在第18个传输轮回里，ssthresh的值设置为多少?</li>
+<li>在第24个传输轮回里，ssthresh的值设置为多少?</li>
+<li>第70个报文段在哪一个传输轮回内发送?</li>
+<li>假定在第26个发送轮回后，通过收到3个冗余ACK检测出有分组丢失，拥塞的窗口长度和ssthresh的值将应当是多少?</li>
+</ol></li>
+<li>若通信信道带宽为1Gbps,两个端系统之间的时延为 15ms，而TCP的发送窗口最大为65535字节。试计算:能达到的最大吞吐量是多少?信道的利用率是多少?</li>
+</ol>
+<h2><span id="网络应用协议">网络应用协议</span></h2>
+<h3><span id="域名系统dns">域名系统DNS</span></h3>
+<p>域名系统</p>
+<ul>
+<li><em>分布式数据库</em>:由层次化的许多名字服务器实现</li>
+<li><em>应用层协议</em>：主机、路由器、 名字服务器间通信，以解析名字 (进行地址/名字转换)
+<ul>
+<li>供应用程序而不是人直接使用</li>
+<li>因特网核心功能，作为应用层协议实现</li>
+<li>复杂性位于网络“边缘”</li>
+</ul></li>
+<li>域名系统维护了一组名字到值的映射关系</li>
+<li>给定一个主机名，域名系统解析返回一个值， 如IP地址</li>
+<li>DNS协议运行在<strong>UDP</strong>之上，使用53号端口 <img src="/images/计算机网络/DraggedImage-71.png"> <img src="/images/计算机网络/DraggedImage-72.png"></li>
+<li>类型
+<ul>
+<li>根域名服务器(root name server)
+<ul>
+<li>负责com, org, net, edu等，以及所有顶级国家域cn、uk等</li>
+</ul></li>
+<li>顶级域名服务器(top-level domain，TLD)
+<ul>
+<li>负责管理在该顶级域名服务器注册的所有二级域名</li>
+</ul></li>
+<li>权威域名服务器(authoritative name server)
+<ul>
+<li>为本组织的服务器(如Web和电子邮件)提供映射，通常有基本、辅助(备份)服务器</li>
+</ul></li>
+<li>本地域名服务器(local name server)
+<ul>
+<li>默认域名服务器</li>
+</ul></li>
+</ul></li>
+<li>交互
+<ul>
+<li>递归查询(recursive query)</li>
+<li>迭代查询(iterative query)
+<ul>
+<li>后3个查询</li>
+</ul></li>
+</ul></li>
+</ul>
+<p>作业</p>
+<ol type="1">
+<li>如果在本地域名服务器、根服务器和顶级域名服务器的无法找到某公司的域名，请阐述解析该公司域名的过程 答：主机要经过如下过程: (1)DNS 查询报文发向本地 DNS 服务器，它将查询转发到权威 DNS 服务器; (2)DNS 权威服务器将查询转发到顶级域名服务器; (3)顶级域名服务器将查询转发到根域名服务器; (4)跟域名服务器在 com 顶级域名服务器解析该公司的权威服务器; (5)由权威服务器就可以解析到该公司的本地域名服务器。</li>
+<li>对同一个域名向DNS服务器发出好几次的DNS请求报文后， 每一次得到IP地址都不一样。这可能吗? 答：如果一个域名与多个 IP 地址对应，这是可能的。这种技术可用于负载 均衡场合。</li>
+<li>电子邮件系统在运输层使用了TCP来传送邮件。为什么还会有发送的电子邮件对方没有收到的情况出现?请解释原因。 答：一份电子邮件必要经过: (1)从发送方用户代理通过 SMTP 向发送方 邮件服务器 (2)发送方邮件服务器通过 SMTP 向接收方邮件服务器发送邮件 (3)接收方用户代理用 POP3 或 IMAP 从接收方邮件服务器读取邮件 等 3 个环节。 尽管每个应用协议都是基于 TCP 的，可以保证邮件每次端到端传输的可靠 性，但并不能保证:
+<ol type="1">
+<li>在发送邮件服务器或接收邮件服务器因服务器故障或缓存溢等原因导致的邮件丢失;</li>
+<li>邮件服务器未工作，邮件发送不出去。电子邮件本身并没有端到端的可靠性保障机制。</li>
+</ol></li>
+</ol>
+<h3><span id="http">HTTP</span></h3>
+<p>HTTP工作过程</p>
+<ul>
+<li>客户向服务器发起TCP连接，80端口</li>
+<li>服务器接受来自客户TCP连接</li>
+<li>在浏览器(HTTP客户)和 Web服务器(HTTP服务器) 之间交换HTTP报文(应用层协议报文)</li>
+<li>关闭TCP 连接</li>
+<li>HTTP是<strong>无状态的</strong></li>
+<li><em>RTT</em>
+<ul>
+<li>从客户到服务器发送一个分组并返回所历经的时间</li>
+</ul></li>
+<li><strong>响应时间</strong>：2RTT + 传输时间
+<ul>
+<li>一个RTT发起TCP连接</li>
+<li>文件传输时间 <img src="/images/计算机网络/DraggedImage-73.png"> * 连接方式</li>
+</ul></li>
+<li>非持续HTTP
+<ul>
+<li>至多一个对象经过一个TCP连接发送</li>
+<li>HTTP/1.0</li>
+<li>问题
+<ul>
+<li>每个对象要求2RTT</li>
+<li>操作系统必须为每个TCP连 接工作并逐个分配资源</li>
+<li>但浏览器经常打开并行TCP 连接以获取引用的对象</li>
+</ul></li>
+</ul></li>
+<li><strong>持续HTTP</strong>
+<ul>
+<li>多个对象能够经过客户和服务器之间的单个TCP连接发送</li>
+<li>无流水线的持续
+<ul>
+<li>仅当前面的响应已经收到，客户才发出新的请求</li>
+<li>对每个引用对象用1RTT</li>
+</ul></li>
+<li>有流水线的持续
+<ul>
+<li>HTTP/1.1</li>
+<li>只要客户遇到一个引用对象， 它发送请求</li>
+</ul></li>
+<li>例子 <img src="/images/计算机网络/DraggedImage-74.png">
+<ul>
+<li>基本HTML文件、8个图片和5个视频</li>
+<li>流水线持续连接的响应时间
+<ul>
+<li><code>2 * RTT + 8 * t1 + 5 * t2</code></li>
+</ul></li>
+<li>无流水持续连接的响应时间
+<ul>
+<li><code>RTT + 8 * (RTT + t1) + 5 * (RTT + t2) = 14 * RTT + 8 * t1 + 5 * t2</code></li>
+</ul></li>
+<li>并行非持续连接的响应时间
+<ul>
+<li><code>2 * RTT + t2</code></li>
+<li>服务器负担大</li>
+<li>对象小时开销大</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<p>请求报文格式 <img src="/images/计算机网络/DraggedImage-75.png"></p>
+<p>响应报文格式 <img src="/images/计算机网络/DraggedImage-76.png"></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/TCP-IP/">TCP/IP</a><a href="/tags/计算机网络/">计算机网络</a><a href="/tags/本科课程/">本科课程</a><a href="/tags/UDP/">UDP</a><a href="/tags/HTTP/">HTTP</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

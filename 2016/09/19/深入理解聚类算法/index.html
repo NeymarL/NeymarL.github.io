@@ -1,0 +1,464 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    深入理解聚类算法 | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="深入理解聚类算法">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      深入理解聚类算法</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/09/19/深入理解聚类算法/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-09-19T07:42:06.000Z">
+          2016-09-19
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <blockquote>
+<p><a href="https://www.wikiwand.com/zh/%E8%81%9A%E7%B1%BB%E5%88%86%E6%9E%90" target="_blank" rel="noopener">聚类分析</a>（英语：Cluster analysis）是对于统计数据分析的一门技术，在许多领域受到广泛应用，包括机器学习，数据挖掘，模式识别，图像分析以及生物信息。聚类是把相似的对象通过静态分类的方法分成不同的组别或者更多的子集（subset），这样让在同一个子集中的成员对象都有相似的一些属性，常见的包括在坐标系中更加短的空间距离等。</p>
+</blockquote>
+<!-- toc -->
+<ul>
+<li><a href="#距离度量方式">距离度量方式</a></li>
+<li><a href="#k-means">K-Means</a></li>
+<li><a href="#密度聚类">密度聚类</a>
+<ul>
+<li><a href="#dbscan">DBSCAN</a></li>
+<li><a href="#密度最大值聚类">密度最大值聚类</a></li>
+</ul></li>
+<li><a href="#谱聚类">谱聚类</a>
+<ul>
+<li><a href="#基础知识">基础知识</a></li>
+<li><a href="#谱和谱聚类">谱和谱聚类</a></li>
+</ul></li>
+<li><a href="#参考">参考</a></li>
+</ul>
+<!-- tocstop -->
+<a id="more"></a>
+<p><strong>定义</strong></p>
+<p>聚类就是对大量<strong>未知标注</strong>的数据集，按数据的<strong>内在相似性</strong>将数据集划分为多个类别，使类别<strong>内</strong>的数据<strong>相似度较大</strong>而类别<strong>间</strong>的数据<strong>相似度较小</strong>。显然聚类算法属于<strong>无监督</strong>学习。</p>
+<h2><span id="距离度量方式">距离度量方式</span></h2>
+<p>度量数据间的距离/相似性有一系列不同的方式：</p>
+<ul>
+<li>闵可夫斯基距离Minkowski/欧式距离： <span class="math display">\[dist(X, Y) = (\sum_{i=1}^N(x_i - y_i)^p)^{\frac{1}{p}}\]</span></li>
+<li>杰卡德相似系数(Jaccard) ： <span class="math display">\[J(A, B) = \frac{|A\cap B|}{|A\cup B|}\]</span></li>
+<li>余弦相似度(cosine similarity)： <span class="math display">\[\cos(\theta) = \frac{a^Tb}{|a|\cdot|b|}\]</span></li>
+<li>Pearson相似系数： <span class="math display">\[\rho_{XY} = \frac{cov(X, Y)}{\sigma_X\sigma_Y} = \frac{E[(X - \mu_x)(Y - \mu_y)]}{\sigma_X\sigma_Y} = \frac{\sum_{i=1}^n(x_i - \mu_x)(y_i - \mu_y)}{\sqrt{\sum_{i=1}^n(x_i - \mu_x)^2}\cdot\sqrt{\sum_{i=1}^n(y_i - \mu_y)^2}}\]</span></li>
+<li>相对熵(K-L距离)： <span class="math display">\[D(p || q) = \sum_xp(x)\log\frac{p(x)}{q(x)} = E_{p(x)}\log\frac{p(x)}{q(x)}\]</span></li>
+<li>Hellinger距离 <span class="math display">\[D_\alpha(p||q) = \frac{1}{1-\alpha^2}(1 - \int p(x)^{\frac{1+\alpha}{2}}q(x)^{\frac{1-\alpha}{2}}dx)\]</span></li>
+</ul>
+<h2><span id="k-means">K-Means</span></h2>
+<p><strong>聚类的基本思想</strong></p>
+<ul>
+<li>给定一个有 <span class="math inline">\(N\)</span> 个对象的数据集, 构造数据的 <span class="math inline">\(k\)</span> 个簇, <span class="math inline">\(k≤n\)</span>。满足下列条件:
+<ul>
+<li>每一个簇至少包含一个对象</li>
+<li>每一个对象属于且仅属于一个簇</li>
+</ul></li>
+<li>将满足上述条件的 <span class="math inline">\(k\)</span> 个簇称作一个合理划分，对于给定的类别数目 <span class="math inline">\(k\)</span>, 首先给出初始划分, 通过<strong>迭代</strong>改变样本和簇的<strong>隶属</strong>关系, 使得每一次改进之后的划分方案都较前一次<strong>好</strong>。</li>
+</ul>
+<p><strong>K-means算法</strong></p>
+<p>K-means算法，也被称为k-平均或k-均值，是一种广泛使用的聚类算法。</p>
+<ul>
+<li>假定输入样本为 <span class="math inline">\(S=x_1,x_2,...,x_m\)</span> , 则算法步骤为:
+<ul>
+<li>选择初始的 <span class="math inline">\(k\)</span> 个类别中心 <span class="math inline">\(μ_1, μ_2, ..., μ_k\)</span></li>
+<li>对于每个样本 <span class="math inline">\(x_i\)</span>，将其标记为距离类别中心最近的类别, 即: <span class="math display">\[label_i = \arg\min_{1\leqslant j \leqslant k}||x_i-\mu_j||\]</span></li>
+<li>将每个类别中心更新为隶属该类别的所有样本的<strong>均值</strong>： <span class="math display">\[\mu_j = \frac{1}{c_j}\sum_{i\in c_j}x_i\]</span></li>
+<li>重复最后两步，直到类别中心的变化<strong>小于某阈值</strong>。</li>
+</ul></li>
+<li>中止条件:
+<ul>
+<li>迭代次数/簇中心变化率/最小平方误差MSE(MinimumSquaredError</li>
+</ul></li>
+</ul>
+<p><strong>公式化理解</strong></p>
+<p>记 <span class="math inline">\(K\)</span>个簇中心为 <span class="math inline">\(\mu_1,\mu_2,...,\mu_k\)</span> , 每个簇的样本数目为<span class="math inline">\(N_1,N_2,...,N_k\)</span>。 假设使用平方误差作为目标函数： <span class="math display">\[J(\mu_1, ... \mu_k) = \frac{1}{2}\sum_{j=1}^K\sum_{i=1}^{N_j}(x_i - \mu_j)^2\]</span></p>
+<p>对它求偏导并令其等于零得：</p>
+<p><span class="math display">\[\frac{\partial J}{\partial \mu_j} = -\sum_{i=1}^{N_j}(x_i - \mu_j) = 0 \Rightarrow \mu_j = \frac{1}{N_j}\sum_{i=1}^{N_j}x_i\]</span></p>
+<p>正好和K-mean算法中的聚类中心更新规则相同，即每个类别中心更新为隶属该类别的所有样本的<strong>均值</strong>，。所以实际上K-mean算法的损失函数就是上面的<strong>均方误差损失</strong>，更新规则也是<strong>梯度下降</strong>，而均方误差损失是假设误差服从<strong>高斯分布</strong>（推导见<a href="https://www.liuhe.website/index.php?/Articles/single/48" target="_blank" rel="noopener">此处</a>）！也就是说，K-mean算法是假设每个簇的误差是服从正态分布的，虽然这个先验条件很强，但如果实际情况不是这样，K-mean算法也可能给出<strong>很好</strong>的聚类结果。</p>
+<p><strong>K-means算法还对异常点和初始值比较敏感</strong></p>
+<p>若簇中含有异常点，将导致均值偏离严重。以一维数据为例 : 数组 <span class="math inline">\(1, 2, 3, 4, 100\)</span> 的均值为 <span class="math inline">\(22\)</span>，显然离大多数数据都比较远，若改成求数组的中位数 <span class="math inline">\(3\)</span>，在该实例中更为稳妥。这种聚类方式即<strong>K-Mediods聚类(K中值聚类)</strong>，相当于把损失函数换成了绝对误差损失。</p>
+<p>若类中心初始值不同，K-means算法可能会得到完全不同的结果（可能是不好的），比如下图所示：</p>
+<p><img src="/images/1474016250691.png"></p>
+<p><strong>总结</strong></p>
+<ul>
+<li>优点
+<ul>
+<li>是解决聚类问题的一种经典算法，<strong>简单</strong>、<strong>快速</strong></li>
+<li>对处理大数据集，该算法保持<strong>可伸缩性</strong>和<strong>高效率</strong></li>
+<li>当簇近似为<strong>高斯分布</strong>时，它的效果较好</li>
+<li>可作为其他聚类方法的基础算法，如<a href="#谱聚类">谱聚类</a></li>
+</ul></li>
+<li>缺点
+<ul>
+<li>在簇的平均值可被定义的情况下才能使用，可能不适用于某些应用</li>
+<li>必须事先给出 <span class="math inline">\(k\)</span> (要生成的簇的数目)，而且对初值敏感, 对于不同的初始值，可能会导致不同结果</li>
+<li>不适合于发现非凸形状的簇或者大小差别很大的簇</li>
+<li>对躁声和孤立点数据敏感</li>
+</ul></li>
+</ul>
+<h2><span id="密度聚类">密度聚类</span></h2>
+<p>密度聚类方法的指导思想是，只要样本点的<strong>密度</strong>大于某阈值，则将该样本添加到最近的簇中。</p>
+<p>这类算法能克服基于距离的算法只能发现“<em>类圆形</em>”(<em>凸</em>)的聚类的缺点，可发现<strong>任意形状的簇</strong>, 且<strong>对噪声数据不敏感</strong>。但计算密度单元的<strong>计算复杂度大</strong>，需要建立空间索引来降低计算量。常用密度聚类的算法有： * DBSCAN * 密度最大值算法</p>
+<h3><span id="dbscan">DBSCAN</span></h3>
+<p><strong>Density-Based Spatial Clustering of Applications with Noise</strong></p>
+<p>它是一个比较有代表性的基于密度的聚类算法。 与划分和层次聚类方法不同，它将簇定义为<strong>密度相连的点的最大集合</strong>，能够把具有足够高密度的区域划分为簇，并可在有“噪声” 的数据中发现任意形状的聚类。</p>
+<p>先来介绍一些相关概念：</p>
+<ul>
+<li>对象的 <span class="math inline">\(ε\)</span>-邻域 : 给定对象在半径 <span class="math inline">\(ε\)</span> 内的区域</li>
+<li>核心对象 : 对于给定的数目 <span class="math inline">\(m\)</span>, 如果一个对象的 <span class="math inline">\(ε\)</span>- 邻域至少包含 <span class="math inline">\(m\)</span> 个对象, 则称该对象为<strong>核心对象</strong></li>
+<li>直接密度可达 : 给定一个对象集合 <span class="math inline">\(D\)</span>, 如果 <span class="math inline">\(p\)</span> 是在 <span class="math inline">\(q\)</span> 的 <span class="math inline">\(ε\)</span>-邻域内, 而 <span class="math inline">\(q\)</span> 是一个核心对象, 我们说对象 <span class="math inline">\(p\)</span> 从对象 <span class="math inline">\(q\)</span> 出发是直接密度可达的</li>
+</ul>
+<p>如右图 <span class="math inline">\(ε=1\)</span>cm, <span class="math inline">\(m=5\)</span>, <img src="/images/1474017928793.png"> <span class="math inline">\(q\)</span>是一个核心对象, 从对象 <span class="math inline">\(q\)</span> 出发到对象 <span class="math inline">\(p\)</span> 是<strong>直接密度可达</strong>的。</p>
+<ul>
+<li><p>密度可达 : 如果存在一个对象链 <span class="math inline">\(p_1p_2...p_n,p_1=q,p_n=p\)</span>, 对 <span class="math inline">\(p_i∈D\)</span>, <span class="math inline">\((1≤i ≤n)\)</span>, <span class="math inline">\(p_{i+1}\)</span> 是从 <span class="math inline">\(p_i\)</span> 关于 <span class="math inline">\(ε\)</span> 和 <span class="math inline">\(m\)</span> <strong>直接密度可达</strong>的, 则对象 <span class="math inline">\(p\)</span> 是从对象 <span class="math inline">\(q\)</span> 关于 <span class="math inline">\(ε\)</span> 和 <span class="math inline">\(m\)</span> <strong>密度可达</strong>的。如下图:<img src="/images/1474018471590.png"></p></li>
+<li>密度相连 : 如果对象集合 <span class="math inline">\(D\)</span> 中存在一个对象 <span class="math inline">\(o\)</span>, 使得对象 <span class="math inline">\(p\)</span> 和 <span class="math inline">\(q\)</span> 是从 <span class="math inline">\(o\)</span> 关于 <span class="math inline">\(ε\)</span> 和 <span class="math inline">\(m\)</span> 密度可达的, 那么对象 <span class="math inline">\(p\)</span> 和 <span class="math inline">\(q\)</span> 是关于 <span class="math inline">\(ε\)</span> 和 <span class="math inline">\(m\)</span> 密度相连的。如下图： <img src="/images/1474018209712.png"></li>
+<li><strong>簇</strong> : 一个基于密度的簇是最大的<strong>密度相连</strong>对象的集合</li>
+<li><p>噪声 : 不包含在任何簇中的对象称为噪声</p></li>
+</ul>
+<p><strong>DBSCAN算法流程</strong></p>
+<ul>
+<li>如果一个点 <span class="math inline">\(p\)</span> 的 <span class="math inline">\(ε\)</span>-邻域包含多于 <span class="math inline">\(m\)</span> 个对象, 则创建一个 <span class="math inline">\(p\)</span> 作为核心对象的新簇</li>
+<li>寻找并合并核心对象<strong>直接</strong>密度可达的对象</li>
+<li>没有新点可以更新簇时, 算法结束</li>
+</ul>
+<p><img src="/images/1474018857997.png"></p>
+<p>由该过程我们可以知道： * 每个簇至少包含一个核心对象 * 非核心对象可以是簇的一部分, 构成了簇的边缘(edge) * 包含过少对象的簇被认为是噪声</p>
+<h3><span id="密度最大值聚类">密度最大值聚类</span></h3>
+<p>密度最大值聚类是一种简洁优美的聚类算法，可以识别各种形状的类簇，并且参数很容易确定。</p>
+<p><strong>一些定义</strong></p>
+<ul>
+<li><strong>局部密度</strong> <span class="math inline">\(\rho_i = \sum_j\chi(d_{ij} - d_c)\)</span>，其中 <span class="math inline">\(\chi(x) = 1, \ if\ x &lt; 0, \ otherwise \ \chi(x) = 0\)</span>，<span class="math inline">\(d_c\)</span> 是一个截断距离，<span class="math inline">\(ρ_i\)</span> 即到对象 <span class="math inline">\(i\)</span> 的距离小于 <span class="math inline">\(d_c\)</span> 的对象的个 数。由于该算法<strong>只对 <span class="math inline">\(ρ_i\)</span> 的相对值敏感</strong>, 所以对 <span class="math inline">\(d_c\)</span> 的选择是稳健的, 一种推荐做法是选择 <span class="math inline">\(d_c\)</span>, 使得平均每个点的邻居数为所有点的 1%-2%</li>
+<li><strong>高局部密度点距离</strong> <span class="math inline">\(\delta_i = \min_{j:\rho_j &gt; \rho_i}(d_{ij})\)</span>
+<ul>
+<li>简称：高密距离</li>
+<li>在密度高于对象 <span class="math inline">\(i\)</span> 的所有对象中, 到对象 <span class="math inline">\(i\)</span> 最近的距离, 即高局部密度点距离</li>
+</ul></li>
+<li>对于密度<strong>最大</strong>的对象, 设置 <span class="math inline">\(δ_i=\max(d_{ij})\)</span> (即 : 该问题中的无穷大)
+<ul>
+<li>只有那些密度是<strong>局部或者全局最大</strong>的点才会有<strong>远大于正常值</strong>的高局部密度点距离</li>
+</ul></li>
+<li><strong>簇的中心</strong>：那些有着<strong>比较大的局部密度 <span class="math inline">\(ρ_i\)</span> </strong>和<strong>很大的高密距离 <span class="math inline">\(δ_i\)</span> </strong>的点被认为是簇的中心
+<ul>
+<li>确定簇中心之后, 其他点按照距离已知簇的中心最近进行分类</li>
+</ul></li>
+<li><strong>异常点</strong>：<strong>高密距离 <span class="math inline">\(δ_i\)</span> 较大</strong>但<strong>局部密度 <span class="math inline">\(ρ_i\)</span> 较小</strong>的点是异常点</li>
+</ul>
+<p><strong>密度最大值聚类过程</strong></p>
+<p>下左图是所有点在二维空间的分布, 下右图是以 <span class="math inline">\(ρ\)</span> 为横坐标, 以 <span class="math inline">\(δ\)</span> 为纵坐标绘制的决策图。可以看到, <span class="math inline">\(1\)</span>和 <span class="math inline">\(10\)</span> 两个点的 <span class="math inline">\(ρ_i\)</span> 和 <span class="math inline">\(δ_i\)</span> 都比较大, 作为<strong>簇的中心点</strong>。<span class="math inline">\(26\)</span>、 <span class="math inline">\(27\)</span>、<span class="math inline">\(28\)</span>三个点的 <span class="math inline">\(δ_i\)</span> 也比较大, 但是 <span class="math inline">\(ρ_i\)</span> 较小, 所以是<strong>异常点</strong>。</p>
+<p><img src="/images/1474028836544.png"></p>
+<p><strong>边界和噪声的重认识</strong></p>
+<p>在聚类分析中，通常需要确定每个点划分给某个簇的<strong>可靠性</strong>:</p>
+<ul>
+<li>在该算法中，可以首先为每个簇定义一个<strong>边界区域 (border region)</strong>，亦即<strong>划分给该簇但是距离其他簇的点的距离小于 <span class="math inline">\(d_c\)</span> 的点</strong>的集合。然后为每个簇找到其边界区域的<strong>局部密度最大</strong>的点，令其局部密度为 <span class="math inline">\(ρ_h\)</span>。</li>
+<li>该簇中所有局部密度大于 <span class="math inline">\(ρ_h\)</span> 的点被认为是簇核心的一 部分(亦即将该点划分给该类簇的可靠性很大)，其余的点被认为是该类簇的<strong>光晕(halo)</strong>，亦即可以认为是<strong>噪声</strong>。</li>
+</ul>
+<h2><span id="谱聚类">谱聚类</span></h2>
+<h3><span id="基础知识">基础知识</span></h3>
+<p><strong>特征值和特征向量</strong></p>
+<p>若数 <span class="math inline">\(\lambda\)</span> 和向量 <span class="math inline">\(\overrightarrow{u}\)</span> 对矩阵 <span class="math inline">\(A\)</span> 满足： <span class="math display">\[A\cdot  \overrightarrow{u}= \lambda \cdot \overrightarrow{u} \]</span> 则 <span class="math inline">\(\lambda\)</span> 称为矩阵 <span class="math inline">\(A\)</span> 的一个特征值，<span class="math inline">\(\overrightarrow{u}\)</span> 为对应的特征向量。</p>
+<p>则有以下结论： * <strong>实对称阵的特征值是实数</strong> * 证明略 * <strong>实对称阵不同特征值的特征向量正交</strong> * 证明：令实对称矩阵为 <span class="math inline">\(A\)</span>, 其两个不同的特征值 <span class="math inline">\(λ_1,λ_2\)</span> 对应的特征向量分别是 <span class="math inline">\(μ_1, μ_2\)</span>; * <span class="math inline">\(λ_1,λ_2,μ_1,μ_2\)</span> 都是<strong>实数</strong>或是<strong>实向量</strong> * 有 <span class="math inline">\(A\mu_1 = \lambda_1\mu_1\)</span>，从而： <span class="math display">\[\begin{array}{lcr}
+\ \ \ \ \ A\mu_2 = \lambda_2\mu_2 \\
+\Rightarrow \mu_1^T A\mu_2 = \mu_1^T\lambda_2\mu_2 \\
+\Rightarrow (A^T\mu_1)^T\mu_2 = \lambda_2\mu_1^T\mu_2 \\
+\Rightarrow (A\mu_1)^T\mu_2 = \lambda_2\mu_1^T\mu_2 \\
+\Rightarrow (\lambda_1\mu_1)^T\mu_2 = \lambda_2\mu_1^T\mu_2 \\
+\Rightarrow \lambda_1\mu_1^T\mu_2 = \lambda_2\mu_1^T\mu_2 \\
+\end{array}\]</span> * 因为 <span class="math inline">\(\lambda_1 \neq \lambda_2\)</span>，所以 <span class="math inline">\(\mu_1^T\mu_2 = 0\)</span>，即 <span class="math inline">\(\mu_1,\mu_2\)</span> 正交。</p>
+<h3><span id="谱和谱聚类">谱和谱聚类</span></h3>
+<ul>
+<li><strong>谱</strong>：方阵作为线性算子，它的所有<strong>特征值</strong>的全体统称方阵的<strong>谱</strong>。
+<ul>
+<li>我们说一个人靠不靠谱儿，实际上是看他以前做过的事的<strong>稳定程度</strong>，即<strong>方差</strong>。</li>
+<li><strong>方阵</strong>的<strong>谱半径</strong>为<strong>最大的特征值</strong></li>
+<li>普通矩阵 <span class="math inline">\(A\)</span> 的<strong>谱半径</strong>: <span class="math inline">\((A^TA)\)</span> 的<strong>最大特征值</strong></li>
+</ul></li>
+</ul>
+<p><strong>谱聚类</strong>是一种基于<strong>图论</strong>的聚类方法, 通过对样本数据的<strong>拉普拉斯矩阵</strong>的<strong>特征向量</strong>进行聚类, 从而达到对样本数据聚类的目的。</p>
+<p><strong>谱分析的整体过程</strong></p>
+<p>给定一组数据 <span class="math inline">\(x_1,x_2,...x_n\)</span>, 记任意两个点之间的<strong>相似度</strong>(“距离”的减函数)为<span class="math inline">\(s_{ij}=&lt;x_i,x_j&gt;\)</span>, 形成<strong>相似度图(similarity graph)</strong> : <span class="math inline">\(G=(V,E)\)</span> 。如果 <span class="math inline">\(x_i\)</span> 和 <span class="math inline">\(x_j\)</span> 之间的相似度 <span class="math inline">\(s_{ij}\)</span> 大于一定的阈值, 那么两个点是连接的, 权值记做 <span class="math inline">\(s_{ij}\)</span>。</p>
+<p>接下来, 可以用相似度图来解决样本数据的聚类问题 : 找到图的一个划分, 形成若干个组(Group), 使得不同组之间有较低的权值, 组内有较高的权值。</p>
+<p><strong>一些概念</strong></p>
+<ul>
+<li>邻接矩阵 <span class="math inline">\(W = (w_{ij})\ \ i,j=1,...n\)</span>，实际上该矩阵就是相似度矩阵，即 <span class="math inline">\(w_{ij} = s_{ij}\)</span></li>
+<li>度矩阵 <span class="math inline">\(D = (d_{i})\ \ i = 1,...,n\)</span>，该矩阵是个对角阵： <span class="math display">\[d_i = \sum_{j=1}^nw_{ij}\]</span></li>
+<li>高斯相似度 <span class="math inline">\(s(x_i, x_j) = \exp(\frac{-||x_i - x_j||^2}{2\sigma^2})\)</span></li>
+<li><strong>Laplace矩阵</strong>：<span class="math inline">\(L = D - W\)</span>
+<ul>
+<li><span class="math inline">\(L\)</span> 是对称半正定矩阵，最小特征值是 <span class="math inline">\(0\)</span>，相应的特征向量是全 <span class="math inline">\(1\)</span> 向量 <span class="math display">\[\begin{array}{lcr}
+f^TLf = f^TDf - f^TWf = \sum_{i=1}^nd_if_i^2 - \sum_{i,j=1}^nf_if_jw_{ij} \\
+= \frac{1}{2}( \sum_{i=1}^nd_if_i^2 - 2\sum_{i,j=1}^nf_if_jw_{ij}  + \sum_{j=1}^nd_jf_j^2) \\
+= \frac{1}{2}\sum_{i,j=1}^nw_{ij}(f_i-f_j)^2 \geqslant 0
+\end{array}\]</span></li>
+<li>其中，<span class="math inline">\(f\)</span> 为任意矩阵，所以 <span class="math inline">\(L\)</span> 为半正定矩阵。</li>
+</ul></li>
+<li>Laplace 矩阵的其它形式：
+<ul>
+<li>对称Laplace矩阵 <span class="math inline">\(L_{sym} = D^{-\frac{1}{2}}LD^{\frac{1}{2}} = I - D^{-\frac{1}{2}}WD^{\frac{1}{2}}\)</span></li>
+<li><strong>随机游走Laplace矩阵</strong> <span class="math inline">\(L_{rw} = D^{-1}L = I - D^{-1}W\)</span>
+<ul>
+<li>之所以叫 Random Walk 是因为 <span class="math inline">\(d_i = \sum_{j=1}^nw_{ij}\)</span>，<span class="math inline">\(D^{-1}W\)</span> 相当于 <span class="math inline">\(W\)</span> 的元素都变成了 <span class="math inline">\(\frac{w_{ij}}{d_i} = \frac{w_{ij}}{\sum_{j=1}^nw_{ij}}\)</span>，相当于做了<strong>归一化</strong>。如果令 <span class="math inline">\(P = D^{-1}W\)</span>，则 <span class="math inline">\(\sum_{j=1}^np_{ij} = 1\)</span>，<span class="math inline">\(p_{ij}\)</span> 就可以看成从点 <span class="math inline">\(i\)</span> 到 <span class="math inline">\(j\)</span> 的概率，也就是 Random Walk 模型了。</li>
+</ul></li>
+</ul></li>
+</ul>
+<p><strong>谱聚类算法</strong></p>
+<ul>
+<li>输入: <span class="math inline">\(n\)</span> 个点 <span class="math inline">\(\{p_i\}\)</span>, 簇的数目 <span class="math inline">\(k\)</span></li>
+<li>计算 <span class="math inline">\(n×n\)</span> 的相似度矩阵 <span class="math inline">\(W\)</span> 和度矩阵 <span class="math inline">\(D\)</span>;</li>
+<li>计算拉普拉斯矩阵 <span class="math inline">\(L=D-W\)</span>;</li>
+<li>计算 <span class="math inline">\(L\)</span> 的前 <span class="math inline">\(k\)</span> 个特征向量 <span class="math inline">\(u_1,u_2,...,u_k\)</span>（<strong>从小到大</strong>排列）;</li>
+<li>将 <span class="math inline">\(k\)</span> 个列向量 <span class="math inline">\(u_1,u_2,...,u_k\)</span> 组成矩阵 <span class="math inline">\(U\)</span>, <span class="math inline">\(U∈R^{n×k}\)</span>;</li>
+<li>对于 <span class="math inline">\(i=1,2,...,n\)</span>, 令 <span class="math inline">\(y_i∈R^k\)</span> 是 <span class="math inline">\(U\)</span> 的第 <span class="math inline">\(i\)</span> 行的向量;</li>
+<li>使用k-means算法将点 <span class="math inline">\((y_i)_{i=1,2,...,n}\)</span> 聚类成簇 <span class="math inline">\(C_1,C_2,...C_k\)</span>;</li>
+<li>输出簇 <span class="math inline">\(A_1,A_2,...A_k\)</span>, 其中, <span class="math inline">\(A_i=\{j\ |\ y_j∈C_i\}\)</span></li>
+</ul>
+<p>使用其它形式的Laplace矩阵算法步骤类似。</p>
+<p>由于最后聚类的过程实际上还是交给k-means来做，所以谱聚类前面所有过程可以看作是给k-means提供更好的特征。</p>
+<p><strong>谱聚类与PCA的联系</strong></p>
+<p>谱聚类中取Laplace矩阵 <span class="math inline">\(L\)</span> <strong>从小到大</strong>的前 <span class="math inline">\(k\)</span> 特征向量，相当于把数据从 <span class="math inline">\(n\)</span> 为降低到 <span class="math inline">\(k\)</span> 维，就是一个<strong>降维</strong>的过程，与PCA是类似的。PCA是取原始数据的<strong>协方差矩阵</strong>的前 <span class="math inline">\(k\)</span> 个特征向量，只不过是<strong>从大到小</strong>排列的。为什么会有顺序区别呢？原因是Laplace矩阵 <span class="math inline">\(L = D - W\)</span> 中的减号，也就是 <span class="math inline">\(L\)</span> 中的特征与原始数据（<span class="math inline">\(W\)</span>）的特征是相反的，所以与PCA取的顺序相反。</p>
+<p><strong>思考与总结</strong></p>
+<ul>
+<li>谱聚类中的 <span class="math inline">\(K\)</span> 如何确定 ?
+<ul>
+<li><span class="math inline">\(k^* = \arg\max_k|\lambda_{k+1} - \lambda_k|\)</span></li>
+</ul></li>
+<li>最后一步K-Means的作用是什么 ?
+<ul>
+<li>目标函数是关于子图划分指示向量的函数，该向量的值根据子图划分确定，是离散的。该问题是NP的，转换成求连续实数域上的解，最后用K-Means算法离散化。</li>
+</ul></li>
+<li>未正则/对称/随机游走拉普拉斯矩阵，首选哪个？
+<ul>
+<li><strong>随机游走拉普拉斯矩阵</strong></li>
+</ul></li>
+<li>谱聚类可以用切割图/随机游走/扰动论等解释</li>
+</ul>
+<h2><span id="参考">参考</span></h2>
+<ul>
+<li>Alex Rodriguez, Alessandro Laio. Clustering by fast search and find of density peak. Science. 2014</li>
+<li>Ulrike von Luxburg. A tutorial on spectral clustering. 2007</li>
+<li>Lang K. Fixing two weaknesses of the spectral method. Advances in Neural Information Processing Systems 18, 715–722. MIT Press, Cambridge, 2006</li>
+<li>Bach F, Jordan M. Learning spectral clustering. Advances in Neural Information Processing Systems 16 (NIPS). 305– 312. MIT Press, Cambridge,2004</li>
+<li>Andrew Rosenberg, Julia Hirschberg, V-Measure: A conditional entropy-based external cluster evaluation measure, 2007.</li>
+<li>W. M. Rand. Objective criteria for the evaluation of clustering methods. Journal of the American Statistical Association. 1971</li>
+<li>Nguyen Xuan Vinh, Julien Epps, James Bailey, Information theoretic measures for clusterings comparison, ICML 2009</li>
+<li>Peter J. Rousseeuw, Silhouettes: a Graphical Aid to the Interpretation and Validation of Cluster Analysis. Computational and Applied Mathematics 20: 53–65, 1987</li>
+</ul>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Clustering/">Clustering</a><a href="/tags/K-Means/">K-Means</a><a href="/tags/DBSCAN/">DBSCAN</a><a href="/tags/谱聚类/">谱聚类</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

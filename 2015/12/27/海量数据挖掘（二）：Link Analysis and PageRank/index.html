@@ -1,0 +1,417 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    海量数据挖掘（二）：Link Analysis and PageRank | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="海量数据挖掘（二）：Link Analysis and PageRank">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      海量数据挖掘（二）：Link Analysis and PageRank</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2015/12/27/海量数据挖掘（二）：Link Analysis and PageRank/" rel="bookmark">
+        <time class="entry-date published" datetime="2015-12-27T08:05:40.000Z">
+          2015-12-27
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <blockquote>
+<p>此系列为Cousera上Standford的<a href="https://class.coursera.org/mmds-002" target="_blank" rel="noopener">Mining Massive Datasets</a>课程学习笔记。 这是该系列的第二篇笔记：<strong>Link Analysis and PageRank</strong></p>
+</blockquote>
+<a id="more"></a>
+<h2><span id="链接分析-link-analysis">链接分析 Link Analysis</span></h2>
+<h3><span id="图类数据-graph-data">图类数据 Graph Data</span></h3>
+<figure>
+<img src="/images/1450882068603.png" alt="Alt text"><figcaption>Alt text</figcaption>
+</figure>
+<p>图由一组节点和一组边组成，根据边有没有方向可以分为有向图和无向图。</p>
+<p>社交网络可以用图来描述、媒体网络可以用图来描述、信息网络也可以用图来描述、互联网更可以用图来描述！ <img src="/images/1450882333263.png" alt="Alt text"></p>
+<p>Web也可以看作一张图。</p>
+<h3><span id="web-as-a-graph">Web as a Graph</span></h3>
+<ul>
+<li>Web 可以看作一个有向图
+<ul>
+<li>节点： 网页</li>
+<li>边 ： 超链接</li>
+</ul></li>
+</ul>
+<p>Web网络图举例：</p>
+<figure>
+<img src="/images/1450882695999.png" alt="Alt text"><figcaption>Alt text</figcaption>
+</figure>
+<h3><span id="how-to-organize-the-web">How to organize the Web?</span></h3>
+<p>早些时候，互联网刚起步的时代，人们手动组织<strong>网页目录(Web directories)</strong>，像雅虎、DMOZ等。</p>
+<p>现在都是采用<strong>网页搜索(Web Search)</strong>的形式，信息检索办法: 在一个小的、可信任的页面集合中寻找相关的网页。</p>
+<p><strong>但是</strong>， Web非常大，林子大了什么鸟都有，充满不可信任的的网页、奇怪的东西、垃圾邮件等。</p>
+<blockquote>
+<p><strong>做Web搜索有两大挑战</strong>： 1. 该信任哪些网页？ 2. 什么是最好结果？</p>
+</blockquote>
+<p>对于第一点，可以认为<strong>可信任的页面里的链接一般都互相指向</strong>，这样就可以确定大部分的可信任网页，但并不是绝对的。 对于第二点，在搜索引擎上搜索的绝大部分都是没有最好的答案的，怎么提供用户最想要的答案是个问题。</p>
+<h3><span id="ranking-nodes-on-the-graph">Ranking Nodes on the Graph</span></h3>
+<p><strong>不是所有网页都一样“重要“！</strong> 比如：https://www.baidu.com/ vs http://www.liuhe.website/ 很容易判断熟轻熟重。</p>
+<p>在Web这个图里，每个节点相连的边数差异很大！</p>
+<p>链接分析算法简介： <img src="/images/1450884497971.png" alt="Alt text"></p>
+<h2><span id="pagerank">PageRank</span></h2>
+<h3><span id="the-quotflowquot-formulation">The &quot;Flow&quot; Formulation</span></h3>
+<blockquote>
+<p>计算节点（网页）权重的想法：<strong>把链接当作权重（Links as votes）</strong></p>
+</blockquote>
+<p>基本想法是这样的，<strong>如果一个网页很重要，那么指向它和它指向别的网页的链接应该很多</strong>。有一个问题就是考虑指向它的链接还是它指出去的链接呢？</p>
+<p>如果考虑指出去的链接的话，那只要大家都在自己的网页上放一大堆链接就可以提高PageRank了，这样并不能反应一个网站的重要程度，所以我们<strong>考虑指向该网页的链接</strong>。</p>
+<p>那么还有一个问题，是不是所有指向你的链接都一样重要？？ 显然不是！ 如果Google首页有指向你的链接，你的流量很可能就会爆增，但是<a href="www.liuhe.website">我的首页</a>如果加上指向你的链接可能并不会带来什么流量。</p>
+<p>所以每个链接带来的权重是不一样的，<strong>来自重要的网站的链接权重应该更高些</strong>。</p>
+<p>一个例子： <img src="/images/1450923574723.png" alt="一个例子"></p>
+<h3><span id="简单的递归公式">简单的递归公式</span></h3>
+<p>每个链接的权重与其源网站的重要程度成比例。</p>
+<p>设页面 <span class="math inline">\(j\)</span> 的权重为 <span class="math inline">\(r_j\)</span> ，该页有 <span class="math inline">\(n\)</span> 个指向其他页面的链接，那么，每个链接给那个网站带来的权重为 $ r_j / n $ 。</p>
+<p>页面 <span class="math inline">\(j\)</span> 自己的权重来自所有指向它的链接的权重之和。</p>
+<p>很简单吧？这就是&quot;Flow&quot;模型。</p>
+<figure>
+<img src="/images/1450924042138.png" alt="Alt text"><figcaption>Alt text</figcaption>
+</figure>
+<p>我们尝试解一下上图中的方程组，即： $ r_y = r_y / 2 + r_a / 2 $ $ r_a = r_y / 2 + r_m $ $ r_m = r_a / 2 $</p>
+<p>发现解并不唯一，只能解得两两之间的关系，原因在于方程组里没有常数，我们还需要加一个条件： $ r_y + r_a + r_m = 1 $</p>
+<p>这样解得：$ r_y = , r_a = , r_m =  $</p>
+<p>像这种小规模例子我们可以直接用高斯消元法球解，但是像web这么大的图肯定不可能人工求解，我们需要一个更好的计算方法。</p>
+<h3><span id="matrix-formulation">Matrix Formulation</span></h3>
+<blockquote>
+<p>警告：以下内容会涉及线性代数以及概率论。</p>
+</blockquote>
+<p>我们用邻接矩阵 <span class="math inline">\(M\)</span> 来表示图，设页面 <span class="math inline">\(i\)</span> 有 $ d_i $ 个外链，如果 $ i -&gt; j $ ，那么 $ M_{ji} =  $ 否则 $ M_{ji} = 0 $ 其中 <span class="math inline">\(M\)</span> 是一个列随机矩阵，每列的和等于1.</p>
+<p>我们再用一个向量 <span class="math inline">\(r\)</span> 来表示所有页面的PageRank，$ r_i $ 是页面 <span class="math inline">\(i\)</span> 的得分，并且 $ _i r_i = 1 $</p>
+<p>现在，上节的方程($ r_j = _{i j}  $)就可以该写成： $  = M  $</p>
+<p>用个例子解释一下： 假设页面 <span class="math inline">\(i\)</span> 链向3个页面，包括 <span class="math inline">\(j\)</span> ，如图所示： <img src="/images/1450973732761.png" alt="Alt text"></p>
+<p>矩阵乘法是这样的，结果矩阵的 <span class="math inline">\([i, j]\)</span> 元素是 $A_{i0} * B_{0j} + A_{i1} * B_{1i} + ... + A_{in} * B_{nj} $ 得到的。 <img src="/images/1450973811824.png" alt="Alt text"></p>
+<p>所以 <span class="math inline">\(M\)</span> 在与 $r $ 相乘的结果也是一个列向量，这个列向量第 <span class="math inline">\(i\)</span> 个元素的值就等于矩阵 <span class="math inline">\(M\)</span> 的第 <span class="math inline">\(j\)</span> 行乘以 <span class="math inline">\(\vec r\)</span> ，数学表达式就是 $ r_j = <em>{k=0}^{n} M</em>{jk}*r_i $，由邻接矩阵所表示的意义可知，这与之前的Flow Equation是等效的。</p>
+<p>一个例子： <img src="/images/1451041071423.png" alt="Alt text"></p>
+<h3><span id="特征向量公式">特征向量公式</span></h3>
+<p>我们先来复习一下什么是特征值(eigenvalue)和特征向量(eigenvector)。</p>
+<blockquote>
+<p>如果表达式：$ A x = x $ 成立，则称<span class="math inline">\(\vec x\)</span>为矩阵<span class="math inline">\(A\)</span>的特征向量， <span class="math inline">\(\lambda\)</span>为矩阵<span class="math inline">\(A\)</span>的特征值，其中 <span class="math inline">\(\vec x\)</span>是任意向量， <span class="math inline">\(\lambda\)</span>是常数。</p>
+</blockquote>
+<p>之前得到的矩阵公式为：<span class="math inline">\(\vec r = M \cdot \vec r\)</span>，正好是符合上述表达式，矩阵<span class="math inline">\(M\)</span>的特征向量就是<span class="math inline">\(\vec r\)</span>，特征值就是<span class="math inline">\(1\)</span>。</p>
+<p>有了这个重大发现之后就可以高效的计算 <span class="math inline">\(\vec r\)</span> 了，我们管这个方法叫<strong>幂迭代(Power iteration)</strong></p>
+<h3><span id="幂迭代-power-iteration">幂迭代 Power Iteration</span></h3>
+<p><strong>幂迭代</strong> * 假设有N个web页面 * 初始化：$ r^{(0)} = [1/N, .... 1/N]^T $ * 迭代：$ r^{(t+1)} = M r^{(t)} $ * 终止条件：$ |r<sup>{(t+1)}-r</sup>{(t)}|_1 &lt; $ * 其中 $ |x|_1 = _{i=1}^{N}|x_i| $</p>
+<p>看了这个之后是不是觉得很好实现？就是一个<code>while</code>循环而已。 还是那个例子： <img src="/images/1451042010630.png" alt="Alt text"> 经过n轮迭代之后，<span class="math inline">\(\vec r\)</span> 的值稳定在$ [6/15, 6/15, 3/15]^T$ ，与之前解方程组的结果一致。</p>
+<h3><span id="random-walk-interpretation">Random Walk Interpretation</span></h3>
+<blockquote>
+<p>现在我们知道PageRank怎么高效的计算了，那么<strong>怎么理解这个网页的“重要“程度这个数值的具体意思呢</strong>？这里提供了一种解释：随机漫游解释。</p>
+</blockquote>
+<p>假设有一个漫步者随机地在网页中漫游： * 在 <span class="math inline">\(t\)</span> 时刻，这个人在某个页面 <span class="math inline">\(i\)</span> * 在 <span class="math inline">\(t+1\)</span> 时刻，漫步者从页面 <span class="math inline">\(i\)</span> 的链接中随机选了一条 * 经由那个链接到达了 <span class="math inline">\(j\)</span> 页面 * 无限重复这一过程</p>
+<p>我们再令一个向量 <span class="math inline">\(p(t)\)</span>，它的第 <span class="math inline">\(i\)</span> 个值即<span class="math inline">\(p_i(t)\)</span>表示在 <span class="math inline">\(t\)</span> 时刻这个漫步者在页面 <span class="math inline">\(i\)</span> 的概率。 所以 <span class="math inline">\(p(t)\)</span> 表示所有页面的概率分布。</p>
+<p>那么漫步者在 <span class="math inline">\(t+1\)</span> 时刻在哪？ 由于选择每个链接是随机的，所以 <span class="math inline">\(t+1\)</span> 时刻漫步者在当前页面指向的每个页面的概率都相等，都等于当前页面的<em>出度分之一</em>，所以有： $ p(t+1) = M p(t) $ 可见这和PageRank的方程是一样的。</p>
+<p>设漫步者会达到一个稳态： $ p(t+1) = M p(t) = p(t) $ 在这个稳态，漫步者在以后任何时刻出现在某个页面的概率都相等，这时 <span class="math inline">\(p(t)\)</span> 是一个<strong>平稳分布(stationary distribution)</strong>。</p>
+<p>所以结论就是： * <strong><span class="math inline">\(\vec r\)</span> 的值是随机漫步的平稳分布</strong> * 一个网页的PageRank得分代表了一个随机漫步者在无限的漫步过程中在某个时间 <span class="math inline">\(t\)</span> 出现在这个页面的概率！</p>
+<h3><span id="存在性和唯一性">存在性和唯一性</span></h3>
+<p>这个随机漫步过程是一个<a href="https://www.wikiwand.com/zh-cn/%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E9%93%BE" target="_blank" rel="noopener">马尔科夫过程</a> 所以有： &gt; 对于满足<strong>一定条件</strong>的图，其<strong>平稳分布是唯一</strong>的，并且<strong>终将会达到平稳分布无论在 <span class="math inline">\(t=0\)</span> 时刻的概率初始值是什么</strong>。</p>
+<h3><span id="the-google-formulation">The Google Formulation</span></h3>
+<p>上面说要满足<strong>一定条件</strong>，其平稳分布才会唯一并且无论初始值是什么，接下来就要探讨这一定条件是什么。</p>
+<p>首先来看三个问题：</p>
+<p>$ r_j^{(t+1)} = _{i j} $ 或者 $ r = M r $</p>
+<ul>
+<li>这个东西（<span class="math inline">\(\vec r\)</span>）是否收敛？</li>
+<li>这个东西是否收敛到我们期待的结果？</li>
+<li>得到的结果是否有意义？</li>
+</ul>
+<p>我们一个一个回答。</p>
+<h4><span id="does-this-converge">Does this converge?</span></h4>
+<p>蜘蛛陷阱(Spider trap)：</p>
+<p>假设图中只有两个节点A和B，如图所示： <img src="/images/1451047252190.png" alt="Alt text"> 初始化 $ r_a = 1, r_b = 0 $，按照公式迭代，我们得到一下结果： <img src="/images/1451047369971.png" alt="Alt text"> 0和1不断反转，不会收敛。再来看下一个问题。</p>
+<h4><span id="does-it-converge-to-what-we-want">Does it converge to what we want?</span></h4>
+<p>死胡同问题(Dead end problem)：</p>
+<p>假设图中只有两个节点a和b，如图所示： <img src="/images/1451047684408.png" alt="Alt text"> 初始化 $ r_a = 1, r_b = 0 $，代入公式迭代得到以下结果： <img src="/images/1451047788390.png" alt="Alt text"> 最终收敛到0，这显然不是我们想要的。</p>
+<p>两个问题总结一下： <img src="/images/1451047864892.png" alt="Alt text"></p>
+<h3><span id="problem-spider-traps">Problem : Spider Traps</span></h3>
+<p>假设有图： <img src="/images/1451047965042.png" alt="Alt text"> 其邻接矩阵 <span class="math inline">\(M\)</span> 为： <img src="/images/1451048025790.png" alt="Alt text"> 带入公式迭代，结果为： <img src="/images/1451048077292.png" alt="Alt text"></p>
+<p>最终，<span class="math inline">\(r_m = 1\)</span> 而 $r_y = r_a = 0 $ 。这从漫步者的角度很好理解，在经过一段时间之后，漫步者到达了 <span class="math inline">\(m\)</span> 节点，然而 <span class="math inline">\(m\)</span> 节点只有指向自己的链接，然后就只能一直停留在 <span class="math inline">\(m\)</span> ，所以最后的概率一定是1, 而其他两个节点的概率就变成了0 。</p>
+<p><em>解决方案</em></p>
+<p><strong>随机传送 Random Teleports</strong></p>
+<p>Google解决这个问题的办法是：到达某个节点后 * 有 <span class="math inline">\(\beta\)</span> 的概率随机找一个链接过去 * 剩下 <span class="math inline">\(1-\beta\)</span> 的概率跳到一个随机的页面 * 一般 <span class="math inline">\(\beta\)</span> 的值在 <span class="math inline">\(0.8\)</span> 到 <span class="math inline">\(0.9\)</span> 之间</p>
+<p>这样就使得漫步者在到达m节点之后有一定的概率跳出去！ <img src="/images/1451048656880.png" alt="Alt text"></p>
+<h3><span id="problem-dead-ends">Problem : Dead Ends</span></h3>
+<p>假设有图： <img src="/images/1451048764950.png" alt="Alt text"> 其邻接矩阵为： <img src="/images/1451048788083.png" alt="Alt text"> 由于m节点没有链接到其他界面，所以m的那一列都等于零。 代入公式迭代，得到结果： <img src="/images/1451048888879.png" alt="Alt text"></p>
+<p>漫步者到达m之后发现是死胡同，无路可走了，然而他也不会在m停留，所以最后出现在三个节点的概率都等于0 。</p>
+<p><em>解决方案</em></p>
+<p>依旧是<strong>传送</strong>！</p>
+<p>当漫步者到达死胡同时，传送的概率变为 <span class="math inline">\(1.0\)</span> ，随机传送到任意页面，然后图就变成了如下： <img src="/images/1451049151567.png" alt="Alt text"> 邻接矩阵变为： <img src="/images/1451049212444.png" alt="Alt text"></p>
+<p>这样问题就解决了，漫步这每次到m之后，发现去所有页面的概率都相同且不为零，相当于随机跳转到一个页面。</p>
+<h3><span id="为什么传送可以解决这些问题">为什么传送可以解决这些问题？</span></h3>
+<p>我们知道求解PageRank的过程实际上是一个马尔科夫过程，也叫马尔科夫链。</p>
+<p><strong>马尔科夫链(Markov chains)</strong>： * 拥有一组状态 <span class="math inline">\(X\)</span> * 转移矩阵 <span class="math inline">\(P\)</span> ，且 <span class="math inline">\(P_{ij} = P(X_t=i | X_{t-1} = j)\)</span>，<span class="math inline">\(P_{ij}\)</span> 的意思就是已知上一步在 <span class="math inline">\(j\)</span>，现在这步在 <span class="math inline">\(i\)</span> 的概率 * <span class="math inline">\(\pi\)</span> 是每个状态 <span class="math inline">\(x\)</span> 特定的平稳分布 * 目标就是找到 <span class="math inline">\(\pi\)</span> 使得 <span class="math inline">\(\pi = P \pi\)</span></p>
+<p><strong>条件</strong>： 对于<strong>任意的初始向量</strong>，只要马尔科夫转移矩阵 <span class="math inline">\(P\)</span> 满足<strong>随机的(stochastic)</strong>，<strong>不可约的(irreducible)</strong>和<strong>非周期的(aperiodic)</strong>，那么对矩阵 <span class="math inline">\(P\)</span> 应用幂迭代就一定会收敛到一个不变的向量。</p>
+<p>我们来讨论一下为什么随机传送可以让矩阵 <span class="math inline">\(M\)</span> 满足上述条件。</p>
+<h4><span id="make-m-stochastic">Make M Stochastic</span></h4>
+<p><strong>随机(Stochastic)</strong>的意思就是每列的和加起来等于<span class="math inline">\(1\)</span></p>
+<p>我们知道下面的图会造成死胡同问题(Dead End)： <img src="/images/1451048764950.png" alt="Alt text"> 如果让其在没有出度的节点可以随机跳转到任意节点的话就相当与在 <span class="math inline">\(m\)</span> 节点上新加了几条边： <img src="/images/1451132954313.png" alt="Alt text"> 这样 <span class="math inline">\(m\)</span> 的出度就变成了3，矩阵 <span class="math inline">\(M\)</span> 也变成了： <img src="/images/1451133022738.png" alt="Alt text"> 现在 <span class="math inline">\(M\)</span> 矩阵就满足了随机性，每列的和都等于 <span class="math inline">\(1\)</span>。</p>
+<p>我们把新矩阵记做 <span class="math inline">\(A\)</span>，有如下计算公式： &gt; $ A = M + a^T(e) $</p>
+<p>如果节点 <span class="math inline">\(i\)</span> 没有出度则 <span class="math inline">\(a_i=1\)</span>，否则 <span class="math inline">\(a_i=0\)</span> ; $ e$ 是单位行向量。</p>
+<h4><span id="make-m-aperiodic">Make M Aperiodic</span></h4>
+<p><strong>周期性(periodic)</strong>定义：如果存在一个 $k&gt;1 $ 使得两次到达同一个状态的间隔总是 <span class="math inline">\(k\)</span> 的整数倍，那么这条链就是具有周期性的。</p>
+<figure>
+<img src="/images/1451134156887.png" alt="Alt text"><figcaption>Alt text</figcaption>
+</figure>
+<p>上图就是一个具有周期性的链，每隔两步就会回到同一状态。 加上随机传送就变成了： <img src="/images/1451134263267.png" alt="Alt text"> 这样不论每隔多少步也不一定会回到同一状态，即<strong>不具有周期性</strong>。</p>
+<h4><span id="make-m-irreducible">Make M Irreducible</span></h4>
+<p><strong>不可约(Irreducible)</strong>的意思是：对于任何状态，都有从这个状态跳到任意另一个状态的可能性。</p>
+<p>如图，其中绿色的线是加上随机跳转之后： <img src="/images/1451134621312.png" alt="Alt text"></p>
+<h3><span id="random-jumps">Random Jumps</span></h3>
+<p>从前面的分析可知，随机跳转可以是 <span class="math inline">\(M\)</span> 满足随机、非周期和不可约的性质，这就是Google的解决方案。</p>
+<ul>
+<li>在每一步，漫步者有两个选择：
+<ul>
+<li><span class="math inline">\(\beta\)</span> 的可能性随机选一个链接</li>
+<li><span class="math inline">\(1-\beta\)</span> 的可能性跳转到随机页面</li>
+</ul></li>
+</ul>
+<p><strong>PageRank 计算方程</strong> 就变成了： &gt; $ r_j = _{i j}  + (1-) $</p>
+<p>其中 <span class="math inline">\(\sum _{i \to j} \beta \frac{r_i}{d_i}\)</span> 是具有 <span class="math inline">\(\beta\)</span> 的概率随机选择一个链接，<span class="math inline">\((1-\beta)\frac{1}{n}\)</span> 是 <span class="math inline">\(1-\beta\)</span> 的概率跳转到随机页面，其中 <span class="math inline">\(n\)</span> 是图中节点个数。</p>
+<p>我们还打算用幂迭代方法计算PageRank，所以还需要变成矩阵形式。</p>
+<p><strong>The Google Matrix A</strong> &gt; $ A = M + (1 - ) e e^T $</p>
+<p><strong>What is <span class="math inline">\(\beta\)</span> ?</strong> 实践表明 <span class="math inline">\(\beta\)</span> 取在 $0.8 $~ <span class="math inline">\(0.9\)</span> 之间较好，其中 <span class="math inline">\(\beta=0.85\)</span> 时每隔五步跳转一次。</p>
+<p>还是举之前那个例子。。。 图为： <img src="/images/1451135546704.png" alt="Alt text"></p>
+<p>矩阵 <span class="math inline">\(\beta M\)</span> 为： <img src="/images/1451135595638.png" alt="Alt text"></p>
+<p>跳转矩阵为： <img src="/images/1451135650772.png" alt="Alt text"></p>
+<p>所以Google矩阵 <span class="math inline">\(A\)</span> 就是它们的和： <img src="/images/1451135678520.png" alt="Alt text"></p>
+<p>进行幂迭代，结果为： <img src="/images/1451135730531.png" alt="Alt text"></p>
+<p>可见，修正之后的PageRank依旧是m分最高，但也不会有蜘蛛陷阱的问题，比较完美！</p>
+<h3><span id="实际上是如何计算pagerank的">实际上是如何计算PageRank的？</span></h3>
+<p>计算PageRank就是一个幂迭代的过程，按照公式： <span class="math inline">\(r^{new} = A \cdot r^{old}\)</span>，看似很简单。</p>
+<p>如果我们有足够的内存来装下 <span class="math inline">\(A, r^{old}, r^{new}\)</span> 的话确实很简单，我们来算一下到底够不够。</p>
+<p>假设有 <span class="math inline">\(N = 1 × 10^{9}\)</span> 个网页，存每个网页只需要4个字节，即只存一个节点ID，那么存储地址+ID就需要 2 billion * 4 byte，约等于8GB</p>
+<p>如果要存储矩阵A，需要存储 <span class="math inline">\(N^2\)</span> 个地址+ID，大概需要 <span class="math inline">\(10^{18}\)</span> 字节这个数量级的内存空间，显然是没有那么大的！</p>
+<p>我们考虑矩阵 <span class="math inline">\(M\)</span> 的值的分布， 如果 $ j i $ 那么 $ M_{ij} = 1/|d_j| $ ，否则 $ M_{ij} = 0 $，实际情况是每个网页一般只有10个到100个链接，即使整个web有1 billion+ 个网页，所以矩阵 <span class="math inline">\(M\)</span> 大部分值都为0，极少数值非0 ，所以我们可以仅存储非零值来极大地减少所需存储空间。</p>
+<p>而矩阵 <span class="math inline">\(A\)</span> 就不一样了，$ A = M + (1 - ) e e^T $，每个值都是非零的，因为矩阵 <span class="math inline">\(M\)</span> 中等于0的情况在 <span class="math inline">\(A\)</span> 中都被赋予了随机跳转到任意节点的可能性。</p>
+<p>由于 <span class="math inline">\(A\)</span> 不能直接放在内存里计算，而 <span class="math inline">\(M\)</span> 可以，所以要想方设法把 <span class="math inline">\(A\)</span> 的迭代变成 <span class="math inline">\(M\)</span> 的迭代。</p>
+<h4><span id="公式变形">公式变形</span></h4>
+<p>原公式为：$ r = A r $ 其中 $A_{ij} = M_{ij} +  $</p>
+<p>把它展开： <span class="math inline">\(r_i = \sum_{j=1}^{N}A_{ij} \cdot r_j\)</span> <img src="/images/1451140624364.png" alt="Alt text"></p>
+<p>最后我们得到： &gt; $ r = M r + []_N $</p>
+<p>这里假设 <span class="math inline">\(M\)</span> 中没有dead-ends，其中 <span class="math inline">\([x]_n\)</span> 表示一个项全部为 <span class="math inline">\(x\)</span> 的向量。</p>
+<p>经过了这样的变形，我们在每次迭代中只需要： * 计算 $ r^{new} = M r^{old}$ * 在 <span class="math inline">\(r^{new}\)</span> 的每一项上加上常量 $ (1-)/N$ * 如果 <span class="math inline">\(M\)</span> 中有dead-end 的话，那么 $_i r_i^{new} &lt; 1 $ ，我们还需要重新分配一下余下部分，使其和等于1.</p>
+<h4><span id="最终的算法">最终的算法</span></h4>
+<ul>
+<li>输入 ： 图 <span class="math inline">\(G\)</span> 和 参数 <span class="math inline">\(\beta\)</span>
+<ul>
+<li><span class="math inline">\(G\)</span> 是有向图而且可以有 <strong>spider traps</strong> 和 <strong>dead ends</strong></li>
+<li>概率参数 <span class="math inline">\(\beta\)</span></li>
+</ul></li>
+<li>输出：Pagerank 向量 <span class="math inline">\(\vec r\)</span> <img src="/images/1451141342964.png" alt="Alt text"></li>
+</ul>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/数据挖掘/">数据挖掘</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

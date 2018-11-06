@@ -1,0 +1,554 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    揭秘二维码—原理与实践 | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="揭秘二维码—原理与实践">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      揭秘二维码—原理与实践</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/11/14/揭秘二维码—原理与实践/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-11-13T16:11:06.000Z">
+          2016-11-14
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <h2><span id="什么是二维码">什么是二维码</span></h2>
+<p>二维码，英文：<strong>Quick Response Code</strong>， 简称 <strong>QR</strong> 码。二维码最初由日本一家公司发明，后由国际标准化组织ISO批准进行标准化。现在二维码在我们生活中广泛使用，它具有比条形码更强的数据表示能力和更强的纠错能力。</p>
+<p>我认为，<strong>二维码就是一种编码，把我们要传递的数据进行编码并转换成另外一种形式呈现出来</strong>。</p>
+<a id="more"></a>
+<h2><span id="技术原理">技术原理</span></h2>
+<p>注：文中所指的QR Code Spec : <a href="http://www.codeplex.com/Download?ProjectName=qrcodenet&amp;DownloadId=284291" target="_blank" rel="noopener">ISO/IEC 18004:2000(E) - QR code specification </a>。</p>
+<h3><span id="整体结构">整体结构</span></h3>
+<p>二维码的整体结构如下图所示：</p>
+<p><img src="/images/QR_Structure.png"></p>
+<p>整体分为两大部分：功能区（Function Patterns）和编码区（Encoding region）。</p>
+<p>功能区里又分为：</p>
+<ul>
+<li>Finder Pattern：用于让解码器定位二维码的位置，分别位于三个角</li>
+<li>Separator：起分隔作用</li>
+<li>Timing Patterns：相当于坐标轴</li>
+<li>Alignment Patterns：帮助解码器重新同步坐标映射，在二维码有一定污损的情况下</li>
+</ul>
+<p>编码区里分为：</p>
+<ul>
+<li>Format Information：用来存储纠错等级和掩码（mask）类型</li>
+<li>Version Information：二维码一共有40个尺寸，Version 1是21 x 21的矩阵，Version 2是 25 x 25的矩阵，Version 3是29的尺寸，每增加一个version，就会增加4的尺寸。在 &gt;= Version 7以上，需要预留两块3 x 6的区域存放一些版本信息</li>
+<li>剩下的区域用来存放数据和纠错码</li>
+</ul>
+<h3><span id="编码方式">编码方式</span></h3>
+<p>二维码有多种编码模式，这里介绍四种：</p>
+<ul>
+<li><p><strong>Numeric Mode</strong>：支持数字0～9</p></li>
+<li><p><strong>Alphanumeric Mode</strong>：包括数字0～9，大写字母A～Z，和一些符号空格 $ % * + - . / : 。这些字符会映射成一个字符索引表。如下所示：</p>
+<p><img src="/images/EncodingAM.png"></p>
+<p>编码的过程是把字符两两分组，然后转成上表的45进制，然后转成11bits的二进制，如果最后有一个落单的，那就转成6bits的二进制。</p></li>
+<li><p><strong>Byte Mode</strong>：这个模式可以编码的字符就比上一个多一些，每把个bit构成一个字符，总共可以表示256个不同字符，具体映射表见QR Code Spec的Table 6</p></li>
+<li><p><strong>Kanji Mode</strong>：双字节编码，这个模式可以编码日文，也可以用于中文编码，下图是一个示例：</p>
+<p><img src="/images/Kanji-mode.png"></p></li>
+</ul>
+<p>每种编码模式都有对应的标识符，如表1所示。模式表示要放在数据的前面。</p>
+<table>
+<thead>
+<tr class="header">
+<th>Mode</th>
+<th>indicator</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Numeric</td>
+<td>0001</td>
+</tr>
+<tr class="even">
+<td>Alphanumeric</td>
+<td>0010</td>
+</tr>
+<tr class="odd">
+<td>Byte</td>
+<td>0100</td>
+</tr>
+<tr class="even">
+<td>Kanji</td>
+<td>1000</td>
+</tr>
+</tbody>
+</table>
+<p>​ 表1 Mode Indicator</p>
+<p>下面我们来看一个具体示例。</p>
+<p>我们用Alphanumeric模式编码 AC-42 这5个字符，假设为Version1：</p>
+<ol type="1">
+<li><p>从字符索引表中找到 “AC-42” 这五个字符的索引：(10, 12, 41, 4, 2)</p></li>
+<li><p>两两分组：(10, 12), (41, 4), (2)</p></li>
+<li><p>把每一组转成11bits的二进制，落单的转成6bits的二进制：</p>
+<p>(10, 12) = 10 * 45 + 12 = 462 = 00111001110</p>
+<p>(41, 4) = 41 * 25 + 4 = 1849 = 11100111001</p>
+<ol start="2" type="1">
+<li>= 000010</li>
+</ol></li>
+<li><p>把这些二进制连接起来：00111001110 11100111001 000010</p></li>
+<li><p>把字符的个数转成二进制，不同的Version对应的bit个数如Table3所示。Version1对应的是9bits，总共5个字符，转换成9-bit二进制数就是：000000101</p>
+<p><img src="/images/Count-Indicator.png"></p></li>
+<li><p>在数据前面加上模式标识符0010和上一步得到的字符数编码：0010 000000101 00111001110 11100111001 000010</p></li>
+</ol>
+<h3><span id="结束和补齐">结束和补齐</span></h3>
+<p>假如我们有个HELLO WORLD的字符串要编码，根据上述示例，我们得到一下编码：</p>
+<table>
+<colgroup>
+<col style="width: 7%">
+<col style="width: 16%">
+<col style="width: 75%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>模式</th>
+<th>字符数</th>
+<th>Hello world编码</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0010</td>
+<td>000001011</td>
+<td>01100001011 01111000110 10001011100 10110111000 10011010100 001101</td>
+</tr>
+</tbody>
+</table>
+<p>我们还要加上结束符：</p>
+<table>
+<colgroup>
+<col style="width: 7%">
+<col style="width: 15%">
+<col style="width: 70%">
+<col style="width: 7%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>模式</th>
+<th>字符数</th>
+<th>Hello world编码</th>
+<th>结束符</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0010</td>
+<td>000001011</td>
+<td>01100001011 01111000110 10001011100 10110111000 10011010100 001101</td>
+<td>0000</td>
+</tr>
+</tbody>
+</table>
+<p><strong>按8bits重排</strong></p>
+<p>如果所有的编码加起来不是8个倍数我们还要在后面加上足够的0，比如上面一共有78个bits，所以，我们还要加上2个0，然后按8个bits分好组：</p>
+<p>00100000   01011011   00001011   01111000   11010001   01110010   11011100   01001101   01000011   010000<strong>00</strong></p>
+<p><strong>补齐码（Padding Bytes）</strong></p>
+<p>最后，如果如果还没有达到我们最大的bits数的限制，我们还要加一些补齐码，Padding Bytes就是重复下面的两个bytes：<strong>11101100 00010001</strong> 。关于每一个Version的每一种纠错级别的最大Bits限制，可以参看QR Code Spec的第33页的Table-7一表，下面是这个表的一部分，里面也包含可表示的最大字符数：</p>
+<p><img src="/images/table7.png"></p>
+<p>假设我们需要编码的是Version 1的Q纠错级，那么，其最大需要104个bits，而我们上面只有80个bits，所以，还需要补24个bits，也就是需要3个Padding Bytes，我们就添加三个，于是得到下面的编码：</p>
+<p>00100000 01011011 00001011 01111000 11010001 01110010 11011100 01001101 01000011 01000000 <strong>11101100 00010001 11101100</strong></p>
+<p>上面的编码就是数据码了，叫Data Codewords，每一个8bits叫一个codeword，我们还要对这些数据码加上纠错信息。</p>
+<h3><span id="纠错码">纠错码</span></h3>
+<p>正是因为有了纠错码的存在，二维码才可以在有一定污损的情况下被正确识别，这也是好多二维码中间有图标或头像依然可以被扫出来的理论基础。</p>
+<p>二维码有四个纠错级别，分别如下：</p>
+<p><img src="/images/table8.png"></p>
+<p><strong>二维码的纠错方式也是通过增加冗余位来实现纠错</strong>，这一点在本质上和（分组）奇偶校验，CRC循环校验等纠错方式是相同的，纠正 <span class="math inline">\(t\)</span> 个错误就需要 <span class="math inline">\(2t\)</span> 个纠错码。</p>
+<p>具体来说，首先，我们需要对数据码进行分组，也就是分成不同的Block，然后对各个Block进行纠错编码，对于如何分组，我们可以查看QR Code Spec的第38页的Table-9的定义表，下面是该表的一部分：</p>
+<p><img src="/images/table9.png"></p>
+<p>倒数第二列表示了需要分多少个纠错块，最后一列表示每个纠错块的具体情况，(c, k, r) 分别代表：</p>
+<ul>
+<li>c：该块中总共的Codeword个数</li>
+<li>k：数据Codeword的个数</li>
+<li>r：可以纠正的错误个数，所以纠错码的位(Codeword)数等于 2r</li>
+</ul>
+<p>举个例子，上述的Version 5 + Q纠错级：需要4个Blocks（2个Blocks为一组，共两组），头一组的两个Blocks中各15个Codewords数据 + 各 18个Codewords的纠错码。下图给一个5-Q的示例（因为二进制写起来会让表格太大，所以都用了十进制）：</p>
+<table>
+<colgroup>
+<col style="width: 4%">
+<col style="width: 4%">
+<col style="width: 45%">
+<col style="width: 45%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>组</th>
+<th>块</th>
+<th>数据</th>
+<th>纠错码</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>1</td>
+<td>67 85 70 134 87 38 85 194 119 50 6 18 6 103 38</td>
+<td>213 199 11 45 115 247 241 223 229 248 154 117 154 111 86 161 111 39</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>2</td>
+<td>246 246 66 7 118 134 242 7 38 86 22 198 199 146 6</td>
+<td>87 204 96 60 202 182 124 157 200 134 27 129 209 17 163 163 120 133</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>1</td>
+<td>182 230 247 119 50 7 118 134 87 38 82 6 134 151 50 7</td>
+<td>148 116 177 212 76 133 75 242 238 76 195 230 189 10 108 240 192 141</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>2</td>
+<td>70 247 118 86 194 6 151 50 16 236 17 236 17 236 17 236</td>
+<td>235 159 5 173 24 147 59 33 106 40 255 172 82 2 131 32 178 236</td>
+</tr>
+</tbody>
+</table>
+<h4><span id="reed-solomon-code">Reed Solomon Code</span></h4>
+<p>关于每一块的纠错码是怎么来的，它是通过<a href="http://en.wikipedia.org/wiki/Reed%E2%80%93Solomon_error_correction" target="_blank" rel="noopener">Reed-Solomon error correction</a>（里德-所罗门纠错算法）实现的，这个地方应该是二维码最难的地方了。RS码是基于 <a href="https://www.wikiwand.com/en/Finite_field" target="_blank" rel="noopener">有限域</a>的编码，这点和<a href="https://www.wikiwand.com/en/Cyclic_redundancy_check" target="_blank" rel="noopener">CRC循环冗余校验</a>是一样的。</p>
+<p>在这个有限域(<strong>GF(2)</strong>)中，四则运算都是按比特模2的四则运算，即两个数的加减法就是按位异或（没有进位和借位），乘法和除法的相加过程也是模2加法。</p>
+<p>每一个二进制数，都可以表示成一个多项式，每一位代表该项的系数，第几位代表指数，如100011101 可以表示为<span class="math inline">\(x^8 + x^4 + x^3 + x^2 + 1\)</span>。</p>
+<p><strong>纠错码就是用数据多项式除以某一个本原多项式<span class="math inline">\(g(x)\)</span>得到的余数</strong>。其中，本原多项式是什么就不多再解释，有兴趣的自行了解，在QR Code Spec中的附录A中有列出；这里面的除法是模2除法。</p>
+<p>关于具体纠错方法和实现就不在这里展开，首先我的理解得也不是很清楚，其次这里面涉及的东西太多，尤其是数学知识，都说清楚可能需要专门写一篇文章。</p>
+<h3><span id="最终编码">最终编码</span></h3>
+<p>在画图前，还需要一步穿插放置的过程。</p>
+<p>对于数据码：把每个块的第一个Codewords先拿出来按顺度排列好，然后再取第一块的第二个，如此类推。如，上述示例中的一部分Data Codewords如下：</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">块1</th>
+<th>67</th>
+<th>85</th>
+<th>70</th>
+<th>134</th>
+<th>87</th>
+<th>38</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">块 2</td>
+<td>246</td>
+<td>246</td>
+<td>66</td>
+<td>7</td>
+<td>118</td>
+<td>134</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">块 3</td>
+<td>182</td>
+<td>230</td>
+<td>247</td>
+<td>119</td>
+<td>50</td>
+<td>7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">块4</td>
+<td>70</td>
+<td>247</td>
+<td>118</td>
+<td>86</td>
+<td>194</td>
+<td>6</td>
+</tr>
+</tbody>
+</table>
+<p>我们先取第一列的：67， 246， 182， 70 然后再取第二列的：67， 246， 182， 70， 85，246，230 ，247 如此类推：67， 246， 182， 70， 85，246，230 ，247 ………  ……… ，38，6，50，17，7，236</p>
+<p>对于纠错码，也是一样的过程，然后，再把这两组放在一起（纠错码放在数据码之后）得到：</p>
+<p>67, 246, 182, 70, 85, 246, 230, 247, 70, 66, 247, 118, 134, 7, 119, 86, 87, 118, 50, 194, 38, 134, 7, 6, 85, 242, 118, 151, 194, 7, 134, 50, 119, 38, 87, 16, 50, 86, 38, 236, 6, 22, 82, 17, 18, 198, 6, 236, 6, 199, 134, 17, 103, 146, 151, 236, 38, 6, 50, 17, 7, 236, 213, 87, 148, 235, 199, 204, 116, 159, 11, 96, 177, 5, 45, 60, 212, 173, 115, 202, 76, 24, 247, 182, 133, 147, 241, 124, 75, 59, 223, 157, 242, 33, 229, 200, 238, 106, 248, 134, 76, 40, 154, 27, 195, 255, 117, 129, 230, 172, 154, 209, 189, 82, 111, 17, 10, 2, 86, 163, 108, 131, 161, 163, 240, 32, 111, 120, 192, 178, 39, 133, 141, 236</p>
+<p>这就是我们的数据区。</p>
+<p><strong>Remainder Bits</strong></p>
+<p>对于某些Version的二维码，上面的还不够长度，还要加上Remainder Bits。比如：上述的5Q版的二维码，还要加上7个bits，Remainder Bits加零就好了。关于哪些Version需要多少个Remainder bit，可以参看QR Code Spec的Table-1的定义表。</p>
+<hr>
+<h2><span id="画二维码图">画二维码图</span></h2>
+<p><strong>Finder Pattern</strong></p>
+<p>终于到了激动人心的画图环节。首先，先把Position Detection图案画在三个角上，无论Version如何，这个图案的尺寸就是这么大：</p>
+<p><img src="/images/finder.png"></p>
+<p>接着用 HELLO WORLD 的例子，画完之后如下图所示：</p>
+<p><img src="/images/draw_finder.png"></p>
+<p><strong>Alignment Pattern</strong></p>
+<p>然后，再把Alignment图案画上，无论Version如何，这个图案的尺寸就是这么大：</p>
+<p><img src="/images/alignment-pattern.png"></p>
+<p>关于Alignment的位置，可以查看QR Code Spec的第83页的Table-E.1的定义表，下面是该表的一部分：</p>
+<p><img src="/images/tableE.png"></p>
+<p>举个例子，Version 2 的值是6和18。因此 Alignment Pattern 的位置应以(行，列)的 (18, 18) 为中心，因为 (6, 6), (6, 18), (18, 6) 和 Finder Patterns 的位置冲突，所以只剩一个。</p>
+<p>画完如下：</p>
+<p><img src="/images/draw_align.png"></p>
+<p><strong>Timing Pattern</strong></p>
+<p>接下来是Timing Pattern的黑白相间的线：</p>
+<p><img src="/images/Timing-Pattern.png"></p>
+<p>画完如下：</p>
+<p><img src="/images/draw_timing.png"></p>
+<p><strong>Format Information</strong></p>
+<p>再接下来是Formation Information，下图中的蓝色部分:</p>
+<p><img src="/images/Format-Information.png"></p>
+<p>Format Information是一个15个bits的信息，每一个bit的位置如下图所示：</p>
+<p><img src="/images/format.png"></p>
+<p>注1：图中的Dark Module，那是永远出现的 注2：图中的第14位是最高位（The Most Significant Bit），第0位是最低位（The Least significant bit），即如果你得到的结果是100100001101000，那么第14位应该是1，第0位应该是0.</p>
+<p>这15个bits中包括：</p>
+<ul>
+<li><p>5个数据bits：其中，2个bits用于表示使用什么样的Error Correction Level， 3个bits表示使用什么样的Mask，每个纠错级别的标识符如Table25所示:</p>
+<p><img src="/images/table25.png"></p></li>
+<li><p>10个纠错bits，通过BCH码来计算。BCH码也是一种比较麻烦的编码，RS码是BCH码的一种特殊情况，有兴趣的读者自己了解一下。</p></li>
+</ul>
+<p>最后这15个bits还要与101010000010010做XOR操作，这样就保证不会因为我们选用了00的纠错级别和000的Mask，从而造成全部为白色，这会增加我们的扫描器的图像识别的困难。</p>
+<p>举个例子：</p>
+<p>假设纠错级别是M： 00 Mask标识符： 101 数据： 00101 BCH码： 0011011100 掩码： 101010000010010 与掩码异或： 100000011001110</p>
+<p>画完如下：</p>
+<p><img src="/images/draw_format.png"></p>
+<p><strong>Version Information</strong></p>
+<p>Version7以后需要这个编码，下图中的蓝色部分：</p>
+<p><img src="/images/Version-Information.png"></p>
+<p>Version Information一共是18个bits，其中包括6个bits的版本号以及12个bits的纠错码，具体怎么放的有需要的可以去看QR Code Spec第54页的8.10节，这里不再赘述。</p>
+<p><strong>数据码和纠错码</strong></p>
+<p>重头戏来了，终于可以正而八经地填充数据了。</p>
+<p>数据是一块一块填充的，每一块应该是一个矩形（比较理想的情况），一块有8个bit正好对应一个Codeword。举个例子，Version2的数据填充应该是这个样子：</p>
+<p><img src="/images/v2.png"></p>
+<p>看起来是不是有点复杂？</p>
+<p>我们看到D1~D9都是正常的矩形，其他的就什么情况都有了，下面来具体看看每一小块该怎么填。</p>
+<p>每一种数据块的填充都有两种模式，分别是上升和下降，先看普通的矩形：</p>
+<p><img src="/images/rect.png"></p>
+<p>注意，这里面的第0位是每个Codeword的最低位（the least significant bit），而第7位是最高位（the most significant bit），不要搞错了。</p>
+<p>由于我们需要折返着填，所以在转向的时候可能出现下面的情况：</p>
+<p><img src="/images/turn.png"></p>
+<p>而且我们填充的时候还不能替换了功能区的值，所以还要绕过去：</p>
+<p><img src="/images/go.png"></p>
+<p>就这几种情况，看上去有点复杂，编程不好实现，但实际上自己只要实际写写看就会发现填充规律是<strong>相同</strong>的：从右下角开始沿着红线填我们的各个bits，1是黑色，0是白色。如果遇到了上面的非数据区，则绕开或跳过。</p>
+<p><img src="/images/Data-Placement.png"></p>
+<p>画完如下：</p>
+<p><img src="/images/draw_data.png"></p>
+<p><strong>Mask</strong></p>
+<p>这样下来，我们的图就填好了，但是，也许那些点并不均衡，如果出现大面积的空白或黑块，会告诉我们扫描识别的困难。所以，我们还要做Masking操作。QR Code Spec中说了，QR码有8个Mask你可以使用，如下所示：</p>
+<p><img src="/images/mask.png"></p>
+<p>每个图下面的数字标识符，公式是对应的条件，当条件满足时，该点是黑的。</p>
+<p>生成好相应mask之后，就和原始填充好的图案进行异或操作，注意mask不能和功能区异或，只能和数据区进行异或。</p>
+<p>Mask过后的二维码就成最终的图了：</p>
+<p><img src="/images/draw_mask.png"></p>
+<h2><span id="实践">实践</span></h2>
+<p>根据上面的流程再加上QR Code Spec，我们就可以编码实现生成二维码了！</p>
+<p>这里附上我做的<a href="https://github.com/NeymarL/qr-code" target="_blank" rel="noopener">demo</a>。</p>
+<p><img src="/images/github.png"></p>
+<h2><span id="参考">参考</span></h2>
+<p><a href="http://www.codeplex.com/Download?ProjectName=qrcodenet&amp;DownloadId=284291" target="_blank" rel="noopener">ISO/IEC 18004:2000(E) - QR code specification </a></p>
+<p><a href="http://coolshell.cn/articles/10590.html" target="_blank" rel="noopener">二维码的生成细节和原理</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Python/">Python</a><a href="/tags/QR-Code/">QR Code</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

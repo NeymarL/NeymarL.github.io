@@ -1,0 +1,320 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    Logistic Regression | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="Logistic Regression">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      Logistic Regression</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/02/03/Logistic Regression/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-02-03T10:14:06.000Z">
+          2016-02-03
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>Now we are switching from regression problems to <strong>classification problems</strong>. Don't be confused by the name &quot;Logistic Regression&quot;; it is named that way for historical reasons and is actually an approach to <strong>classification</strong> problems, <strong>not regression</strong> problems.</p>
+<a id="more"></a>
+<!-- toc -->
+<ul>
+<li><a href="#classification">Classification</a></li>
+<li><a href="#hypothesis-representation">Hypothesis Representation</a></li>
+<li><a href="#decision-boundary">Decision Boundary</a></li>
+<li><a href="#cost-function">Cost Function</a></li>
+<li><a href="#simplified-cost-function-and-gradient-descent">Simplified Cost Function and Gradient Descent</a>
+<ul>
+<li><a href="#gradient-descent">Gradient Descent</a></li>
+</ul></li>
+<li><a href="#advanced-optimization">Advanced Optimization</a></li>
+<li><a href="#multiclass-classification-one-vs-all">Multiclass Classification: One-vs-all</a></li>
+</ul>
+<!-- tocstop -->
+<h2><span id="classification">Classification</span></h2>
+<p>Instead of our output vector <span class="math inline">\(y\)</span> being a continuous range of values, it will only be 0 or 1. <span class="math display">\[y∈\{0,1\}\]</span></p>
+<p>Where 0 is usually taken as the &quot;<strong>negative class</strong>&quot; and 1 as the &quot;<strong>positive class</strong>&quot;, but you are free to assign any representation to it.</p>
+<p>We're only doing two classes for now, called a &quot;<strong>Binary Classification Problem</strong>.&quot;</p>
+<p>One method is to use linear regression and map all predictions greater than 0.5 as a 1 and all less than 0.5 as a 0. This method doesn't work well because <em>classification is not actually a linear function</em>.</p>
+<h2><span id="hypothesis-representation">Hypothesis Representation</span></h2>
+<p>Our hypothesis should satisfy: <span class="math display">\[0≤h_θ(x)≤1\]</span></p>
+<p>Our new form uses the &quot;<strong>Sigmoid Function</strong>&quot;, also called the &quot;<strong>Logistic Function</strong>&quot;: <span class="math display">\[hθ(x)=g(θ^Tx)\]</span> <span class="math display">\[z=θ^Tx\]</span> <span class="math display">\[g(z)=\frac{1}{1+e^{−z}}\]</span></p>
+<figure>
+<img src="/images/1454474534412.png" alt="Alt text"><figcaption>Alt text</figcaption>
+</figure>
+<p>The function <span class="math inline">\(g(z)\)</span>, shown here, maps any real number to the (0, 1) interval, making it useful for transforming an arbitrary-valued function into a function better suited for classification. Try playing with interactive plot of sigmoid function <a href="https://www.desmos.com/calculator/bgontvxotm" target="_blank" rel="noopener">here</a>.</p>
+<p>We start with our old hypothesis (linear regression), except that we want to restrict the range to 0 and 1. This is accomplished by plugging <span class="math inline">\(θ^Tx\)</span> into the Logistic Function.</p>
+<p><span class="math inline">\(h_θ\)</span> will give us the <strong>probability</strong> that our output is 1. For example, <span class="math inline">\(h_θ(x)=0.7\)</span> gives us the probability of 70% that our output is 1.</p>
+<p><span class="math display">\[h_θ(x)=P(y=1∣x ;θ)=1−P(y=0∣x ;θ)\]</span> <span class="math display">\[P(y=0∣x;θ)+P(y=1∣x ;θ)=1\]</span> Our probability that our prediction is 0 is just the complement of our probability that it is 1 (e.g. if probability that it is 1 is 70%, then the probability that it is 0 is 30%).</p>
+<h2><span id="decision-boundary">Decision Boundary</span></h2>
+<p>In order to get our discrete 0 or 1 classification, we can translate the output of the hypothesis function as follows:</p>
+<p><span class="math display">\[h_θ(x)≥0.5→y=1\]</span> <span class="math display">\[h_θ(x)&lt;0.5→y=0\]</span></p>
+<p>The way our logistic function <span class="math inline">\(g\)</span> behaves is that when its input is greater than or equal to zero, its output is greater than or equal to 0.5:</p>
+<p><span class="math display">\[g(z)≥0.5\]</span> when <span class="math inline">\(z≥0\)</span></p>
+<p>Remember.-</p>
+<p><span class="math display">\[z=0,e^0=1,g(z)=1/2\]</span> <span class="math display">\[z→∞,e^{−∞}→0,g(z)=1\]</span> <span class="math display">\[z→−∞,e^∞→∞,g(z)=0\]</span></p>
+<p>So if our input to g is <span class="math inline">\(θ^TX\)</span>, then that means:</p>
+<p><span class="math display">\[h_θ(x)=g(θ^Tx)≥0.5\]</span> when<span class="math inline">\(θ^Tx≥0\)</span></p>
+<p>From these statements we can now say:</p>
+<p><span class="math display">\[θ^Tx≥0→y=1\]</span> <span class="math display">\[θ^Tx&lt;0→y=0\]</span></p>
+<p>The <strong>decision boundary</strong> is the line that separates the area where y=0 and where y=1. It is created by our hypothesis function.</p>
+<p><strong>Example</strong>:</p>
+<p><span class="math display">\[θ=\begin{bmatrix}
+5 \\
+-1 \\
+0\\
+\end{bmatrix}\]</span> <span class="math inline">\(y=1\)</span> if <span class="math inline">\(5+(−1)x1+0x2≥0\)</span> <span class="math inline">\(5−x1≥0\)</span> <span class="math inline">\(−x1≥−5\)</span> <span class="math inline">\(x1≤5\)</span></p>
+<p>Our decision boundary then is a straight vertical line placed on the graph where <span class="math inline">\(x_1=5\)</span>, and everything to the left of that denotes <span class="math inline">\(y=1\)</span>, while everything to the right denotes <span class="math inline">\(y=0\)</span>.</p>
+<p>Again, the input to the sigmoid function <span class="math inline">\(g(z)\)</span> (e.g. <span class="math inline">\(θ^TX\)</span>) need not be linear, and could be a function that describes a circle (e.g. <span class="math inline">\(z=θ_0+θ_1x^2_1+θ_2x^2_2\)</span>) or any shape to fit our data.</p>
+<h2><span id="cost-function">Cost Function</span></h2>
+<p>We <strong>cannot</strong> use the same cost function that we use for linear regression because the Logistic Function will cause the output to be wavy, causing many local optima. In other words, it will not be a convex function. Instead, our cost function for logistic regression looks like:</p>
+<p><span class="math display">\[J(θ)=\frac{1}{m}∑_{i=1}^mCost(h_θ(x^{(i)}),y^{(i)})\]</span></p>
+<p><span class="math inline">\(Cost(h_θ(x),y)=−log(h_θ(x))\)</span> <code>if</code> <span class="math inline">\(y = 1\)</span> $Cost(h_θ(x),y)=−log(1−h_θ(x)) $ <code>if</code> <span class="math inline">\(y = 0\)</span></p>
+<p><img src="/images/1454494932330.png" alt="Alt text"> <img src="/images/1454494937253.png" alt="Alt text"></p>
+<p>The more our hypothesis is off from <span class="math inline">\(y\)</span>, the larger the cost function output. If our hypothesis is equal to <span class="math inline">\(y\)</span>, then our cost is <span class="math inline">\(0\)</span>:</p>
+<p><span class="math inline">\(Cost(h_θ(x),y)=0\)</span> <span class="math inline">\(if\)</span> <span class="math inline">\(h_θ(x)=y\)</span> <span class="math inline">\(Cost(h_θ(x),y)→∞\)</span> <span class="math inline">\(if\)</span> <span class="math inline">\(y=0\)</span> <span class="math inline">\(and\)</span> <span class="math inline">\(h_θ(x)→1\)</span> <span class="math inline">\(Cost(h_θ(x),y)→∞\)</span> <span class="math inline">\(if\)</span> <span class="math inline">\(y=1\)</span> <span class="math inline">\(and\)</span> <span class="math inline">\(h_θ(x)→0\)</span></p>
+<p>If our correct answer '<span class="math inline">\(y\)</span>' is 0, then the cost function will be 0 if our hypothesis function also outputs 0. If our hypothesis approaches 1, then the cost function will approach infinity.</p>
+<p>If our correct answer '<span class="math inline">\(y\)</span>' is 1, then the cost function will be 0 if our hypothesis function outputs 1. If our hypothesis approaches 0, then the cost function will approach infinity.</p>
+<p><strong>Note</strong> that writing the cost function in this way guarantees that <span class="math inline">\(J(θ)\)</span> is convex for logistic regression.</p>
+<h2><span id="simplified-cost-function-and-gradient-descent">Simplified Cost Function and Gradient Descent</span></h2>
+<p>We can compress our cost function's two conditional cases into one case:</p>
+<p><span class="math display">\[Cost(h_θ(x),y)=−ylog(h_θ(x))−(1−y)log(1−h_θ(x))\]</span></p>
+<p>Notice that when y is equal to 1, then the second term <span class="math inline">\(((1−y)log(1−h_θ(x)))\)</span> will be zero and will not affect the result. If y is equal to 0, then the first term <span class="math inline">\((−ylog(h_θ(x)))\)</span> will be zero and will not affect the result.</p>
+<p>We can fully write out our entire cost function as follows:</p>
+<p><span class="math display">\[J(θ)=−\frac{1}{m}\sum_{i=1}^m[y^{(i)}\log(h_θ(x^{(i)}))+(1−y^{(i)})\log(1−h_θ(x^{(i)}))]\]</span></p>
+<p>A <strong>vectorized</strong> implementation is:</p>
+<p><span class="math display">\[J(θ)=−\frac{1}{m}(\log(g(Xθ))^Ty+\log(1−g(Xθ))^T(1−y))\]</span></p>
+<h3><span id="gradient-descent">Gradient Descent</span></h3>
+<p>Remember that the general form of gradient descent is: <span class="math inline">\(Repeat\{\)</span> <span class="math display">\[θ_j := θ_j−α\frac{∂}{∂θ_j}J(θ)\]</span> <span class="math inline">\(\}\)</span></p>
+<p>We can work out the derivative part using calculus to get: <span class="math inline">\(Repeat\{\)</span> <span class="math display">\[θ_j := θ_j−\frac{α}{m}\sum_{i=1}^m(h_θ(x^{(i)})−y^{(i)})x^{(i)}_j\]</span> <span class="math inline">\(\}\)</span></p>
+<p>Notice that this algorithm is <strong>identical</strong> to the one we used in <strong>linear regression</strong>. We still have to simultaneously update all values in theta.</p>
+<p>A <strong>vectorized</strong> implementation is:</p>
+<p><span class="math display">\[θ :=θ − \frac{α}{m}X^T(g(Xθ)− \overrightarrow{y} )\]</span></p>
+<h2><span id="advanced-optimization">Advanced Optimization</span></h2>
+<p>&quot;<strong>Conjugate gradient</strong>&quot;, &quot;<strong>BFGS</strong>&quot;, and &quot;<strong>L-BFGS</strong>&quot; are more sophisticated, faster ways to optimize theta instead of using gradient descent. A. Ng suggests you do not write these more sophisticated algorithms yourself (unless you are an expert in numerical computing) but use them pre-written from libraries. Octave provides them.</p>
+<p>We first need to provide a function that computes the following two equations:<span class="math inline">\(J(θ)\)</span>, <span class="math inline">\(\frac{∂}{∂θ_j}J(θ)\)</span></p>
+<p>We can write a single function that returns both of these: <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="params">[jVal, gradient]</span> = <span class="title">costFunction</span><span class="params">(theta)</span></span></span><br><span class="line">  jval = [...code to compute J(theta)...];</span><br><span class="line">  gradient = [...code to compute derivative of J(theta)...];</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></p>
+<p>Then we can use octave's &quot;<code>fminunc()</code>&quot; optimization algorithm along with the &quot;<code>optimset()</code>&quot; function that creates an object containing the options we want to send to &quot;<code>fminunc()</code>&quot;. (Note: the value for <code>MaxIter</code> should be an integer, not a character string - errata in the video at 7:30) <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">options = optimset(<span class="string">'GradObj'</span>, <span class="string">'on'</span>, <span class="string">'MaxIter'</span>, <span class="number">100</span>);</span><br><span class="line">initialTheta = <span class="built_in">zeros</span>(<span class="number">2</span>,<span class="number">1</span>);</span><br><span class="line">[optTheta, functionVal, exitFlag] = fminunc(@costFunction, initialTheta, options);</span><br></pre></td></tr></table></figure></p>
+<p>We give to the function &quot;<code>fminunc()</code>&quot; our cost function, our initial vector of theta values, and the &quot;<code>options</code>&quot; object that we created beforehand.</p>
+<h2><span id="multiclass-classification-one-vs-all">Multiclass Classification: One-vs-all</span></h2>
+<p>Now we will approach the classification of data into more than two categories. Instead of <span class="math inline">\(y = \{0,1\}\)</span> we will expand our definition so that <span class="math inline">\(y = \{0,1...n\}\)</span>.</p>
+<p>In this case we divide our problem into <span class="math inline">\(n+1\)</span> (+1 because the index starts at 0) binary classification problems; in each one, we predict the probability that '<span class="math inline">\(y\)</span>' is a member of one of our classes.</p>
+<p><span class="math display">\[y∈\{0,1...n\}\]</span> <span class="math display">\[h^{(0)}_θ(x)=P(y=0∣x ;θ)\]</span> <span class="math display">\[h^{(1)}_θ(x)=P(y=1∣x ;θ)\]</span> <span class="math display">\[⋯\]</span> <span class="math display">\[h^{(n)}_θ(x)=P(y=n∣x ;θ)\]</span> <span class="math display">\[prediction=\max_i(h^{(i)}_θ(x))\]</span></p>
+<p>We are basically choosing one class and then lumping all the others into a single second class. We do this repeatedly, applying binary logistic regression to each case, and then use the hypothesis that returned the highest value as our prediction.</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Logistic-Regression/">Logistic Regression</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

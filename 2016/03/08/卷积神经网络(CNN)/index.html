@@ -1,0 +1,396 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    卷积神经网络(CNN) | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="卷积神经网络(CNN)">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      卷积神经网络(CNN)</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/03/08/卷积神经网络(CNN)/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-03-08T14:32:00.000Z">
+          2016-03-08
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>卷积神经网络（Convolutional Neural Network, CNN）是一种前馈神经网络，它的人工神经元可以响应一部分覆盖范围内的周围单元，对于大型图像处理有出色表现。</p>
+<!-- toc -->
+<ul>
+<li><a href="#概揽">概揽</a></li>
+<li><a href="#layers-used-to-build-convnets">Layers used to build ConvNets</a>
+<ul>
+<li><a href="#卷积层convolutional-layer">卷积层（Convolutional layer）</a></li>
+<li><a href="#池化层pooling-layer">池化层(Pooling Layer)</a></li>
+<li><a href="#全连接层fully-connected-layer">全连接层（Fully-connected layer）</a></li>
+</ul></li>
+<li><a href="#卷积神经网络架构">卷积神经网络架构</a>
+<ul>
+<li><a href="#layer-patterns">Layer Patterns</a></li>
+<li><a href="#layer-sizing-patterns">Layer Sizing Patterns</a></li>
+<li><a href="#case-studies">Case Studies</a></li>
+</ul></li>
+<li><a href="#参考">参考</a></li>
+</ul>
+<!-- tocstop -->
+<a id="more"></a>
+<h1><span id="概揽">概揽</span></h1>
+<p><strong>卷积神经网络</strong>（Convolutional Neural Networks / CNNs / ConvNets）与普通神经网络非常相似，它们都由具有可学习的权重和偏置常量(biases)的神经元组成。每个神经元都接收一些输入，并做一些点积计算，输出是每个分类的分数，普通神经网络里的一些计算技巧到这里依旧适用。</p>
+<p>所以哪里不同呢？卷积神经网络默认输入是图像，可以让我们把特定的性质编码入网络结构，使是我们的前馈函数更加有效率，并减少了大量参数。</p>
+<p><strong>具有三维体积的神经元(3D volumes of neurons)</strong> 卷积神经网络利用输入是图片的特点，把神经元设计成三个维度 ： <strong>width</strong>, <strong>height</strong>, <strong>depth</strong>(注意这个depth不是神经网络的深度，而是用来描述神经元的) 。比如输入的图片大小是 32 × 32 × 3 (rgb)，那么输入神经元就也具有 32×32×3 的维度。下面是图解：</p>
+<p><img src="/images/1457405418840.png"> 传统神经网络</p>
+<p><img src="/images/1457405426800.png"> 卷积神经网络</p>
+<p>一个卷积神经网络由很多层组成，它们的输入是三维的，输出也是三维的，有的层有参数，有的层不需要参数。</p>
+<h1><span id="layers-used-to-build-convnets">Layers used to build ConvNets</span></h1>
+<p>卷积神经网络通常包含以下几种层：</p>
+<ul>
+<li><strong>卷积层（Convolutional layer）</strong>，卷积神经网路中每层卷积层由若干卷积单元组成，每个卷积单元的参数都是通过反向传播算法优化得到的。卷积运算的目的是提取输入的不同特征，第一层卷积层可能只能提取一些低级的特征如边缘、线条和角等层级，更多层的网络能从低级特征中迭代提取更复杂的特征。</li>
+<li><strong>线性整流层（Rectified Linear Units layer, ReLU layer）</strong>，这一层神经的活性化函数（Activation function）使用线性整流（Rectified Linear Units, ReLU）<span class="math inline">\(f(x) = max(0, x)\)</span>。</li>
+<li><strong>池化层（Pooling layer）</strong>，通常在卷积层之后会得到维度很大的特征，将特征切成几个区域，取其最大值或平均值，得到新的、维度较小的特征。</li>
+<li><strong>全连接层（ Fully-Connected layer）</strong>, 把所有局部特征结合变成全局特征，用来计算最后每一类的得分。</li>
+</ul>
+<p>一个卷积神经网络各层应用<a href="http://cs231n.stanford.edu/" target="_blank" rel="noopener">实例</a>： <img src="/images/1457406468399.png"></p>
+<h2><span id="卷积层convolutional-layer">卷积层（Convolutional layer）</span></h2>
+<p><strong>局部感知（Local Connectivity）</strong></p>
+<p>普通神经网络把输入层和隐含层进行“<strong>全连接(Full Connected)</strong>“的设计。从计算的角度来讲，相对较小的图像从整幅图像中计算特征是可行的。但是，如果是更大的图像（如 96x96 的图像），要通过这种全联通网络的这种方法来学习整幅图像上的特征，从计算角度而言，将变得非常耗时。你需要设计 10 的 4 次方（=10000）个输入单元，假设你要学习 100 个特征，那么就有 10 的 6 次方个参数需要去学习。与 28x28 的小块图像相比较， 96x96 的图像使用前向输送或者后向传导的计算方式，计算过程也会慢 10 的 2 次方（=100）倍。</p>
+<p>卷积层解决这类问题的一种简单方法是对隐含单元和输入单元间的连接加以限制：<strong>每个隐含单元仅仅只能连接输入单元的一部分</strong>。例如，每个隐含单元仅仅连接输入图像的一小片相邻区域。（对于不同于图像输入的输入形式，也会有一些特别的连接到单隐含层的输入信号“连接区域”选择方式。如音频作为一种信号输入方式，一个隐含单元所需要连接的输入单元的子集，可能仅仅是一段音频输入所对应的某个时间段上的信号。)</p>
+<p>每个隐含单元连接的输入区域大小叫r神经元的<strong>感受野(receptive field)</strong>。</p>
+<p>由于卷积层的神经元也是三维的，所以也具有深度。卷积层的参数包含一系列过滤器（filter），每个过滤器训练一个深度，有几个过滤器输出单元就具有多少深度。</p>
+<p>具体如下图所示，样例输入单元大小是32×32×3, 输出单元的深度是5, 对于输出单元不同深度的同一位置，与输入图片连接的区域是相同的，但是参数（过滤器）不同。</p>
+<p><img src="/images/1457406711273.png"></p>
+<p>虽然每个输出单元只是连接输入的一部分，但是值的计算方法是没有变的，都是权重和输入的点积，然后加上偏置，这点与普通神经网络是一样的，如下图所示：</p>
+<p><img src="/images/1457407298878.png"></p>
+<p><strong>空间排列（Spatial arrangement）</strong></p>
+<p>一个输出单元的大小有以下三个量控制：<strong>depth</strong>, <strong>stride</strong> 和 <strong>zero-padding</strong>。</p>
+<ul>
+<li><strong>深度(depth)</strong> : 顾名思义，它控制输出单元的深度，也就是filter的个数，连接同一块区域的神经元个数。又名：<strong>depth column</strong></li>
+<li><strong>步幅(stride)</strong>：它控制在同一深度的相邻两个隐含单元，与他们相连接的输入区域的距离。如果步幅很小（比如 stride = 1）的话，相邻隐含单元的输入区域的重叠部分会很多; 步幅很大则重叠区域变少。</li>
+<li><strong>补零(zero-padding)</strong> ： 我们可以通过在输入单元周围补零来改变输入单元整体大小，从而控制输出单元的空间大小。</li>
+</ul>
+<p>我们先定义几个符号：</p>
+<ul>
+<li><span class="math inline">\(W\)</span> : 输入单元的大小（宽或高）</li>
+<li><span class="math inline">\(F\)</span> : 感受野(receptive field)</li>
+<li><span class="math inline">\(S\)</span> : 步幅（stride）</li>
+<li><span class="math inline">\(P\)</span> : 补零（zero-padding)的数量</li>
+<li><span class="math inline">\(K\)</span> : 深度，输出单元的深度</li>
+</ul>
+<p>则可以用以下公式计算一个维度（宽或高）内一个输出单元里可以有几个隐藏单元： <span class="math display">\[\frac{W - F + 2P}{S} + 1\]</span> 如果计算结果不是一个整数，则说明现有参数不能正好适合输入，步幅（stride）设置的不合适，或者需要补零，证明略，下面用一个例子来说明一下。</p>
+<p>这是一个一维的例子，左边模型输入单元有5个，即<span class="math inline">\(W = 5\)</span>, 边界各补了一个零，即<span class="math inline">\(P = 1\)</span>，步幅是1， 即<span class="math inline">\(S = 1\)</span>，感受野是3，因为每个输出隐藏单元连接3个输入单元，即<span class="math inline">\(F = 3\)</span>，根据上面公式可以计算出输出隐藏单元的个数是：<span class="math inline">\(\frac{5 - 3 + 2}{1} + 1 = 5\)</span>，与图示吻合。右边那个模型是把步幅变为2，其余不变，可以算出输出大小为：<span class="math inline">\(\frac{5 - 3 + 2}{2} + 1 = 3\)</span>，也与图示吻合。若把步幅改为3，则公式不能整除，说明步幅为3不能恰好吻合输入单元大小。</p>
+<p><img src="/images/1457416670778.png"></p>
+<p>另外，网络的权重在图的右上角，计算方法和普通神经网路一样。</p>
+<p><strong>参数共享(Parameter Sharing)</strong></p>
+<p>应用参数共享可以大量减少参数数量，参数共享基于一个假设：如果图像中的一点（x1, y1）包含的特征很重要，那么它应该和图像中的另一点（x2, y2）一样重要。换种说法，我们把同一深度的平面叫做<strong>深度切片(depth slice)</strong>（(e.g. a volume of size [55x55x96] has 96 depth slices, each of size [55x55])），那么同一个切片应该共享同一组权重和偏置。我们仍然可以使用梯度下降的方法来学习这些权值，只需要对原始算法做一些小的改动， 这里共享权值的梯度是所有共享参数的梯度的总和。</p>
+<p>我们不禁会问为什么要权重共享呢？一方面，重复单元能够对特征进行识别，而不考虑它在可视域中的位置。另一方面，权值共享使得我们能更有效的进行特征抽取，因为它极大的减少了需要学习的自由变量的个数。通过控制模型的规模，卷积网络对视觉问题可以具有很好的泛化能力。</p>
+<p><strong>卷积（Convolution）</strong></p>
+<p>如果应用参数共享的话，实际上每一层计算的操作就是输入层和权重的<strong>卷积</strong>！这也就是卷积神经网络名字的由来。</p>
+<p>先抛开卷积这个概念不管。为简便起见，考虑一个大小为5×5的图像，和一个3×3的卷积核。这里的卷积核共有9个参数，就记为 <span class="math inline">\(Θ=[θ_{ij}]_{3×3}\)</span> 吧。这种情况下，卷积核实际上有9个神经元，他们的输出又组成一个3×3的矩阵，称为特征图。第一个神经元连接到图像的第一个3×3的局部，第二个神经元则连接到第二个局部（注意，有重叠！就跟你的目光扫视时也是连续扫视一样）。具体如下图所示。</p>
+<p><img src="/images/1457419579658.png"></p>
+<p>图的上方是第一个神经元的输出，下方是第二个神经元的输出。每个神经元的运算依旧是</p>
+<p><span class="math display">\[f(x)=act(\sum_{i,j}^{n}θ_{(n−i)(n−j)}x_{ij}+b)\]</span></p>
+<p>需要注意的是，平时我们在运算时，习惯使用 <span class="math inline">\(θ_{ij}x_{ij}\)</span> 这种写法，但事实上，我们这里使用的是 <span class="math inline">\(θ_{(n−i)(n−j)}x_{ij}\)</span>。</p>
+<p>现在我们回忆一下离散卷积运算。假设有二维离散函数 <span class="math inline">\(f(x,y)\)</span> , <span class="math inline">\(g(x,y)\)</span> ， 那么它们的卷积定义为 <span class="math display">\[f(m,n)∗g(m,n)=\sum_{u}^{∞}\sum_{v}^{∞}f(u,v)g(m−u,n−v)\]</span></p>
+<p>现在发现了吧！上面例子中的9个神经元均完成输出后，实际上等价于图像和卷积核的卷积操作！</p>
+<p><strong>Numpy examples</strong></p>
+<p>下面用numpy的代码具体的说明一下上面的概念和公式等。</p>
+<p>假设输入存储在一个numpy array <code>X</code>里，那么： * 位于 (x, y) 的 depth column 是 <code>X[x, y, :]</code> * 深度为 d 的 depth slice 是 <code>X[:, :, d]</code></p>
+<p>假设X的大小是<code>X.shape: (11,11,4)</code>，并且不用补零（P ＝ 0），过滤器（感受野）大小F ＝ 5，步幅为2（S＝ 2）。那么输出单元的空间大小应该为 (11 - 5) / 2 + 1 = 4，即宽和高都为4 。假设输出存储在 <code>V</code> 中，那么它的计算方式应该为：</p>
+<ul>
+<li><code>V[0,0,0] = np.sum(X[:5,:5,:] * W0) + b0</code></li>
+<li><code>V[1,0,0] = np.sum(X[2:7,:5,:] * W0) + b0</code></li>
+<li><code>V[2,0,0] = np.sum(X[4:9,:5,:] * W0) + b0</code></li>
+<li><code>V[3,0,0] = np.sum(X[6:11,:5,:] * W0) + b0</code></li>
+<li></li>
+<li><code>V[0,0,1] = np.sum(X[:5,:5,:] * W1) + b1</code></li>
+<li><code>V[1,0,1] = np.sum(X[2:7,:5,:] * W1) + b1</code></li>
+<li><code>V[2,0,1] = np.sum(X[4:9,:5,:] * W1) + b1</code></li>
+<li><code>V[3,0,1] = np.sum(X[6:11,:5,:] * W1) + b1</code></li>
+<li><code>V[0,1,1] = np.sum(X[:5,2:7,:] * W1) + b1</code></li>
+<li><code>V[2,3,1] = np.sum(X[4:9,6:11,:] * W1) + b1</code></li>
+</ul>
+<p>注意在numpy中 <code>*</code> 表示两个数组对应元素相乘。</p>
+<p><strong>卷积层总结(Summary)</strong></p>
+<ul>
+<li>接收三维输入 <span class="math inline">\(W_1 * H_1 * D_1\)</span></li>
+<li>需要给出4个参数（hyperparameters）：
+<ul>
+<li>Number of filters <span class="math inline">\(K\)</span>,</li>
+<li>their spatial extent <span class="math inline">\(F\)</span>,</li>
+<li>the stride <span class="math inline">\(S\)</span>,</li>
+<li>the amount of zero padding <span class="math inline">\(P\)</span>.</li>
+</ul></li>
+<li>输出一个三维单元 <span class="math inline">\(W_2 * H_2 * D_2\)</span>，其中：
+<ul>
+<li><span class="math inline">\(W_2 = \frac{W_1 - F + 2P}{S} + 1\)</span></li>
+<li><span class="math inline">\(H_2 = \frac{H_1 - F + 2P}{S} + 1\)</span></li>
+<li><span class="math inline">\(D_2 = K\)</span><br>
+</li>
+</ul></li>
+<li>应用权值共享，每个filter会产生<span class="math inline">\(F * F * D_1\)</span> 个权重，总共 $(F * F * D_1) * K $ 个权重和 <span class="math inline">\(K\)</span> 个偏置。</li>
+<li>在输出单元，第d个深度切片的结果是由第d个filter 和输入单元做卷积运算，然后再加上偏置而来。</li>
+</ul>
+<h2><span id="池化层pooling-layer">池化层(Pooling Layer)</span></h2>
+<p><strong>池化（pool）</strong>即<strong>下采样（downsamples）</strong>，目的是为了减少特征图。池化操作对每个深度切片独立，规模一般为 2＊2，相对于卷积层进行卷积运算，池化层进行的运算一般有以下几种： * 最大池化（Max Pooling）。取4个点的最大值。这是最常用的池化方法。 * 均值池化（Mean Pooling）。取4个点的均值。 * 高斯池化。借鉴高斯模糊的方法。不常用。 * 可训练池化。训练函数 ff ，接受4个点为输入，出入1个点。不常用。</p>
+<p>最常见的池化层是规模为2*2， 步幅为2，对输入的每个深度切片进行下采样。每个MAX操作对四个数进行，如下图所示： <img src="/images/1457434159635.png"></p>
+<p>池化操作将保存<strong>深度大小不变</strong>。</p>
+<p>如果池化层的输入单元大小不是二的整数倍，一般采取边缘补零（zero-padding）的方式补成2的倍数，然后再池化。</p>
+<p><strong>池化层总结(Summary)</strong></p>
+<ul>
+<li>接收单元大小为：<span class="math inline">\(W_1 * H_1 * D_1\)</span></li>
+<li>需要两个参数（hyperparameters）：
+<ul>
+<li>their spatial extent <span class="math inline">\(F\)</span>,</li>
+<li>the stride <span class="math inline">\(S\)</span>,</li>
+</ul></li>
+<li>输出大小：<span class="math inline">\(W_2 * H_2 * D_2\)</span>，其中：
+<ul>
+<li><span class="math inline">\(W_2=\frac{W_1−F}{S}\)</span></li>
+<li><span class="math inline">\(H_2=\frac{H_1−F}{S}+1\)</span></li>
+<li><span class="math inline">\(D_2=D_1\)</span></li>
+</ul></li>
+<li>不需要引入新权重</li>
+</ul>
+<h2><span id="全连接层fully-connected-layer">全连接层（Fully-connected layer）</span></h2>
+<p>全连接层和卷积层可以相互转换： * 对于任意一个卷积层，要把它变成全连接层只需要把权重变成一个巨大的矩阵，其中大部分都是0 除了一些特定区块（因为局部感知），而且好多区块的权值还相同（由于权重共享）。 * 相反地，对于任何一个全连接层也可以变为卷积层。比如，一个<span class="math inline">\(K ＝ 4096\)</span> 的全连接层，输入层大小为 <span class="math inline">\(7*7*512\)</span>，它可以等效为一个 <span class="math inline">\(F=7,\ P=0,\ S=1,\ K=4096\)</span> 的卷积层。换言之，我们把 filter size 正好设置为整个输入层大小。</p>
+<h1><span id="卷积神经网络架构">卷积神经网络架构</span></h1>
+<h2><span id="layer-patterns">Layer Patterns</span></h2>
+<p>常见的卷积神经网络架构是这样的： <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">INPUT -&gt; [[CONV -&gt; RELU]*N -&gt; POOL?]*M -&gt; [FC -&gt; RELU]*K -&gt; FC</span><br></pre></td></tr></table></figure></p>
+<p>堆叠几个卷积和整流层，再加一个池化层，重复这个模式知道图片已经被合并得比较小了，然后再用全连接层控制输出。</p>
+<p>上述表达式中 <code>?</code> 意味着0次或1次，通常情况下：<code>N &gt;= 0 &amp;&amp; N &lt;= 3</code>, <code>M &gt;= 0</code>, <code>K &gt;= 0 &amp;&amp; K &lt; 3</code>。</p>
+<p>比如你可以组合出以下几种模式： * <code>INPUT -&gt; FC</code>, 实现了一个线性分类器， 这里 <code>N = M = K = 0</code> * <code>INPUT -&gt; CONV -&gt; RELU -&gt; FC</code> * <code>INPUT -&gt; [CONV -&gt; RELU -&gt; POOL]*2 -&gt; FC -&gt; RELU -&gt; FC</code>. Here we see that there is a single <code>CONV</code> layer between every <code>POOL</code> layer. * <code>INPUT -&gt; [CONV -&gt; RELU -&gt; CONV -&gt; RELU -&gt; POOL]*3 -&gt; [FC -&gt; RELU]*2 -&gt; FC</code> Here we see two CONV layers stacked before every POOL layer. This is generally a good idea for larger and deeper networks, because multiple stacked CONV layers can develop more complex features of the input volume before the destructive pooling operation.</p>
+<h2><span id="layer-sizing-patterns">Layer Sizing Patterns</span></h2>
+<ul>
+<li><strong>Input layer</strong> : 应该是2的整数次幂。比如32，64， 128等。</li>
+<li><strong>Conv Layer</strong> : 使用小的过滤器（filter），$ F = 3 or F = 5$, 步幅 <span class="math inline">\(S=1\)</span>，如果不能恰好拟合输入层，还要边缘补零。如果使用 <span class="math inline">\(F = 3,\ P = 1\)</span>，那么输出大小将与输入一样。如果用更大的过滤器（比如7*7），一般只会在紧挨着原始输入图片的卷积层才会看到。</li>
+<li><strong>Pool Layer</strong> : <span class="math inline">\(F = 2,\ S = 2\)</span></li>
+</ul>
+<h2><span id="case-studies">Case Studies</span></h2>
+<p>大牛们构建的网络</p>
+<ul>
+<li><strong>LeNet</strong>. The first successful applications of Convolutional Networks were developed by Yann LeCun in 1990's. Of these, the best known is the <a href="http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf" target="_blank" rel="noopener">LeNet</a> architecture that was used to read zip codes, digits, etc.</li>
+<li><strong>AlexNet</strong>. The first work that popularized Convolutional Networks in Computer Vision was the <a href="http://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks" target="_blank" rel="noopener">AlexNet</a>, developed by Alex Krizhevsky, Ilya Sutskever and Geoff Hinton. The AlexNet was submitted to the <a href="http://www.image-net.org/challenges/LSVRC/2014/" target="_blank" rel="noopener">ImageNet ILSVRC challenge</a> in 2012 and significantly outperformed the second runner-up (top 5 error of 16% compared to runner-up with 26% error). The Network had a similar architecture basic as LeNet, but was deeper, bigger, and featured Convolutional Layers stacked on top of each other (previously it was common to only have a single CONV layer immediately followed by a POOL layer).</li>
+<li><strong>ZF Net</strong>. The ILSVRC 2013 winner was a Convolutional Network from Matthew Zeiler and Rob Fergus. It became known as the <a href="http://arxiv.org/abs/1311.2901" target="_blank" rel="noopener">ZFNet</a> (short for Zeiler &amp; Fergus Net). It was an improvement on AlexNet by tweaking the architecture hyperparameters, in particular by expanding the size of the middle convolutional layers.</li>
+<li><strong>GoogLeNet</strong>. The ILSVRC 2014 winner was a Convolutional Network from <a href="http://arxiv.org/abs/1409.4842" target="_blank" rel="noopener">Szegedy et al.</a> from Google. Its main contribution was the development of an Inception Module that dramatically reduced the number of parameters in the network (4M, compared to AlexNet with 60M). Additionally, this paper uses Average Pooling instead of Fully Connected layers at the top of the ConvNet, eliminating a large amount of parameters that do not seem to matter much.</li>
+<li><strong>VGGNet</strong>. The runner-up in ILSVRC 2014 was the network from Karen Simonyan and Andrew Zisserman that became known as the <a href="http://www.robots.ox.ac.uk/~vgg/research/very_deep/" target="_blank" rel="noopener">VGGNet</a>. Its main contribution was in showing that the depth of the network is a critical component for good performance. Their final best network contains 16 CONV/FC layers and, appealingly, features an extremely homogeneous architecture that only performs 3x3 convolutions and 2x2 pooling from the beginning to the end. It was later found that despite its slightly weaker classification performance, the VGG ConvNet features outperform those of GoogLeNet in multiple transfer learning tasks. Hence, the VGG network is currently the most preferred choice in the community when extracting CNN features from images. In particular, their <a href="http://www.robots.ox.ac.uk/~vgg/research/very_deep/" target="_blank" rel="noopener">pretrained model</a> is available for plug and play use in Caffe. A downside of the VGGNet is that it is more expensive to evaluate and uses a lot more memory and parameters (140M).</li>
+<li><strong>ResNet</strong>. <a href="http://arxiv.org/abs/1512.03385" target="_blank" rel="noopener">Residual Network</a> developed by Kaiming He et al. was the winner of ILSVRC 2015. It features an interesting architecture with special skip connections and features heavy use of batch normalization. The architecture is also missing fully connected layers at the end of the network. The reader is also referred to Kaiming's presentation (<a href="https://www.youtube.com/watch?v=1PGLj-uKT1w" target="_blank" rel="noopener">video</a>, <a href="http://research.microsoft.com/en-us/um/people/kahe/ilsvrc15/ilsvrc2015_deep_residual_learning_kaiminghe.pdf" target="_blank" rel="noopener">slides</a>), and some <a href="https://github.com/gcr/torch-residual-networks" target="_blank" rel="noopener">recent experiments</a> that reproduce these networks in Torch.</li>
+</ul>
+<h1><span id="参考">参考</span></h1>
+<p><a href="http://cs231n.github.io/convolutional-networks/" target="_blank" rel="noopener">CS231n: Convolutional Neural Networks for Visual Recognition</a> <a href="https://www.wikiwand.com/zh-hans/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C" target="_blank" rel="noopener">卷积神经网络-维基百科</a> <a href="http://deeplearning.stanford.edu/wiki/index.php/%E5%8D%B7%E7%A7%AF%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96" target="_blank" rel="noopener">卷积特征提取</a> <a href="http://www.moonshile.com/post/juan-ji-shen-jing-wang-luo-quan-mian-jie-xi" target="_blank" rel="noopener">卷积神经网络全面解析</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/CNN/">CNN</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

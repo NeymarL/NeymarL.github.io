@@ -1,0 +1,261 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    阿里音乐流行趋势预测大赛总结 | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="阿里音乐流行趋势预测大赛总结">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      阿里音乐流行趋势预测大赛总结</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/07/22/阿里音乐流行趋势预测大赛总结/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-07-22T11:42:06.000Z">
+          2016-07-22
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <h2><span id="赛题分析">赛题分析</span></h2>
+<p>题目要求根据用户过去六个月的交互纪录来预测未来两个月歌手的播放量。</p>
+<a id="more"></a>
+<h2><span id="解题思路">解题思路</span></h2>
+<h3><span id="数据感知">数据感知</span></h3>
+<p>刚开始拿到数据之后做了一些简单的统计，发现艺人数量不是很多，只有50个，用户数量35万左右，而且每个用户的平均交互数量很低，半年内只有16次，低于平均值的用户占比70+%。总体来看活跃用户不多，把歌手播放量曲线画出来之后发现大部分的歌手的播放量都在2000以下。</p>
+<h3><span id="预测用户行为">预测用户行为</span></h3>
+<p>开始我们打算通过预测用户的播放行为来预测歌手的播放量，因为感觉这样有理有据，比如一个用户今天播放并下载了一首歌曲，那么他明天很可能还会听这首歌等等。根据这些逻辑我们从历史纪录里提取出了一些特征，然后用这些特征预测下一天的播放量，把预测好的再加入历史纪录用于预测下下一天，如此反复直到预测完2个月的播放量。</p>
+<p>但是这样做有几个问题：</p>
+<ul>
+<li>首先，训练周期太长。光提取特征就要花一个小时左右的时间，再加上训练，合并训练集等，一共要两个小时左右，但这才预测了1天，把60天都预测完需要 60 * 2 = 120 小时，所以这么做肯定不行。</li>
+<li>其次，单个用户的随机性太强，导致训练误差也非常大，而且误差还会积累。 于是我们就放弃了这种方法。</li>
+</ul>
+<h3><span id="时间序列分析">时间序列分析</span></h3>
+<p>时间序列分析的方法也是参赛后在交流群里听说的，有人说用ARIMA能做到6200（当时第一6500+），我就去查了查，发现了时间序列分析这个理论体系。</p>
+<p>于是我也用ARIMA试了，但是遇到一个很蛋疼的问题，ARIMA预测的好坏很依赖于他的参数！虽然50个歌手不多，但是为每个歌手单独调参肯定会累死，大家都用一套参数效果又不好。这时我又发现了R的<code>auto.arima</code>，用这个可以自动调参，但用了之后发现效果也没那么好，记得好像6000分左右吧。</p>
+<h3><span id="均值大法好">均值大法好</span></h3>
+<p>在第一赛季期间总是有人在群里说规则轻松6500，模型打不过规则等，但一直不知道规则是啥，感觉很神秘很牛逼，后来才恍然大悟，这个比赛里它们说的规则就是取均值。</p>
+<p>我就一点一点试，发现取最后十天左右的均值确实可以达到6500，刚发现的时候排名还挺高，后来大家都知道了排名就下来了，不过一直稳定在前100名。</p>
+<p>从此以后我的方法就一直围绕均值展开，各种变花样均值，比如滑动窗口、平滑一下再取均值、STL分解一下再取均值等。</p>
+<h3><span id="回归模型">回归模型</span></h3>
+<p>到了第二赛季，平台上没有提供时间序列算法，只能用回归模型了，先后试了GBDT和XGBOOST，前者预测出来好多负值，非常不靠谱，不造怎么回事，后者还可以，虽然效果不如均值，但最起码比较接近。</p>
+<p>回归模型的好坏主要依赖于特征的选择，就好比你要判断一个人是男是女，如果你的判断依据是头发长短，头发长认为是女生，头发短认为是男生，那么你判断的正确率可能在95%左右；但如果你的判断依据是那个人的染色体数目，那么你的正确率肯定在99.999%以上。</p>
+<p>我在某次选择时加上了下载量这个特征，发现预测78月的效果超过了均值，不过由于没有9、10月的下载量数据，所以用均值替代，我把78月的真实下载量也用均值替代，重新预测78月的播放量发现也比均值的效果好。可是，当我用该方法预测9、10月时，分数TMD也变低了！线上效果又没有均值好，很醉。后来还尝试了不同的特征、feature stack等方法，效果都不如花样均值。</p>
+<p>最后我只有祭出目测大法，才稍稍提了几分，能留在前50实属万幸。</p>
+<h2><span id="赛后总结">赛后总结</span></h2>
+<p>赛后看了其他人写的博客发现，自己数据预处理做的不够，那些爆发点很可能是刷单的，应该清洗掉，但当时没考虑到，而且感觉比赛的时候思维比较局限，总是围绕着一点转来转去，导致最后效果一般。</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/踩坑现场/">踩坑现场</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/数据挖掘/">数据挖掘</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

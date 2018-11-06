@@ -1,0 +1,292 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    Paper Reading - Neural Machine Translation In Linear Time (ByteNet) | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="Paper Reading - Neural Machine Translation In Linear Time (ByteNet)">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      Paper Reading - Neural Machine Translation In Linear Time (ByteNet)</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/08/14/Neural Machine Translation In Linear Time (ByteNet)/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-08-14T01:30:19.000Z">
+          2017-08-14
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>ByteNet 可用于<strong>字符级</strong>的机器翻译模型并且有着很好的表现，它的特点在于可以在线性时间 (linear time) 完成翻译而且能够处理长距离依赖。它也采用编码器-解码器架构，并且编码器和解码器都由CNN组成。</p>
+<p>ByteNet 之所以有上述的这些特性，是因为使用了如下一些技术：</p>
+<ul>
+<li>Dynamic Unfolding
+<ul>
+<li>解决了生成不同长度翻译的问题</li>
+</ul></li>
+<li>Dilated Convolution
+<ul>
+<li>缩短了依赖传播的距离</li>
+</ul></li>
+<li>Masked 1D Convolution
+<ul>
+<li>保证训练时只用过去的信息生成当前字符</li>
+</ul></li>
+<li>Residual Blocks
+<ul>
+<li>解决梯度消失问题</li>
+</ul></li>
+</ul>
+<a id="more"></a>
+<p><img src="/images/byte.png"></p>
+<h2><span id="dynamic-unfolding">Dynamic Unfolding</span></h2>
+<p><img src="/images/dy_unfold.png"></p>
+<p>Encoder 的输出的句子编码的长度固定为 <span class="math inline">\(|\hat{t}|\)</span> (不够会补零)，是目标句子长度 <span class="math inline">\(|t|\)</span> 的上界，可以通过下式得到： <span class="math display">\[
+|\hat{t}| = a|s| + b
+\]</span> 其中，<span class="math inline">\(|s|\)</span> 表示源句子长度，通过选择适当的参数 <span class="math inline">\(a\)</span> 和 <span class="math inline">\(b\)</span>，使得 <span class="math inline">\(|\hat{t}|\)</span> 基本都大于实际长度 <span class="math inline">\(|t|\)</span>，并且没有太多冗余。</p>
+<p>在每一步，decoder 根据当前输入字符和句子特征输出下一个字符，直到生成EOS。至于 decoder 怎么接收输入并 conditioned on 编码器的输出，论文在并没有提及，不过从一个<a href="https://github.com/paarthneekhara/byteNet-tensorflow/blob/master/ByteNet/model.py" target="_blank" rel="noopener">开源实现</a>中看出是直接把输入和编码器在对应位置的输出连接起来，如上图所示。</p>
+<h2><span id="dilated-convolution">Dilated Convolution</span></h2>
+<p>一维离散卷积的定义为： <span class="math display">\[
+(f*g)[n] = \sum_{m=-\infty}^{\infty}f[m]g[n-m] = \sum_{m=-M}^Mf[n - m]g[m]
+\]</span> 例：如果 <span class="math inline">\(f = [0, 1, 2, -1, 1, -3, 0]\)</span>, <span class="math inline">\(g = [1, 0, -1]\)</span>，则按照上式，卷积计算如下所示： <span class="math display">\[
+\begin{array}{lcl}
+(f*g)[2]        &amp; = &amp; f[2]g[0] + f[1]g[1] + f[0]g[2] = -2 \\
+(f*g)[3]  &amp; = &amp; f[3]g[0] + f[2]g[1] + f[1]g[2] = 2 \\
+...\\
+(f*g)[6]  &amp; = &amp; f[6]g[0] + f[5]g[1] + f[4]g[2] = 1 \\
+\end{array}
+\]</span> 和 stride = 1 的普通卷积网络计算一致。</p>
+<p><img src="/images/stride.jpeg"></p>
+<p><strong>Dilated Convolution</strong>的定义为： <span class="math display">\[
+(f*_lg)[n] = \sum_{m=-\infty}^{\infty}f[m]g[n-lm] = \sum_{m=-M}^Mf[n - lm]g[m]
+\]</span> 其中，<span class="math inline">\(l\)</span> 为 dilation factor，控制扩张大小，这样 <span class="math inline">\(l = 2\)</span> 时上面例子中的卷积就变成了： <span class="math display">\[
+\begin{array}{lcl}
+(f*_2g)[4]        &amp; = &amp; f[4]g[0] + f[2]g[1] + f[0]g[2]  \\
+(f*_2g)[5]  &amp; = &amp; f[5]g[0] + f[3]g[1] + f[1]g[2] \\
+(f*_2g)[6]  &amp; = &amp; f[6]g[0] + f[4]g[1] + f[2]g[2]  \\
+\end{array}
+\]</span> 当 <span class="math inline">\(l = 3\)</span> 时，相应卷积就为: <span class="math display">\[
+(f*_3g)[6] = f[6]g[0] + f[3]g[1] + f[0]g[2]
+\]</span> 这样虽然卷积核都为3，但 receptive field 的大小却大了很多，所以使用 dialted conv 能使 <strong>receptive field</strong> 的大小呈<strong>指数增长</strong>，而相应<strong>参数</strong>却是<strong>线性增长</strong>的，如下图所示。使用 dilated conv 就可以有效地缩短依赖传播的距离。</p>
+<p><img src="/images/dilated.png"></p>
+<p>参考：<a href="https://arxiv.org/abs/1511.07122" target="_blank" rel="noopener">MULTI-SCALE CONTEXT AGGREGATION BY DILATED CONVOLUTIONS</a></p>
+<h2><span id="residual-block">Residual Block</span></h2>
+<p><img src="/images/residual.png"></p>
+<p>每一层（包括 Encoder 和 Decoder）都封装了一个 residual block（上图），其中每个黄色的格子代表一个卷积层，里面的数字是相应的 filter size。中间的 Masked 1 x K 是这层的主力，其他都是为了使他发挥更大效果的陪衬。</p>
+<h2><span id="linear-time">Linear Time</span></h2>
+<p><img src="/images/lt.png"></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/NLP/">NLP</a><a href="/tags/NMT/">NMT</a><a href="/tags/Deep-NLP/">Deep NLP</a><a href="/tags/CNN/">CNN</a><a href="/tags/ByteBet/">ByteBet</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

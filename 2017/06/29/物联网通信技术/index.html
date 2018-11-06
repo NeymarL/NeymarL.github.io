@@ -1,0 +1,1049 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    物联网通信技术 | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="物联网通信技术">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      物联网通信技术</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/06/29/物联网通信技术/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-06-29T12:08:47.000Z">
+          2017-06-29
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p><strong>目录</strong></p>
+<!-- toc -->
+<ul>
+<li><a href="#无线通信基础">无线通信基础</a>
+<ul>
+<li><a href="#信号传输">信号传输</a></li>
+<li><a href="#编码和调制">编码和调制</a></li>
+</ul></li>
+<li><a href="#无线网络基础">无线网络基础</a>
+<ul>
+<li><a href="#多址接入mac">多址接入（MAC）</a></li>
+</ul></li>
+<li><a href="#802154zigbee">802.15.4/Zigbee</a>
+<ul>
+<li><a href="#概述">概述</a></li>
+<li><a href="#物理层">物理层</a></li>
+<li><a href="#mac层">MAC层</a></li>
+<li><a href="#网络层">网络层</a></li>
+<li><a href="#tinyos">TinyOS</a></li>
+</ul></li>
+<li><a href="#无线局域网">无线局域网</a>
+<ul>
+<li><a href="#mac层-1">MAC层</a></li>
+<li><a href="#功耗管理">功耗管理</a></li>
+</ul></li>
+<li><a href="#无线广域网">无线广域网</a>
+<ul>
+<li><a href="#大容量的小区制利用有限频段覆盖无限大面积">大容量的小区制：利用有限频段覆盖无限大面积</a></li>
+<li><a href="#gsmgprs">GSM/GPRS</a></li>
+<li><a href="#cdma">CDMA</a></li>
+<li><a href="#3g">3G</a></li>
+</ul></li>
+<li><a href="#物联网通信架构">物联网通信架构</a>
+<ul>
+<li><a href="#基于ip的物联网通信架构">基于IP的物联网通信架构</a></li>
+<li><a href="#6lowpan">6LowPAN</a></li>
+</ul></li>
+<li><a href="#各种技术对比">各种技术对比！</a></li>
+</ul>
+<!-- tocstop -->
+<a id="more"></a>
+<h2><span id="无线通信基础">无线通信基础</span></h2>
+<h3><span id="信号传输">信号传输</span></h3>
+<p><em>信号</em></p>
+<ul>
+<li>时域概念
+<ul>
+<li>模拟信号</li>
+<li>数字信号</li>
+<li>周期信号</li>
+<li>非周期信号</li>
+</ul></li>
+<li>频域概念
+<ul>
+<li>一个电磁信号由多种频率成分组成</li>
+<li>基频：当一个信号的所有频率成分都是某个频率的整数倍时，后者称为基频</li>
+<li>频谱：一个信号包涵的频率范围</li>
+<li>绝对带宽：一个信号的频谱宽度</li>
+<li>有效带宽：一个信号的绝大部分能量集中在相当窄的频带内</li>
+</ul></li>
+<li>数据与信号
+<ul>
+<li>数据：传达某种意义或信息的实体</li>
+<li>信号：数据的电气或电磁表示</li>
+<li>传输：通过信号的传播和处理进行数据通信的过程</li>
+</ul></li>
+<li>数据率与带宽 <img src="/images/物联网通信技术/DraggedImage.png"> <img src="/images/物联网通信技术/DraggedImage-1.png">
+<ul>
+<li>数据率：数据能够进行通信的速率，单位b/s
+<ul>
+<li>数据率 = 2*基频</li>
+</ul></li>
+<li>带宽：传输信号的带宽，受发送器和传输媒体限制
+<ul>
+<li>信道无噪声：尼奎斯特带宽 <img src="/images/物联网通信技术/DraggedImage-2.png">
+<ul>
+<li>B：带宽</li>
+</ul></li>
+<li>信道有噪声
+<ul>
+<li>信噪比，SNR, S/N：信号功率／噪声功率 <img src="/images/物联网通信技术/DraggedImage-3.png"></li>
+<li>分贝：用来表示信号强度的增益、损耗以及<em>相对值</em></li>
+<li><strong>dB &amp; dBm</strong> <img src="/images/物联网通信技术/DraggedImage-4.png"></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>信道容量：给定条件下，在某一通信线路（信道）上，数据可以被传输的最大速率
+<ul>
+<li>香农容量公式 <img src="/images/物联网通信技术/DraggedImage-5.png"></li>
+<li>举例 <img src="/images/物联网通信技术/DraggedImage-6.png"></li>
+</ul></li>
+<li>传输媒体：数据传输系统中发送器和接收器之间的物理路径
+<ul>
+<li>导向：双绞线、光纤</li>
+<li>非导向：大气</li>
+</ul></li>
+<li>复用
+<ul>
+<li>FDM</li>
+<li>TDM</li>
+<li>OFDM：正交频分复用</li>
+</ul></li>
+</ul>
+<p><em>天线</em></p>
+<ul>
+<li>各向同性天线</li>
+<li>偶极天线</li>
+<li>抛物反射天线</li>
+</ul>
+<p><strong>天线增益</strong></p>
+<ul>
+<li>天线定向性度量</li>
+<li>天线增益定义为<em>在一特定方向的功率输出</em>： <img src="/images/物联网通信技术/DraggedImage-7.png"></li>
+</ul>
+<p>传播</p>
+<ul>
+<li>直线传播
+<ul>
+<li><strong>自由空间损耗公式</strong>
+<ul>
+<li>未考虑天线增益 <img src="/images/物联网通信技术/DraggedImage-8.png"> <img src="/images/物联网通信技术/DraggedImage-9.png"></li>
+<li>考虑天线增益 <img src="/images/物联网通信技术/DraggedImage-10.png"> <img src="/images/物联网通信技术/DraggedImage-11.png"></li>
+</ul></li>
+<li>实质就是空间的损耗减去发送端和接收端的增益</li>
+</ul></li>
+<li>信噪比SNR <img src="/images/物联网通信技术/DraggedImage-12.png"> <img src="/images/物联网通信技术/DraggedImage-13.png"></li>
+<li>衰减原因
+<ul>
+<li>大气吸收</li>
+<li>多普勒效应</li>
+<li>多径
+<ul>
+<li>反射</li>
+<li>衍射</li>
+<li>散射</li>
+</ul></li>
+</ul></li>
+</ul>
+<p>衰落</p>
+<ul>
+<li>由于信道的变化导致接收信号的功率随时间、地理位置、频率等变化</li>
+<li>慢衰落</li>
+<li>快衰落
+<ul>
+<li>描述信号<em>幅值</em>的<em>瞬时变化</em>，与<strong>多径传播</strong>有关</li>
+</ul></li>
+</ul>
+<p>接收</p>
+<ul>
+<li>接收基噪声基底
+<ul>
+<li>RNF = kTW + NF</li>
+<li>kTW：理论热噪声基底</li>
+<li>NF：噪声系数</li>
+</ul></li>
+<li><strong>接收机灵敏度</strong> <img src="/images/物联网通信技术/DraggedImage-14.png"></li>
+</ul>
+<h3><span id="编码和调制">编码和调制</span></h3>
+<p>数字信号-模拟信号</p>
+<ul>
+<li>幅移键控（ASK）
+<ul>
+<li>用振幅恒定的载波表示一个二进制数</li>
+<li><em>在光纤中传播数字数据时使用</em></li>
+<li><strong>优点</strong>
+<ul>
+<li>简单</li>
+</ul></li>
+<li><strong>缺点</strong>
+<ul>
+<li>最易受噪声影响</li>
+<li>效率低</li>
+</ul></li>
+</ul></li>
+<li>频移键控（FSK）
+<ul>
+<li>用不同频率表示不同的二进制值</li>
+<li><em>用于高频率无线（或同轴电缆）的传输</em></li>
+<li>多进制：带宽效率高，但易出错</li>
+<li><strong>优点</strong>
+<ul>
+<li>比ASK抗干扰强</li>
+<li>电压噪声可以忽略</li>
+</ul></li>
+<li><strong>缺点</strong>
+<ul>
+<li>需要频谱最大</li>
+</ul></li>
+</ul></li>
+<li>相移键控（PSK）
+<ul>
+<li>二相相移键控（BPSK）</li>
+<li>差分相移键控（DPSK）
+<ul>
+<li>通过与前面的信号比较决定相移</li>
+</ul></li>
+<li>四相相移键控（QPSK）</li>
+<li>多相位相移键控</li>
+<li><em>用途：广泛使用</em></li>
+<li><strong>优点</strong>
+<ul>
+<li>比ASK抗干扰强，和ASK用相同带宽</li>
+<li>比FSK带宽利用率高</li>
+</ul></li>
+<li><strong>缺点</strong>
+<ul>
+<li>检测、恢复信号比ASK、FSK更复杂</li>
+</ul></li>
+</ul></li>
+<li>计算带宽 <img src="/images/物联网通信技术/DraggedImage-15.png"></li>
+</ul>
+<h2><span id="无线网络基础">无线网络基础</span></h2>
+<h3><span id="多址接入mac">多址接入（MAC）</span></h3>
+<p>MAC层定义用户需要时如何访问无线信道</p>
+<ul>
+<li>随机访问
+<ul>
+<li>ALOHA, CSMA</li>
+</ul></li>
+<li>有序访问
+<ul>
+<li>令牌总线（环）</li>
+</ul></li>
+<li>确定性访问
+<ul>
+<li>FDMA, TDMA, CDMA</li>
+</ul></li>
+<li>组合</li>
+</ul>
+<p><em>CSMA：载波监听</em></p>
+<ul>
+<li>发前先听</li>
+<li>1-持续CSMA
+<ul>
+<li>一有空就发</li>
+</ul></li>
+<li>p-持续CSMA
+<ul>
+<li>有空闲随机概率p发送</li>
+</ul></li>
+</ul>
+<p>CSMA/CD</p>
+<ul>
+<li>发前先听，边发边听</li>
+<li>无线中难于检测冲突</li>
+</ul>
+<p>隐藏节点问题</p>
+<ul>
+<li>在无线环境中，当两个节点相距较远时，无发进行载波监听 <img src="/images/物联网通信技术/DraggedImage-16.png"></li>
+</ul>
+<p><strong>CSMA/CA</strong></p>
+<ul>
+<li>冲突避免CA = Collision Avoidance</li>
+<li>监听到信道空闲，维持一段时间后，再随机等待一段时间仍然空闲，才提交数据</li>
+<li>RTS-CTS握手
+<ul>
+<li>设备发送数据之前，先发送RTS帧给目标端，等待目标端回应CTS帧后才开始发送 <img src="/images/物联网通信技术/DraggedImage-17.png"></li>
+</ul></li>
+<li>暴露节点问题 <img src="/images/物联网通信技术/DraggedImage-18.png"></li>
+</ul>
+<p><em>总结对比</em></p>
+<ul>
+<li>随机访问：CSMA
+<ul>
+<li><em>轻载：快速响应</em></li>
+<li>重载：吞吐量下降</li>
+<li>实现简单</li>
+</ul></li>
+<li>确定性协议：TDMA，FDMA
+<ul>
+<li>带宽保证</li>
+<li>平均延迟较高</li>
+<li>延迟变化小</li>
+<li>同步、协调等机制</li>
+</ul></li>
+<li>混合：CSMA/TDMA
+<ul>
+<li>自适应、开销大</li>
+</ul></li>
+</ul>
+<h2><span id="802154zigbee">802.15.4/Zigbee</span></h2>
+<h3><span id="概述">概述</span></h3>
+<p>ZigBee技术优点</p>
+<ol type="1">
+<li>低功耗</li>
+<li>低成本</li>
+<li>低速率</li>
+<li>近距离</li>
+<li>短时延</li>
+<li>高容量</li>
+<li>高安全</li>
+<li>免执照频段</li>
+</ol>
+<h3><span id="物理层">物理层</span></h3>
+<p><img src="/images/物联网通信技术/DraggedImage-19.png"></p>
+<p>Symbol</p>
+<ul>
+<li>Symbol的具体内容和采用的调制方式有关
+<ul>
+<li>2.4GHz, 4bit数据用一个Symbol表示，16种</li>
+<li>其他，1bit数据用一个Symbol表示，2种</li>
+</ul></li>
+</ul>
+<p>功能</p>
+<ul>
+<li>打开和关闭收发器</li>
+<li>信道能量检测</li>
+<li>链路质量指示</li>
+<li>空闲信道评估</li>
+<li>信道频率选择</li>
+<li>在物理介质上发送和接收数据包</li>
+</ul>
+<h3><span id="mac层">MAC层</span></h3>
+<p>数据传输</p>
+<ul>
+<li>数据由装置发送给协调者</li>
+<li>数据由协调者发送给装置</li>
+<li>数据由网路装置中对等传输（星状拓扑不支持）</li>
+</ul>
+<p><em>信标使能网络（Beacon mode）</em></p>
+<ul>
+<li>超帧：实现协调器和设备的时间同步、识别PAN及设备之间的通信（<em>不支持网状拓扑结构</em>）
+<ul>
+<li>CAP（Contention Access Period）采用时隙CSMA/CA</li>
+<li>CFP（Contention Free Period）采用时隙GTS机制通信</li>
+</ul></li>
+<li>通信时间划分
+<ul>
+<li>活跃期（划分为16个等长的slot）
+<ul>
+<li>信标帧发送阶段</li>
+<li>CAP</li>
+<li>CFP <img src="/images/物联网通信技术/DraggedImage-20.png"></li>
+</ul></li>
+<li>睡眠期</li>
+</ul></li>
+<li><em>BO</em>：<em>信标级数</em>，取值范围0到14，等于15时表示不使用超帧结构</li>
+<li><em>SO</em>：<em>超帧级数</em>，取值范围0到14，但必须保证<strong>SO不大于BO</strong>，当二者相等时，表示该超帧中不包含非活跃期</li>
+<li><em>Duty Cycle</em>
+<ul>
+<li>活跃时间2^(-(BO-SO))</li>
+<li>睡眠时间1-2^(-(BO-SO))</li>
+<li>（N总-N非活跃）/N总 <img src="/images/物联网通信技术/DraggedImage-21.png"></li>
+</ul></li>
+<li><strong>CAP</strong>
+<ul>
+<li>CAP开始于beacon帧之后，结束于CFP开始之前的时隙边界上。如果CFP长度为0，CAP结束于超帧活动区末端</li>
+<li>长度至少为MinCAPLength个符号长度，可以通过调节CFP长度动态的增减</li>
+<li><em>除了确认帧和紧跟因数据请求而发送的确认帧之后的数据帧以外</em>，所有CAP内的帧都是用CSMA/CA</li>
+<li>必须保证该传输事务结束时距CAP结束至少还有一个帧间间隔（IFS），以保证接收方有时间处理该帧；否则延迟到下一个CAP发送</li>
+<li>帧间隔时间IFS
+<ul>
+<li>ACK延时t_ACK发送</li>
+<li>SIFS：当前一个DATA帧长度小于等于MaxSIFSFrameSize(18)时，后一个帧至少延时SIFS发送
+<ul>
+<li>SIFS的典型值是12 Symbols</li>
+</ul></li>
+<li>LIFS：前一个帧长大于18，后一帧延迟LIFS发送
+<ul>
+<li>LIFS的典型值是40 Symbols <img src="/images/物联网通信技术/DraggedImage-22.png"></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><strong>CFP</strong>
+<ul>
+<li>CFP是为了保证某个设备的QoS而设置的。它开始于CAP结束后的时隙边界上，结束于超帧活动区域尾部</li>
+<li>CFP扩大或减小取决于所有GTS的总长度</li>
+<li>在GTS内传输不用CSMA/CA</li>
+<li>保证传输结束时距它的GTS结束至少有一个帧间间隔</li>
+<li><em>GTS: Guaranteed Time Slot</em>
+<ul>
+<li>用于低延迟或对数据传输带宽有特殊要求的应用</li>
+<li>协调者通过超帧负责分配，最多分配7个，每个可以占用1个或多个时间片</li>
+</ul></li>
+</ul></li>
+<li>CSMA/CA时隙 UnitBackoffPeriod：20 Symbols</li>
+<li><em>CSMA/CA退避算法</em>
+<ul>
+<li>NB：后退次数，已执行的back off的次数</li>
+<li>CW：碰撞窗口长度，单位为backoff period, 20 Symbols，含义是必须执行几次帧测频道皆为闲置时才可将数据送出，<em>初始值为2</em></li>
+<li>BE：后退指数，Backoff Time = 2^BE - 1，取值0-5 <img src="/images/物联网通信技术/DraggedImage-23.png"> <img src="/images/物联网通信技术/DraggedImage-24.png"></li>
+<li><em>2CCA</em>：为了保护ACK，因为ACK需要延迟t_ACK时间才能发送，只检测一个CCA可能会导致碰撞 <img src="/images/物联网通信技术/DraggedImage-25.png"> <img src="/images/物联网通信技术/DraggedImage-26.png"> <img src="/images/物联网通信技术/DraggedImage-27.png"></li>
+</ul></li>
+<li>数据由装置发送给协调器（直接传输） <img src="/images/物联网通信技术/DraggedImage-28.png"></li>
+<li>数据由协调者发送给装置（间接传输） <img src="/images/物联网通信技术/DraggedImage-29.png"></li>
+</ul>
+<p><em>信标不使能网络（Non-beacon mode）</em></p>
+<ul>
+<li>无超帧，通过无时隙的CSMA/CA机制发送数据</li>
+<li>某一节点的退避周期和PAN中任何其他的节点的退避周期无关</li>
+<li>无时隙CSMA/CA <img src="/images/物联网通信技术/DraggedImage-30.png"> <img src="/images/物联网通信技术/DraggedImage-31.png"></li>
+<li>数据由装置发送给协调器（直接传输） <img src="/images/物联网通信技术/DraggedImage-32.png"></li>
+<li>数据由协调者发送给装置（间接传输） <img src="/images/物联网通信技术/DraggedImage-33.png"></li>
+</ul>
+<p><strong>性能分析</strong></p>
+<ul>
+<li>实例：2.4GHz频段上使用<em>非时隙</em>CSMA/CA能够达到的数据传输率250kbps? <em>有退避、CCA、必要的间隔</em>
+<ol type="1">
+<li>信道访问时间
+<ul>
+<li>{0, 2^BE-1}周期，1CCA</li>
+<li>假设信道空闲，退避1次即可，BE=macMinBE=3</li>
+<li>最长访问时间=InitialblockoffPeriod + CCA = (2^3 - 1) x UnitBackoffPeriod + CCA = 7 x 320 + 128 (微秒)= 2.368 ms</li>
+<li>其中 InitialblockoffPeriod = 8 symbols UnitBackoffPeriod = 20 symbols 1 symbol = 16 (微秒)</li>
+</ul></li>
+<li>数据帧传输时间 <img src="/images/物联网通信技术/DraggedImage-34.png">
+<ul>
+<li>最大有效载荷：MaxPHYPacketSize = 127 <img src="/images/物联网通信技术/DraggedImage-35.png"></li>
+</ul></li>
+<li>确认传输时间 <img src="/images/物联网通信技术/DraggedImage-36.png">
+<ul>
+<li>不使用CSMA/CA.....................</li>
+</ul></li>
+</ol></li>
+</ul>
+<h3><span id="网络层">网络层</span></h3>
+<p>路由</p>
+<ul>
+<li><em>树形路由</em>
+<ul>
+<li>有信标</li>
+<li>地址分配
+<ul>
+<li>基于树的深度新加入的路由节点被赋予一个连续的地址范围</li>
+<li><strong>该范围中的第一个整数为该节点的地址</strong>，余下的数用于分配子节点 <img src="/images/物联网通信技术/DraggedImage-37.png"></li>
+<li><code>Cm</code>：最大孩子个数</li>
+<li><code>Rm</code>：最大子路由节点个数</li>
+<li><code>Lm</code>：网络最大深度，<code>[0 ~ Lm]</code></li>
+<li><strong>分配方案</strong>
+<ul>
+<li>具有深度<code>d &lt; Lm</code>的路由节点的<em>地址范围</em>为<code>A(d)</code>
+<ul>
+<li><code>if d = Lm - 1, then A(d) = 1 + Cm</code></li>
+<li><code>else A(d) = 1 + Cm - Rm + Rm * A(d+1)</code></li>
+</ul></li>
+<li>深度为<code>Lm</code>的路由节点和终端设备的地址范围为1</li>
+</ul></li>
+<li>地址分配实例
+<ul>
+<li>给定<code>Rm = 2, Cm = 4, Lm = 3</code></li>
+<li>分配：
+<ul>
+<li><code>A(3) = 1</code></li>
+<li><code>A(2) = 1 + 4 - 2 + 2 * A(3) = 5</code></li>
+<li><code>A(1) = 1 + 4 - 2 + 2 * A(2) = 13</code></li>
+<li><code>A(0) = 1 + 4 - 2 + 2 * A(1) = 29</code></li>
+<li>Range: <code>[0 ~ 28]</code></li>
+<li>根节点地址：<code>0</code></li>
+<li>第一层节点的地址范围：<code>[1 ~ 13], [14, 26], 27, 28</code></li>
+<li>第二层节点的地址范围：<code>{[2 ~ 6], [7 ~ 11], 12, 13}, {[15 ~ 19], [20 ~ 24], 25, 26}</code> <img src="/images/物联网通信技术/DraggedImage-38.png"></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>网状路由
+<ul>
+<li>无信标，对等传输</li>
+<li>有路由能力：AODV</li>
+</ul></li>
+</ul>
+<p><strong>AODV</strong></p>
+<ul>
+<li>路由发现过程
+<ul>
+<li>要向某一目的节点发送数据的节点广播一个<em>RREQ消息</em></li>
+<li>收到<em>RREQ消息</em>的节点继续广播</li>
+<li>当节点广播<em>RREQ</em>时，同时设置一个指向源节点的<em>反向路径</em>（丢弃收到的重复路由请求分组）</li>
+<li>AODV假定连接是对称的</li>
+<li>当目的节点收到<em>RREQ</em>时，发送路由回复消息</li>
+<li>路由回复<em>RREP</em>消息沿路由请求转发时设置的反向路径传回源节点</li>
+<li>如果中间节点知道目的节点的路径，且该路径较新，也可以发送<em>RREP</em></li>
+<li>使用序列号定义路径的新旧，被发现的时间的远近 <img src="/images/物联网通信技术/DraggedImage-39.png"> <img src="/images/物联网通信技术/DraggedImage-40.png"> <img src="/images/物联网通信技术/DraggedImage-41.png"> <img src="/images/物联网通信技术/DraggedImage-42.png"> <img src="/images/物联网通信技术/DraggedImage-43.png"> <img src="/images/物联网通信技术/DraggedImage-44.png"> <img src="/images/物联网通信技术/DraggedImage-45.png"> <img src="/images/物联网通信技术/DraggedImage-46.png"> <img src="/images/物联网通信技术/DraggedImage-47.png"></li>
+</ul></li>
+</ul>
+<p><img src="/images/物联网通信技术/DraggedImage-48.png"></p>
+<h3><span id="tinyos">TinyOS</span></h3>
+<p><em>启动／停止</em> <img src="/images/物联网通信技术/DraggedImage-49.png"> <img src="/images/物联网通信技术/DraggedImage-50.png"></p>
+<p><em>发送数据</em> <img src="/images/物联网通信技术/DraggedImage-51.png"> <img src="/images/物联网通信技术/DraggedImage-52.png"></p>
+<p><em>接收数据</em> <img src="/images/物联网通信技术/DraggedImage-53.png"></p>
+<p><em>选信道</em> 在makefile里加入：<code>PFLAGS += -DCC2420_DEF_CHANNEL=13</code></p>
+<p><em>AM Type</em> 代码中的<code>id</code> enum { AM_BLINKTORADIO = 6, };</p>
+<p><em>包格式</em></p>
+<ul>
+<li><code>00</code>：表示AM数据包</li>
+<li>目标地址（2B）</li>
+<li>源地址（2B）</li>
+<li>消息长度（1B）</li>
+<li>组号（1B）</li>
+<li>AM Type (1B)</li>
+<li>Payload (最大28B)
+<ul>
+<li>nodeid (2B)</li>
+<li>counter (2B)</li>
+</ul></li>
+</ul>
+<h2><span id="无线局域网">无线局域网</span></h2>
+<h3><span id="mac层">MAC层</span></h3>
+<p>帧定义</p>
+<ul>
+<li>控制帧</li>
+<li>数据帧</li>
+<li>管理帧</li>
+<li>MAC首部：30字节</li>
+<li>帧主体：数据部分，<strong>不超过2312字节（如果数据长度大于2312则要分片！）</strong>；通常小于1500字节</li>
+<li>帧检验序列FCS：4字节 <img src="/images/物联网通信技术/DraggedImage-54.png"></li>
+</ul>
+<p><img src="/images/物联网通信技术/DraggedImage-55.png"></p>
+<p><em>分布式协调功能（DCF）</em>子层使用<em>CSMA/CA</em>机制，向上提供争用服务。 <em>点协调功能（PCF）</em>子层使用集中控制的接入算法，把数据权<em>轮流</em>交给各个站从而避免了碰撞的产生。</p>
+<p>帧间间隔IFS</p>
+<ul>
+<li>SIFS：短
+<ul>
+<li>ACK帧、CTS帧、MAC帧分片的数据帧、回答AP探寻的帧、<em>PCF</em>中AP发送的任何帧 <img src="/images/物联网通信技术/DraggedImage-56.png"></li>
+</ul></li>
+<li>PIFS：<em>点协调PCF</em>功能帧间间隔，比SIFS长；在<em>PCF</em>方式下使用，没有争用 <img src="/images/物联网通信技术/DraggedImage-57.png"></li>
+<li>DIFS：<em>分布协调DCF</em>功能帧间间隔，在<em>DCF</em>方式中用来发送数据帧和管理帧。</li>
+</ul>
+<p><strong>分布式协调DCF</strong></p>
+<ul>
+<li>CSMA/CA
+<ul>
+<li>发前先听，空闲等待<em>DIFS</em>，发送</li>
+<li>为什么空闲后还要等待？
+<ul>
+<li>可能有其他的站有高优先级的帧要发送</li>
+</ul></li>
+<li>源站发送了数据帧；目的站正确接收此帧，隔<em>SIFS</em>后，向源站发送确认帧ACK</li>
+<li>若源站没有在规定时间内收到ACK，则需重传此帧，直到收到或放弃</li>
+<li><em>虚拟载波监听（Virtual Carrier Sense）</em>
+<ul>
+<li>让源站将它要占用信道的时间通知给其他站，以便使其他站在此时间内停止发送数据</li>
+<li>表示其他站并没有监听信道，而是由于收到了<em>源站的通知</em>，才不发送数据</li>
+</ul></li>
+<li>网络分配向量
+<ul>
+<li>当检测到MAC帧首部的持续时间字段时，就调整自己的<em>网络分配向量NAV</em></li>
+<li>NAV指出了必须经过多少时间才能完成数据帧的这次传输，才能使信道转入空闲状态</li>
+</ul></li>
+<li>争用窗口
+<ul>
+<li>不仅要等待一个<em>DIFS</em>，还要进入<em>争用窗口</em>，并计算<em>随机退避时间</em>以便再次试图接入到信道</li>
+</ul></li>
+<li>二进制指数退避算法
+<ul>
+<li>第<code>i</code>次退避在<code>2^{2+i}</code>个时隙中随机选择一个
+<ul>
+<li>第<code>1</code>次退避在<code>8</code>个（0-7）时隙中随机选择一个</li>
+<li>第<code>3</code>次退避在<code>32</code>个时隙中随机选择一个</li>
+</ul></li>
+<li>仅在要发送<em>第一个</em>数据帧时检测到信道空闲时才<strong>不</strong>使用退避算法！</li>
+<li>除此之外所有情况都要用！即
+<ul>
+<li>发送第一帧时检测到信道忙</li>
+<li>每次重传后</li>
+<li>每次成功发送后</li>
+</ul></li>
+</ul></li>
+<li>退避计时器（backoff timer）
+<ul>
+<li>若信道空闲，则退避计时器就<em>继续</em>倒计时</li>
+<li>若信道忙，就<em>冻结</em>退避计时器的剩余时间，重新等待变为空闲，再经过DIFS后，<em>从剩余时间继续</em></li>
+<li>如果计时器减小到0，则开始发送整个数据帧 <img src="/images/物联网通信技术/DraggedImage-58.png"> <img src="/images/物联网通信技术/DraggedImage-59.png"></li>
+</ul></li>
+<li>RTS/CTS <img src="/images/物联网通信技术/DraggedImage-60.png"> <img src="/images/物联网通信技术/DraggedImage-61.png"></li>
+</ul></li>
+<li>与802.15.14 MAC层CSMA/CA区别
+<ul>
+<li>空闲信道检测只需一个CCA，802.15.14需要2个</li>
+<li>无限制回退</li>
+<li>回退算法：802.15.14无冻结</li>
+<li>虚拟载波监听！！</li>
+</ul></li>
+</ul>
+<p><strong>点协调 PCF</strong></p>
+<ul>
+<li>每个超帧周期分为<em>CFP</em>和<em>CP</em>
+<ul>
+<li><em>CFP</em>阶段传输实时业务，使用<strong>PCF</strong></li>
+<li><em>CP</em>使用<em>DCF</em> <img src="/images/物联网通信技术/DraggedImage-62.png"></li>
+</ul></li>
+<li>轮询列表
+<ul>
+<li>一个<code>CF-Poll</code>授权发送一个帧</li>
+</ul></li>
+<li>调度算法
+<ul>
+<li>PC到Station</li>
+<li>Round-Robin Scheme (R-Poll)：地址从小到大轮询</li>
+<li>Cyclic Shift Polling Scheme (CS-Poll)：循环移动列表顺序</li>
+<li>FIFO：缓存队列里的数据帧顺序 <img src="/images/物联网通信技术/DraggedImage-63.png"> <img src="/images/物联网通信技术/DraggedImage-64.png"> <img src="/images/物联网通信技术/DraggedImage-65.png"> <img src="/images/物联网通信技术/DraggedImage-66.png"></li>
+</ul></li>
+</ul>
+<h3><span id="功耗管理">功耗管理</span></h3>
+<p>TIM：Traffic Indiction Map，标志哪个STA有缓存的帧 DTIM：发送TIM广播包</p>
+<p><em>Power-Save mode (PS)</em></p>
+<ul>
+<li>每个<code>Listen_Interval</code>周期内激活接收器</li>
+<li>STA进入PS模式应通知AP，所有到它那的帧都会被缓存 <img src="/images/物联网通信技术/DraggedImage-67.png"> <img src="/images/物联网通信技术/DraggedImage-68.png"></li>
+<li>通信
+<ul>
+<li>关闭射频，定期睡眠</li>
+<li>AP缓存发往该终端的数据包</li>
+<li>缓存信息在TIM里说明</li>
+<li>醒来的终端需要用<code>PS-Poll</code>帧来接收数据包</li>
+</ul></li>
+<li>AP响应<code>PS-Poll</code>
+<ul>
+<li>立即响应 <img src="/images/物联网通信技术/DraggedImage-69.png"></li>
+<li>有分片的立即响应 <img src="/images/物联网通信技术/DraggedImage-70.png"></li>
+<li>推迟响应 <img src="/images/物联网通信技术/DraggedImage-71.png"></li>
+</ul></li>
+</ul>
+<h2><span id="无线广域网">无线广域网</span></h2>
+<h3><span id="大容量的小区制利用有限频段覆盖无限大面积">大容量的小区制：利用有限频段覆盖无限大面积</span></h3>
+<p><img src="/images/物联网通信技术/DraggedImage-72.png"></p>
+<p>思想是用许多小功率的发射机代替单个的大功率发射机，每一个小的功率覆盖区只提供服务范围内的一小部分覆盖。 相邻小区使用<em>不同信道组</em>，从而防止相互干扰。 通过限制小区的覆盖面积，使得同信道组可以在不同地方重复使用。</p>
+<p>为整个系统中的所有基站选择和分配信道组的设计过程叫做<em>频率复用</em>。 * 多个不同频率的小区cell构成簇cluster；不同簇使用对应的相同频率</p>
+<p><strong>越区切换 Handoff</strong> 在<em>不中断通讯</em>的情况下从一个小区穿越到另一个小区时：</p>
+<ul>
+<li>识别一个新的BS</li>
+<li>把语音信道和控制信道同时切换到新的BS</li>
+<li>切换请求的优先级高于呼叫请求</li>
+<li>切换步骤
+<ul>
+<li>测量控制</li>
+<li>测量报告</li>
+<li>切换判决</li>
+<li>切换执行 分类</li>
+</ul></li>
+<li>硬切换
+<ul>
+<li>在频率<em>不同</em>的小区切换，先断旧连接，再建立新连接（GSM）</li>
+</ul></li>
+<li>软切换
+<ul>
+<li>在频率<em>相同</em>的小区切换，新建连接成功后，再拆旧连接（CDMA） <img src="/images/物联网通信技术/DraggedImage-73.png"></li>
+</ul></li>
+</ul>
+<p>切换规则 <img src="/images/物联网通信技术/DraggedImage-74.png"></p>
+<ul>
+<li>相对信号强度准则
+<ul>
+<li><em>切换点A</em>，原基站信号强度满足通话要求时，仍可能切换</li>
+</ul></li>
+<li>具有门限规定的相对信号强度准则
+<ul>
+<li>门限<code>Th2</code>时，<em>切换点B</em>，当前基站信号低于门限，新基站信号更强</li>
+<li>门限高时，接近于<em> 相对信号强度准则</em>；</li>
+<li>门限太低，增大越区时延</li>
+</ul></li>
+<li>具有滞后余量的相对信号强度准则
+<ul>
+<li>新基站信号强（滞后余量<code>h</code>）很多时，<em>切换点C</em>，避免乒乓效应</li>
+</ul></li>
+<li>具有滞后余量和门限规定的相对信号强度准则
+<ul>
+<li><em>切换点D</em></li>
+</ul></li>
+</ul>
+<p>实际应用</p>
+<ul>
+<li>1G蜂窝
+<ul>
+<li>MSC（移动交换中心）决定是否切换</li>
+<li>时延10s</li>
+</ul></li>
+<li>2G蜂窝
+<ul>
+<li>MS辅助决定切换</li>
+<li>时延1～2s</li>
+</ul></li>
+</ul>
+<p><strong>位置管理</strong> 数据库（每个MSC建立）</p>
+<ul>
+<li><em>原籍位置寄存器HLR</em>
+<ul>
+<li>注册用户信息</li>
+<li>用户预订业务</li>
+<li>记账信息</li>
+<li><em>位置访问寄存器VLR</em></li>
+</ul></li>
+</ul>
+<p>主要任务</p>
+<ul>
+<li>位置登记：更新HLR/VLR</li>
+<li>呼叫传递：根据HLR/VLR定位移动台，确定处于哪个小区 <img src="/images/物联网通信技术/DraggedImage-75.png"></li>
+</ul>
+<p>呼叫传递</p>
+<ol type="1">
+<li>MS通过基站向MSC发呼叫初始化</li>
+<li>MSC通过地址翻译过程确定<strong>被呼</strong><em>HLR</em>，并向<em>HLR</em>发送位置请求信息</li>
+<li><em>HLR</em>确定被叫所在<em>VLR</em>，向<em>VLR</em>发送路由请求，<em>VLR</em>将该消息转发给<strong>被叫</strong>服务的MSC</li>
+<li><em>MSC</em>为<strong>被叫</strong>服务分配临时本地号码<em>TLDN</em>，并向<em>HLR</em>发送含有该号码的应答</li>
+<li><em>HLR</em>将上述消息转发给<strong>主呼</strong>MS服务的MSC</li>
+<li><strong>主叫</strong>MSC根据上述信息通过SS7向被叫MSC请求呼叫建立 <img src="/images/物联网通信技术/DraggedImage-76.png"></li>
+</ol>
+<p><strong>支持的用户数</strong></p>
+<ul>
+<li>话务量
+<ul>
+<li>每个用户产生的负载密度为 <img src="/images/物联网通信技术/DraggedImage-77.png"></li>
+<li>若有C个信道，则每个信道的负载密度为 <img src="/images/物联网通信技术/DraggedImage-78.png"></li>
+</ul></li>
+<li>系统容量与阻塞概率 <img src="/images/物联网通信技术/DraggedImage-79.png">
+<ul>
+<li><code>Pr</code>代表<em>呼叫被拒绝</em>的概率，<code>A</code>是话务量，<code>C</code>为中继信道数</li>
+</ul></li>
+<li>爱尔兰呼损表 <img src="/images/物联网通信技术/DraggedImage-80.png"></li>
+<li>举例计算支持用户数 <img src="/images/物联网通信技术/DraggedImage-81.png"> <img src="/images/物联网通信技术/DraggedImage-82.png"></li>
+</ul>
+<p>Tradeoffs <img src="/images/物联网通信技术/DraggedImage-83.png"></p>
+<h3><span id="gsmgprs">GSM/GPRS</span></h3>
+<p><em>FDMA</em> + <em>TDMA</em> <img src="/images/物联网通信技术/DraggedImage-84.png"></p>
+<p>GSM</p>
+<ul>
+<li>电路交换网络</li>
+<li>语音服务</li>
+</ul>
+<p>数据服务支持</p>
+<ul>
+<li>GPRS（General Packet Radio Service）</li>
+<li>EDGE（Enhanced Data GSM Environment） <img src="/images/物联网通信技术/DraggedImage-85.png"></li>
+</ul>
+<h3><span id="cdma">CDMA</span></h3>
+<p>扩频复用 <img src="/images/物联网通信技术/DraggedImage-86.png"></p>
+<p>正交编码 <img src="/images/物联网通信技术/DraggedImage-87.png"></p>
+<p>特点</p>
+<ul>
+<li>频率分集</li>
+<li>多路阻抗</li>
+<li>保密</li>
+<li>故障弱化</li>
+<li>自我干扰</li>
+<li>软切换</li>
+<li><strong>发射功率小</strong></li>
+<li>数据传输率：9.6kb/s</li>
+<li>频道带宽：1.25MHz</li>
+</ul>
+<p>CMDA vs. GSM</p>
+<ul>
+<li>通信质量好</li>
+<li>赛车、断讯问题少</li>
+<li>其他功能差不多</li>
+<li>发射功率小</li>
+</ul>
+<h3><span id="3g">3G</span></h3>
+<p>WCDMA, CDMA2000, TD-SCDMA, WiMax</p>
+<p><strong>极品对比图</strong> <img src="/images/物联网通信技术/DraggedImage-88.png"></p>
+<h2><span id="物联网通信架构">物联网通信架构</span></h2>
+<h3><span id="基于ip的物联网通信架构">基于IP的物联网通信架构</span></h3>
+<p><img src="/images/物联网通信技术/DraggedImage-89.png"></p>
+<p>优势</p>
+<ul>
+<li>互通性</li>
+<li>架构的稳定性和普遍性</li>
+<li>可扩展性</li>
+<li>易于配置和管理</li>
+<li>开放性</li>
+<li>安全性</li>
+<li>已经建立好的各种服务.... <img src="/images/物联网通信技术/DraggedImage-90.png"></li>
+</ul>
+<p>挑战</p>
+<ul>
+<li>在资源受限的物体上实现完整的IP协议栈</li>
+<li>低功耗有损网络下的IP数据包传输</li>
+<li>低功耗有损网络下的路由</li>
+</ul>
+<h3><span id="6lowpan">6LowPAN</span></h3>
+<p><img src="/images/物联网通信技术/DraggedImage-91.png"></p>
+<p><img src="/images/物联网通信技术/DraggedImage-92.png"></p>
+<h2><span id="各种技术对比">各种技术对比！</span></h2>
+<p><img src="/images/物联网通信技术/DraggedImage-93.png"> <img src="/images/物联网通信技术/DraggedImage-94.png"> <img src="/images/物联网通信技术/DraggedImage-95.png"></p>
+<p>ZigBee</p>
+<ul>
+<li>低功耗</li>
+<li>低成本</li>
+<li>低速率
+<ul>
+<li>20-250kbps</li>
+</ul></li>
+<li>近距离
+<ul>
+<li>10-100m</li>
+</ul></li>
+<li>短延时
+<ul>
+<li>睡眠转工作15ms</li>
+<li>接入网络30ms</li>
+<li>蓝牙 3-10s</li>
+<li>WiFi需要3s</li>
+</ul></li>
+<li>高容容
+<ul>
+<li>每个主节点管 254个</li>
+<li>最多65000个</li>
+</ul></li>
+<li>安全</li>
+<li>免执照频段
+<ul>
+<li>2.4GHz</li>
+</ul></li>
+</ul>
+<p>CDMA</p>
+<ul>
+<li>多路阻抗</li>
+<li>保密</li>
+<li>故障弱化</li>
+<li>自我干扰</li>
+<li><strong>发射功率小-&gt;省电（相比于GSM相比）</strong>
+<ul>
+<li>正常通话时<code>0.1mW</code></li>
+</ul></li>
+<li>数据传输率：9.6kb/s</li>
+<li>频道带宽：1.25MHz</li>
+</ul>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/计算机网络/">计算机网络</a><a href="/tags/本科课程/">本科课程</a><a href="/tags/物联网/">物联网</a><a href="/tags/TinyOS/">TinyOS</a><a href="/tags/ZigBee/">ZigBee</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

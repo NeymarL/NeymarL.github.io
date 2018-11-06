@@ -1,0 +1,308 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    决策树之ID3算法详解 | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="决策树之ID3算法详解">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      决策树之ID3算法详解</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/07/16/决策树之ID3算法详解/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-07-16T01:53:00.000Z">
+          2016-07-16
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <!-- toc -->
+<ul>
+<li><a href="#决策树简介">决策树简介</a>
+<ul>
+<li><a href="#构造决策树">构造决策树</a></li>
+</ul></li>
+<li><a href="#id3-算法">ID3 算法</a>
+<ul>
+<li><a href="#概揽">概揽</a></li>
+<li><a href="#信息增益">信息增益</a></li>
+<li><a href="#划分数据集">划分数据集</a></li>
+<li><a href="#递归构建决策树">递归构建决策树</a></li>
+</ul></li>
+<li><a href="#总结">总结</a></li>
+<li><a href="#参考">参考</a></li>
+</ul>
+<!-- tocstop -->
+<a id="more"></a>
+<h2><span id="决策树简介">决策树简介</span></h2>
+<p>决策树（Decision tree）由一个决策图和可能的结果组成， 用来创建到达目标的规划。决策树建立并用来辅助决策，是一种特殊的树结构。决策树是一个利用像树一样的图形或决策模型的决策支持工具，包括随机事件结果，资源代价和实用性。它是一个算法显示的方法。决策树经常在运筹学中使用，特别是在决策分析中，它帮助确定一个能最可能达到目标的策略。如果在实际中，决策不得不在没有完备知识的情况下被在线采用，一个决策树应该平行概率模型作为最佳的选择模型或在线选择模型算法。决策树的另一个使用是作为计算条件概率的描述性手段。</p>
+<p>機器學習中，決策樹是一個預測模型；他代表的是對象屬性與對象值之間的一種映射關係。樹中每個節點表示某個對象，而每個分叉路徑則代表的某個可能的屬性值，而每個葉結點則對應從根節點到該葉節點所經歷的路徑所表示的對象的值。決策樹僅有單一輸出，若欲有複數輸出，可以建立獨立的決策樹以處理不同輸出。 数据挖掘中决策树是一种经常要用到的技术，可以用于分析数据，同样也可以用来作预测。</p>
+<h3><span id="构造决策树">构造决策树</span></h3>
+<p>在构造决策树时，我们需要解决的第一个问题就是，当前数据集上哪个特征在划分数据分类时取决定性作用。为了找到决定性特征，划分出最好的结果，我们必须评估每个特征。完成测试之后，原始数据集就被划分为几个数据子集。如果数据子集内的数据不属于同一类型，则需要重复划分数据子集的过程。</p>
+<p>划分数据子集的伪代码 <code>createBranch()</code>如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">检测数据集中的每个子项是否属于同一分类:</span><br><span class="line">	<span class="keyword">if</span> 是 <span class="keyword">return</span> 类标签</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		寻找划分数据集的最好特征</span><br><span class="line">		划分数据集</span><br><span class="line">		创建分支节点</span><br><span class="line">			<span class="keyword">for</span> 每个划分的子集</span><br><span class="line">				调用createBranch并增加返回结果到分支节点中</span><br><span class="line">		<span class="keyword">return</span> 分支节点</span><br></pre></td></tr></table></figure>
+<p>可见创建决策树就是反复划分数据集的过程，那么如何划分数据集、何时停止划分就是决策树构造的关键，本文主要介绍ID3算法及其实现。</p>
+<h2><span id="id3-算法">ID3 算法</span></h2>
+<h3><span id="概揽">概揽</span></h3>
+<p>ID3算法（Iterative Dichotomiser 3）是一个由Ross Quinlan发明的用于决策树的算法。</p>
+<p>这个算法是建立在奥卡姆剃刀的基础上：越是小型的决策树越优于大的决策树。尽管如此，该算法也不是总是生成最小的树形结构。而是一个启发式算法。奥卡姆剃刀阐述了一个信息熵的概念：</p>
+<p><span class="math display">\[I_E(i)=-\sum _{j=1}^{m}f(i,j)\log _2f(i,j)\]</span></p>
+<p>这个ID3算法可以归纳为以下几点： * 使用所有没有使用的属性并计算与之相关的样本熵值 * 选取其中熵值最小的属性 * 生成包含该属性的节点</p>
+<h3><span id="信息增益">信息增益</span></h3>
+<p>划分数据集的最大原则是：<strong>将无序的数据变得更加有序</strong>。我们可以使用多种方法划分数据集，但是每种方法都有各自优缺点。组织杂乱无章的数据的一种方法就是使用<em>信息论</em>度量信息。</p>
+<p>在划分数据集之前之后信息发生的变化称为<strong>信息增益</strong>，知道如何计算信息增益，我们就可以计算每个特征值划分数据集获得的信息增益，获得信息增益最高的特征就是最好的选择。</p>
+<p>集合信息的度量方式被称为香农熵或简称熵。</p>
+<p><strong>熵（entropy）</strong>定义为信息的期望值，在明晰这个概念之前，我们必须知道信息的定义。如果待分类事务可能划分在多个分类之中，则符号 <span class="math inline">\(x_i\)</span> 的信息定义为</p>
+<p><span class="math display">\[l(x_i) = -log_2p(x_i)\]</span> 其中 <span class="math inline">\(p(x_i)\)</span> 是选择该分类的概率。</p>
+<p>所以计算熵的公式为：</p>
+<p><span class="math display">\[H = -\sum_{i=1}^np(x_i)log_2p(x_i)\]</span> 其中 <span class="math inline">\(n\)</span> 是分类的数目。</p>
+<p>下面的Python代码将示例如何计算给定数据集的熵。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> log</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">calcShannonEnt</span><span class="params">(dataSet)</span>:</span></span><br><span class="line">    numEntries = len(dataSet)</span><br><span class="line">    labelCounts = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> featVec <span class="keyword">in</span> dataSet:</span><br><span class="line">        currentLabel = featVec[<span class="number">-1</span>]</span><br><span class="line">        <span class="keyword">if</span> currentLabel <span class="keyword">not</span> <span class="keyword">in</span> labelCounts.keys():</span><br><span class="line">            labelCounts[currentLabel] = <span class="number">0</span></span><br><span class="line">        labelCounts[currentLabel] += <span class="number">1</span></span><br><span class="line">    shannonEnt = <span class="number">0.0</span></span><br><span class="line">    <span class="keyword">for</span> key <span class="keyword">in</span> labelCounts:</span><br><span class="line">        prob = float(labelCounts[key]) / numEntries</span><br><span class="line">        shannonEnt -= prob * log(prob, <span class="number">2</span>)</span><br><span class="line">    <span class="keyword">return</span> shannonEnt</span><br></pre></td></tr></table></figure>
+<p>把上述代码保存为 <code>decisiontree.py</code>，在为其添加一个创建数据集函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">createDataSet</span><span class="params">()</span>:</span></span><br><span class="line">    dataSet = [[<span class="number">1</span>, <span class="number">1</span>, <span class="string">'yes'</span>],</span><br><span class="line">               [<span class="number">1</span>, <span class="number">1</span>, <span class="string">'yes'</span>],</span><br><span class="line">               [<span class="number">1</span>, <span class="number">0</span>, <span class="string">'no'</span>],</span><br><span class="line">               [<span class="number">0</span>, <span class="number">1</span>, <span class="string">'no'</span>],</span><br><span class="line">               [<span class="number">0</span>, <span class="number">1</span>, <span class="string">'no'</span>]]</span><br><span class="line">    labels = [<span class="string">'no surfacing'</span>, <span class="string">'flippers'</span>]</span><br><span class="line">    <span class="keyword">return</span> dataSet, labels</span><br></pre></td></tr></table></figure>
+<p>在Python命令提示符下输入下列命令：</p>
+<p><img src="/images/1468651153427.png"></p>
+<p>熵越高，则混合的数据也越多。得到熵之后，我们就可以按照获取最大信息增益的方法划分数据集。</p>
+<h3><span id="划分数据集">划分数据集</span></h3>
+<p>我们将对每个特征划分数据集的结果计算一次信息熵，然后判断按照哪个特征划分是最好的方式。</p>
+<p>在 <code>decisiontree.py</code> 中加入如下代码： <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">splitDataSet</span><span class="params">(dataSet, axis, value)</span>:</span></span><br><span class="line">    retDataSet = []</span><br><span class="line">    <span class="keyword">for</span> featVec <span class="keyword">in</span> dataSet:</span><br><span class="line">        <span class="keyword">if</span> featVec[axis] == value:</span><br><span class="line">            reducedFeatVec = featVec[:axis]</span><br><span class="line">            reducedFeatVec.extend(featVec[axis+<span class="number">1</span>:])</span><br><span class="line">            retDataSet.append(reducedFeatVec)</span><br><span class="line">    <span class="keyword">return</span> retDataSet</span><br></pre></td></tr></table></figure></p>
+<p>上述代码使用了三个输入参数：待划分数据集、划分数据集的特征、需要返回的特征的值。我们可以在前面的简单样本数据上测试函数 <code>splitDataSet()</code> 函数：</p>
+<p><img src="/images/1468651789771.png"></p>
+<p>接下来我们将遍历整个数据集，循环计算熵，找到最好的划分方式，在 <code>decisiontree.py</code> 中添加如下函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">chooseBestFeat</span><span class="params">(dataSet)</span>:</span></span><br><span class="line">    numFeatures = len(dataSet[<span class="number">0</span>]) - <span class="number">1</span></span><br><span class="line">    baseEntroy = calcShannonEnt(dataSet)</span><br><span class="line">    bestInfoGain = <span class="number">0.0</span></span><br><span class="line">    bestFeature = <span class="number">-1</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(numFeatures):</span><br><span class="line">        featList = [example[i] <span class="keyword">for</span> example <span class="keyword">in</span> dataSet]</span><br><span class="line">        uniqueVals = set(featList)</span><br><span class="line">        newEntropy = <span class="number">0.0</span></span><br><span class="line">        <span class="keyword">for</span> value <span class="keyword">in</span> uniqueVals:</span><br><span class="line">            subDataSet = splitDataSet(dataSet, i, value)</span><br><span class="line">            prob = len(subDataSet) / float(len(dataSet))</span><br><span class="line">            newEntropy += prob * calcShannonEnt(subDataSet)</span><br><span class="line">        infoGain = baseEntroy - newEntropy</span><br><span class="line">        <span class="keyword">if</span> infoGain &gt; bestInfoGain:</span><br><span class="line">            bestInfoGain = infoGain</span><br><span class="line">            bestFeature = i</span><br><span class="line">    <span class="keyword">return</span> bestFeature</span><br></pre></td></tr></table></figure>
+<p>在上述代码中调用的数据集需要满足一定的要求： 1. 数据必须是一种由列表元素组成的列表，而且所有元素都要具有相同的数据长度 2. 数据的最后一列或者每个实例的最后一个元素是当前类的标签</p>
+<p>现在我们可以测试上面代码的实际输出结果： <img src="/images/1468652728528.png"></p>
+<p>代码的运行结果告诉我们，第0个特征是最好的用于划分数据集的特征，划分的正确性请读者自行检验。</p>
+<h3><span id="递归构建决策树">递归构建决策树</span></h3>
+<p>目前我们已经学习了从数据集构造决策树算法所需的所有子功能模块，下面我们采用递归的原则构建整个决策树。</p>
+<p><strong>递归结束的条件</strong>是：程序遍历完所有划分数据集的属性，或者每个分支下的所有实例都具有相同的分类。</p>
+<p>如果数据集已经处理了所有属性，但类标签依然不是唯一的，此时我们需要决定如何定义该叶子节点，在这种情况下，我们通常会采用多数表决的方法决定叶子节点的分类。</p>
+<p>打开文本编辑器，添加如下代码到 <code>decisiontree.py</code> 中： <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> operator</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">majorityCnt</span><span class="params">(classList)</span>:</span></span><br><span class="line">    classCount = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> vote <span class="keyword">in</span> classList:</span><br><span class="line">        <span class="keyword">if</span> vote <span class="keyword">not</span> <span class="keyword">in</span> classCount.keys():</span><br><span class="line">            classCount[vote] = <span class="number">0</span></span><br><span class="line">        classCount[vote] += <span class="number">1</span></span><br><span class="line">        sortedClassCnt = sorted(classCount.iteritems(),</span><br><span class="line">                                key=operator.itemgetter(<span class="number">1</span>), reverse=<span class="keyword">True</span>)</span><br><span class="line">        <span class="keyword">return</span> sortedClassCnt[<span class="number">0</span>][<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">createTree</span><span class="params">(dataSet, labels)</span>:</span></span><br><span class="line">    classList = [example[<span class="number">-1</span>] <span class="keyword">for</span> example <span class="keyword">in</span> dataSet]</span><br><span class="line">    <span class="keyword">if</span> classList.count(classList[<span class="number">0</span>]) == len(classList):</span><br><span class="line">        <span class="comment"># 类别完全相同时，停止继续划分</span></span><br><span class="line">        <span class="keyword">return</span> classList[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">if</span> len(dataSet[<span class="number">0</span>]) == <span class="number">1</span>:</span><br><span class="line">        <span class="comment"># 遍历完所有特征时返回出现最多的</span></span><br><span class="line">        <span class="keyword">return</span> majorityCnt(classList)</span><br><span class="line">    bestFeat = chooseBestFeat(dataSet)</span><br><span class="line">    bestFeatLabel = labels[bestFeat]</span><br><span class="line">    DTree = &#123;bestFeatLabel: &#123;&#125;&#125;</span><br><span class="line">    <span class="keyword">del</span>(labels[bestFeat])</span><br><span class="line">    featValues = [example[bestFeat] <span class="keyword">for</span> example <span class="keyword">in</span> dataSet]</span><br><span class="line">    uniqueVals = set(featValues)</span><br><span class="line">    <span class="keyword">for</span> value <span class="keyword">in</span> uniqueVals:</span><br><span class="line">        subLabels = labels[:]</span><br><span class="line">        DTree[bestFeatLabel][value] = createTree(</span><br><span class="line">            splitDataSet(dataSet, bestFeat, value), subLabels)</span><br><span class="line">    <span class="keyword">return</span> DTree</span><br></pre></td></tr></table></figure></p>
+<p>这里使用python的字典类型存储树的信息，当然也可以定义特殊类型的数据结构，但在这里完全没有必要。</p>
+<p>我们测试一下上述代码的实际输出结果：</p>
+<p><img src="/images/1468654341025.png"></p>
+<p>变量 <code>tree</code> 包含了很多代表树结构的嵌套字典。如果值是类标签，则该节点是叶子节点; 如果值是另一个字典，则该子节点是一个判断节点，这种格式结构不断重复就形成了一棵树。本例中这棵树包含了3个叶子节点以及两个判断节点，如下所示：</p>
+<figure>
+<img src="./1468655345150.png" alt="Alt text|center"><figcaption>Alt text|center</figcaption>
+</figure>
+<h2><span id="总结">总结</span></h2>
+<p>决策树分类器就像带有终止块的流程图，终止块表示分类结果。开始处理数据集时，我们首先要测量集合中数据的不一致性，也就是熵，然后寻找最优方案划分数据集，直到数据集中的所有数据属于同一分类。ID3算法可用于划分标称型数据集。构建决策树时，我们通常采用递归的方法将数据集转化为决策树。</p>
+<p>还有其他决策树构造算法，最流行的是C4.5和CART，详情见下回分解。</p>
+<h2><span id="参考">参考</span></h2>
+<p>《机器学习实战》[美] Peter Harrington https://www.wikiwand.com/en/ID3_algorithm https://www.wikiwand.com/en/Decision_tree</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Decision-Tree/">Decision Tree</a><a href="/tags/ID3/">ID3</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

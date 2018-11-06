@@ -1,0 +1,557 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>
+    MySQL 笔记 | NIUHE | Be Myself Enjoy My Life
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE&#39;s Blog">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="MySQL 笔记">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">Be Myself Enjoy My Life</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">目录</a></li>
+      
+        <li><a href="/categories">分类</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      MySQL 笔记</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2015/12/17/MySQL 笔记/" rel="bookmark">
+        <time class="entry-date published" datetime="2015-12-17T06:14:40.000Z">
+          2015-12-17
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <h3><span id="登陆">登陆</span></h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> mysql [-h hostname] -u username -p</span></span><br><span class="line">Enter Password:</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h3><span id="新建数据库">新建数据库</span></h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create database dbname;</span><br></pre></td></tr></table></figure>
+<h3><span id="创建用户和分配权限">创建用户和分配权限</span></h3>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">GRANT</span> <span class="keyword">privileges</span> [columes] </span><br><span class="line"><span class="keyword">ON</span> item</span><br><span class="line"><span class="keyword">TO</span> user_name [<span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'password'</span>]</span><br><span class="line">[REQUIRE ssl_options]</span><br><span class="line">[<span class="keyword">WITH</span> [<span class="keyword">GRANT</span> <span class="keyword">OPTION</span> | limit_options] ]</span><br></pre></td></tr></table></figure>
+<h5><span id="创建用户">创建用户</span></h5>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CREATE USER &apos;username&apos;@&apos;host&apos; IDENTIFIED BY &apos;password&apos;;</span><br></pre></td></tr></table></figure>
+<h5><span id="授权">授权</span></h5>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GRANT privileges ON databasename.tablename TO &apos;username&apos;@&apos;host&apos;</span><br></pre></td></tr></table></figure>
+<p>说明: privileges – 用户的操作权限,如<code>SELECT</code> , <code>INSERT</code> , <code>UPDATE</code> 等.如果要授予所 的权限则使用<code>ALL</code>.;<code>databasename</code> – 数据库名,<code>tablename</code>-表名,如果要授予该用户对所有数据库和表的相应操作权限则可用<code>*</code> 表示, 如: <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GRANT SELECT, INSERT ON test.user TO &apos;pig&apos;@&apos;%&apos;;</span><br></pre></td></tr></table></figure></p>
+<h3><span id="使用数据库">使用数据库</span></h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; use dbname;</span><br></pre></td></tr></table></figure>
+<h3><span id="创建数据库表">创建数据库表</span></h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; CREATE DATABASE dbname;</span><br><span class="line">mysql&gt; CREATE TABLE tablename (columns);</span><br><span class="line">// 丛文件中载入</span><br><span class="line">mysql&gt; -h host -u username -D dbname -p &lt; bookorama.sql;</span><br></pre></td></tr></table></figure>
+<p>举例： <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; CREATE TABLE books(</span><br><span class="line">	isbn char(13) NOT NULL PRIMARY KEY,</span><br><span class="line">	author char(50),</span><br><span class="line">	title char(100),</span><br><span class="line">	price float(4, 2)</span><br><span class="line">);</span><br></pre></td></tr></table></figure></p>
+<h3><span id="查看数据库">查看数据库</span></h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show tables;</span><br><span class="line">mysql&gt; show database;</span><br><span class="line">mysql&gt; describe tables;	// 查看某个表的详细信息</span><br></pre></td></tr></table></figure>
+<h3><span id="索引">索引</span></h3>
+<blockquote>
+<p>索引的创建可以在<code>CREATE TABLE</code>语句中进行，也可以单独用<code>CREATE INDEX</code>或<code>ALTER TABLE</code>来给表增加索引。删除索引可以利用<code>ALTER TABLE</code>或<code>DROP INDEX</code>语句来实现。</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> [<span class="keyword">UNIQUE</span> | FULLTEXT] <span class="keyword">INDEX</span> index_name <span class="keyword">ON</span> table_name (index_column_name [(<span class="keyword">length</span>)] [<span class="keyword">ASC</span>|<span class="keyword">DESC</span>], ...)</span><br></pre></td></tr></table></figure>
+<h4><span id="使用alter-table语句创建索引">使用<code>ALTER TABLE</code>语句创建索引</span></h4>
+<p>语法如下 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">alter table table_name add index index_name (column_list) ;</span><br><span class="line">alter table table_name add unique (column_list) ;</span><br><span class="line">alter table table_name add primary key (column_list) ;</span><br></pre></td></tr></table></figure></p>
+<p>其中包括 * 普通索引、<code>UNIQUE</code>索引和<code>PRIMARY KEY</code>索引3种创建索引的格式 * <code>table_name</code>是要增加索引的表名 * <code>column_list</code>指出对哪些列进行索引，<strong>多列时各列之间用逗号分隔</strong>。 * 索引名<code>index_name</code>可选，缺省时，MySQL将根据第一个索引列赋一个名称。 * <code>ALTER TABLE</code>允许在单个语句中更改多个表，因此可以同时创建多个索引。</p>
+<p>创建索引的示例如下： <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; alter table table_test add index index_test1(name) ;</span><br><span class="line">Query OK, 2 rows affected (0.08 sec)</span><br></pre></td></tr></table></figure></p>
+<h4><span id="使用create-index语句对表增加索引">使用<code>CREATE INDEX</code>语句对表增加索引</span></h4>
+<p>能够增加普通索引和<code>UNIQUE</code>索引两种。其格式如下： <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create index index_name on table_name (column_list) ;</span><br><span class="line">create unique index index_name on table_name (column_list) ;</span><br></pre></td></tr></table></figure></p>
+<p>创建索引的示例如下： <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create index index_test2 on table_test(age);</span><br><span class="line">Query OK, 2 rows affected (0.08 sec)</span><br></pre></td></tr></table></figure></p>
+<p>说明：<code>table_name</code>、<code>index_name</code>和<code>column_list</code>具有与<code>ALTER TABLE</code>语句中相同的含义，索引名不可选。另外，不能用<code>CREATE INDEX</code>语句创建<code>PRIMARY KEY</code>索引。</p>
+<h4><span id="删除索引">删除索引</span></h4>
+<blockquote>
+<p>删除索引可以使用<code>ALTER TABLE</code>或<code>DROP INDEX</code>语句来实现。</p>
+</blockquote>
+<p><code>DROP INDEX</code>可以在<code>ALTER TABLE</code>内部作为一条语句处理，其格式如下： <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">drop index index_name on table_name ;</span><br><span class="line">alter table table_name drop index index_name ;</span><br><span class="line">alter table table_name drop primary key ;</span><br></pre></td></tr></table></figure></p>
+<p>其中，在前面的两条语句中，都删除了<code>table_name</code>中的索引<code>index_name</code>。而在最后一条语句中，只在删除<code>PRIMARY KEY</code>索引中使用，因为一个表只可能有一个<code>PRIMARY KEY</code>索引，因此不需要指定索引名。如果没有创建<code>PRIMARY KEY</code>索引，但表具有一个或多个<code>UNIQUE</code>索引，则MySQL将删除第一个<code>UNIQUE</code>索引。</p>
+<blockquote>
+<p>如果从表中删除某列，则索引会受影响。对于多列组合的索引，如果删除其中的某列，则该列也会从索引中删除。如果删除组成索引的所有列，则整个索引将被删除。</p>
+</blockquote>
+<p>删除索引的操作，如下面的代码： <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; drop index name on table_test ;</span><br><span class="line">Query OK, 2 rows affected (0.08 sec)</span><br></pre></td></tr></table></figure></p>
+<h3><span id="数据类型">数据类型</span></h3>
+<h4><span id="整数类型">整数类型</span></h4>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">类型</th>
+<th style="text-align: left;">取值范围</th>
+<th style="text-align: center;">存储空间</th>
+<th style="text-align: left;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">TINYINT[(M)]</td>
+<td style="text-align: left;">-127<sub>128或0</sub>255</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">非常小的整数</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">BIT</td>
+<td style="text-align: left;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: left;">TINYINT的同义词</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">BOOL</td>
+<td style="text-align: left;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: left;">TINYINT的同义词</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SMALLINT[(M)]</td>
+<td style="text-align: left;">-32768<sub>32767或0</sub>65535</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: left;">小型整数</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MEDIUMINT[(M)]</td>
+<td style="text-align: left;">-8388608<sub>8883607或0</sub>16777215</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: left;">中型整数</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">INT[(M)]</td>
+<td style="text-align: left;"><span class="math inline">\(-2^{31}\)</span><sub><span class="math inline">\(2^{31}-1\)</span>或0</sub><span class="math inline">\(2^{32}-1\)</span></td>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">一般整数</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">INTEGER[(M)]</td>
+<td style="text-align: left;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: left;">INT的同义词</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">BIGINT[(M)]</td>
+<td style="text-align: left;"><span class="math inline">\(-2^{63}\)</span><sub><span class="math inline">\(2^{63}-1\)</span>或0</sub><span class="math inline">\(2^{64}-1\)</span></td>
+<td style="text-align: center;">8</td>
+<td style="text-align: left;">大型整数</td>
+</tr>
+</tbody>
+</table>
+<h4><span id="浮点类型">浮点类型</span></h4>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">类型</th>
+<th style="text-align: left;">取值范围</th>
+<th style="text-align: center;">存储空间</th>
+<th style="text-align: left;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">FLOAT(精度)</td>
+<td style="text-align: left;">取决于精度</td>
+<td style="text-align: center;">可变</td>
+<td style="text-align: left;">可用于指定单精度和双精度浮点数</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">FLOAT[(M, D)]</td>
+<td style="text-align: left;">+- 1.17549E-38</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">单精度浮点数，等同于FLOAT(4)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DOUBLE[(M), D]</td>
+<td style="text-align: left;">+- 3.40282E+308</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: left;">双精度浮点数，等同于FLOAT(8)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DOUBLE</td>
+<td style="text-align: left;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: left;">DOUBLE[(M, D)]的同义词</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PRECISION[(M, D)]</td>
+<td style="text-align: left;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: left;">同上</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">REAL[(M, D)]</td>
+<td style="text-align: left;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: left;">同上</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DECIMAL[(M [,D])]</td>
+<td style="text-align: left;">可变</td>
+<td style="text-align: center;">M + 2</td>
+<td style="text-align: left;">浮点数，以char存储。范围取决于M</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">NUMERIC[(M, D)]</td>
+<td style="text-align: left;">同上</td>
+<td style="text-align: center;"></td>
+<td style="text-align: left;">DECIMAL的同义词</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DEC[(M, D)]</td>
+<td style="text-align: left;">同上</td>
+<td style="text-align: center;"></td>
+<td style="text-align: left;">DECIMAL的同义词</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">FIXED[(M, D)]</td>
+<td style="text-align: left;">同上</td>
+<td style="text-align: center;"></td>
+<td style="text-align: left;">DECIMAL的同义词</td>
+</tr>
+</tbody>
+</table>
+<h4><span id="日期和时间类型">日期和时间类型</span></h4>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">类型</th>
+<th style="text-align: left;">取值范围</th>
+<th style="text-align: left;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">DATE</td>
+<td style="text-align: left;">1000-01-01 ~ 9999-12-31</td>
+<td style="text-align: left;">一个日期，以YYYY-MM-DD格式显示</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TIME</td>
+<td style="text-align: left;">-838:59:59 ~ 838:59:59</td>
+<td style="text-align: left;">一个时间，以HH:MM:SS形式显示</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DATETIME</td>
+<td style="text-align: left;">1000-01-01 00:00:00 ~ 9999-12-31 23:59:59</td>
+<td style="text-align: left;">日期和时间</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TIMESTAMP[(M)]</td>
+<td style="text-align: left;">1970-01-01 00:00:00 ~ 2037年的某个时间</td>
+<td style="text-align: left;">时间标签，在处理报告中有意义。</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">YEAR[(2/4)]</td>
+<td style="text-align: left;">70<sub>69(1970</sub>2069)</td>
+<td style="text-align: left;">年份。可以指定2位数字或4位数字的格式。</td>
+</tr>
+</tbody>
+</table>
+<h4><span id="字符串类型">字符串类型</span></h4>
+<h5><span id="常规字符串类型">常规字符串类型</span></h5>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">类型</th>
+<th style="text-align: left;">取值范围</th>
+<th style="text-align: left;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">CHAR(M)</td>
+<td style="text-align: left;">0~255个字符</td>
+<td style="text-align: left;">固定长度为M的字符串，M的取值为0~255</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CHAR</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">CHAR(1)的同义词</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">VARCHAR(M)</td>
+<td style="text-align: left;">1~255个字符</td>
+<td style="text-align: left;">可变长度</td>
+</tr>
+</tbody>
+</table>
+<h5><span id="text和blob类型">TEXT和BLOB类型</span></h5>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">类型</th>
+<th style="text-align: center;">最大长度(字符数)</th>
+<th style="text-align: left;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">TINYBLOB</td>
+<td style="text-align: center;">255</td>
+<td style="text-align: left;">小二进制大对象(BLOB)字段</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TINYTEXT</td>
+<td style="text-align: center;">255</td>
+<td style="text-align: left;">小TEXT字段</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">BLOB</td>
+<td style="text-align: center;">65535</td>
+<td style="text-align: left;">常规BLOB字段</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TEXT</td>
+<td style="text-align: center;">65535</td>
+<td style="text-align: left;">常规TEXT字段</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MEDIUMBLOB</td>
+<td style="text-align: center;"><span class="math inline">\(2^{24}-1\)</span></td>
+<td style="text-align: left;">中型BLOB字段</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MEDIUMTEXT</td>
+<td style="text-align: center;"><span class="math inline">\(2^{24}-1\)</span></td>
+<td style="text-align: left;">中型TEXT字段</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">LONGBLOB</td>
+<td style="text-align: center;"><span class="math inline">\(2^{32}-1\)</span></td>
+<td style="text-align: left;">长BLOB字段</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">LONGTEXT</td>
+<td style="text-align: center;"><span class="math inline">\(2^{32}-1\)</span></td>
+<td style="text-align: left;">长TEXT字段</td>
+</tr>
+</tbody>
+</table>
+<h5><span id="set和enum类型">SET和ENUM类型</span></h5>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">类型</th>
+<th style="text-align: center;">集合中的最大值</th>
+<th style="text-align: left;">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">ENUM('value1', 'value2', ...)</td>
+<td style="text-align: center;">65535</td>
+<td style="text-align: left;">该类型的列只可以容纳所列值之一或者为NULL</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SET('value1', 'value2', ...)</td>
+<td style="text-align: center;">64</td>
+<td style="text-align: left;">该类型的列可以容纳一组值或者为NULL</td>
+</tr>
+</tbody>
+</table>
+<h3><span id="插入数据">插入数据</span></h3>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> [<span class="keyword">INTO</span>] table_name [(column1, column2, ...)] </span><br><span class="line"><span class="keyword">VALUES</span>(value1, value2, ...);</span><br></pre></td></tr></table></figure>
+<h3><span id="查询数据">查询数据</span></h3>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> [options] items</span><br><span class="line">[<span class="keyword">INTO</span> file_details]</span><br><span class="line"><span class="keyword">FROM</span> <span class="string">`tables_name`</span></span><br><span class="line">[ <span class="keyword">WHERE</span> conditions ]</span><br><span class="line">[ <span class="keyword">GROUP</span> <span class="keyword">BY</span> group_type ]</span><br><span class="line">[ <span class="keyword">HAVING</span> where_definition ]</span><br><span class="line">[ <span class="keyword">ORDER</span> <span class="keyword">BY</span> order_type ]</span><br><span class="line">[ <span class="keyword">LIMIT</span> limit_criteria ]</span><br><span class="line">[ <span class="keyword">PROCEDURE</span> proc_name(arguments)]</span><br><span class="line">[ lock_options ];</span><br></pre></td></tr></table></figure>
+<p><del>此处略过1000字</del></p>
+<h3><span id="更新数据">更新数据</span></h3>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> [<span class="keyword">LOW_PRIORITY</span>] [<span class="keyword">IGNORE</span>] tablename</span><br><span class="line"><span class="keyword">SET</span> column1 = expression1, ...</span><br><span class="line">[ <span class="keyword">WHERE</span> condition ]</span><br><span class="line">[ <span class="keyword">ORDER</span> <span class="keyword">BY</span> order_criteria ]</span><br><span class="line">[ <span class="keyword">LIMIT</span> <span class="built_in">number</span> ]</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/后台开发/">后台开发</a><a href="/tags/MySQL/">MySQL</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+
+
+	<section id="comment" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Niuhe';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2018
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71540601-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>
