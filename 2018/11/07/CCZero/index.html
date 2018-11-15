@@ -234,6 +234,8 @@
 <p><img src="/images/issueouashd.png" alt=""></p>
 <p>后来有一天有人在GitHub上提了一个issue说你可以把它做成分布式的，像LeelaZero那样，我们可以帮你一起训练。<a href="https://zero.sjeng.org/" target="_blank" rel="noopener">LeelaZero</a>是国外一个开发者复现AlphaGo论文搞的围棋AI，因为DeepMind并没有公开程序或代码，所以他想训练出一个公开的围棋之神，然后就邀请网友帮他一起训练，具体的方法就是：网友们在自己的机器上进行自我博弈，然后把博弈的棋谱上传到他的服务器上，然后他攒够一定棋谱之后进行训练神经网络，训练好之后分发新的权重。</p>
 <p>在国内也有很多人帮他训练（跑谱），给我提issue的那个人也是帮LeelaZero训练中的一员。当时正好程序写完了没什么事做，每天就只能等训练结果，然后就决定尝试一下这个模式。因为之前有过Web开发的经验，所以服务器很快就搭好了，测试基本没问题之后就开始运行。</p>
+<p><strong>架构</strong></p>
+<p><img src="/images/architecture.png" alt=""></p>
 <p>在维护这个项目正常运行的过程中遇到很多<strong>坑</strong>，程序也做了很多改进：</p>
 <ol>
 <li>首先是帮忙跑谱的大多都是象棋爱好者，并非开发者，所以我要把Python代码打包成exe文件分发给他们一键执行，最终使用<a href="https://www.pyinstaller.org/" target="_blank" rel="noopener">PyInstaller</a>打包成功，这其中遇到了很多坑：<ul>
