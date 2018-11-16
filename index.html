@@ -85,6 +85,79 @@
 
   
   
+  <h3 class="article-title"><a href="/2018/11/16/RL - DQN and A3C/"><span>
+        RL - DQN &amp; A3C</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2018/11/16/RL - DQN and A3C/" rel="bookmark">
+        <time class="entry-date published" datetime="2018-11-16T06:24:32.000Z">
+          2018-11-16
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <h2 id="Deep-Q-Network"><a href="#Deep-Q-Network" class="headerlink" title="Deep Q-Network"></a>Deep Q-Network</h2><p>使用非线性函数拟合 Q-value 的RL算法不稳定主要因为：</p>
+<ol>
+<li>同一个观测序列中的数据相关性较大</li>
+<li>当 Q-value 发生了很小的改变，可能导致整个策略（policy）发生较大变化，从而导致 Q-value 和目标 $r + \gamma * \max_{a’}Q(s’ ,a’)$ 的差距不稳定</li>
+</ol>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Reinforcement-Learning/">Reinforcement Learning</a><a href="/tags/Q-learning/">Q-learning</a><a href="/tags/DQN/">DQN</a><a href="/tags/A3C/">A3C</a>
+      </span>
+      
+
+    </div>
+
+    
+    <div class="article-meta pull-right">
+      <span>
+        <i class="icon-comments"></i>
+        <span>
+          <a href="/2018/11/16/RL - DQN and A3C/#comment">
+            Comments</a>
+        </span>
+      </span>
+    </div>
+    
+  </div>
+</article>
+
+
+  <article>
+
+  
+  
   <h3 class="article-title"><a href="/2018/11/07/CCZero/"><span>
         中国象棋Zero技术详解</span></a></h3>
   
@@ -788,83 +861,6 @@
         <i class="icon-comments"></i>
         <span>
           <a href="/2018/01/09/RL - Integrating Learning and Planning/#comment">
-            Comments</a>
-        </span>
-      </span>
-    </div>
-    
-  </div>
-</article>
-
-
-  <article>
-
-  
-  
-  <h3 class="article-title"><a href="/2018/01/06/RL - Policy Gradient/"><span>
-        RL - Policy Gradient</span></a></h3>
-  
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2018/01/06/RL - Policy Gradient/" rel="bookmark">
-        <time class="entry-date published" datetime="2018-01-06T05:42:09.000Z">
-          2018-01-06
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-      <h2 id="introduction">Introduction</h2>
-<p>This lecture talks about methods that optimise policy directly. Instead of working with value function as we consider so far, we seek experience and use the experience to update our policy in the direction that makes it better.</p>
-<p>In the last lecture, we approximated the value or action-value function using parameters <span class="math inline">\(\theta\)</span>, <span class="math display">\[
-V_\theta(s)\approx V^\pi(s)\\
-Q_\theta(s, a)\approx Q^\pi(s, a)
-\]</span> A policy was generated directly from the value function using <span class="math inline">\(\epsilon\)</span>-greedy.</p>
-<p>In this lecture we will directly parametrise the policy <span class="math display">\[
-\pi_\theta(s, a)=\mathbb{P}[a|s, \theta]
-\]</span> We will focus again on <span class="math inline">\(\color{red}{\mbox{model-free}}\)</span> reinforcement learning.</p>
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-      
-      
-
-      <span class="post-categories">
-        <i class="icon-categories"></i>
-        <a href="/categories/学习笔记/">学习笔记</a>
-      </span>
-      
-
-      
-      
-
-      <span class="post-tags">
-        <i class="icon-tags"></i>
-        <a href="/tags/Reinforcement-Learning/">Reinforcement Learning</a><a href="/tags/增强学习/">增强学习</a><a href="/tags/Policy-Gradient/">Policy Gradient</a><a href="/tags/REINFORCE/">REINFORCE</a><a href="/tags/Actor-Critic/">Actor-Critic</a>
-      </span>
-      
-
-    </div>
-
-    
-    <div class="article-meta pull-right">
-      <span>
-        <i class="icon-comments"></i>
-        <span>
-          <a href="/2018/01/06/RL - Policy Gradient/#comment">
             Comments</a>
         </span>
       </span>

@@ -85,6 +85,80 @@
 
   
   
+  <h3 class="article-title"><a href="/2015/12/28/C++关于对象传值与传引用的总结/"><span>
+        C++关于对象传值与传引用的总结</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2015/12/28/C++关于对象传值与传引用的总结/" rel="bookmark">
+        <time class="entry-date published" datetime="2015-12-28T08:05:40.000Z">
+          2015-12-28
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <h2 id="传值vs传引用">传值VS传引用</h2>
+<p>C++在传递<strong>对象类型</strong>的参数时候有两种情况：</p>
+<ul>
+<li>如果是引用就相当于直接把这个对象本身传递过去了</li>
+<li>若是传值则需在进入函数之前通过<strong>拷贝构造函数</strong>建立一个临时对象（如果没有自己写拷贝构造函数则是<strong>浅拷贝</strong>），然后再离开函数之后这个临时对象会自动销毁（调用了<strong>析构函数</strong>）</li>
+</ul>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/踩坑现场/">踩坑现场</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/C/">C++</a>
+      </span>
+      
+
+    </div>
+
+    
+    <div class="article-meta pull-right">
+      <span>
+        <i class="icon-comments"></i>
+        <span>
+          <a href="/2015/12/28/C++关于对象传值与传引用的总结/#comment">
+            Comments</a>
+        </span>
+      </span>
+    </div>
+    
+  </div>
+</article>
+
+
+  <article>
+
+  
+  
   <h3 class="article-title"><a href="/2015/12/27/海量数据挖掘（二）：Link Analysis and PageRank/"><span>
         海量数据挖掘（二）：Link Analysis and PageRank</span></a></h3>
   
@@ -710,77 +784,6 @@
         <i class="icon-comments"></i>
         <span>
           <a href="/2015/12/17/gdb基本使用方法/#comment">
-            Comments</a>
-        </span>
-      </span>
-    </div>
-    
-  </div>
-</article>
-
-
-  <article>
-
-  
-  
-  <h3 class="article-title"><a href="/2015/12/17/在PHP语言中使用JSON/"><span>
-        在PHP语言中使用JSON</span></a></h3>
-  
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2015/12/17/在PHP语言中使用JSON/" rel="bookmark">
-        <time class="entry-date published" datetime="2015-12-17T07:14:40.000Z">
-          2015-12-17
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-      <blockquote>
-<p>从5.2版本开始，PHP原生提供<code>json_encode()</code>和<code>json_decode()</code>函数，前者用于编码，后者用于解码。</p>
-</blockquote>
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-      
-      
-
-      <span class="post-categories">
-        <i class="icon-categories"></i>
-        <a href="/categories/学习笔记/">学习笔记</a>
-      </span>
-      
-
-      
-      
-
-      <span class="post-tags">
-        <i class="icon-tags"></i>
-        <a href="/tags/PHP/">PHP</a><a href="/tags/JSON/">JSON</a>
-      </span>
-      
-
-    </div>
-
-    
-    <div class="article-meta pull-right">
-      <span>
-        <i class="icon-comments"></i>
-        <span>
-          <a href="/2015/12/17/在PHP语言中使用JSON/#comment">
             Comments</a>
         </span>
       </span>
