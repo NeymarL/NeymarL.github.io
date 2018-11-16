@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.52coding.com.cn/2018/05/15/AlphaGo%20and%20AlphaGo%20Zero/</loc>
+    
+    <lastmod>2018-11-16T07:54:21.150Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://www.52coding.com.cn/2018/11/07/CCZero/</loc>
     
     <lastmod>2018-11-16T07:52:09.000Z</lastmod>
@@ -593,13 +600,6 @@
     <loc>http://www.52coding.com.cn/2016/03/19/Anomaly%20Detection/</loc>
     
     <lastmod>2018-11-06T03:44:19.020Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2018/05/15/AlphaGo%20and%20AlphaGo%20Zero/</loc>
-    
-    <lastmod>2018-11-06T03:43:57.031Z</lastmod>
     
   </url>
   

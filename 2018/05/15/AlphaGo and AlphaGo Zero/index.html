@@ -223,6 +223,11 @@
 <p>由上图可见围棋与将棋和象棋还是有很大不同的，但是AlphaZero的主要算法和AlphaGo Zero一样，都是自我博弈的增强学习，只是把一些只针对围棋的细节去掉了（比如通过旋转进行数据增强，因为围棋是对称的）和输入输出维度进行了改变。</p>
 <p>它的学习曲线如下，均达到了顶尖水平：</p>
 <p><img src="/images/zero_curve2.png"></p>
+<h2><span id="alphazero-and-exit">AlphaZero and ExIt</span></h2>
+<p><a href="https://arxiv.org/abs/1705.08439" target="_blank" rel="noopener">Expert Iteration（ExIt）</a>是一种模仿学习（Imitation Learning, IL）算法，普通的 IL 算法中，徒弟模仿专家的策略只能提高自己的策略，专家是不会有任何提高的，而 ExIt 算法就是想让师傅教徒弟的时候自己也有提高。</p>
+<p><strong>ExIt 算法</strong> 师傅根据徒弟的策略进行前向搜索（例如MCTS，alpha-beta，贪心搜索等），得出比徒弟更好的策略，然后徒弟再学习师傅的策略，如此循环，随着徒弟的增强，师傅也会越来越强。</p>
+<p><img src="/images/exit.png"></p>
+<p>可见，AlphaZero也属于 ExIt 算法，师傅为 MCTS，徒弟就是神经网络。</p>
 <h2><span id="summary">Summary</span></h2>
 <p>现在棋类人工智能算法的发展趋势是越来越泛化，趋向于多功能。从 AlphaGo 的学习人类专家的棋谱到 AlphaGo Zero 的从零开始无需人类知识的自我博弈学习再到 AlphaZero 的同一算法适应不同棋类并且都取得超人水平。可见人工智能越来越向通用智能发展，虽然长路漫漫，现在的算法远不够泛化，但是很多东西，比如神经网络结构都是可以用到不同领域的。AlphaGo 系列的作者之一 David Silver 曾说:“每次你专门化一些东西都会伤害你的泛化能力” (Every time you specialize something you hurt your generalization ability.)。事实也的确如此，AlphaGo 系列架构越来越简单，而其性能和泛化能力却越来越强大。</p>
 
