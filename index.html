@@ -106,10 +106,11 @@
   <div class="article-content">
     <div class="entry">
       
-      <h2 id="Deep-Q-Network"><a href="#Deep-Q-Network" class="headerlink" title="Deep Q-Network"></a>Deep Q-Network</h2><p>使用非线性函数拟合 Q-value 的RL算法不稳定主要因为：</p>
-<ol>
+      <h2 id="deep-q-network">Deep Q-Network</h2>
+<p>使用非线性函数拟合 Q-value 的RL算法不稳定主要因为：</p>
+<ol type="1">
 <li>同一个观测序列中的数据相关性较大</li>
-<li>当 Q-value 发生了很小的改变，可能导致整个策略（policy）发生较大变化，从而导致 Q-value 和目标 $r + \gamma * \max_{a’}Q(s’ ,a’)$ 的差距不稳定</li>
+<li>当 Q-value 发生了很小的改变，可能导致整个策略（policy）发生较大变化，从而导致 Q-value 和目标 <span class="math inline">\(r + \gamma * \max_{a&#39;}Q(s&#39; ,a&#39;)\)</span> 的差距不稳定</li>
 </ol>
       
     </div>
