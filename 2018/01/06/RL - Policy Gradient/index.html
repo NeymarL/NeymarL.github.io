@@ -297,6 +297,31 @@ J(\theta) &amp;=\mathbb{E}_{\pi_\theta}[r]\\
 \nabla_\theta J(\theta)=\color{red}{\mathbb{E}_{\pi_\theta}[\nabla_\theta\log\pi_\theta(s, a)Q^{\pi_\theta}(s, a)]}
 \]</span></p>
 </blockquote>
+<p><strong>Demonstration</strong></p>
+<blockquote>
+<p>Settings: The initial state <span class="math inline">\(s_0\)</span> is sampled from distribution <span class="math inline">\(\rho_0\)</span>. A trajectory <span class="math inline">\(\tau = (s_0, a_0, s_1, a_1, ..., s_{t+1})\)</span> is sampled from policy <span class="math inline">\(\pi_\theta\)</span>.</p>
+<p>The target function would be <span class="math display">\[
+J(\theta) = E_{\tau\sim\pi}[R(\tau)]
+\]</span> The probability of trajectory <span class="math inline">\(\tau\)</span> is sampled from <span class="math inline">\(\pi\)</span> is <span class="math display">\[
+P(\tau|\theta) = \rho_0(s_0)+\prod_{t=0}^TP(s_{t+1}|s_t, a_t)\pi_\theta(a_t|s_t)
+\]</span> Using the log prob trick: <span class="math display">\[
+\triangledown_\theta P(\tau|\theta) = P(\tau|\theta)\triangledown_\theta\log P(\tau|\theta)
+\]</span> Expand the trajectory: <span class="math display">\[
+\begin{align}
+\triangledown_\theta \log P(\tau|\theta) &amp;= \cancel{\triangledown_\theta \log\rho_0(s_0)}+\sum_{t=0}^T\cancel{\triangledown_\theta \log P(s_{t+1}|s_t,a_t)}+ \triangledown_\theta\log\pi_\theta(a_t|s_t)\\
+&amp;= \sum_{t=0}^T\triangledown_\theta\log\pi_\theta(a_t|s_t)
+\end{align}
+\]</span> The gradient of target function <span class="math display">\[
+\begin{align}
+\triangledown_\theta J(\theta) &amp;= \triangledown_\theta E_{\tau\sim\pi}[R(\tau)]\\
+&amp;= \int_\tau \triangledown_\theta P(\tau|\theta)R(\tau)\\
+&amp;= \int_\tau P(\tau|\theta)\triangledown_\theta \log P(\tau|\theta)R(\tau)\\
+&amp;= E_{\tau\sim\pi}[\triangledown_\theta \log P(\tau|\theta)R(\tau)]\\
+&amp;= E_{\tau\sim\pi}[\sum_{t=0}^T\triangledown_\theta\log\pi_\theta(a_t|s_t)R(\tau)]\\
+&amp;= E_{\tau\sim\pi}[\sum_{t=0}^T \color{red}{\Phi_t}\triangledown_\theta\log\pi_\theta(a_t|s_t)]
+\end{align}
+\]</span></p>
+</blockquote>
 <p><strong>Monte-Carlo Policy Gradient (REINFORCE)</strong></p>
 <p>Update parameters by stochastic gradient ascent using policy gradient theorem. And using return <span class="math inline">\(v_t\)</span> as an <strong>unbiased sample</strong> of <span class="math inline">\(Q^{\pi_\theta}(s_t,a_t)\)</span>: <span class="math display">\[
 \triangle\theta_t=\alpha\nabla_\theta\log\pi_\theta(s_t, a_t)v_t

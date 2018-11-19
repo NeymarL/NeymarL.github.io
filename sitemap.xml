@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.52coding.com.cn/2018/01/06/RL%20-%20Policy%20Gradient/</loc>
+    
+    <lastmod>2018-11-19T04:17:43.918Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://www.52coding.com.cn/2018/05/15/AlphaGo%20and%20AlphaGo%20Zero/</loc>
     
     <lastmod>2018-11-16T07:54:21.150Z</lastmod>
@@ -103,13 +110,6 @@
     <loc>http://www.52coding.com.cn/2017/07/06/%E7%89%A9%E8%81%94%E7%BD%91%E5%AE%89%E5%85%A8%E6%A6%82%E8%AE%BA/</loc>
     
     <lastmod>2018-11-06T05:12:19.197Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2018/01/06/RL%20-%20Policy%20Gradient/</loc>
-    
-    <lastmod>2018-11-06T04:48:57.673Z</lastmod>
     
   </url>
   
