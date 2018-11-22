@@ -107,7 +107,7 @@
   <div class="article-content">
     <div class="entry">
       
-      <p><a href="https://arxiv.org/abs/1502.05477" target="_blank" rel="noopener">Trust Region Policy Optimization (TRPO)</a>算法是由伯克利大学的Schulman等人于2015年提出的策略梯度（Policy Gradients）算法。TRPO通过衡量不同策略的表现来试图保证每次更新的策略都比以前的策略更强（单调性），同时找到尽可能大的更新步幅。</p>
+      <p><a href="https://arxiv.org/abs/1502.05477" target="_blank" rel="noopener">Trust Region Policy Optimization (TRPO)</a>算法是由伯克利大学的Schulman等人于2015年提出的策略梯度（Policy Gradients）算法。TRPO通过最大化新策略相对于当前策略的优势来保证每次更新都是单调递增的（稳定），同时找到尽可能大的更新步幅。算法推导出的最终结果是在KL约束下最大化替代优势函数。</p>
 <a id="more"></a>
 <h2><span id="背景">背景</span></h2>
 <p>考虑经典的 MDP<span class="math inline">\(&lt;S, A, P, r, \rho_0, \gamma&gt;\)</span>，其中 <span class="math inline">\(S\)</span> 是所有状态（state）的集合，<span class="math inline">\(A\)</span> 是所有动作（action）的集合，<span class="math inline">\(P: S\times A\times S \rightarrow \mathbb{R}\)</span> 是转移概率分布，<span class="math inline">\(r\)</span> 是奖励（reward）函数，<span class="math inline">\(\rho_0\)</span> 是初始状态（<span class="math inline">\(s_0\)</span>）分布，<span class="math inline">\(\gamma\)</span> 是折扣因子（ discount factor）。</p>
