@@ -55,7 +55,9 @@
   <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
   <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <script type="text/javascript" src="/js/social-share.min.js"></script>
+  <script type="text/javascript" src="/js/search.js"></script>
+  <script type="text/javascript" src="/js/jquery.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
 <body>
@@ -79,6 +81,8 @@
         <li><a href="/categories">分类</a></li>
       
         <li><a href="/tags">标签</a></li>
+      
+        <li><a href="/search">搜索</a></li>
       
     </ul>
   </nav>
@@ -144,9 +148,37 @@
 <p>这样就去掉了<code>_</code>的斜体含义，在公式里使用<code>_</code>就没有问题了，不过要使用<code>*</code>的话要用<code>\ast</code>替代。</p>
 <h3><span id="评论">评论</span></h3>
 <p>Hacker这款主题支持两种评论方式，分别是<a href="https://github.com/imsun/gitment" target="_blank" rel="noopener">Gitment</a>和<a href="https://disqus.com/" target="_blank" rel="noopener">Disqus</a>。一开始试了试Gitment，配置好之后发现不能用，其原因是有一个服务过期了而作者也弃坑了没人管，我也懒得折腾就转向了Disqus，注册了之后就可以直接使用，十分方便（不过好像要翻墙才能访问= =）。</p>
+<h3><span id="搜索">搜索</span></h3>
+<p>主题内置不支持搜索，需要自己动手，丰衣足食。</p>
+<p>首先安装生成搜索内容的插件： <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-generator-search --save</span><br></pre></td></tr></table></figure></p>
+<p>然后在<code>_config.yml</code>进行如下配置： <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">search:</span></span><br><span class="line"><span class="attr">  path:</span> <span class="string">search.xml</span></span><br><span class="line"><span class="attr">  field:</span> <span class="string">post</span></span><br><span class="line"><span class="attr">  content:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure></p>
+<p>配置项具体含义参考<a href="https://www.npmjs.com/package/hexo-generator-search" target="_blank" rel="noopener">这里</a>，这个网站还说了应该怎么用这个插件来在博客中支持搜索并且给了demo，分为三步：</p>
+<ol type="1">
+<li><a href="https://github.com/wzpan/hexo-theme-freemind/blob/master/layout/_widget/search.ejs#L8" target="_blank" rel="noopener">创建搜索框</a></li>
+<li>编写<a href="https://github.com/wzpan/hexo-theme-freemind/blob/master/source/js/search.js" target="_blank" rel="noopener">搜索脚本</a></li>
+<li>在 Hexo 主题中把两部分<a href="https://github.com/wzpan/hexo-theme-freemind/blob/master/layout/_partial/after_footer.ejs#L22" target="_blank" rel="noopener">结合起来</a></li>
+</ol>
+<h4><span id="创建搜索框">创建搜索框</span></h4>
+<p>我的打算是把“搜索”放在顶部，和“主页”、“目录”等一排，是一个单独的页面。所以要先创建新界面：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new page &quot;search&quot;</span><br></pre></td></tr></table></figure>
+<p>修改 <code>search</code> 目录下的 <code>index.md</code>：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: 搜索</span><br><span class="line">date: 2018-11-23 14:42:39</span><br><span class="line">layout: "search"</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+<p>在主题的 <code>_config.yml</code> 中加上：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">menu:</span></span><br><span class="line">  <span class="string">...</span></span><br><span class="line">  <span class="string">搜索:</span> <span class="string">/search</span></span><br></pre></td></tr></table></figure>
+<p>在主题的 <code>layout</code> 目录下创建 <code>search.ejs</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;article&gt;</span><br><span class="line">    &lt;h2 class=&quot;article-title &lt;% if (page.category)&#123; %&gt; category&lt;% &#125; else if (page.category)&#123; %&gt; category&lt;% &#125; %&gt;&quot;&gt;</span><br><span class="line">        &lt;%= page.title || config.title %&gt;</span><br><span class="line">    &lt;/h2&gt;</span><br><span class="line"></span><br><span class="line">    &lt;div id=&quot;site_search&quot;&gt;</span><br><span class="line">        &lt;div class=&quot;form-group&quot;&gt;</span><br><span class="line">            &lt;input type=&quot;text&quot; id=&quot;local-search-input&quot; name=&quot;q&quot; results=&quot;0&quot; placeholder=&quot;输入关键词&quot; class=&quot;st-search-input st-default-search-input form-control&quot; /&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">        &lt;div class=&quot;archive&quot;&gt;</span><br><span class="line">            &lt;div id=&quot;local-search-result&quot;&gt;&lt;/div&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line"></span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/article&gt;</span><br></pre></td></tr></table></figure>
+<p>重新build就应该可以看到“搜索”标签和搜索框了。</p>
+<h4><span id="编写搜索脚本">编写搜索脚本</span></h4>
+<p>在主题目录下创建<code>source/js/search.js</code>，源码照 https://github.com/wzpan/hexo-theme-freemind/blob/master/source/js/search.js 稍作修改。同时也下载jquery到<code>js</code>文件夹。</p>
+<p>然后在 <code>layout/components/head.ejs</code>中添加：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"&lt;%- config.root %&gt;js/search.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"&lt;%- config.root %&gt;js/jquery.min.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4><span id="结合">结合</span></h4>
+<p>在 <code>layout/search.ejs</code>里添加</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</span><br><span class="line">    <span class="keyword">var</span> search_path = <span class="string">"&lt;%= config.search.path %&gt;"</span>;</span><br><span class="line">    <span class="keyword">if</span> (search_path.length == <span class="number">0</span>) &#123;</span><br><span class="line">        search_path = <span class="string">"search.xml"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> path = <span class="string">"&lt;%= config.root %&gt;"</span> + search_path;</span><br><span class="line">    searchFunc(path, <span class="string">'local-search-input'</span>, <span class="string">'local-search-result'</span>);</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这样就完全实现了搜索功能！</p>
 <h3><span id="其他">其他</span></h3>
 <p><strong>分割线</strong></p>
-<p>Hexo中写作不能使用<code>___</code>来实现分割线，用了的话会generate失败，而且提示的错误很迷，曾经困扰了我很久。</p>
+<p>Hexo中写作不能使用<code>___</code>（三个下划线）来实现分割线，用了的话会generate失败，而且提示的错误很迷，曾经困扰了我很久。如果要用分割线的话需要四个下划线。</p>
 <p><strong>修改网站Icon</strong></p>
 <p>在主题中找到<code>head.ejs</code>文件，其中有一行：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;link href=&quot;&lt;%- config.root %&gt;favicon.ico&quot; rel=&quot;icon&quot;&gt;;</span><br></pre></td></tr></table></figure>

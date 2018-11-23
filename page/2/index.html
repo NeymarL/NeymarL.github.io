@@ -53,7 +53,9 @@
   <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
   <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-  <script type="text/javascript" src="/js/social-share.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <script type="text/javascript" src="/js/social-share.min.js"></script>
+  <script type="text/javascript" src="/js/search.js"></script>
+  <script type="text/javascript" src="/js/jquery.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
 <body>
@@ -77,6 +79,8 @@
         <li><a href="/categories">分类</a></li>
       
         <li><a href="/tags">标签</a></li>
+      
+        <li><a href="/search">搜索</a></li>
       
     </ul>
   </nav>
@@ -184,9 +188,15 @@
   <div class="article-content">
     <div class="entry">
       
-      <h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>This lecture talks about methods that optimise policy directly. Instead of working with value function as we consider so far, we seek experience and use the experience to update our policy in the direction that makes it better.</p>
-<p>In the last lecture, we approximated the value or action-value function using parameters $\theta$,<br>$$<br>V_\theta(s)\approx V^\pi(s)\\<br>Q_\theta(s, a)\approx Q^\pi(s, a)<br>$$<br>A policy was generated directly from the value function using $\epsilon$-greedy.</p>
-<p>In this lecture we will directly parametrise the policy<br>$$<br>\pi_\theta(s, a)=\mathbb{P}[a|s, \theta]<br>$$<br>We will focus again on $\color{red}{\mbox{model-free}}$ reinforcement learning.</p>
+      <h2 id="introduction">Introduction</h2>
+<p>This lecture talks about methods that optimise policy directly. Instead of working with value function as we consider so far, we seek experience and use the experience to update our policy in the direction that makes it better.</p>
+<p>In the last lecture, we approximated the value or action-value function using parameters <span class="math inline">\(\theta\)</span>, <span class="math display">\[
+V_\theta(s)\approx V^\pi(s)\\
+Q_\theta(s, a)\approx Q^\pi(s, a)
+\]</span> A policy was generated directly from the value function using <span class="math inline">\(\epsilon\)</span>-greedy.</p>
+<p>In this lecture we will directly parametrise the policy <span class="math display">\[
+\pi_\theta(s, a)=\mathbb{P}[a|s, \theta]
+\]</span> We will focus again on <span class="math inline">\(\color{red}{\mbox{model-free}}\)</span> reinforcement learning.</p>
       
     </div>
 
@@ -285,7 +295,7 @@
 
       <span class="post-tags">
         <i class="icon-tags"></i>
-        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Reinforcement-Learning/">Reinforcement Learning</a><a href="/tags/增强学习/">增强学习</a><a href="/tags/DQN/">DQN</a><a href="/tags/Neural-Network/">Neural Network</a>
+        <a href="/tags/Reinforcement-Learning/">Reinforcement Learning</a><a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/增强学习/">增强学习</a><a href="/tags/DQN/">DQN</a><a href="/tags/Neural-Network/">Neural Network</a>
       </span>
       
 
@@ -364,7 +374,7 @@
 
       <span class="post-tags">
         <i class="icon-tags"></i>
-        <a href="/tags/Reinforcement-Learning/">Reinforcement Learning</a><a href="/tags/增强学习/">增强学习</a><a href="/tags/Monte-Carlo-Control/">Monte-Carlo Control</a><a href="/tags/Sarsa/">Sarsa</a><a href="/tags/Q-learning/">Q-learning</a>
+        <a href="/tags/Reinforcement-Learning/">Reinforcement Learning</a><a href="/tags/增强学习/">增强学习</a><a href="/tags/Q-learning/">Q-learning</a><a href="/tags/Monte-Carlo-Control/">Monte-Carlo Control</a><a href="/tags/Sarsa/">Sarsa</a>
       </span>
       
 

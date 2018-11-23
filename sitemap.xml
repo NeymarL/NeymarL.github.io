@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.52coding.com.cn/2018/11/06/%E5%8D%9A%E5%AE%A2%E8%BF%81%E7%A7%BB%E8%AE%B0%E5%BD%95/</loc>
+    
+    <lastmod>2018-11-23T08:04:39.413Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/search/index.html</loc>
+    
+    <lastmod>2018-11-23T06:44:16.693Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://www.52coding.com.cn/2018/11/16/RL%20-%20DQN%20and%20A3C/</loc>
     
     <lastmod>2018-11-23T06:19:03.882Z</lastmod>
@@ -32,7 +46,7 @@
   <url>
     <loc>http://www.52coding.com.cn/2018/11/07/CCZero/</loc>
     
-    <lastmod>2018-11-16T07:52:09.000Z</lastmod>
+    <lastmod>2018-11-16T07:54:14.481Z</lastmod>
     
   </url>
   
@@ -40,13 +54,6 @@
     <loc>http://www.52coding.com.cn/baidu_verify_25glERGpH4.html</loc>
     
     <lastmod>2018-11-06T12:07:07.847Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2018/11/06/%E5%8D%9A%E5%AE%A2%E8%BF%81%E7%A7%BB%E8%AE%B0%E5%BD%95/</loc>
-    
-    <lastmod>2018-11-06T11:17:46.893Z</lastmod>
     
   </url>
   
