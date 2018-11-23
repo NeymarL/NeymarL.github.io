@@ -18,8 +18,11 @@
 
   <meta charset="utf-8">
   
+  <!-- if (config.subtitle) {
+    title.push(config.subtitle);
+  } -->
   <title>
-    RL - Trust Region Policy Optimization (TRPO) | NIUHE | 日々私たちが过ごしている日常というのは、実は奇迹の连続なのかもしれんな
+    RL - Trust Region Policy Optimization (TRPO) | NIUHE
   </title>
 
   
@@ -27,7 +30,7 @@
   
 
   
-  <meta name="description" content="NIUHE&#39;s Blog">
+  <meta name="description" content="NIUHE的博客">
   
 
   
@@ -179,7 +182,7 @@ H\hat{x} = \triangledown_\theta((\triangledown_\theta\bar{D}_{KL}(\theta||\theta
 <h2><span id="performance">Performance</span></h2>
 <p><strong>TRPO的一些特点</strong></p>
 <ul>
-<li>单调进步，训练过程更加稳定</li>
+<li>保证每次更新在当前训练数据上都是进步的，训练过程更加稳定</li>
 <li>通过满足KL约束来找尽可能大的步长</li>
 <li>on-policy 算法</li>
 <li>可用于离散和连续的动作空间</li>
@@ -225,6 +228,13 @@ H\hat{x} = \triangledown_\theta((\triangledown_\theta\bar{D}_{KL}(\theta||\theta
 </article>
 
 <div class="social-share"></div>
+<script type="text/javascript">
+  var $config = {
+    image: "icon.png",
+  };
+
+  socialShare('.social-share-cs', $config);
+</script>
 
 
 	<section id="comment" class="comment">
