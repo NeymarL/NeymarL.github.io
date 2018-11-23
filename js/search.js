@@ -38,7 +38,7 @@ var searchFunc = function (path, search_id, content_id) {
             var $resultContent = document.getElementById(content_id);
             if ($("#local-search-input").length > 0) {
                 $input.addEventListener('input', function () {
-                    var str = '<ul class=\"search-result-list\">';
+                    var str = '<div class=\"archive-categories\"><div class=\"archive\">';
                     var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
                     $resultContent.innerHTML = "";
                     if (this.value.trim().length <= 0) {
@@ -80,12 +80,14 @@ var searchFunc = function (path, search_id, content_id) {
                         }
                         // show search results
                         if (isMatch) {
-                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            // str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            str += "<div class=\"archive-post\"><h3 class=\"archive-title\"><a href='" + data_url + "' target=\"_blank\"><span>";
+                            str += data_title + "</span></a></h3></div>"
                             var content = data.content.trim().replace(/<[^>]+>/g, "");
                             if (first_occur >= 0) {
-                                // cut out 100 characters
+                                // cut out 40 characters
                                 var start = first_occur - 20;
-                                var end = first_occur + 80;
+                                var end = first_occur + 20;
 
                                 if (start < 0) {
                                     start = 0;
@@ -109,10 +111,10 @@ var searchFunc = function (path, search_id, content_id) {
 
                                 str += "<p class=\"search-result\">" + match_content + "...</p>"
                             }
-                            str += "</li>";
+                            // str += "</li>";
                         }
                     });
-                    str += "</ul>";
+                    str += "</div></div>";
                     $resultContent.innerHTML = str;
                 });
             }

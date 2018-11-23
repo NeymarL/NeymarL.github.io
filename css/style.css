@@ -741,6 +741,30 @@ article.archive {
 .archive-post time a:hover {
   color: #f03838;
 }
+.form-group {
+  text-align: center;
+}
+.form-group input {
+  width: 50%;
+  margin: 20px auto;
+  border: 2px solid #f00;
+  line-height: 30px;
+  font-size: 16px;
+}
+.form-group input[type=text] {
+  -webkit-transition: width 0.4s ease-in-out;
+  transition: width 0.4s ease-in-out;
+}
+.form-group input[type=text]:focus {
+  width: 80%;
+}
+.search-keyword {
+  font-weight: 900;
+  color: #f00;
+}
+.search-result {
+  font-size: 14px;
+}
 article .tags-cloud {
   width: 100%;
   margin: 8rem 0;
