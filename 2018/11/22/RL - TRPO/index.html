@@ -155,7 +155,7 @@ L(\theta_{old}, \theta) = \mathbb{E}_{s,a\sim\pi_{\theta_{old}}}[\frac{\pi_\thet
 \text{ s.t. }\bar{D}_{KL}(\theta||\theta_{old})≤\delta
 \]</span> 其中，<span class="math inline">\(\bar{D}_{KL}\)</span> 是平均KL散度： <span class="math display">\[
 \bar{D}_{KL}(\theta||\theta_{old})=\mathbb{E}_{s\sim\pi_{\theta_{old}}}[D_{KL}(\pi_{\theta}(\cdot|s)||\pi_{\theta_{old}}(\cdot|s))]
-\]</span> 然而上面的带约束优化也并非容易，所以TRPO对上式进行了一些近似，对目标函数和约束进行一阶泰勒近似得： <span class="math display">\[
+\]</span> 然而上面的带约束优化也并非容易，所以TRPO对上式进行了一些近似，对目标函数和约束进行泰勒展开可以得到： <span class="math display">\[
 L(\theta_{old}, \theta) \approx g^T(\theta-\theta_{old})
 \]</span></p>
 <p><span class="math display">\[
@@ -190,7 +190,7 @@ H\hat{x} = \triangledown_\theta((\triangledown_\theta\bar{D}_{KL}(\theta||\theta
 <li>通过满足KL约束来找尽可能大的步长</li>
 <li>on-policy 算法</li>
 <li>可用于离散和连续的动作空间</li>
-<li>算法完全从理论推导，理解起来很烧脑</li>
+<li>算法较为复杂</li>
 </ul>
 <p><strong>实验性能</strong></p>
 <p>在模拟机器人走路、游泳等任务中取得了在当时不错的效果；在通过视频输入玩Atari游戏的任务中表现不如DQN等方法。</p>
