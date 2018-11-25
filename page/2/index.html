@@ -92,6 +92,76 @@
 
   
   
+  <h3 class="article-title"><a href="/2018/03/10/在没有人类知识的情况下掌握围棋/"><span>
+        论文翻译：在没有人类知识的情况下掌握围棋</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2018/03/10/在没有人类知识的情况下掌握围棋/" rel="bookmark">
+        <time class="entry-date published" datetime="2018-03-10T06:01:09.000Z">
+          2018-03-10
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <h4 id="前言">1. 前言</h4>
+<p>​ 人工智能的一个长期目标是在一些有挑战的领域中从零开始学习出超人熟练程度的算法。最近，AlphaGo成为第一个在围棋比赛中击败世界冠军的程序。 AlphaGo中的树搜索使用深度神经网络评估位置和选定的移动。这些神经网络是通过监督学习来自人类专家的走法以及通过强化自我学习来进行训练的。这里我们只介绍一种基于强化学习的算法，没有超出游戏规则的人类数据，指导或领域知识。AlphaGo成为自己的老师：一个神经网络训练预测AlphaGo的移动选择和游戏的胜者。这个神经网络提高了树搜索的强度，在下一次迭代中拥有更高质量的移动选择和更强的自我学习。我们的新程序AlphaGo Zero从零开始学习，实现了超人的表现，与之前发布的夺冠冠军AlphaGo相比以100-0取胜。</p>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Reinforcement-Learning/">Reinforcement Learning</a><a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/AlphaGo/">AlphaGo</a><a href="/tags/AlphaZero/">AlphaZero</a><a href="/tags/增强学习/">增强学习</a>
+      </span>
+      
+
+    </div>
+
+    
+    <div class="article-meta pull-right">
+      <span>
+        <i class="icon-comments"></i>
+        <span>
+          <a href="/2018/03/10/在没有人类知识的情况下掌握围棋/#comment">
+            Comments</a>
+        </span>
+      </span>
+    </div>
+    
+  </div>
+</article>
+
+
+  <article>
+
+  
+  
   <h3 class="article-title"><a href="/2018/01/09/RL - Integrating Learning and Planning/"><span>
         RL - Integrating Learning and Planning</span></a></h3>
   
@@ -761,94 +831,6 @@ Q_\theta(s, a)\approx Q^\pi(s, a)
         <i class="icon-comments"></i>
         <span>
           <a href="/2017/08/15/SAN for Image QA/#comment">
-            Comments</a>
-        </span>
-      </span>
-    </div>
-    
-  </div>
-</article>
-
-
-  <article>
-
-  
-  
-  <h3 class="article-title"><a href="/2017/08/14/Neural Machine Translation In Linear Time (ByteNet)/"><span>
-        Paper Reading - Neural Machine Translation In Linear Time (ByteNet)</span></a></h3>
-  
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2017/08/14/Neural Machine Translation In Linear Time (ByteNet)/" rel="bookmark">
-        <time class="entry-date published" datetime="2017-08-14T01:30:19.000Z">
-          2017-08-14
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-      <p>ByteNet 可用于<strong>字符级</strong>的机器翻译模型并且有着很好的表现，它的特点在于可以在线性时间 (linear time) 完成翻译而且能够处理长距离依赖。它也采用编码器-解码器架构，并且编码器和解码器都由CNN组成。</p>
-<p>ByteNet 之所以有上述的这些特性，是因为使用了如下一些技术：</p>
-<ul>
-<li>Dynamic Unfolding
-<ul>
-<li>解决了生成不同长度翻译的问题</li>
-</ul></li>
-<li>Dilated Convolution
-<ul>
-<li>缩短了依赖传播的距离</li>
-</ul></li>
-<li>Masked 1D Convolution
-<ul>
-<li>保证训练时只用过去的信息生成当前字符</li>
-</ul></li>
-<li>Residual Blocks
-<ul>
-<li>解决梯度消失问题</li>
-</ul></li>
-</ul>
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-      
-      
-
-      <span class="post-categories">
-        <i class="icon-categories"></i>
-        <a href="/categories/学习笔记/">学习笔记</a>
-      </span>
-      
-
-      
-      
-
-      <span class="post-tags">
-        <i class="icon-tags"></i>
-        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/NLP/">NLP</a><a href="/tags/NMT/">NMT</a><a href="/tags/Deep-NLP/">Deep NLP</a><a href="/tags/CNN/">CNN</a><a href="/tags/ByteBet/">ByteBet</a>
-      </span>
-      
-
-    </div>
-
-    
-    <div class="article-meta pull-right">
-      <span>
-        <i class="icon-comments"></i>
-        <span>
-          <a href="/2017/08/14/Neural Machine Translation In Linear Time (ByteNet)/#comment">
             Comments</a>
         </span>
       </span>

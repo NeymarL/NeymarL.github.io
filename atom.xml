@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.52coding.com.cn/"/>
-  <updated>2018-11-24T05:31:46.359Z</updated>
+  <updated>2018-11-25T14:00:05.541Z</updated>
   <id>http://www.52coding.com.cn/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>RL - Proximal Policy Optimization (PPO)</title>
+    <link href="http://www.52coding.com.cn/2018/11/25/RL%20-%20PPO/"/>
+    <id>http://www.52coding.com.cn/2018/11/25/RL - PPO/</id>
+    <published>2018-11-25T14:00:09.000Z</published>
+    <updated>2018-11-25T14:00:05.541Z</updated>
+    
+    <content type="html"><![CDATA[<p><a href="https://arxiv.org/abs/1707.06347" target="_blank" rel="noopener">Proximal Policy Optimization (PPO, PPO-Clip, PPO-Penalty)</a> 是由<a href="https://www.52coding.com.cn/2018/11/22/RL%20-%20TRPO/">TRPO</a>的作者Schulman等人于2017年提出的策略梯度类算法。PPO算法的思路和TRPO一致，都是想在优化时采取尽可能大的步幅但又不能太大以至于产生崩坏。相比于比TRPO，PPO实现起来更简单，泛化能力更强，可以使用随机梯度下降（SGD）进行优化。</p><a id="more"></a><h2><span id="背景">背景</span></h2><p>PPO的背景与<a href="https://www.52coding.com.cn/2018/11/22/RL%20-%20TRPO/#背景">TRPO的背景</a>一致，最终TRPO推导出如下的带约束优化问题：<br>$$<br>\max_{\theta}\mathbb{E}_t[\frac{\pi_\theta(a_t|s_t)}{\pi_{\theta_{old}}(a_t|s_t)}A_t]\\<br>\text{subject to }\mathbb{E}_t[\text{KL}[\pi_{\theta_{old}}(\cdot|s_t), \pi_\theta(\cdot|s_t)]]<br>$$<br>令 $r_t(\theta) = \frac{\pi_\theta(a_t|s_t)}{\pi_{\theta_{old}}(a_t|s_t)}$ 为新旧策略的概率比（$r_t(\theta_{old}) = 1$）。TRPO最大化的替代目标（surrogate objective）可以写为如下形式：<br>$$<br>L^{CPI}(\theta)=\mathbb{E}_t[\frac{\pi_\theta(a_t|s_t)}{\pi_{\theta_{old}}(a_t|s_t)}A_t]=\mathbb{E}_t[r_t(\theta)A_t]<br>$$<br>如果不加约束的话，直接优化该目标会产生巨大的更新，导致更新不稳定甚至崩溃。所以需要考虑一种惩罚方法，使 $r_t(\theta)$ 接近 $1$。</p><h2><span id="ppo-clip">PPO-Clip</span></h2><p>PPO-Clip的目标函数为：<br>$$<br>L^{CLIP}(\theta)=\mathbb{E}_t[\min(r_t(\theta)A_t, \text{clip}(r_t(\theta), 1-\epsilon, 1+\epsilon)A_t)]<br>$$<br>其中 $\epsilon$ 为超参数控制截断率，取值通常比较小（0.2左右）。</p><p>上述目标函数的第一项与 $L^{CPI}$ 一致，第二项则是为了限制更新幅度（施加惩罚），控制 $r_t(\theta) \in [1-\epsilon, 1+\epsilon]$。可见 $L^{CLIP}(\theta)$ 是 $L^{CPI}(\theta)$ 的一个下界。</p><p><img src="/images/lclip.png" alt=""></p><p>上图显示了 $\text{clip}$ 函数的工作方式：</p><ul><li>当 $A &gt; 0$ 时，如果想使目标函数取得更大的值，就需要增大 $\pi_\theta(a_t|s_t)$ 的值，也就是增大 $r_t(\theta)$ 。但是式中的 $\min$ 函数限制了 $r_t(\theta)$ 最大取到 $1+\epsilon$，所以新策略再远离旧策略（$r_t(\theta)$ 继续增大）并不会带来更多地好处。</li><li>当 $A &lt; 0$ 时，如果想使目标函数取得更大的值，就需要减小 $\pi_\theta(a_t|s_t)$ 的值，也就是减小 $r_t(\theta)$ 。但是式中的 $\min$ 函数限制了 $r_t(\theta)$ 最小取到 $1-\epsilon$，所以新策略再远离旧策略（$r_t(\theta)$ 继续减小）并不会带来更多地好处。</li></ul><p>在实现中，目标函数通常使用更简单的形式：<br>$$<br>L^{CLIP}(s, a, \theta_k, \theta)=\min(\frac{\pi_\theta(a|s)}{\pi_{\theta_{k}}(a|s)}A^{\pi_{\theta_k}}(s, a), g(\epsilon, A^{\pi_{\theta_k}}(s, a)))<br>$$<br>其中，<br>$$<br>g(\epsilon, A^{\pi_{\theta_k}}(s, a))=\begin{cases}<br>(1+\epsilon)A,  &amp; \mbox{if }A ≥0 \\<br>(1-\epsilon)A, &amp; \mbox{if }A&lt;0<br>\end{cases}<br>$$</p><blockquote><p>注：即便对 $r_t(\theta)$ 加上截断，新策略仍染有可能偏离旧策略很远，不过有很多trick来处理这个问题。其中一个特别简单的处理方式就是：如果新策略和旧策略的平均KL距离大于某个阈值，则停止进行更新（<strong>early stopping</strong>）。</p></blockquote><p>相比于TRPO，由于没有了KL约束，PPO可以用SGD来进行优化，实现简单很多。</p><p><strong>PPO-Clip算法</strong></p><p><img src="/images/ppo_algo.svg" alt=""></p><h2><span id="ppo-penalty">PPO-Penalty</span></h2><p>这种方法使用KL距离作为惩罚项，关键在于求出能够自适应多种任务的惩罚因子 $\beta$。算法的逻辑为，在每次策略进行更新时：</p><ul><li><p>使用SGD优化目标函数：<br>$$<br>L^{KLPEN}(\theta)=\mathbb{E}_t\left[\frac{\pi_\theta(a_t|s_t)}{\pi_{\theta_{old}}(a_t|s_t)}A_t-\beta\cdot\text{KL}[\pi_{old}(a_t|s_t), \pi_\theta(a_t|s_t)]\right]<br>$$</p></li><li><p>计算 $d = \mathbb{E}\left[\text{KL}[\pi_{\theta_{old}}(\cdot|s_t), \pi_\theta(\cdot|s_t)]\right]$</p><ul><li>如果 $d &lt; d_{targ}/1.5$，则 $\beta \leftarrow \beta/2$</li><li>如果 $d &gt; d_{targ} \times 1.5$，则 $\beta \leftarrow\beta \times 2$</li></ul></li></ul><blockquote><p>注：PPO-Penalty 没有 PPO-Clip 效果好。</p></blockquote><h2><span id="实验和总结">实验和总结</span></h2><p><strong>特点</strong></p><ul><li>训练稳定</li><li>通过限制 $r_t(\theta)$ 来找到尽可能大的并且合理的步长</li><li>on-policy 算法</li><li>可用于离散和连续的动作空间</li><li>相比于TRPO，PPO实现简单，效果更好</li></ul><p><strong>实验性能</strong></p><p>在大部分 MuJoCo 环境中强于其他策略梯度类算法，在Atari环境中，表现仅次于ACER，但是学习速度优于ACER。</p><p><img src="/images/ppo_mujoco.png" alt=""></p><p><img src="/images/ppo_atari.png" alt=""></p><h3><span id="代码">代码</span></h3><p>自己也实现了一下PPO-Clip算法，代码在<a href="https://github.com/NeymarL/Pacman-RL/blob/master/src/ppo.py" target="_blank" rel="noopener">这里</a>。下图显示了在 OpenAI <a href="https://gym.openai.com/" target="_blank" rel="noopener">Gym</a> 上的 <code>MsPacman-ram-v0</code> 环境上的测试结果：</p><p><img src="/images/ppo_pacman.png" alt=""></p><p><img src="/images/sample1.gif" alt=""></p><h2><span id="references">References</span></h2><p>[1] <a href="https://arxiv.org/abs/1707.06347" target="_blank" rel="noopener">https://arxiv.org/abs/1707.06347</a></p><p>[2] <a href="https://spinningup.openai.com/en/latest/algorithms/ppo.html" target="_blank" rel="noopener">https://spinningup.openai.com/en/latest/algorithms/ppo.html</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/1707.06347&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Proximal Policy Optimization (PPO, PPO-Clip, PPO-Penalty)&lt;/a&gt; 是由&lt;a href=&quot;https://www.52coding.com.cn/2018/11/22/RL%20-%20TRPO/&quot;&gt;TRPO&lt;/a&gt;的作者Schulman等人于2017年提出的策略梯度类算法。PPO算法的思路和TRPO一致，都是想在优化时采取尽可能大的步幅但又不能太大以至于产生崩坏。相比于比TRPO，PPO实现起来更简单，泛化能力更强，可以使用随机梯度下降（SGD）进行优化。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="学习笔记" scheme="http://www.52coding.com.cn/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+    
+    
+      <category term="Reinforcement Learning" scheme="http://www.52coding.com.cn/tags/Reinforcement-Learning/"/>
+    
+      <category term="增强学习" scheme="http://www.52coding.com.cn/tags/%E5%A2%9E%E5%BC%BA%E5%AD%A6%E4%B9%A0/"/>
+    
+      <category term="Policy Gradient" scheme="http://www.52coding.com.cn/tags/Policy-Gradient/"/>
+    
+      <category term="PPO" scheme="http://www.52coding.com.cn/tags/PPO/"/>
+    
+  </entry>
   
   <entry>
     <title>RL - Trust Region Policy Optimization (TRPO)</title>
@@ -719,57 +747,6 @@ Q_\theta(s, a)\approx Q^\pi(s, a)
       <category term="CNN" scheme="http://www.52coding.com.cn/tags/CNN/"/>
     
       <category term="VQA" scheme="http://www.52coding.com.cn/tags/VQA/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Paper Reading - Neural Machine Translation In Linear Time (ByteNet)</title>
-    <link href="http://www.52coding.com.cn/2017/08/14/Neural%20Machine%20Translation%20In%20Linear%20Time%20(ByteNet)/"/>
-    <id>http://www.52coding.com.cn/2017/08/14/Neural Machine Translation In Linear Time (ByteNet)/</id>
-    <published>2017-08-14T01:30:19.000Z</published>
-    <updated>2018-11-06T03:46:52.613Z</updated>
-    
-    <content type="html"><![CDATA[<p>ByteNet 可用于<strong>字符级</strong>的机器翻译模型并且有着很好的表现，它的特点在于可以在线性时间 (linear time) 完成翻译而且能够处理长距离依赖。它也采用编码器-解码器架构，并且编码器和解码器都由CNN组成。</p><p>ByteNet 之所以有上述的这些特性，是因为使用了如下一些技术：</p><ul><li>Dynamic Unfolding<ul><li>解决了生成不同长度翻译的问题</li></ul></li><li>Dilated Convolution<ul><li>缩短了依赖传播的距离</li></ul></li><li>Masked 1D Convolution<ul><li>保证训练时只用过去的信息生成当前字符</li></ul></li><li>Residual Blocks<ul><li>解决梯度消失问题</li></ul></li></ul><a id="more"></a><p><img src="/images/byte.png"></p><h2><span id="dynamic-unfolding">Dynamic Unfolding</span></h2><p><img src="/images/dy_unfold.png"></p><p>Encoder 的输出的句子编码的长度固定为 <span class="math inline">\(|\hat{t}|\)</span> (不够会补零)，是目标句子长度 <span class="math inline">\(|t|\)</span> 的上界，可以通过下式得到： <span class="math display">\[|\hat{t}| = a|s| + b\]</span> 其中，<span class="math inline">\(|s|\)</span> 表示源句子长度，通过选择适当的参数 <span class="math inline">\(a\)</span> 和 <span class="math inline">\(b\)</span>，使得 <span class="math inline">\(|\hat{t}|\)</span> 基本都大于实际长度 <span class="math inline">\(|t|\)</span>，并且没有太多冗余。</p><p>在每一步，decoder 根据当前输入字符和句子特征输出下一个字符，直到生成EOS。至于 decoder 怎么接收输入并 conditioned on 编码器的输出，论文在并没有提及，不过从一个<a href="https://github.com/paarthneekhara/byteNet-tensorflow/blob/master/ByteNet/model.py" target="_blank" rel="noopener">开源实现</a>中看出是直接把输入和编码器在对应位置的输出连接起来，如上图所示。</p><h2><span id="dilated-convolution">Dilated Convolution</span></h2><p>一维离散卷积的定义为： <span class="math display">\[(f*g)[n] = \sum_{m=-\infty}^{\infty}f[m]g[n-m] = \sum_{m=-M}^Mf[n - m]g[m]\]</span> 例：如果 <span class="math inline">\(f = [0, 1, 2, -1, 1, -3, 0]\)</span>, <span class="math inline">\(g = [1, 0, -1]\)</span>，则按照上式，卷积计算如下所示： <span class="math display">\[\begin{array}{lcl}(f*g)[2]        &amp; = &amp; f[2]g[0] + f[1]g[1] + f[0]g[2] = -2 \\(f*g)[3]  &amp; = &amp; f[3]g[0] + f[2]g[1] + f[1]g[2] = 2 \\...\\(f*g)[6]  &amp; = &amp; f[6]g[0] + f[5]g[1] + f[4]g[2] = 1 \\\end{array}\]</span> 和 stride = 1 的普通卷积网络计算一致。</p><p><img src="/images/stride.jpeg"></p><p><strong>Dilated Convolution</strong>的定义为： <span class="math display">\[(f*_lg)[n] = \sum_{m=-\infty}^{\infty}f[m]g[n-lm] = \sum_{m=-M}^Mf[n - lm]g[m]\]</span> 其中，<span class="math inline">\(l\)</span> 为 dilation factor，控制扩张大小，这样 <span class="math inline">\(l = 2\)</span> 时上面例子中的卷积就变成了： <span class="math display">\[\begin{array}{lcl}(f*_2g)[4]        &amp; = &amp; f[4]g[0] + f[2]g[1] + f[0]g[2]  \\(f*_2g)[5]  &amp; = &amp; f[5]g[0] + f[3]g[1] + f[1]g[2] \\(f*_2g)[6]  &amp; = &amp; f[6]g[0] + f[4]g[1] + f[2]g[2]  \\\end{array}\]</span> 当 <span class="math inline">\(l = 3\)</span> 时，相应卷积就为: <span class="math display">\[(f*_3g)[6] = f[6]g[0] + f[3]g[1] + f[0]g[2]\]</span> 这样虽然卷积核都为3，但 receptive field 的大小却大了很多，所以使用 dialted conv 能使 <strong>receptive field</strong> 的大小呈<strong>指数增长</strong>，而相应<strong>参数</strong>却是<strong>线性增长</strong>的，如下图所示。使用 dilated conv 就可以有效地缩短依赖传播的距离。</p><p><img src="/images/dilated.png"></p><p>参考：<a href="https://arxiv.org/abs/1511.07122" target="_blank" rel="noopener">MULTI-SCALE CONTEXT AGGREGATION BY DILATED CONVOLUTIONS</a></p><h2><span id="residual-block">Residual Block</span></h2><p><img src="/images/residual.png"></p><p>每一层（包括 Encoder 和 Decoder）都封装了一个 residual block（上图），其中每个黄色的格子代表一个卷积层，里面的数字是相应的 filter size。中间的 Masked 1 x K 是这层的主力，其他都是为了使他发挥更大效果的陪衬。</p><h2><span id="linear-time">Linear Time</span></h2><p><img src="/images/lt.png"></p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;ByteNet 可用于&lt;strong&gt;字符级&lt;/strong&gt;的机器翻译模型并且有着很好的表现，它的特点在于可以在线性时间 (linear time) 完成翻译而且能够处理长距离依赖。它也采用编码器-解码器架构，并且编码器和解码器都由CNN组成。&lt;/p&gt;
-&lt;p&gt;ByteNet 之所以有上述的这些特性，是因为使用了如下一些技术：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Dynamic Unfolding
-&lt;ul&gt;
-&lt;li&gt;解决了生成不同长度翻译的问题&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;Dilated Convolution
-&lt;ul&gt;
-&lt;li&gt;缩短了依赖传播的距离&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;Masked 1D Convolution
-&lt;ul&gt;
-&lt;li&gt;保证训练时只用过去的信息生成当前字符&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;Residual Blocks
-&lt;ul&gt;
-&lt;li&gt;解决梯度消失问题&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-      <category term="学习笔记" scheme="http://www.52coding.com.cn/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
-    
-    
-      <category term="Deep Learning" scheme="http://www.52coding.com.cn/tags/Deep-Learning/"/>
-    
-      <category term="NLP" scheme="http://www.52coding.com.cn/tags/NLP/"/>
-    
-      <category term="NMT" scheme="http://www.52coding.com.cn/tags/NMT/"/>
-    
-      <category term="Deep NLP" scheme="http://www.52coding.com.cn/tags/Deep-NLP/"/>
-    
-      <category term="CNN" scheme="http://www.52coding.com.cn/tags/CNN/"/>
-    
-      <category term="ByteBet" scheme="http://www.52coding.com.cn/tags/ByteBet/"/>
     
   </entry>
   
