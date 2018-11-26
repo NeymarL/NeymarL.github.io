@@ -114,77 +114,25 @@
   <div class="article-content">
     <div class="entry">
       
-      <p><a href="https://arxiv.org/abs/1502.05477" target="_blank" rel="noopener">Trust Region Policy Optimization (TRPO)</a>算法是由伯克利大学的Schulman等人于2015年提出的策略梯度（Policy Gradients）算法。TRPO通过最大化新策略相对于当前策略的优势来保证每次更新都是单调递增的（稳定），同时找到尽可能大的更新步幅。算法推导出的最终结果是在KL约束下最大化替代优势函数。</p>
+      <p><a href="https://arxiv.org/abs/1502.05477" target="_blank" rel="noopener">Trust Region Policy Optimization (TRPO) </a>算法是由伯克利大学的Schulman等人于2015年提出的策略梯度（Policy Gradients）算法。TRPO通过最大化新策略相对于当前策略的优势来保证每次更新都是单调递增的（稳定），同时找到尽可能大的更新步幅。算法推导出的最终结果是在KL约束下最大化替代优势函数。</p>
 <a id="more"></a>
-<h2><span id="背景">背景</span></h2>
-<p>考虑经典的 MDP<span class="math inline">\(&lt;S, A, P, r, \rho_0, \gamma&gt;\)</span>，其中 <span class="math inline">\(S\)</span> 是所有状态（state）的集合，<span class="math inline">\(A\)</span> 是所有动作（action）的集合，<span class="math inline">\(P: S\times A\times S \rightarrow \mathbb{R}\)</span> 是转移概率分布，<span class="math inline">\(r\)</span> 是奖励（reward）函数，<span class="math inline">\(\rho_0\)</span> 是初始状态（<span class="math inline">\(s_0\)</span>）分布，<span class="math inline">\(\gamma\)</span> 是折扣因子（ discount factor）。</p>
-<p>定义 <span class="math inline">\(\pi\)</span> 为一个随机策略：<span class="math inline">\(\pi: S\times A\rightarrow [0, 1]\)</span>，定义 <span class="math inline">\(\eta(\pi)\)</span> 来衡量策略 <span class="math inline">\(\pi\)</span> 的好坏： <span class="math display">\[
-\eta(\pi)=\mathbb{E}_{s_0, a_0, ...\sim\pi}[\sum_{t=0}^\infty\gamma^tr(s_t)]
-\]</span> 接着定义 state-action value function <span class="math inline">\(Q_\pi\)</span>, value function <span class="math inline">\(V_\pi\)</span>, 优势函数（advantage function）<span class="math inline">\(A_\pi\)</span>: <span class="math display">\[
-Q_\pi(s_t, a_t) = \mathbb{E}_{s_{t+1}, a_{t+1}, ...\sim\pi}[\sum_{l=0}^\infty\gamma^lr_{s_{t+l}}]
-\]</span></p>
-<p><span class="math display">\[
-V_\pi(s_t) =\mathbb{E}_{a_t, s_{t+1}, ...\sim\pi}[\sum_{l=0}^\infty\gamma^lr_{s_{t+l}}]
-\]</span></p>
-<p><span class="math display">\[
-A_\pi(s, a) = Q_\pi(s, a) - V_\pi(s)
-\]</span></p>
-<p>然后可以通过下式来衡量策略 <span class="math inline">\(\tilde{\pi}\)</span> 相对于策略 <span class="math inline">\(\pi\)</span> 的优势（证明详见论文）： <span class="math display">\[
-\begin{align}
-\eta(\tilde{\pi})&amp;=\eta(\pi)+\mathbb{E}_{s_0, a_0, ...\sim\color{red}{\tilde{\pi}}}[\sum_{t=0}^\infty\gamma^tA_\pi(s_t,a_t)]\\
-&amp;= \eta(\pi)+\sum_s\color{red}{\rho_\tilde{\pi}(s)}\sum_a\tilde{\pi}(a|s)A_\pi(s, a)
-\end{align}
-\]</span> 其中 <span class="math inline">\(\rho_\pi\)</span> 为策略 <span class="math inline">\(\pi\)</span> 的折扣访问频率（discounted visitation frequency）： <span class="math display">\[
-\rho_\pi(s) = P(s_0=s)+\gamma P(s_1=s) + \gamma^2 P(s_2=s)+...
-\]</span> 通过上式可知，只要每个状态 <span class="math inline">\(s\)</span> 的期望优势非负，即 <span class="math inline">\(\sum_a\tilde{\pi}(a|s)A_\pi(s, a)&gt;0\)</span>，就可以保证更新是单调非递减的，这其实就是经典的<a href="https://www.52coding.com.cn/2017/12/07/RL%20-%20Planning%20by%20Dynamic%20Programming/">策略迭代（policy iteration）</a>的更新方式。然而，由于 <span class="math inline">\(\rho_\tilde{\pi}(s)\)</span> 的存在，导致直接优化上式很困难，所以引入一个<strong>替代优势</strong>（surrogate advantage）： <span class="math display">\[
-\begin{align}
-L_\pi(\tilde{\pi})&amp;=\eta(\pi)+\sum_s\color{red}{\rho_\pi(s)}\sum_a\tilde{\pi}(a|s)A_\pi(s, a)\\
-\end{align}
-\]</span> 经过一系列推导，可以得到策略 <span class="math inline">\(\tilde{\pi}\)</span> 的优势下界： <span class="math display">\[
-\eta(\tilde{\pi})≥L_\pi(\tilde{\pi})-C\cdot D_{KL}^\max(\pi, \tilde{\pi})
-\]</span> 其中，<span class="math inline">\(C=\frac{4\epsilon\gamma}{(1-\gamma)^2}\)</span>，<span class="math inline">\(D_{KL}^\max\)</span> 是最大的KL散度。</p>
-<p>基于上述公式，可以得到如下的类策略迭代的算法，即可保证每轮迭代都是单调的：</p>
-<p><img src="/images/IMG_1925FD469BD9-1.jpeg"></p>
-<h2><span id="trpo">TRPO</span></h2>
-<p>由于Deep RL都是使用参数为 <span class="math inline">\(\theta\)</span> 的神经网络来拟合策略 <span class="math inline">\(\pi_\theta\)</span>，为了使公式更简洁，把算法1中公式的 <span class="math inline">\(\pi\)</span> 替换成 <span class="math inline">\(\theta\)</span>: <span class="math display">\[
-\theta = \arg\max_{\theta}[L(\theta_{old}, \theta)-C\cdot D_{KL}^\max(\theta_{old}|| \theta)]
-\]</span> 其中， <span class="math display">\[
-L(\theta_{old}, \theta) = \mathbb{E}_{s,a\sim\pi_{\theta_{old}}}[\frac{\pi_\theta(a|s)}{\pi_{\theta_{old}}(a|s)}A^{\pi_{\theta_{old}}}(s,a)]
-\]</span> TRPO是算法1的近似，区别在于：TRPO没有使用惩罚项 <span class="math inline">\(C\)</span>，而是使用 KL散度约束（i.e. trust region constraint）： <span class="math display">\[
-\theta = \arg\max_\theta L(\theta_{old}, \theta)\\
-\text{ s.t. }\bar{D}_{KL}(\theta||\theta_{old})≤\delta
-\]</span> 其中，<span class="math inline">\(\bar{D}_{KL}\)</span> 是平均KL散度： <span class="math display">\[
-\bar{D}_{KL}(\theta||\theta_{old})=\mathbb{E}_{s\sim\pi_{\theta_{old}}}[D_{KL}(\pi_{\theta}(\cdot|s)||\pi_{\theta_{old}}(\cdot|s))]
-\]</span> 然而上面的带约束优化也并非容易，所以TRPO对上式进行了一些近似，对目标函数和约束进行泰勒展开可以得到： <span class="math display">\[
-L(\theta_{old}, \theta) \approx g^T(\theta-\theta_{old})
-\]</span></p>
-<p><span class="math display">\[
-\bar{D}_{KL}(\theta||\theta_{old})\approx \frac{1}{2}(\theta-\theta_{old})^TH(\theta-\theta_{old})
-\]</span></p>
-<p>其中，<span class="math inline">\(g\)</span> 是替代函数的梯度在 <span class="math inline">\(\theta=\theta_{old}\)</span> 处的值，凑巧的是，它和策略梯度的值正好相等：<span class="math inline">\(g = \triangledown_\theta J(\pi_\theta)|_{\theta_{old}}\)</span>；<span class="math inline">\(H\)</span> 是对于 <span class="math inline">\(\theta\)</span> 的海森矩阵（Hessian matrix）。</p>
-<p>于是得到如下的近似优化问题： <span class="math display">\[
-\theta_{k+1}=\arg\max_\theta g^T(\theta-\theta_k)\\
-\text{s.t. }\frac{1}{2}(\theta-\theta_k)^TH(\theta-\theta_k)≤\delta
-\]</span> 通过拉格朗日法求解上述约束优化问题得： <span class="math display">\[
-\theta_{k+1}=\theta_k+\sqrt{\frac{2\delta}{g^TH^{-1}g}}H^{-1}g
-\]</span> 这个就是 <a href="https://papers.nips.cc/paper/2073-a-natural-policy-gradient.pdf" target="_blank" rel="noopener">Natural Policy Gradient</a> 的更新公式。不过，由于泰勒近似引入了误差，上式的解可能不满足 KL 约束，所以 TRPO 增加了一个线性搜索（backtracking line search）： <span class="math display">\[
-\theta_{k+1}=\theta_k+\alpha^j\sqrt{\frac{2\delta}{g^TH^{-1}g}}H^{-1}g
-\]</span> 其中，<span class="math inline">\(\alpha\in(0,1)\)</span> 是回溯系数（backtracking coefficient），<span class="math inline">\(j\)</span> 是最小的非负整数使得 <span class="math inline">\(\pi_{\theta_{k+1}}\)</span> 满足 KL 约束并且产生<strong>正</strong>的替代优势，这样就可以保证训练进步是单调的。</p>
-<p>最后，计算和存储 <span class="math inline">\(H^{-1}\)</span> 的开销是很大的，尤其是神经网络的参数动不动就几M。TRPO 使用<a href="https://www.wikiwand.com/en/Conjugate_gradient_method" target="_blank" rel="noopener">共轭梯度法（conjugate gradient）</a>来解 <span class="math inline">\(Hx = g\)</span>，这样就不用直接计算和存储 <span class="math inline">\(H\)</span>。</p>
-<p>最终的更新公式为： <span class="math display">\[
-\theta_{k+1}=\theta_k+\alpha^j\sqrt{\frac{2\delta}{\hat{x}^TH\hat{x}}}\hat{x}
-\]</span> 其中， <span class="math display">\[
-\begin{align}
-\hat{x}&amp;\approx H^{-1}g &amp; \text{(using conjugate gradient)}
-\end{align}
-\]</span></p>
-<p><span class="math display">\[
-H\hat{x} = \triangledown_\theta((\triangledown_\theta\bar{D}_{KL}(\theta||\theta_k))^T\hat{x})
-\]</span></p>
+<h2><span id="背景">背景</span></h2><p>考虑经典的 MDP$&lt;S, A, P, r, \rho_0, \gamma&gt;$，其中 $S$ 是所有状态（state）的集合，$A$ 是所有动作（action）的集合，$P: S\times A\times S \rightarrow \mathbb{R}$ 是转移概率分布，$r$ 是奖励（reward）函数，$\rho_0$ 是初始状态（$s_0$）分布，$\gamma$ 是折扣因子（ discount factor）。</p>
+<p>定义 $\pi$ 为一个随机策略：$\pi: S\times A\rightarrow [0, 1]$，定义 $\eta(\pi)$ 来衡量策略 $\pi$ 的好坏：<br>$$<br>\eta(\pi)=\mathbb{E}_{s_0, a_0, …\sim\pi}[\sum_{t=0}^\infty\gamma^tr(s_t)]<br>$$<br>接着定义 state-action value function $Q_\pi$, value function $V_\pi$, 优势函数（advantage function）$A_\pi$:<br>$$<br>Q_\pi(s_t, a_t) = \mathbb{E}_{s_{t+1}, a_{t+1}, …\sim\pi}[\sum_{l=0}^\infty\gamma^lr_{s_{t+l}}]<br>$$</p>
+<p>$$<br>V_\pi(s_t) =\mathbb{E}_{a_t, s_{t+1}, …\sim\pi}[\sum_{l=0}^\infty\gamma^lr_{s_{t+l}}]<br>$$</p>
+<p>$$<br>A_\pi(s, a) = Q_\pi(s, a) - V_\pi(s)<br>$$</p>
+<p>然后可以通过下式来衡量策略 $\tilde{\pi}$ 相对于策略 $\pi$ 的优势（证明详见论文）：<br>$$<br>\begin{align}<br>\eta(\tilde{\pi})&amp;=\eta(\pi)+\mathbb{E}_{s_0, a_0, …\sim\color{red}{\tilde{\pi}}}[\sum_{t=0}^\infty\gamma^tA_\pi(s_t,a_t)]\\<br>&amp;= \eta(\pi)+\sum_s\color{red}{\rho_\tilde{\pi}(s)}\sum_a\tilde{\pi}(a|s)A_\pi(s, a)<br>\end{align}<br>$$<br>其中 $\rho_\pi$ 为策略 $\pi$ 的折扣访问频率（discounted visitation frequency）：<br>$$<br>\rho_\pi(s) = P(s_0=s)+\gamma P(s_1=s) + \gamma^2 P(s_2=s)+…<br>$$<br>通过上式可知，只要每个状态 $s$ 的期望优势非负，即 $\sum_a\tilde{\pi}(a|s)A_\pi(s, a)&gt;0$，就可以保证更新是单调非递减的，这其实就是经典的<a href="https://www.52coding.com.cn/2017/12/07/RL%20-%20Planning%20by%20Dynamic%20Programming/">策略迭代（policy iteration）</a>的更新方式。然而，由于 $\rho_\tilde{\pi}(s)$ 的存在，导致直接优化上式很困难，所以引入一个<strong>替代优势</strong>（surrogate advantage）：<br>$$<br>\begin{align}<br>L_\pi(\tilde{\pi})&amp;=\eta(\pi)+\sum_s\color{red}{\rho_\pi(s)}\sum_a\tilde{\pi}(a|s)A_\pi(s, a)\\<br>\end{align}<br>$$<br>经过一系列推导，可以得到策略 $\tilde{\pi}$ 的优势下界：<br>$$<br>\eta(\tilde{\pi})≥L_\pi(\tilde{\pi})-C\cdot D_{KL}^\max(\pi, \tilde{\pi})<br>$$<br>其中，$C=\frac{4\epsilon\gamma}{(1-\gamma)^2}$，$D_{KL}^\max$ 是最大的KL散度。</p>
+<p>这里相当于对优化目标 $L_\pi(\tilde{\pi})$ 进行了惩罚，惩罚因子为 $C$，惩罚项为KL散度，目的是限制新旧策略的差距。通过最大化上述公式，就能最大化新策略 $\tilde{\pi}$ 所得到的奖励，同时又不会离旧策略 $\pi$ 太远（导致对当前数据过拟合），算法如下：</p>
+<p><img src="/images/IMG_1925FD469BD9-1.jpeg" alt=""></p>
+<h2><span id="trpo">TRPO</span></h2><p>由于Deep RL都是使用参数为 $\theta$ 的神经网络来拟合策略 $\pi_\theta$，为了使公式更简洁，把算法1中公式的 $\pi$ 替换成 $\theta$:<br>$$<br>\theta = \arg\max_{\theta}[L(\theta_{old}, \theta)-C\cdot D_{KL}^\max(\theta_{old}|| \theta)]<br>$$<br>其中，<br>$$<br>L(\theta_{old}, \theta) = \mathbb{E}_{s,a\sim\pi_{\theta_{old}}}[\frac{\pi_\theta(a|s)}{\pi_{\theta_{old}}(a|s)}A^{\pi_{\theta_{old}}}(s,a)]<br>$$<br>TRPO是算法1的近似，区别在于：TRPO没有使用惩罚项 $C$，而是使用 KL散度约束（i.e. trust region constraint）：<br>$$<br>\theta = \arg\max_\theta L(\theta_{old}, \theta)\\<br>\text{ s.t. }\bar{D}_{KL}(\theta||\theta_{old})≤\delta<br>$$<br>其中，$\bar{D}_{KL}$ 是平均KL散度：<br>$$<br>\bar{D}_{KL}(\theta||\theta_{old})=\mathbb{E}_{s\sim\pi_{\theta_{old}}}[D_{KL}(\pi_{\theta}(\cdot|s)||\pi_{\theta_{old}}(\cdot|s))]<br>$$<br>然而上面的带约束优化也并非容易，所以TRPO对上式进行了一些近似，对目标函数和约束进行泰勒展开可以得到：<br>$$<br>L(\theta_{old}, \theta) \approx g^T(\theta-\theta_{old})<br>$$</p>
+<p>$$<br>\bar{D}_{KL}(\theta||\theta_{old})\approx \frac{1}{2}(\theta-\theta_{old})^TH(\theta-\theta_{old})<br>$$</p>
+<p>其中，$g$ 是替代函数的梯度在 $\theta=\theta_{old}$ 处的值，凑巧的是，它和策略梯度的值正好相等：$g = \triangledown_\theta J(\pi_\theta)|_{\theta_{old}}$；$H$ 是对于 $\theta$ 的海森矩阵（Hessian matrix）。</p>
+<p>于是得到如下的近似优化问题：<br>$$<br>\theta_{k+1}=\arg\max_\theta g^T(\theta-\theta_k)\\<br>\text{s.t. }\frac{1}{2}(\theta-\theta_k)^TH(\theta-\theta_k)≤\delta<br>$$<br>通过拉格朗日法求解上述约束优化问题得：<br>$$<br>\theta_{k+1}=\theta_k+\sqrt{\frac{2\delta}{g^TH^{-1}g}}H^{-1}g<br>$$<br>这个就是 <a href="https://papers.nips.cc/paper/2073-a-natural-policy-gradient.pdf" target="_blank" rel="noopener">Natural Policy Gradient</a> 的更新公式。不过，由于泰勒近似引入了误差，上式的解可能不满足 KL 约束，所以 TRPO 增加了一个线性搜索（backtracking line search）：<br>$$<br>\theta_{k+1}=\theta_k+\alpha^j\sqrt{\frac{2\delta}{g^TH^{-1}g}}H^{-1}g<br>$$<br>其中，$\alpha\in(0,1)$ 是回溯系数（backtracking coefficient），$j$ 是最小的非负整数使得 $\pi_{\theta_{k+1}}$ 满足 KL 约束并且产生<strong>正</strong>的替代优势，这样就可以保证训练进步是单调的。</p>
+<p>最后，计算和存储 $H^{-1}$ 的开销是很大的，尤其是神经网络的参数动不动就几M。TRPO 使用<a href="https://www.wikiwand.com/en/Conjugate_gradient_method" target="_blank" rel="noopener">共轭梯度法（conjugate gradient）</a>来解 $Hx = g$，这样就不用直接计算和存储 $H$。</p>
+<p>最终的更新公式为：<br>$$<br>\theta_{k+1}=\theta_k+\alpha^j\sqrt{\frac{2\delta}{\hat{x}^TH\hat{x}}}\hat{x}<br>$$<br>其中，<br>$$<br>\begin{align}<br>\hat{x}&amp;\approx H^{-1}g &amp; \text{(using conjugate gradient)}<br>\end{align}<br>$$</p>
+<p>$$<br>H\hat{x} = \triangledown_\theta((\triangledown_\theta\bar{D}_{KL}(\theta||\theta_k))^T\hat{x})<br>$$</p>
 <p><strong>TRPO算法</strong></p>
-<p><img src="/images/trpo.svg"></p>
-<h2><span id="performance">Performance</span></h2>
-<p><strong>TRPO的一些特点</strong></p>
+<p><img src="/images/trpo.svg" alt=""></p>
+<h2><span id="performance">Performance</span></h2><p><strong>TRPO的一些特点</strong></p>
 <ul>
 <li>保证每次更新在当前训练数据上都是进步的，训练过程更加稳定</li>
 <li>通过满足KL约束来找尽可能大的步长</li>
@@ -194,13 +142,12 @@ H\hat{x} = \triangledown_\theta((\triangledown_\theta\bar{D}_{KL}(\theta||\theta
 </ul>
 <p><strong>实验性能</strong></p>
 <p>在模拟机器人走路、游泳等任务中取得了在当时不错的效果；在通过视频输入玩Atari游戏的任务中表现不如DQN等方法。</p>
-<p><img src="/images/trpo_per.jpg"></p>
+<p><img src="/images/trpo_per.jpg" alt=""></p>
 <p>下图是我在 OpenAI <a href="https://gym.openai.com/" target="_blank" rel="noopener">Gym</a> 的 <code>Walker2d-v2</code> 和 <code>MsPacman-ram-v0</code> 中测试的结果。</p>
-<p><img src="/images/walker.png"></p>
-<p><img src="/images/pacman.png"></p>
-<h2><span id="references">References</span></h2>
-<p>[1] https://arxiv.org/abs/1502.05477</p>
-<p>[2] https://spinningup.openai.com/en/latest/algorithms/trpo.html</p>
+<p><img src="/images/walker.png" alt=""></p>
+<p><img src="/images/pacman.png" alt=""></p>
+<h2><span id="references">References</span></h2><p>[1] <a href="https://arxiv.org/abs/1502.05477" target="_blank" rel="noopener">https://arxiv.org/abs/1502.05477</a></p>
+<p>[2] <a href="https://spinningup.openai.com/en/latest/algorithms/trpo.html" target="_blank" rel="noopener">https://spinningup.openai.com/en/latest/algorithms/trpo.html</a></p>
 
       
     </div>
