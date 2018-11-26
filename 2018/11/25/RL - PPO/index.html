@@ -120,7 +120,7 @@
 <p>PPO的背景与<a href="https://www.52coding.com.cn/2018/11/22/RL%20-%20TRPO/#背景">TRPO的背景</a>一致，最终TRPO推导出如下的带约束优化问题： <span class="math display">\[
 \max_{\theta}\mathbb{E}_t[\frac{\pi_\theta(a_t|s_t)}{\pi_{\theta_{old}}(a_t|s_t)}A_t]\\
 \text{subject to }\mathbb{E}_t[\text{KL}[\pi_{\theta_{old}}(\cdot|s_t), \pi_\theta(\cdot|s_t)]]
-\]</span> 令 <span class="math inline">\(r_t(\theta) = \frac{\pi_\theta(a_t|s_t)}{\pi_{\theta_{old}}(a_t|s_t)}\)</span> 为新旧策略的概率比（<span class="math inline">\(r_t(\theta_{old}) = 1\)</span>）。TRPO最大化的替代目标（surrogate objective）可以写为如下形式： <span class="math display">\[
+\]</span> 令 <span class="math inline">\(r_t(\theta) = \frac{\pi_\theta(a_t|s_t)}{\pi_{\theta_{old}}(a_t|s_t)}\)</span> 为新旧策略的概率比（易知 <span class="math inline">\(r_t(\theta_{old}) = 1\)</span>）。TRPO最大化的替代目标（surrogate objective）可以写为如下形式： <span class="math display">\[
 L^{CPI}(\theta)=\mathbb{E}_t[\frac{\pi_\theta(a_t|s_t)}{\pi_{\theta_{old}}(a_t|s_t)}A_t]=\mathbb{E}_t[r_t(\theta)A_t]
 \]</span> 如果不加约束的话，直接优化该目标会产生巨大的更新，导致更新不稳定甚至崩溃。所以需要考虑一种惩罚方法，使 <span class="math inline">\(r_t(\theta)\)</span> 接近 <span class="math inline">\(1\)</span>。</p>
 <h2><span id="ppo-clip">PPO-Clip</span></h2>
