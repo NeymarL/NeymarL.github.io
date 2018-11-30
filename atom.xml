@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.52coding.com.cn/"/>
-  <updated>2018-11-26T04:59:16.491Z</updated>
+  <updated>2018-11-30T05:53:52.543Z</updated>
   <id>http://www.52coding.com.cn/</id>
   
   <author>
@@ -15,6 +15,38 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>RL - Deep Deterministic Policy Gradient (DDPG)</title>
+    <link href="http://www.52coding.com.cn/2018/11/30/RL%20-%20Deep%20Deterministic%20Policy%20Gradient/"/>
+    <id>http://www.52coding.com.cn/2018/11/30/RL - Deep Deterministic Policy Gradient/</id>
+    <published>2018-11-30T05:53:09.000Z</published>
+    <updated>2018-11-30T05:53:52.543Z</updated>
+    
+    <content type="html"><![CDATA[<p><a href="https://arxiv.org/abs/1509.02971" target="_blank" rel="noopener">Deep Deterministic Policy Gradient (DDPG)</a> 是由DeepMind的Lillicrap等人于2015年提出的算法，发表在ICLR 2016上。DDPG是基于<a href="http://proceedings.mlr.press/v32/silver14.pdf" target="_blank" rel="noopener">DPG</a>算法的改进，可以看作是 Actor-critic 和 <a href="https://www.52coding.com.cn/2018/11/16/RL%20-%20DQN%20and%20A3C/">DQN</a> 的结合，它同时学习一个 Q-function 和一个策略（policy）：用 Q-learning 的方法学习 Q-function，然后用 Q-function 更新策略。</p><a id="more"></a><h2><span id="dpg">DPG</span></h2><p><a href="http://proceedings.mlr.press/v32/silver14.pdf" target="_blank" rel="noopener">Deterministic Policy Gradient (DPG)</a> 是把策略梯度（policy gradient）算法扩展到确定性策略（deterministic policy）上，事实上，DPG被证明是随机策略梯度（stochastic policy gradient）的一种特殊情况。</p><blockquote><p>随机策略梯度： <span class="math display">\[\triangledown_\theta J(\pi_\theta)=\mathbb{E}_{s\sim\rho^\pi, a\sim\pi_\theta}[\triangledown_\theta\log\pi_\theta(a|s)Q^\pi(s,a)]\]</span> 其中，<span class="math inline">\(\pi_\theta\)</span> 是由参数为 <span class="math inline">\(\theta\)</span> 的函数近似的策略，<span class="math inline">\(\rho^\pi\)</span> 为策略 <span class="math inline">\(\pi_\theta\)</span> 的状态分布（state distribution）。</p></blockquote><p>大部分 model-free 的增强学习算法属于泛化的<a href="https://www.52coding.com.cn/2017/12/07/RL%20-%20Planning%20by%20Dynamic%20Programming/">策略迭代（policy iteration）</a>算法，一般分为两步：策略评估（policy evaluation） 和策略改进（ policy improvement）。策略评估通常使用 <a href="https://www.52coding.com.cn/2017/12/16/RL%20-%20Model-Free%20Prediction/#monte-carlo-learning">Monte-Carlo evaluation</a> 或 <a href="https://www.52coding.com.cn/2017/12/16/RL%20-%20Model-Free%20Prediction/#temporal-difference-learning">temporal difference learning</a> 来近似 <span class="math inline">\(Q^\pi(s, a)\)</span>。策略改进则通常通过最大化评估的 action-value 来得到：<span class="math inline">\(\mu^{k+1}(s) = \arg\max_aQ^{\mu^k}(s, a)\)</span>。</p><p>然而，在连续的动作空间（continuous action spaces）里这种最大化却是不可行的。在离散的动作空间里，我们可以为每个action计算相应 Q-value 然后进行比较；但是在连续的动作空间中，我们不可能把每个action的 Q-value 都计算出来再比较，而通过对 Q-function 求导求的方式计算最大值开销又很大。所以，取而代之的是单独用一个函数近似策略，然后<strong>用 Q-function 的梯度来改进该策略</strong>。具体来说，对于每个访问过的状态 <span class="math inline">\(s\)</span>，策略函数的参数 <span class="math inline">\(\theta^{k+1}\)</span> 根据 <span class="math inline">\(\triangledown_\theta Q^{\mu_k}(s, \mu_\theta(s))\)</span> 来更新： <span class="math display">\[\begin{align}\theta^{k+1}&amp;=\theta^k+\alpha\mathbb{E}_{s\sim\rho^{\mu^k}}[\triangledown_\theta Q^{\mu^k}(s, \mu_\theta(s))]\\&amp;= \theta^k + \alpha\mathbb{E}_{s\sim\rho^{\mu^k}}[\triangledown_\theta \mu_\theta(s)\triangledown_aQ^{\mu^k}(s, a)|_{a=\mu_\theta(s)}]\end{align}\]</span></p><h2><span id="ddpg">DDPG</span></h2><p>在 DPG 中，Q-function 是通过 Q-learning 的方式来学习的，而当使用神经网络来近似 Q-function 的时候会导致训练不稳定，DDPG 应用了 <a href="https://www.52coding.com.cn/2018/11/16/RL%20-%20DQN%20and%20A3C/#deep-q-network">DQN</a> 中的两个trick来解决不稳定的问题，也就是<strong>经验池（replay buffer）</strong>和<strong>目标网络（target network）</strong>。</p><p>具体来说，经验池 <span class="math inline">\(D\)</span> 每次探索都会存储元组 <span class="math inline">\((s, a, r, s&#39;, d)\)</span>，其中 <span class="math inline">\(d\)</span> 为一个布尔变量，如果 <code>d == True</code>，就表明 <span class="math inline">\(s&#39;\)</span> 是终止状态（terminal state）。 每次更新时都会从经验池随机采样一批数据进行更新。经验池的大小是一个需要微调的超参数：如果经验池过小的话，会导致对池内数据过拟合；如果经验池存储所有数据的话，又会放慢学习的速度。</p><p>目标网络是指用单独的网络参数来生成目标（q-target），设策略函数的参数为 <span class="math inline">\(\theta\)</span>，Q-function 的参数为 <span class="math inline">\(\phi\)</span>，则对应的目标网络参数为 <span class="math inline">\(\theta_{tag}\)</span> 和 <span class="math inline">\(\phi_{tag}\)</span>，生成的目标为： <span class="math display">\[r + \gamma(1-d)Q_{\phi_{tag}}(s&#39;, \mu_{\theta_{tag}}(s&#39;))\]</span> 所以 Q-value 端的更新公式为： <span class="math display">\[\triangledown_\phi \mathbb{E}_{s,a,r,s&#39;,d\sim D}\left[\left(Q(s,a)-(r + \gamma(1-d)Q_{\phi_{tag}}(s&#39;, \mu_{\theta_{tag}}(s&#39;)))\right)^2\right]\]</span> 与DQN不同的是，DDPG中的目标网络使用“软更新”的方式，即目标网络并不是隔一定时间后与主网络同步，而是朝着主网络缓慢移动： <span class="math display">\[\theta_{tag}\leftarrow\tau\theta+(1-\tau)\theta_{tag}\\\phi_{tag}\leftarrow\tau\phi+(1-\tau)\phi_{tag}\]</span> 其中，<span class="math inline">\(\tau \in (0, 1)\)</span> 是一个超参数，通常取值接近 1。</p><p>为了增加探索能力，训练时在选择每个动作的时候都会加上随机噪声 <span class="math inline">\(\mathcal{N}\)</span>，论文作者建议使用时间相关的 <a href="https://en.wikipedia.org/wiki/Ornstein%E2%80%93Uhlenbeck_process" target="_blank" rel="noopener">OU噪声</a>，但是最近的研究结果表明使用不相关的、zero-mean的高斯噪声效果会更好。同时为了取得更高质量的训练数据，噪声可以随着训练过程逐步减小。另外，在评测时应去掉噪声。</p><p><strong>DDPG算法</strong></p><p><img src="/images/ddpg_algo.svg"></p><h2><span id="总结">总结</span></h2><p><strong>特点</strong></p><ul><li>off-policy算法</li><li>只能用于连续的动作空间</li><li>可以看作是把DQN应用到连续动作空间</li></ul><h2><span id="references">References</span></h2><p>[1] http://proceedings.mlr.press/v32/silver14.pdf</p><p>[2] https://arxiv.org/abs/1509.02971</p><p>[3] https://spinningup.openai.com/en/latest/algorithms/ddpg.html</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/1509.02971&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Deep Deterministic Policy Gradient (DDPG)&lt;/a&gt; 是由DeepMind的Lillicrap等人于2015年提出的算法，发表在ICLR 2016上。DDPG是基于&lt;a href=&quot;http://proceedings.mlr.press/v32/silver14.pdf&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;DPG&lt;/a&gt;算法的改进，可以看作是 Actor-critic 和 &lt;a href=&quot;https://www.52coding.com.cn/2018/11/16/RL%20-%20DQN%20and%20A3C/&quot;&gt;DQN&lt;/a&gt; 的结合，它同时学习一个 Q-function 和一个策略（policy）：用 Q-learning 的方法学习 Q-function，然后用 Q-function 更新策略。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="学习笔记" scheme="http://www.52coding.com.cn/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+    
+    
+      <category term="Reinforcement Learning" scheme="http://www.52coding.com.cn/tags/Reinforcement-Learning/"/>
+    
+      <category term="增强学习" scheme="http://www.52coding.com.cn/tags/%E5%A2%9E%E5%BC%BA%E5%AD%A6%E4%B9%A0/"/>
+    
+      <category term="DQN" scheme="http://www.52coding.com.cn/tags/DQN/"/>
+    
+      <category term="Policy Gradient" scheme="http://www.52coding.com.cn/tags/Policy-Gradient/"/>
+    
+      <category term="DPG" scheme="http://www.52coding.com.cn/tags/DPG/"/>
+    
+      <category term="DDPG" scheme="http://www.52coding.com.cn/tags/DDPG/"/>
+    
+  </entry>
   
   <entry>
     <title>RL - Proximal Policy Optimization (PPO)</title>
@@ -708,45 +740,6 @@ Q_\theta(s, a)\approx Q^\pi(s, a)
       <category term="增强学习" scheme="http://www.52coding.com.cn/tags/%E5%A2%9E%E5%BC%BA%E5%AD%A6%E4%B9%A0/"/>
     
       <category term="DRL" scheme="http://www.52coding.com.cn/tags/DRL/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Paper Reading - Stacked Attention Networks for Image QA</title>
-    <link href="http://www.52coding.com.cn/2017/08/15/SAN%20for%20Image%20QA/"/>
-    <id>http://www.52coding.com.cn/2017/08/15/SAN for Image QA/</id>
-    <published>2017-08-15T01:30:19.000Z</published>
-    <updated>2018-11-06T03:48:03.977Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><p>Zichao Yang, Xiaodong He, Jianfeng Gao , Li Deng , Alex Smola <a href="https://arxiv.org/abs/1511.02274" target="_blank" rel="noopener">Stacked Attention Networks for Image Question Answering</a></p></blockquote><p>这篇文章发表在CVPR2016，作者把 attention 机制应用在 Visual QA，不但能理解神经网络生成答案的 multiple resoning，而且获得了当时最好的效果。</p><p>SAN总共由三部分组成：</p><ul><li>Image Model：用来编码图片信息</li><li>Question Moel：用来编码问题信息</li><li>Stacked Attention Networks：通过多层 attention layer 不断优化对问题的编码</li></ul><a id="more"></a><p><img src="/images/san.png"></p><h2><span id="image-model">Image Model</span></h2><p>Image model 使用 VGGNet 处理源图片，用最后一个池化层作为提取的图片特征: <span class="math display">\[f_I = CNN_{vgg}(I)\]</span> 把输入图片转化为 <span class="math inline">\(448 \times 448\)</span> 大小， 输出的特征即为 <span class="math inline">\(512 \times 14 \times 14\)</span>，其中 <span class="math inline">\(512\)</span> 为特征向量（feature vector） <span class="math inline">\(f_i\)</span> 的维度，<span class="math inline">\(14 \times 14\)</span> 是区域（特征向量）的个数，每个特征向量 <span class="math inline">\(f_i\)</span> 代表源图片中 <span class="math inline">\(32 \times 32\)</span> 大小的区域。</p><p><img src="/images/vgg.png"></p><p>为了后面方便处理，通过一个线性层把图片特征转化为和问题特征一样的维度： <span class="math display">\[v_I = \tanh(W_If_I + b_I)\]</span> 其中，<span class="math inline">\(v_I\)</span> 是个矩阵，它的第 <span class="math inline">\(i\)</span> 列 <span class="math inline">\(v_i\)</span> 是区域 <span class="math inline">\(i\)</span> 的特征向量（feature vector）。</p><h2><span id="question-model">Question Model</span></h2><p>作者采用了两种模型对问题进行编码，分别基于 LSTM 和 CNN。</p><h3><span id="lstm-based-question-model">LSTM based question model</span></h3><p>基于 LSTM 的模型很简单，就是用一个普通的 LSTM 对问题进行编码（没准扩展成bi-LSTM效果会更好一些），每个时刻处理一个词，把最后一个词对应的 hidden state 作为编码结果: <span class="math display">\[\begin{alignat}{3}x_t &amp;= W_eq_t, \ t\in\{1, 2, ... T\} \\h_t &amp;= LSTM(x_t), \ t\in\{1, 2, ... T\}\\v_Q &amp;= h_T\end{alignat}\]</span> 其中， <span class="math inline">\(q_t\)</span> 为词的 one-hot encoding，<span class="math inline">\(W_e\)</span> 为 embedding 矩阵，<span class="math inline">\(x_t\)</span> 就为词的 word embedding（总觉得这样的词编码太简单了），<span class="math inline">\(v_Q\)</span> 为对问题的编码。</p><p><img src="/images/lstmq.png"></p><h3><span id="cnn-based-question-model">CNN based question model</span></h3><p><img src="/images/cnn_basedq.png"></p><p>这应该算是CNN的一个变种，它的 filter 有三种，分别为 unigram, bigram, trigram，分别对应窗口大小 <span class="math inline">\(c = 1, 2, 3\)</span>。定义符号 <span class="math inline">\(x_{i:j}\)</span> 为 <span class="math inline">\(x_i, x_{i+1}, …, x_j\)</span> 的连接，所以问题向量可表示为: <span class="math display">\[x_{1:T} = [x1, x2, ..., x_T]\]</span></p><p>然后对每一个 filter 分别在 <span class="math inline">\(x_{1:T}\)</span> 上进行卷积操作，第 <span class="math inline">\(t\)</span> 次卷积操作的输出为： <span class="math display">\[h_{c,t} = \tanh(W_cx_{t:t+c-1}+b_c)\]</span> 窗口大小为 <span class="math inline">\(c\)</span> 的 feature map 为： <span class="math display">\[h_c = [h_{c,1}, h_{c,2}, ..., h_{c,T-c+1}]\]</span> 然后对每个 feature map 进行 max pooling，得到最终的问题特征： <span class="math display">\[\hat{h}_c = \max_t(h_{c,1}, h_{c, 2} ..., h_{c,T-c+1})\]</span></p><p><span class="math display">\[v_Q = h = [\hat{h}_1,\hat{h}_2,\hat{h}_3]\]</span></p><h2><span id="stacked-attention-networks">Stacked Attention Networks</span></h2><p><strong>第一层 attention network</strong></p><p><img src="/images/san1st.png"></p><p>首先根据图像特征矩阵 <span class="math inline">\(v_I\)</span> 和问题特征向量 <span class="math inline">\(v_Q\)</span> 计算 attention map： <span class="math display">\[\begin{alignat}{3}h_A &amp;= \tanh(W_{I,A}v_I\oplus (W_{Q,A}v_Q+b_A))\\p_I &amp;= softmax(W_Ph_A+b_P)\end{alignat}\]</span> 其中，<span class="math inline">\(v_I\in R^{d\times m}\)</span>, <span class="math inline">\(d\)</span> 是图像特征的维度，<span class="math inline">\(m\)</span> 是图像区域个数；<span class="math inline">\(v_Q \in R^d\)</span>；<span class="math inline">\(W_{I, A}, W_{Q,A} \in R^{k \times d}\)</span>，<span class="math inline">\(b_A \in R^{k}\)</span>；定义 <span class="math inline">\(\oplus\)</span> 为矩阵和向量的加法，其运算规则为矩阵的每一列分别和该向量相加，所以 <span class="math inline">\(h_A \in R^{k\times m}\)</span>。<span class="math inline">\(W_P \in R^{1\times k}, b_P\in R^{1\times m}\)</span>，<span class="math inline">\(p_I \in R^{1\times m}\)</span> 为 attention vector，它每一项都是一个概率，表示该问题的答案所在某个区域的概率，或者说问了回答这个问题，注意力应该集中在哪里。</p><p>之后用 attention vector 计算 图像特征的加权和，然后与问题特征相加，得到<strong>优化的问题特征</strong>： <span class="math display">\[\begin{alignat}{3}\widehat{v}_I &amp;= \sum_ip_iv_i \\u &amp;= \hat{v}_I+v_Q\end{alignat}\]</span> 后面的每层 attention network 结构都是一样的，区别在于不再使用原始的问题特征 <span class="math inline">\(v_Q\)</span>，而是用优化后的 <span class="math inline">\(u\)</span>:</p><p><img src="/images/san2nd.png"></p><p><strong>第 k 层 attention network</strong> <span class="math display">\[\begin{alignat}{3}h_A^k &amp;= \tanh(W_{I,A}^kv_I\oplus (W_{Q,A}^ku_{k-1}+b_A^k))\\p_I^k &amp;= softmax(W_P^kh_A^k+b_P^k)\\\widehat{v}_I^k &amp;= \sum_ip_i^kv_i \\u^k &amp;= \hat{v}_I^k+u^{k-1}\end{alignat}\]</span> 作者通过实验发现，第一层 attention 可以识别问题中出现的实体，第二层则可以消除无关的，只关心与答案相关的实体，多加几层对识别效果没有明显提升。</p><p><strong>输出层</strong></p><p><img src="/images/vqa_out.png"></p><p>由于输出只是一个词，所以可以转化为分类问题，在所有候选答案里挑一个词出来： <span class="math display">\[p_{ans} = softmax(W_uu^K+b_u)\]</span> 其中 <span class="math inline">\(K\)</span> 为 attention 的层数。</p><h2><span id="可视化-attention-layer">可视化 Attention Layer</span></h2><ul><li>正确结果</li></ul><p><img src="/images/true_vqa.png"></p><ul><li>错误结果</li></ul><p><img src="/images/false_vqa.png"></p><h2><span id="总结">总结</span></h2><p>这篇文章的主要工作在于把 attention 机制应用在 Visual QA 问题中，效果卓群，可解释性强。但也有可改进的地方，如图片编码选择 ResNet 而不是 VGGNet；问题的 word embedding 采用 word2vec；对问题的编码采用 bi-LSTM 等，也许会进一步提高整体的表现。</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;blockquote&gt;
-&lt;p&gt;Zichao Yang, Xiaodong He, Jianfeng Gao , Li Deng , Alex Smola &lt;a href=&quot;https://arxiv.org/abs/1511.02274&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Stacked Attention Networks for Image Question Answering&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;这篇文章发表在CVPR2016，作者把 attention 机制应用在 Visual QA，不但能理解神经网络生成答案的 multiple resoning，而且获得了当时最好的效果。&lt;/p&gt;
-&lt;p&gt;SAN总共由三部分组成：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Image Model：用来编码图片信息&lt;/li&gt;
-&lt;li&gt;Question Moel：用来编码问题信息&lt;/li&gt;
-&lt;li&gt;Stacked Attention Networks：通过多层 attention layer 不断优化对问题的编码&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-      <category term="学习笔记" scheme="http://www.52coding.com.cn/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
-    
-    
-      <category term="Deep Learning" scheme="http://www.52coding.com.cn/tags/Deep-Learning/"/>
-    
-      <category term="Attention" scheme="http://www.52coding.com.cn/tags/Attention/"/>
-    
-      <category term="CV" scheme="http://www.52coding.com.cn/tags/CV/"/>
-    
-      <category term="CNN" scheme="http://www.52coding.com.cn/tags/CNN/"/>
-    
-      <category term="VQA" scheme="http://www.52coding.com.cn/tags/VQA/"/>
     
   </entry>
   

@@ -3,6 +3,39 @@
   
     
     <entry>
+      <title>RL - Deep Deterministic Policy Gradient (DDPG)</title>
+      <link href="/2018/11/30/RL%20-%20Deep%20Deterministic%20Policy%20Gradient/"/>
+      <url>/2018/11/30/RL%20-%20Deep%20Deterministic%20Policy%20Gradient/</url>
+      
+        <content type="html"><![CDATA[<p><a href="https://arxiv.org/abs/1509.02971" target="_blank" rel="noopener">Deep Deterministic Policy Gradient (DDPG)</a> 是由DeepMind的Lillicrap等人于2015年提出的算法，发表在ICLR 2016上。DDPG是基于<a href="http://proceedings.mlr.press/v32/silver14.pdf" target="_blank" rel="noopener">DPG</a>算法的改进，可以看作是 Actor-critic 和 <a href="https://www.52coding.com.cn/2018/11/16/RL%20-%20DQN%20and%20A3C/">DQN</a> 的结合，它同时学习一个 Q-function 和一个策略（policy）：用 Q-learning 的方法学习 Q-function，然后用 Q-function 更新策略。</p><a id="more"></a><h2><span id="dpg">DPG</span></h2><p><a href="http://proceedings.mlr.press/v32/silver14.pdf" target="_blank" rel="noopener">Deterministic Policy Gradient (DPG)</a> 是把策略梯度（policy gradient）算法扩展到确定性策略（deterministic policy）上，事实上，DPG被证明是随机策略梯度（stochastic policy gradient）的一种特殊情况。</p><blockquote><p>随机策略梯度： <span class="math display">\[\triangledown_\theta J(\pi_\theta)=\mathbb{E}_{s\sim\rho^\pi, a\sim\pi_\theta}[\triangledown_\theta\log\pi_\theta(a|s)Q^\pi(s,a)]\]</span> 其中，<span class="math inline">\(\pi_\theta\)</span> 是由参数为 <span class="math inline">\(\theta\)</span> 的函数近似的策略，<span class="math inline">\(\rho^\pi\)</span> 为策略 <span class="math inline">\(\pi_\theta\)</span> 的状态分布（state distribution）。</p></blockquote><p>大部分 model-free 的增强学习算法属于泛化的<a href="https://www.52coding.com.cn/2017/12/07/RL%20-%20Planning%20by%20Dynamic%20Programming/">策略迭代（policy iteration）</a>算法，一般分为两步：策略评估（policy evaluation） 和策略改进（ policy improvement）。策略评估通常使用 <a href="https://www.52coding.com.cn/2017/12/16/RL%20-%20Model-Free%20Prediction/#monte-carlo-learning">Monte-Carlo evaluation</a> 或 <a href="https://www.52coding.com.cn/2017/12/16/RL%20-%20Model-Free%20Prediction/#temporal-difference-learning">temporal difference learning</a> 来近似 <span class="math inline">\(Q^\pi(s, a)\)</span>。策略改进则通常通过最大化评估的 action-value 来得到：<span class="math inline">\(\mu^{k+1}(s) = \arg\max_aQ^{\mu^k}(s, a)\)</span>。</p><p>然而，在连续的动作空间（continuous action spaces）里这种最大化却是不可行的。在离散的动作空间里，我们可以为每个action计算相应 Q-value 然后进行比较；但是在连续的动作空间中，我们不可能把每个action的 Q-value 都计算出来再比较，而通过对 Q-function 求导求的方式计算最大值开销又很大。所以，取而代之的是单独用一个函数近似策略，然后<strong>用 Q-function 的梯度来改进该策略</strong>。具体来说，对于每个访问过的状态 <span class="math inline">\(s\)</span>，策略函数的参数 <span class="math inline">\(\theta^{k+1}\)</span> 根据 <span class="math inline">\(\triangledown_\theta Q^{\mu_k}(s, \mu_\theta(s))\)</span> 来更新： <span class="math display">\[\begin{align}\theta^{k+1}&amp;=\theta^k+\alpha\mathbb{E}_{s\sim\rho^{\mu^k}}[\triangledown_\theta Q^{\mu^k}(s, \mu_\theta(s))]\\&amp;= \theta^k + \alpha\mathbb{E}_{s\sim\rho^{\mu^k}}[\triangledown_\theta \mu_\theta(s)\triangledown_aQ^{\mu^k}(s, a)|_{a=\mu_\theta(s)}]\end{align}\]</span></p><h2><span id="ddpg">DDPG</span></h2><p>在 DPG 中，Q-function 是通过 Q-learning 的方式来学习的，而当使用神经网络来近似 Q-function 的时候会导致训练不稳定，DDPG 应用了 <a href="https://www.52coding.com.cn/2018/11/16/RL%20-%20DQN%20and%20A3C/#deep-q-network">DQN</a> 中的两个trick来解决不稳定的问题，也就是<strong>经验池（replay buffer）</strong>和<strong>目标网络（target network）</strong>。</p><p>具体来说，经验池 <span class="math inline">\(D\)</span> 每次探索都会存储元组 <span class="math inline">\((s, a, r, s&#39;, d)\)</span>，其中 <span class="math inline">\(d\)</span> 为一个布尔变量，如果 <code>d == True</code>，就表明 <span class="math inline">\(s&#39;\)</span> 是终止状态（terminal state）。 每次更新时都会从经验池随机采样一批数据进行更新。经验池的大小是一个需要微调的超参数：如果经验池过小的话，会导致对池内数据过拟合；如果经验池存储所有数据的话，又会放慢学习的速度。</p><p>目标网络是指用单独的网络参数来生成目标（q-target），设策略函数的参数为 <span class="math inline">\(\theta\)</span>，Q-function 的参数为 <span class="math inline">\(\phi\)</span>，则对应的目标网络参数为 <span class="math inline">\(\theta_{tag}\)</span> 和 <span class="math inline">\(\phi_{tag}\)</span>，生成的目标为： <span class="math display">\[r + \gamma(1-d)Q_{\phi_{tag}}(s&#39;, \mu_{\theta_{tag}}(s&#39;))\]</span> 所以 Q-value 端的更新公式为： <span class="math display">\[\triangledown_\phi \mathbb{E}_{s,a,r,s&#39;,d\sim D}\left[\left(Q(s,a)-(r + \gamma(1-d)Q_{\phi_{tag}}(s&#39;, \mu_{\theta_{tag}}(s&#39;)))\right)^2\right]\]</span> 与DQN不同的是，DDPG中的目标网络使用“软更新”的方式，即目标网络并不是隔一定时间后与主网络同步，而是朝着主网络缓慢移动： <span class="math display">\[\theta_{tag}\leftarrow\tau\theta+(1-\tau)\theta_{tag}\\\phi_{tag}\leftarrow\tau\phi+(1-\tau)\phi_{tag}\]</span> 其中，<span class="math inline">\(\tau \in (0, 1)\)</span> 是一个超参数，通常取值接近 1。</p><p>为了增加探索能力，训练时在选择每个动作的时候都会加上随机噪声 <span class="math inline">\(\mathcal{N}\)</span>，论文作者建议使用时间相关的 <a href="https://en.wikipedia.org/wiki/Ornstein%E2%80%93Uhlenbeck_process" target="_blank" rel="noopener">OU噪声</a>，但是最近的研究结果表明使用不相关的、zero-mean的高斯噪声效果会更好。同时为了取得更高质量的训练数据，噪声可以随着训练过程逐步减小。另外，在评测时应去掉噪声。</p><p><strong>DDPG算法</strong></p><p><img src="/images/ddpg_algo.svg"></p><h2><span id="总结">总结</span></h2><p><strong>特点</strong></p><ul><li>off-policy算法</li><li>只能用于连续的动作空间</li><li>可以看作是把DQN应用到连续动作空间</li></ul><h2><span id="references">References</span></h2><p>[1] http://proceedings.mlr.press/v32/silver14.pdf</p><p>[2] https://arxiv.org/abs/1509.02971</p><p>[3] https://spinningup.openai.com/en/latest/algorithms/ddpg.html</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 学习笔记 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Reinforcement Learning </tag>
+            
+            <tag> 增强学习 </tag>
+            
+            <tag> DQN </tag>
+            
+            <tag> Policy Gradient </tag>
+            
+            <tag> DPG </tag>
+            
+            <tag> DDPG </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>RL - Proximal Policy Optimization (PPO)</title>
       <link href="/2018/11/25/RL%20-%20PPO/"/>
       <url>/2018/11/25/RL%20-%20PPO/</url>
