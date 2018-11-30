@@ -130,8 +130,9 @@
 &amp;= \theta^k + \alpha\mathbb{E}_{s\sim\rho^{\mu^k}}[\triangledown_\theta \mu_\theta(s)\triangledown_aQ^{\mu^k}(s, a)|_{a=\mu_\theta(s)}]
 \end{align}
 \]</span></p>
+<p>可以证明，上述更新也属于策略梯度算法，这就是DPG算法的策略更新公式。</p>
 <h2><span id="ddpg">DDPG</span></h2>
-<p>在 DPG 中，Q-function 是通过 Q-learning 的方式来学习的，而当使用神经网络来近似 Q-function 的时候会导致训练不稳定，DDPG 应用了 <a href="https://www.52coding.com.cn/2018/11/16/RL%20-%20DQN%20and%20A3C/#deep-q-network">DQN</a> 中的两个trick来解决不稳定的问题，也就是<strong>经验池（replay buffer）</strong>和<strong>目标网络（target network）</strong>。</p>
+<p>DDPG改进了 Q-function 的学习方式，而策略端的更新方式和DPG相同，即如式(1)所示。在 DPG 中，Q-function 是通过 Q-learning 的方式来学习的，而当使用神经网络来近似 Q-function 的时候会导致训练不稳定，DDPG 应用了 <a href="https://www.52coding.com.cn/2018/11/16/RL%20-%20DQN%20and%20A3C/#deep-q-network">DQN</a> 中的两个trick来解决不稳定的问题，也就是<strong>经验池（replay buffer）</strong>和<strong>目标网络（target network）</strong>。</p>
 <p>具体来说，经验池 <span class="math inline">\(D\)</span> 每次探索都会存储元组 <span class="math inline">\((s, a, r, s&#39;, d)\)</span>，其中 <span class="math inline">\(d\)</span> 为一个布尔变量，如果 <code>d == True</code>，就表明 <span class="math inline">\(s&#39;\)</span> 是终止状态（terminal state）。 每次更新时都会从经验池随机采样一批数据进行更新。经验池的大小是一个需要微调的超参数：如果经验池过小的话，会导致对池内数据过拟合；如果经验池存储所有数据的话，又会放慢学习的速度。</p>
 <p>目标网络是指用单独的网络参数来生成目标（q-target），设策略函数的参数为 <span class="math inline">\(\theta\)</span>，Q-function 的参数为 <span class="math inline">\(\phi\)</span>，则对应的目标网络参数为 <span class="math inline">\(\theta_{tag}\)</span> 和 <span class="math inline">\(\phi_{tag}\)</span>，生成的目标为： <span class="math display">\[
 r + \gamma(1-d)Q_{\phi_{tag}}(s&#39;, \mu_{\theta_{tag}}(s&#39;))
