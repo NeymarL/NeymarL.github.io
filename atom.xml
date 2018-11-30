@@ -410,9 +410,9 @@
       <category term="学习笔记" scheme="http://www.52coding.com.cn/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     
     
-      <category term="Reinforcement Learning" scheme="http://www.52coding.com.cn/tags/Reinforcement-Learning/"/>
-    
       <category term="Deep Learning" scheme="http://www.52coding.com.cn/tags/Deep-Learning/"/>
+    
+      <category term="Reinforcement Learning" scheme="http://www.52coding.com.cn/tags/Reinforcement-Learning/"/>
     
       <category term="AlphaGo" scheme="http://www.52coding.com.cn/tags/AlphaGo/"/>
     
@@ -441,9 +441,9 @@
       <category term="学习笔记" scheme="http://www.52coding.com.cn/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     
     
-      <category term="Reinforcement Learning" scheme="http://www.52coding.com.cn/tags/Reinforcement-Learning/"/>
-    
       <category term="Deep Learning" scheme="http://www.52coding.com.cn/tags/Deep-Learning/"/>
+    
+      <category term="Reinforcement Learning" scheme="http://www.52coding.com.cn/tags/Reinforcement-Learning/"/>
     
       <category term="AlphaGo" scheme="http://www.52coding.com.cn/tags/AlphaGo/"/>
     
@@ -554,9 +554,9 @@ Q_\theta(s, a)\approx Q^\pi(s, a)
       <category term="学习笔记" scheme="http://www.52coding.com.cn/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     
     
-      <category term="Reinforcement Learning" scheme="http://www.52coding.com.cn/tags/Reinforcement-Learning/"/>
-    
       <category term="Deep Learning" scheme="http://www.52coding.com.cn/tags/Deep-Learning/"/>
+    
+      <category term="Reinforcement Learning" scheme="http://www.52coding.com.cn/tags/Reinforcement-Learning/"/>
     
       <category term="增强学习" scheme="http://www.52coding.com.cn/tags/%E5%A2%9E%E5%BC%BA%E5%AD%A6%E4%B9%A0/"/>
     
