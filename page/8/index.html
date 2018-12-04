@@ -92,6 +92,67 @@
 
   
   
+  <h3 class="article-title"><a href="/2016/01/17/记录：在 Docker 上配置 PHP 应用/"><span>
+        记录：在 Docker 上配置 PHP 应用</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/01/17/记录：在 Docker 上配置 PHP 应用/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-01-16T16:16:06.000Z">
+          2016-01-17
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <blockquote>
+<p><strong>什么是Docker</strong> docker的英文本意是码头工人，也就是搬运工，这种搬运工搬运的是集装箱（Container），集装箱里面装的可不是商品货物，而是任意类型的App，Docker把App（叫Payload）装在Container内，通过Linux Container技术的包装将App变成一种标准化的、可移植的、自管理的组件，这种组件可以在你的latop上开发、调试、运行，最终非常方便和一致地运行在production环境下。</p>
+</blockquote>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/踩坑现场/">踩坑现场</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/后台开发/">后台开发</a><a href="/tags/PHP/">PHP</a><a href="/tags/Docker/">Docker</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+  <article>
+
+  
+  
   <h3 class="article-title"><a href="/2016/01/10/IP 浅析/"><span>
         TCP/IP 浅析</span></a></h3>
   
@@ -650,66 +711,6 @@
       <span class="post-tags">
         <i class="icon-tags"></i>
         <a href="/tags/后台开发/">后台开发</a><a href="/tags/PHP/">PHP</a>
-      </span>
-      
-
-    </div>
-
-    
-  </div>
-</article>
-
-
-  <article>
-
-  
-  
-  <h3 class="article-title"><a href="/2015/12/19/Mysqli 使用/"><span>
-        Mysqli 使用</span></a></h3>
-  
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2015/12/19/Mysqli 使用/" rel="bookmark">
-        <time class="entry-date published" datetime="2015-12-19T10:35:40.000Z">
-          2015-12-19
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-      <h3 id="连接数据库并获取相关信息">连接数据库并获取相关信息</h3>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">$mysqli=@<span class="keyword">new</span> mysqli(<span class="string">"localhost"</span>, <span class="string">"root"</span>, <span class="string">""</span>, <span class="string">"mysql"</span>);</span><br><span class="line"><span class="comment">//如果连接错误</span></span><br><span class="line"><span class="keyword">if</span>(mysqli_connect_errno())&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"连接数据库失败："</span>.mysqli_connect_error();</span><br><span class="line">    $mysqli=<span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">exit</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//获取当前字符集</span></span><br><span class="line"><span class="keyword">echo</span> $mysqli-&gt;character_set_name().<span class="string">"&lt;br&gt;"</span>;</span><br><span class="line"><span class="comment">//获取客户端信息</span></span><br><span class="line"><span class="keyword">echo</span> $mysqli-&gt;get_client_info().<span class="string">"&lt;br&gt;"</span>;</span><br><span class="line"><span class="comment">//获取mysql主机信息</span></span><br><span class="line"><span class="keyword">echo</span> $mysqli-&gt;host_info.<span class="string">"&lt;br&gt;"</span>;</span><br><span class="line"><span class="comment">//获取服务器信息</span></span><br><span class="line"><span class="keyword">echo</span> $mysqli-&gt;server_info.<span class="string">"&lt;br&gt;"</span>;</span><br><span class="line"><span class="comment">//获取服务器版本</span></span><br><span class="line"><span class="keyword">echo</span> $mysqli-&gt;server_version.<span class="string">"&lt;br&gt;"</span>;</span><br><span class="line"><span class="comment">//关闭数据库连接</span></span><br><span class="line">$mysqli-&gt;close();</span><br></pre></td></tr></table></figure>
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-      
-      
-
-      <span class="post-categories">
-        <i class="icon-categories"></i>
-        <a href="/categories/学习笔记/">学习笔记</a>
-      </span>
-      
-
-      
-      
-
-      <span class="post-tags">
-        <i class="icon-tags"></i>
-        <a href="/tags/后台开发/">后台开发</a><a href="/tags/MySQL/">MySQL</a><a href="/tags/PHP/">PHP</a>
       </span>
       
 
