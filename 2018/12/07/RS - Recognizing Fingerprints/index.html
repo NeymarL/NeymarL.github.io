@@ -194,12 +194,12 @@ V_2(i,j)=\sum_{u=i-\frac{w}2}^{i+\frac{w}2}\sum_{v=j-\frac{w}2}^{j+\frac{w}2}(I_
 <p>Let <span class="math inline">\(G\)</span> be the normalized image and <span class="math inline">\(O\)</span> be the orientation image (field). For estimating the ridge frequency <span class="math inline">\(Ω\)</span> image,</p>
 <ul>
 <li><p>Step 1: divide <span class="math inline">\(G\)</span> into blocks of size <span class="math inline">\(w \times w\)</span>.</p></li>
-<li><p>Step 2: for each block centered at pixel <span class="math inline">\((i, j)\)</span>, compute an oriented window of size <span class="math inline">\(w \times l\)</span> that is defined in the ridge coordinate system <span class="math inline">\((k, d)\)</span>.</p></li>
+<li><p>Step 2: for each block centered at pixel <span class="math inline">\((i, j)\)</span>, compute an oriented window of size <span class="math inline">\(w \times l\)</span> that is defined in the ridge coordinate system <span class="math inline">\((k, d)\)</span>. <img src="/images/ridgesys.png"></p></li>
 <li><p>Step 3: for each block centered at pixel <span class="math inline">\((i, j)\)</span>, compute the x-signature, <span class="math inline">\(X[0], X[1], ..., X[l-1]\)</span>, of the ridges and valleys within the oriented window, where <span class="math display">\[
 X[k]=\frac{1}w\sum_{d=0}^{w-1}G(u,v)\\
 u=i+(d-\frac{w}2)\cos O(i,j)+(k+\frac{l}2)\sin O(i,j)\\
 v=i+(d-\frac{w}2)\sin O(i,j)+(\frac{l}2-k)\cos O(i,j)
-\]</span></p></li>
+\]</span> <img src="/images/w2blabla.png"> <img src="/images/orientationdsa.png"></p></li>
 </ul>
 <p>The x-signature forms a discrete sinusoidal-shape wave, which has the same frequency as that of the ridges and valleys in the oriented window. Therefore, the <strong>frequency of ridges and valleys can be estimated from the x-signature</strong>.</p>
 <p>Let <span class="math inline">\(T(i, j)\)</span> be the average number of pixels between two consecutive peaks in the x-signature, then the ridge frequency <span class="math inline">\(Ω(i, j)\)</span> is computed as <span class="math display">\[
