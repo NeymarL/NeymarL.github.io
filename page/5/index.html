@@ -92,6 +92,176 @@
 
   
   
+  <h3 class="article-title"><a href="/2017/01/08/RFID/"><span>
+        射频识别技术（RFID）</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/01/08/RFID/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-01-08T04:08:47.000Z">
+          2017-01-08
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p><strong>目录</strong></p>
+<!-- toc -->
+<ul>
+<li><a href="#第一章-物联网识别技术">第一章 物联网识别技术</a>
+<ul>
+<li><a href="#物联网基本概念">物联网基本概念</a></li>
+<li><a href="#物联网识别技术">物联网识别技术</a></li>
+<li><a href="#传统自动识别技术">传统自动识别技术</a></li>
+</ul></li>
+<li><a href="#第二章-条形码基本概念">第二章 条形码基本概念</a>
+<ul>
+<li><a href="#条形码barcode基本知识">条形码(Barcode)基本知识</a></li>
+<li><a href="#商品条码">商品条码</a>
+<ul>
+<li><a href="#ean-13码">EAN-13码</a></li>
+<li><a href="#ean-8码">EAN-8码</a></li>
+<li><a href="#upc-a">UPC-A</a></li>
+<li><a href="#upc-e码">UPC-E码</a></li>
+<li><a href="#库德巴条码">库德巴条码</a></li>
+<li><a href="#128条码">128条码</a></li>
+</ul></li>
+<li><a href="#isbn码和issn码">ISBN码和ISSN码</a>
+<ul>
+<li><a href="#isbn">ISBN</a></li>
+<li><a href="#issn">ISSN</a></li>
+</ul></li>
+<li><a href="#快速响应矩阵码">快速响应矩阵码</a></li>
+</ul></li>
+<li><a href="#第三章-条码识别技术及应用">第三章 条码识别技术及应用</a></li>
+<li><a href="#第四章-射频识别技术">第四章 射频识别技术</a>
+<ul>
+<li><a href="#rfid系统组成及特点">RFID系统组成及特点</a></li>
+<li><a href="#rfid技术的理论基础">RFID技术的理论基础</a>
+<ul>
+<li><a href="#数据传输原理">数据传输原理</a></li>
+<li><a href="#能量传输原理">能量传输原理</a></li>
+<li><a href="#数据传输编码">数据传输编码</a></li>
+<li><a href="#数据校验方法">数据校验方法</a></li>
+</ul></li>
+<li><a href="#rfid系统工程">RFID系统工程</a>
+<ul>
+<li><a href="#rfid系统性能指标">RFID系统性能指标</a></li>
+</ul></li>
+<li><a href="#rfid技术的应用发展面临的问题">RFID技术的应用发展面临的问题</a></li>
+</ul></li>
+<li><a href="#第五章-电子标签">第五章 电子标签</a>
+<ul>
+<li><a href="#电子标签的组成及工作原理">电子标签的组成及工作原理</a>
+<ul>
+<li><a href="#mifare-1射频卡的结构">Mifare 1射频卡的结构</a></li>
+<li><a href="#mifare-1射频卡的特点">Mifare 1射频卡的特点</a></li>
+<li><a href="#mifare-1射频卡的存储结构">Mifare 1射频卡的存储结构</a></li>
+</ul></li>
+<li><a href="#电子标签种类">电子标签种类</a>
+<ul>
+<li><a href="#按能量来源分类">按能量来源分类</a></li>
+<li><a href="#按工作频率分类">按工作频率分类</a></li>
+<li><a href="#按标签读写方式分类">按标签读写方式分类</a></li>
+<li><a href="#按标签用途分类">按标签用途分类</a></li>
+<li><a href="#按标签功能分类">按标签功能分类</a></li>
+</ul></li>
+<li><a href="#双频rfid系统">双频RFID系统</a>
+<ul>
+<li><a href="#有源系统">有源系统</a></li>
+<li><a href="#无源系统">无源系统</a></li>
+<li><a href="#双频rfid系统的应用">双频RFID系统的应用</a></li>
+</ul></li>
+<li><a href="#电子标签协议">电子标签协议</a></li>
+<li><a href="#电子标签的天线">电子标签的天线</a></li>
+<li><a href="#电子标签信息的写入方式">电子标签信息的写入方式</a></li>
+<li><a href="#电子标签性能因素">电子标签性能因素</a></li>
+</ul></li>
+<li><a href="#第六章-读写器">第六章 读写器</a>
+<ul>
+<li><a href="#读写器的工作原理">读写器的工作原理</a>
+<ul>
+<li><a href="#读写器工作流程">读写器工作流程</a></li>
+</ul></li>
+<li><a href="#读写器天线">读写器天线</a>
+<ul>
+<li><a href="#读写器的天线种类">读写器的天线种类</a></li>
+</ul></li>
+<li><a href="#读写器的发展趋势">读写器的发展趋势</a></li>
+<li><a href="#作业">作业</a></li>
+</ul></li>
+<li><a href="#第七章-rfid技术标准体系">第七章 RFID技术标准体系</a>
+<ul>
+<li><a href="#rfid标准体系">RFID标准体系</a></li>
+</ul></li>
+<li><a href="#第八章-rfid系统关键技术">第八章 RFID系统关键技术</a>
+<ul>
+<li><a href="#rfid系统的安全技术">RFID系统的安全技术</a>
+<ul>
+<li><a href="#rfid系统的安全需求">RFID系统的安全需求</a></li>
+<li><a href="#rfid安全技术">RFID安全技术</a></li>
+</ul></li>
+<li><a href="#多标签识别技术">多标签识别技术</a></li>
+<li><a href="#多读写器防碰撞技术">多读写器防碰撞技术</a></li>
+</ul></li>
+<li><a href="#第九章-rfid应用系统的构建">第九章 RFID应用系统的构建</a>
+<ul>
+<li><a href="#电子标签选择">电子标签选择</a></li>
+<li><a href="#读写器选择">读写器选择</a></li>
+</ul></li>
+<li><a href="#第十章-rfid技术应用">第十章 RFID技术应用</a>
+<ul>
+<li><a href="#基于rfid的典型物联网系统epc">基于RFID的典型物联网系统EPC</a></li>
+</ul></li>
+<li><a href="#电子钱包">电子钱包</a></li>
+<li><a href="#rfid术语">RFID术语</a></li>
+</ul>
+<!-- tocstop -->
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/本科课程/">本科课程</a><a href="/tags/物联网/">物联网</a><a href="/tags/RFID/">RFID</a><a href="/tags/QR-Code/">QR-Code</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+  <article>
+
+  
+  
   <h3 class="article-title"><a href="/2017/01/06/操作系统/"><span>
         嵌入式操作系统</span></a></h3>
   
@@ -717,83 +887,6 @@
       <span class="post-tags">
         <i class="icon-tags"></i>
         <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/SVM/">SVM</a>
-      </span>
-      
-
-    </div>
-
-    
-  </div>
-</article>
-
-
-  <article>
-
-  
-  
-  <h3 class="article-title"><a href="/2016/09/08/提升方法：GBDT , XGBOOST, AdaBoost/"><span>
-        提升方法：GBDT , XGBOOST &amp; AdaBoost</span></a></h3>
-  
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2016/09/08/提升方法：GBDT , XGBOOST, AdaBoost/" rel="bookmark">
-        <time class="entry-date published" datetime="2016-09-08T11:42:06.000Z">
-          2016-09-08
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-      <blockquote>
-<p><strong>提升</strong> (<em>boosting</em>) 方法是一种常用的统计学习方法，应用广泛且有效，在分类问题中，它通过改变训练样本的权重，学习多个分类器，并将这些分类器进行线性组合，提高分类器性能。</p>
-</blockquote>
-<!-- toc -->
-<ul>
-<li><a href="#gbdt">GBDT</a>
-<ul>
-<li><a href="#提升的概念">提升的概念</a></li>
-<li><a href="#提升算法">提升算法</a></li>
-<li><a href="#梯度提升决策树-gbdt">梯度提升决策树 GBDT</a></li>
-</ul></li>
-<li><a href="#xgboost">XGBOOST</a></li>
-<li><a href="#adaboost">AdaBoost</a>
-<ul>
-<li><a href="#误差分析">误差分析</a></li>
-</ul></li>
-<li><a href="#参考文献">参考文献</a></li>
-</ul>
-<!-- tocstop -->
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-      
-      
-
-      <span class="post-categories">
-        <i class="icon-categories"></i>
-        <a href="/categories/学习笔记/">学习笔记</a>
-      </span>
-      
-
-      
-      
-
-      <span class="post-tags">
-        <i class="icon-tags"></i>
-        <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Boosting/">Boosting</a><a href="/tags/GBDT/">GBDT</a><a href="/tags/xgboost/">xgboost</a>
       </span>
       
 
