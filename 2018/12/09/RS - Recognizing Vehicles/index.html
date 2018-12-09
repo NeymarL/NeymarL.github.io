@@ -133,8 +133,8 @@
 <p>For vehicle detection and tracking and intelligent transportation systems, lane marking detection is one of the key steps. Lane markings can be detected based on the camera inverse perspective mapping (IPM) and the assumption that the lane markings are represented by almost vertical bright lines of constant width, surrounded by a darker background.</p>
 <p>The lanes can then be detected by using the camera <strong>inverse perspective mapping (IPM)</strong> and the <strong>Canny edge detector</strong>.</p>
 <p><strong>Inverse perspective mapping</strong></p>
-<p><img src="/Users/liuhe/Documents/Recognition%20System/review/images/impres.png"></p>
-<p><img src="/Users/liuhe/Documents/Recognition%20System/review/images/ipmreason.png"></p>
+<p><img src="/images/impres.png"></p>
+<p><img src="/images/ipmreason.png"></p>
 <h3><span id="canny-edge-detector">Canny edge detector</span></h3>
 <p><a href="http://en.wikipedia.org/wiki/Canny_edge_detector" target="_blank" rel="noopener">Canny edge detector</a> is one of the most popular detectors of edge pixels. The edge detection process serves to simplify the analysis of images by drastically <strong>reducing the amount of data to be processed</strong>, while at the same time <strong>preserving useful structural information</strong> about object boundaries.</p>
 <p>There are three common criteria relevant to edge detector performance.</p>
@@ -143,9 +143,9 @@
 <li>The edge points should be well localized. That is, the distance between the points marked by the detector and the true edge center should be minimized.</li>
 <li>The last requirement is to circumvent the possibility of multiple responses to a single edge.</li>
 </ul>
-<p><img src="/Users/liuhe/Documents/Recognition%20System/review/images/cedbalala.jpg"></p>
+<p><img src="/images/cedbalala.jpg"></p>
 <p>In the figure above, (a) is a noisy step edge; (b) is a difference of boxes operator; (c) is the output of filtering by box operator; (d) is the first derivative of Gaussian operator; and (e) is the first derivative of Gaussian applied to the edge.</p>
-<p><img src="/Users/liuhe/Documents/Recognition%20System/review/images/cannysd.png"></p>
+<p><img src="/images/cannysd.png"></p>
 <p>The <strong>edge center</strong> is marked as <strong>red circle</strong> at a local maximum in the output of the filter responses. Within the region of the edge, the boxes operator exhibits more local maxima than the Gaussian operator. Therefore, <strong>the Gaussian operator is better</strong> than the boxes operator in this example.</p>
 <p><strong>The three performance criteria</strong></p>
 <ol type="1">
@@ -170,7 +170,7 @@ f(x)=a_1e^{\alpha x}\sin\omega x+a_2e^{\alpha x}\cos\omega x+a_3e^{-\alpha x}\si
 G(x)=\exp(-\frac{x^2}{2\sigma^2})\\
 f(x)=G&#39;(x)=-\frac{x}{\sigma^2}\exp(-\frac{x^2}{2\sigma^2})
 \]</span> For 2D, the solution proposed by Canny amounts to convolving the initial image with a Gaussian function followed by computation of the derivatives in <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> of the result.</p>
-<p><img src="/Users/liuhe/Documents/Recognition%20System/review/images/firstderofgaus.png"></p>
+<p><img src="/images/firstderofgaus.png"></p>
 <p>There are three main steps in the Canny edge detection</p>
 <ol type="1">
 <li><p>Gradient calculation</p>
@@ -182,7 +182,7 @@ M=\sqrt{I_x^2+I_y^2}\approx |I_x|+|I_y|
 <li><p>Non-maximum suppression</p>
 <p>keep local maximum, set others to zero.</p></li>
 <li><p>Hysteresis thresholding</p>
-<p><img src="/Users/liuhe/Documents/Recognition%20System/review/images/hyposisthres.png"></p></li>
+<p><img src="/images/hyposisthres.png"></p></li>
 </ol>
 <h2><span id="vehicle-detection-based-on-symmetry">Vehicle Detection based on Symmetry</span></h2>
 <p>Vehicle detection is based on the assumption that the rear or frontal views of the vehicles are generally symmetric; can be characterized by a rectangular bounding box which satisfies specific aspect ratio constraints and is placed in a specific region of the image, e.g., within lanes.</p>
@@ -193,23 +193,23 @@ M=\sqrt{I_x^2+I_y^2}\approx |I_x|+|I_y|
 <li>Step 3: Once the symmetry axis has been detected, the lower part (the two bottom corners) of a rectangular bounding box is detected.</li>
 <li>The top horizontal limit of the vehicle is then searched according to the pre-defined aspect ratio.</li>
 </ol>
-<p><img src="/Users/liuhe/Documents/Recognition%20System/review/images/vdbasedonsys.png"></p>
+<p><img src="/images/vdbasedonsys.png"></p>
 <p>Vertical and horizontal binary edges can help solve the problems of strong reflection areas in the vehicle images. The analysis of symmetry produces symmetry maps for gray-level intensity, edge (total), horizontal edge, vertical edge and total (combined) symmetry. The symmetry axis can be found from the total symmetry map.</p>
 <p><strong>Bounding box detection</strong></p>
 <p>After detecting the symmetry axis, the width of the symmetrical region is checked for the presence of two corners representing the bottom of the bounding box around the vehicle.</p>
 <p>Once the two corners are detected, the top side of the rectangle box can be detected by searching.</p>
-<p><img src="/Users/liuhe/Documents/Recognition%20System/review/images/boundingboxde.png"></p>
+<p><img src="/images/boundingboxde.png"></p>
 <h2><span id="visual-saliency-for-detection-and-tracking">Visual Saliency For Detection and Tracking</span></h2>
 <p><strong>Visual saliency</strong> refers to the idea that certain parts of a scene are pre-attentively distinctive (pop-out) and create some form of immediate significant visual arousal within the early stages of the <strong>Human Visual System (HVS)</strong>. The figure below is an example.</p>
 <p>In image analysis, an <strong>edge</strong> is a pop-out region (<strong>region of saliency</strong>) since the edge is more visually significant than the other parts of the image.</p>
-<p><img src="/Users/liuhe/Documents/Recognition%20System/review/images/vsexamples.png"></p>
+<p><img src="/images/vsexamples.png"></p>
 <p>The salient points are literally the points on the object which are almost unique. These points maximize the discrimination between objects. The visual saliency is defined in terms of <strong>local signal complexity</strong>.</p>
 <p><strong>Shannon entropy</strong> of local attributes (called <strong>local entropy</strong>) is <span class="math display">\[
 H_{D,Rx}(x)=-\sum_{i\in D}P_{D,Rx}(x,d_i)\log_2P_{D,Rx}(x,d_i)
 \]</span> where <span class="math inline">\(x\)</span> is point location, <span class="math inline">\(Rx\)</span> is local neighborhood at <span class="math inline">\(x\)</span>, <span class="math inline">\(D\)</span> is descriptor (e.g. intensity), and <span class="math inline">\(P_{D,Rx}(x,d_i)\)</span> is histogram value at <span class="math inline">\(x\)</span>.</p>
-<p><img src="/Users/liuhe/Documents/Recognition%20System/review/images/entropylsakdjad.jpg"></p>
+<p><img src="/images/entropylsakdjad.jpg"></p>
 <p>Below are sample frames from the processed sequences using a <strong>fixed scale</strong> based on local entropy. Red square boxes represent the most salient icons or parts of the image. The size of the local window or scale and threshold used were selected manually to give the most satisfactory results.</p>
-<p><img src="/Users/liuhe/Documents/Recognition%20System/review/images/saliegsdas.png"></p>
+<p><img src="/images/saliegsdas.png"></p>
 <ul>
 <li>Problem: the scale is fixed and global. For example, the scale is inappropriate for the pedestrians and the road markings in DT sequence.</li>
 <li>Problem: Small salient regions are not picked up. Highly textured regions, e.g., large intensity variation regions, are picked up. For example, trees and bushes in Vicky sequence.</li>
@@ -232,22 +232,22 @@ s:\frac{\partial^2H_D(s,x)}{\partial s^2}&lt;0
 \]</span></p></li>
 <li><p>Detection performance can be further improved if change of histogram is considered.</p></li>
 </ul>
-<p><img src="/Users/liuhe/Documents/Recognition%20System/review/images/salenscaleg.png"></p>
+<p><img src="/images/salenscaleg.png"></p>
 <p><strong>Vehicle Detection by using AdaBoost</strong></p>
 <p>Vehicles can be detected by using <a href="https://www.52coding.com.cn/2018/12/06/RS%20-%20Recognizing%20Faces/#adaboost">AdaBoost</a>.</p>
-<p><img src="/Users/liuhe/Documents/Recognition%20System/review/images/vehildabboo.png"></p>
+<p><img src="/images/vehildabboo.png"></p>
 <p>By using the AdaBoost, vehicles in their lateral view can be detected in real time.</p>
 <p><strong>Vehicle Recognition</strong></p>
 <p>After vehicle detection, the vehicle can be recognition by using PCA and classification methods, e.g., k-NN or Bayesian methods.</p>
 <h2><span id="application-examples">Application Examples</span></h2>
 <p><strong>Vehicle counting in traffic surveillance</strong></p>
-<p><img src="/Users/liuhe/Documents/Recognition%20System/review/images/survelleg.png"></p>
+<p><img src="/images/survelleg.png"></p>
 <p><strong>Traffic jam detection and alarming</strong></p>
-<p><img src="/Users/liuhe/Documents/Recognition%20System/review/images/trafficjamsdeg.png"></p>
+<p><img src="/images/trafficjamsdeg.png"></p>
 <p><strong>Abnormal vehicle behavior detection</strong></p>
-<p><img src="/Users/liuhe/Documents/Recognition%20System/review/images/abnormaldetec.png"></p>
+<p><img src="/images/abnormaldetec.png"></p>
 <p><strong>Target tracking in night</strong></p>
-<p><img src="/Users/liuhe/Documents/Recognition%20System/review/images/targetrackinni.png"></p>
+<p><img src="/images/targetrackinni.png"></p>
 
       
     </div>
