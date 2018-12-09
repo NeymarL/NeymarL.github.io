@@ -125,8 +125,7 @@
 <li><a href="#marr-hildreth-edge-detector">Marr-Hildreth Edge Detector</a></li>
 </ul></li>
 <li><a href="#scale-invariant-feature-transform-sift">Scale Invariant Feature Transform (SIFT)</a></li>
-<li><a href="#visual-saliency-and-local-entropy">Visual Saliency and Local Entropy</a></li>
-<li><a href="#corner-detector">Corner Detector</a></li>
+<li><a href="#harris-corner-detector">Harris Corner Detector</a></li>
 </ul>
 <!-- tocstop -->
 <a id="more"></a>
@@ -298,10 +297,66 @@ m(x,y)=\sqrt{(L(x+1,y)-L(x-1,y))^2+(L(x,y+1)-L(x,y-1))^2}\\
 <p>Matlab Implementation</p>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">% num = match(image1, image2)</span></span><br><span class="line"><span class="comment">%</span></span><br><span class="line"><span class="comment">% This function reads two images, finds their SIFT features, and</span></span><br><span class="line"><span class="comment">%   displays lines connecting the matched keypoints.  A match is accepted</span></span><br><span class="line"><span class="comment">%   only if its distance is less than distRatio times the distance to the</span></span><br><span class="line"><span class="comment">%   second closest match.</span></span><br><span class="line"><span class="comment">% It returns the number of matches displayed.</span></span><br><span class="line"><span class="comment">%</span></span><br><span class="line"><span class="comment">% Example: match('scene.pgm','book.pgm');</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">num</span> = <span class="title">match</span><span class="params">(image1, image2)</span></span></span><br><span class="line"><span class="comment">% Find SIFT keypoints for each image</span></span><br><span class="line">[im1, des1, loc1] = sift(image1);</span><br><span class="line">[im2, des2, loc2] = sift(image2);</span><br><span class="line"><span class="comment">% For efficiency in Matlab, it is cheaper to compute dot products between</span></span><br><span class="line"><span class="comment">%  unit vectors rather than Euclidean distances.  Note that the ratio of</span></span><br><span class="line"><span class="comment">%  angles (acos of dot products of unit vectors) is a close approximation</span></span><br><span class="line"><span class="comment">%  to the ratio of Euclidean distances for small angles.</span></span><br><span class="line"><span class="comment">%</span></span><br><span class="line"><span class="comment">% distRatio: Only keep matches in which the ratio of vector angles from the</span></span><br><span class="line"><span class="comment">%   nearest to second nearest neighbor is less than distRatio.</span></span><br><span class="line">distRatio = <span class="number">0.6</span>;</span><br><span class="line"><span class="comment">% For each descriptor in the first image, select its match to second image.</span></span><br><span class="line">des2t = des2';</span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span> : <span class="built_in">size</span>(des1,<span class="number">1</span>)</span><br><span class="line">    dotprods = des1(<span class="built_in">i</span>,:) * des2t; <span class="comment">% compute orientation of des1[i] and des2[j] for all j</span></span><br><span class="line">    [vals, indx] = <span class="built_in">sort</span>(<span class="built_in">acos</span>(dotprods)); <span class="comment">% Take inverse cosine and sort results</span></span><br><span class="line">    <span class="comment">% Check if nearest neighbor has angle less than distRatio times 2nd.</span></span><br><span class="line">    <span class="keyword">if</span> (vals(<span class="number">1</span>) &lt; distRatio * vals(<span class="number">2</span>))</span><br><span class="line">      match(<span class="built_in">i</span>) = indx(<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">      match(<span class="built_in">i</span>) = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
 <p><img src="/images/IMG_DAD55EC9C383-1.jpg"></p>
-<h2><span id="visual-saliency-and-local-entropy">Visual Saliency and Local Entropy</span></h2>
-<p>To be continued...</p>
-<h2><span id="corner-detector">Corner Detector</span></h2>
-<p>To be continued...</p>
+<h2><span id="harris-corner-detector">Harris Corner Detector</span></h2>
+<p><strong>Basic Idea</strong></p>
+<p>We should easily recognize the point by looking at intensity values within a small window. hifting the window in any direction should yield a large change in appearance.</p>
+<p><img src="/images/cornersad1.png"></p>
+<p>Harris corner detector gives a mathematical approach for determining which case holds.</p>
+<p>Change of intensity for the shift <span class="math inline">\([u, v]\)</span>: <span class="math display">\[
+E(u,v)=\sum_{x,y}w(x,y)[I(x+u,y+v)-I(x,y)]
+\]</span> where <span class="math inline">\(w(x,y)\)</span> is window function.</p>
+<p>For nearly constant patches, this will be near 0. For very distinctive patches, this will be larger. Hence... we want patches where <span class="math inline">\(E(u,v)\)</span> is LARGE.</p>
+<p><img src="/images/harriasequ.png"></p>
+<p>For small shifts <span class="math inline">\([u, v]\)</span>, we have a bilinear approximation: <span class="math display">\[
+E(u,v)\approx [u,v]M[u,v]^T
+\]</span> where <span class="math inline">\(M\)</span> is a 2x2 matrix computed from image derivatives: <span class="math display">\[
+M=\sum_{x,y}w(x,y)\begin{bmatrix}
+I_x^2      &amp; I_xI_y      \\
+I_xI_y      &amp; I_y^2
+\end{bmatrix}
+\]</span> Treat gradient vectors as a set of <span class="math inline">\((dx,dy)\)</span> points with a center of mass defined as being at <span class="math inline">\((0,0)\)</span>. Fit an ellipse to that set of points via scatter matrix.</p>
+<p><img src="/images/harrianaly.png"></p>
+<p><img src="/images/harrrieclips.png"></p>
+<p>Measure of corner response: <span class="math display">\[
+R=Det(M)-k(Trace(M))^2
+\]</span> where <span class="math display">\[
+Det(M)=\lambda_1\lambda_2\\
+Trace(M)=\lambda_1+\lambda_2
+\]</span> According to <span class="math inline">\(R\)</span>, we can detect corner:</p>
+<p><img src="/images/harrieres.png"></p>
+<p><span class="math inline">\(R\)</span> depends only on eigenvalues of <span class="math inline">\(M\)</span>. As we can see from figure above,</p>
+<ul>
+<li><span class="math inline">\(R\)</span> is large for a corner.</li>
+<li><span class="math inline">\(R\)</span> is negative with large magnitude for an edge</li>
+<li><span class="math inline">\(|R|\)</span> is small for a flat region</li>
+</ul>
+<p><strong>Harris Corner Detection Algorithm</strong></p>
+<ol type="1">
+<li><p>Compute <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> derivatives of image: <span class="math display">\[
+I_x=G_\sigma^x\ast I\\
+I_y=G_\sigma^y\ast I
+\]</span></p></li>
+<li><p>Compute products of derivatives at every pixel: <span class="math display">\[
+I_x^2=I_x\cdot I_x\\
+I_y^2=I_y\cdot I_y\\
+I_{xy}=I_x\cdot I_y
+\]</span></p></li>
+<li><p>Compute the sums of the products of derrivatives at each pixel: <span class="math display">\[
+S_x^2=G_\sigma&#39;\ast I_x^2\\
+S_y^2=G_\sigma&#39;\ast I_y^2\\
+S_{xy}=G_\sigma&#39;\ast I_{xy}
+\]</span></p></li>
+<li><p>Define at each pixel <span class="math inline">\((x,y)\)</span> the matrix: <span class="math display">\[
+M(x,y)=\begin{bmatrix}
+S_x^2(x,y)      &amp; S_{xy}(x,y)      \\
+S_{xy}(x,y)     &amp; S_y^2(x,y)
+\end{bmatrix}
+\]</span></p></li>
+<li><p>Compute the response of the detector at each pixel: <span class="math display">\[
+R=Det(M)-k(Trace(M))^2
+\]</span></p></li>
+<li><p>Threshold of value of <span class="math inline">\(R\)</span>. Compute nonmax suppression.</p></li>
+</ol>
 
       
     </div>
