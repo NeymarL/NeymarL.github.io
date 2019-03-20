@@ -92,6 +92,65 @@
 
   
   
+  <h3 class="article-title"><a href="/2018/11/25/RL - PPO/"><span>
+        RL - Proximal Policy Optimization (PPO)</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2018/11/25/RL - PPO/" rel="bookmark">
+        <time class="entry-date published" datetime="2018-11-25T14:00:09.000Z">
+          2018-11-25
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p><a href="https://arxiv.org/abs/1707.06347" target="_blank" rel="noopener">Proximal Policy Optimization (PPO, PPO-Clip, PPO-Penalty)</a> 是由<a href="https://www.52coding.com.cn/2018/11/22/RL%20-%20TRPO/">TRPO</a>的作者Schulman等人于2017年提出的策略梯度类算法。PPO算法的思路和TRPO一致，都是想在优化时采取尽可能大的步幅但又不能太大以至于产生崩坏。相比于比TRPO，PPO实现起来更简单，泛化能力更强，可以使用随机梯度下降（SGD）进行优化。</p>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Reinforcement-Learning/">Reinforcement Learning</a><a href="/tags/增强学习/">增强学习</a><a href="/tags/Policy-Gradient/">Policy Gradient</a><a href="/tags/PPO/">PPO</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+  <article>
+
+  
+  
   <h3 class="article-title"><a href="/2018/11/22/RL - TRPO/"><span>
         RL - Trust Region Policy Optimization (TRPO)</span></a></h3>
   
@@ -682,66 +741,6 @@
 <p>围棋起源于古代中国，是世界上最古老的棋类运动之一。在宋代的《梦溪笔谈》中探讨了围棋的局数变化数目，作者沈括称“大约连书万字四十三个，即是局之大数”，意思是说变化数目要写43个万字。根据围棋规则，没有气的子不能存活，扣除这些状态后的合法状态约有 <span class="math inline">\(2.08×10^{170}\)</span> 种。Robertson 与 Munro 在1978年证得围棋是一种 PSPACE-hard 的问题，其必胜法之记忆计算量在<span class="math inline">\(10^{600}\)</span> 以上，这远远超过可观测宇宙的原子总数 <span class="math inline">\(10^{75}\)</span>，可见围棋对传统的搜索方法是非常有挑战的。
       
     </p></div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-      
-      
-
-      <span class="post-categories">
-        <i class="icon-categories"></i>
-        <a href="/categories/学习笔记/">学习笔记</a>
-      </span>
-      
-
-      
-      
-
-      <span class="post-tags">
-        <i class="icon-tags"></i>
-        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Reinforcement-Learning/">Reinforcement Learning</a><a href="/tags/AlphaGo/">AlphaGo</a><a href="/tags/AlphaZero/">AlphaZero</a><a href="/tags/增强学习/">增强学习</a>
-      </span>
-      
-
-    </div>
-
-    
-  </div>
-</article>
-
-
-  <article>
-
-  
-  
-  <h3 class="article-title"><a href="/2018/03/10/在没有人类知识的情况下掌握围棋/"><span>
-        论文翻译：在没有人类知识的情况下掌握围棋</span></a></h3>
-  
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2018/03/10/在没有人类知识的情况下掌握围棋/" rel="bookmark">
-        <time class="entry-date published" datetime="2018-03-10T06:01:09.000Z">
-          2018-03-10
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-      <h4 id="前言">1. 前言</h4>
-<p>​ 人工智能的一个长期目标是在一些有挑战的领域中从零开始学习出超人熟练程度的算法。最近，AlphaGo成为第一个在围棋比赛中击败世界冠军的程序。 AlphaGo中的树搜索使用深度神经网络评估位置和选定的移动。这些神经网络是通过监督学习来自人类专家的走法以及通过强化自我学习来进行训练的。这里我们只介绍一种基于强化学习的算法，没有超出游戏规则的人类数据，指导或领域知识。AlphaGo成为自己的老师：一个神经网络训练预测AlphaGo的移动选择和游戏的胜者。这个神经网络提高了树搜索的强度，在下一次迭代中拥有更高质量的移动选择和更强的自我学习。我们的新程序AlphaGo Zero从零开始学习，实现了超人的表现，与之前发布的夺冠冠军AlphaGo相比以100-0取胜。</p>
-      
-    </div>
 
   </div>
 

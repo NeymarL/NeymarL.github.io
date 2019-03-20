@@ -92,6 +92,84 @@
 
   
   
+  <h3 class="article-title"><a href="/2017/08/14/Neural Machine Translation In Linear Time (ByteNet)/"><span>
+        Paper Reading - Neural Machine Translation In Linear Time (ByteNet)</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/08/14/Neural Machine Translation In Linear Time (ByteNet)/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-08-14T01:30:19.000Z">
+          2017-08-14
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>ByteNet 可用于<strong>字符级</strong>的机器翻译模型并且有着很好的表现，它的特点在于可以在线性时间 (linear time) 完成翻译而且能够处理长距离依赖。它也采用编码器-解码器架构，并且编码器和解码器都由CNN组成。</p>
+<p>ByteNet 之所以有上述的这些特性，是因为使用了如下一些技术：</p>
+<ul>
+<li>Dynamic Unfolding
+<ul>
+<li>解决了生成不同长度翻译的问题</li>
+</ul></li>
+<li>Dilated Convolution
+<ul>
+<li>缩短了依赖传播的距离</li>
+</ul></li>
+<li>Masked 1D Convolution
+<ul>
+<li>保证训练时只用过去的信息生成当前字符</li>
+</ul></li>
+<li>Residual Blocks
+<ul>
+<li>解决梯度消失问题</li>
+</ul></li>
+</ul>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/学习笔记/">学习笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/NLP/">NLP</a><a href="/tags/NMT/">NMT</a><a href="/tags/Deep-NLP/">Deep NLP</a><a href="/tags/CNN/">CNN</a><a href="/tags/ByteBet/">ByteBet</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+  <article>
+
+  
+  
   <h3 class="article-title"><a href="/2017/08/13/Attention Is All You Need/"><span>
         Paper Reading - Attention Is All You Need</span></a></h3>
   
@@ -673,101 +751,6 @@
       <span class="post-tags">
         <i class="icon-tags"></i>
         <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Regularization/">Regularization</a><a href="/tags/L1-Norm/">L1 Norm</a><a href="/tags/L2-Norm/">L2 Norm</a>
-      </span>
-      
-
-    </div>
-
-    
-  </div>
-</article>
-
-
-  <article>
-
-  
-  
-  <h3 class="article-title"><a href="/2017/07/06/物联网安全概论/"><span>
-        物联网安全概论</span></a></h3>
-  
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2017/07/06/物联网安全概论/" rel="bookmark">
-        <time class="entry-date published" datetime="2017-07-06T02:41:47.000Z">
-          2017-07-06
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-      <p><strong>目录</strong></p>
-<!-- toc -->
-<ul>
-<li><a href="#概论">概论</a></li>
-<li><a href="#密码学基础">密码学基础</a></li>
-<li><a href="#现代常规对称加密技术">现代常规对称加密技术</a>
-<ul>
-<li><a href="#des">DES</a></li>
-<li><a href="#triple-des">Triple DES</a></li>
-<li><a href="#aes">AES</a></li>
-</ul></li>
-<li><a href="#公钥密码">公钥密码</a>
-<ul>
-<li><a href="#随机数产生">随机数产生</a></li>
-<li><a href="#公钥密码算法">公钥密码算法</a>
-<ul>
-<li><a href="#diffie-hellman密钥交换">Diffie-Hellman密钥交换</a></li>
-<li><a href="#背包算法">背包算法</a></li>
-<li><a href="#rsa算法">RSA算法</a></li>
-</ul></li>
-</ul></li>
-<li><a href="#hash函数-数字签名与身份认证">Hash函数、数字签名与身份认证</a>
-<ul>
-<li><a href="#hash函数">Hash函数</a></li>
-<li><a href="#数字签名">数字签名</a></li>
-<li><a href="#身份认证">身份认证</a></li>
-</ul></li>
-<li><a href="#pki">PKI</a></li>
-<li><a href="#基于身份加密体制">基于身份加密体制</a></li>
-<li><a href="#物联网安全">物联网安全</a>
-<ul>
-<li><a href="#密码学在分布式传感器网络dsn中的应用">密码学在分布式传感器网络（DSN）中的应用</a></li>
-<li><a href="#基于密码学的rfid认证">基于密码学的RFID认证</a></li>
-<li><a href="#基于pke的rfid认证">基于PKE的RFID认证</a></li>
-</ul></li>
-</ul>
-<!-- tocstop -->
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-      
-      
-
-      <span class="post-categories">
-        <i class="icon-categories"></i>
-        <a href="/categories/学习笔记/">学习笔记</a>
-      </span>
-      
-
-      
-      
-
-      <span class="post-tags">
-        <i class="icon-tags"></i>
-        <a href="/tags/本科课程/">本科课程</a><a href="/tags/物联网/">物联网</a><a href="/tags/信息安全/">信息安全</a><a href="/tags/RSA/">RSA</a><a href="/tags/DES/">DES</a><a href="/tags/AES/">AES</a><a href="/tags/PKI/">PKI</a><a href="/tags/HASH/">HASH</a>
       </span>
       
 
