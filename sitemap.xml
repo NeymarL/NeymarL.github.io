@@ -2,79 +2,688 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://www.52coding.com.cn/2019/04/10/The%20Costs%20of%20Production/</loc>
+    <loc>http://www.52coding.com.cn/2016/10/02/%E9%9A%90%E9%A9%AC%E5%B0%94%E7%A7%91%E5%A4%AB%E6%A8%A1%E5%9E%8B%EF%BC%88HMM%EF%BC%89/</loc>
     
-    <lastmod>2019-04-10T03:29:47.885Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2019/02/22/Elasticity%20and%20Its%20Application/</loc>
-    
-    <lastmod>2019-03-25T03:45:13.220Z</lastmod>
+    <lastmod>2019-04-12T03:31:13.587Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.52coding.com.cn/2019/03/20/Consumers,%20Producers,%20and%20the%20Efficiency%20of%20Markets/</loc>
+    <loc>http://www.52coding.com.cn/2016/07/22/%E9%98%BF%E9%87%8C%E9%9F%B3%E4%B9%90%E6%B5%81%E8%A1%8C%E8%B6%8B%E5%8A%BF%E9%A2%84%E6%B5%8B%E5%A4%A7%E8%B5%9B%E6%80%BB%E7%BB%93/</loc>
     
-    <lastmod>2019-03-20T08:26:50.610Z</lastmod>
+    <lastmod>2019-04-12T03:31:07.824Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2015/12/21/%E8%AE%B0%E5%BD%95%EF%BC%9A%E7%94%A8PHP%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95web%E6%A1%86%E6%9E%B6/</loc>
+    
+    <lastmod>2019-04-12T03:30:40.974Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2015/12/26/%E8%AE%B0%E5%BD%95%EF%BC%9A%E5%BE%AE%E4%BF%A1%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/</loc>
+    
+    <lastmod>2019-04-12T03:30:36.635Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/01/17/%E8%AE%B0%E5%BD%95%EF%BC%9A%E5%9C%A8%20Docker%20%E4%B8%8A%E9%85%8D%E7%BD%AE%20PHP%20%E5%BA%94%E7%94%A8/</loc>
+    
+    <lastmod>2019-04-12T03:30:31.821Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2015/12/18/%E8%AE%B0%E5%BD%95%EF%BC%9AArchlinux%E6%90%AD%E5%BB%BAphp%EF%BC%8Cnginx%EF%BC%8Cmysql%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</loc>
+    
+    <lastmod>2019-04-12T03:30:26.473Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2017/06/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</loc>
+    
+    <lastmod>2019-04-12T03:30:18.423Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/03/10/%E8%81%9A%E7%B1%BB%EF%BC%88Clustering%EF%BC%89/</loc>
+    
+    <lastmod>2019-04-12T03:30:15.753Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/08/30/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E5%85%AC%E5%BC%8F%E6%8E%A8%E5%AF%BC/</loc>
+    
+    <lastmod>2019-04-12T03:30:13.102Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/02/22/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C(Neural%20Network)(%E4%B8%8B)/</loc>
+    
+    <lastmod>2019-04-12T03:30:08.684Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/02/18/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C(Neural%20Network)(%E4%B8%8A)/</loc>
+    
+    <lastmod>2019-04-12T03:30:05.534Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2017/06/29/%E7%89%A9%E8%81%94%E7%BD%91%E9%80%9A%E4%BF%A1%E6%8A%80%E6%9C%AF/</loc>
+    
+    <lastmod>2019-04-12T03:30:01.360Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2017/07/06/%E7%89%A9%E8%81%94%E7%BD%91%E5%AE%89%E5%85%A8%E6%A6%82%E8%AE%BA/</loc>
+    
+    <lastmod>2019-04-12T03:29:58.770Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2017/01/05/%E7%89%A9%E8%81%94%E7%BD%91%E5%AD%98%E5%82%A8%E6%8A%80%E6%9C%AF/</loc>
+    
+    <lastmod>2019-04-12T03:29:55.494Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2017/06/25/%E7%89%A9%E8%81%94%E7%BD%91%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%8A%80%E6%9C%AF/</loc>
+    
+    <lastmod>2019-04-12T03:29:52.615Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/09/19/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%81%9A%E7%B1%BB%E7%AE%97%E6%B3%95/</loc>
+    
+    <lastmod>2019-04-12T03:29:49.550Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/09/22/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3EM%E7%AE%97%E6%B3%95/</loc>
+    
+    <lastmod>2019-04-12T03:29:46.714Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2015/12/27/%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9ALink%20Analysis%20and%20PageRank/</loc>
+    
+    <lastmod>2019-04-12T03:29:43.037Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/01/04/%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AFinding%20Similar%20Sets/</loc>
+    
+    <lastmod>2019-04-12T03:29:40.281Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2015/12/22/%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9AMapReduce/</loc>
+    
+    <lastmod>2019-04-12T03:29:36.871Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/02/07/%E6%AD%A3%E5%88%99%E5%8C%96%E8%A7%A3%E5%86%B3%E8%BF%87%E5%BA%A6%E6%8B%9F%E5%90%88%E9%97%AE%E9%A2%98/</loc>
+    
+    <lastmod>2019-04-12T03:29:34.437Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2017/01/06/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</loc>
+    
+    <lastmod>2019-04-12T03:29:31.432Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/11/14/%E6%8F%AD%E7%A7%98%E4%BA%8C%E7%BB%B4%E7%A0%81%E2%80%94%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5/</loc>
+    
+    <lastmod>2019-04-12T03:29:28.651Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/09/08/%E6%8F%90%E5%8D%87%E6%96%B9%E6%B3%95%EF%BC%9AGBDT%20,%20XGBOOST,%20AdaBoost/</loc>
+    
+    <lastmod>2019-04-12T03:29:23.430Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/03/19/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%20%EF%BC%88Recommender%20Systems%EF%BC%89/</loc>
+    
+    <lastmod>2019-04-12T03:29:20.526Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/02/27/%E5%BA%94%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%BB%BA%E8%AE%AE/</loc>
+    
+    <lastmod>2019-04-12T03:29:17.767Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2015/12/24/%E5%AE%89%E8%A3%85Memcache/</loc>
+    
+    <lastmod>2019-04-12T03:29:14.912Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2018/03/10/%E5%9C%A8%E6%B2%A1%E6%9C%89%E4%BA%BA%E7%B1%BB%E7%9F%A5%E8%AF%86%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%8B%E6%8E%8C%E6%8F%A1%E5%9B%B4%E6%A3%8B/</loc>
+    
+    <lastmod>2019-04-12T03:29:12.272Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2015/12/17/%E5%9C%A8PHP%E8%AF%AD%E8%A8%80%E4%B8%AD%E4%BD%BF%E7%94%A8JSON/</loc>
+    
+    <lastmod>2019-04-12T03:29:09.655Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/03/08/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C(CNN)/</loc>
+    
+    <lastmod>2019-04-12T03:29:06.890Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2018/11/06/%E5%8D%9A%E5%AE%A2%E8%BF%81%E7%A7%BB%E8%AE%B0%E5%BD%95/</loc>
+    
+    <lastmod>2019-04-12T03:29:04.580Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/09/02/%E5%86%B3%E7%AD%96%E6%A0%91%E5%92%8C%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97%E4%B8%AD%E7%9A%84%E5%85%AC%E5%BC%8F%E6%8E%A8%E5%AF%BC/</loc>
+    
+    <lastmod>2019-04-12T03:29:00.198Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/07/16/%E5%86%B3%E7%AD%96%E6%A0%91%E4%B9%8BID3%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/</loc>
+    
+    <lastmod>2019-04-12T03:28:57.913Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/01/02/Wireshark%20%E6%8A%93%E5%8C%85%E6%8C%87%E5%8D%97/</loc>
+    
+    <lastmod>2019-04-12T03:28:43.171Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2018/11/01/Unity%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
+    
+    <lastmod>2019-04-12T03:28:34.868Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/06/23/Understanding%20RNN%20LSTM%20Networks/</loc>
+    
+    <lastmod>2019-04-12T03:28:30.282Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2018/10/03/Thinking%20Like%20an%20Economist/</loc>
+    
+    <lastmod>2019-04-12T03:28:27.689Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://www.52coding.com.cn/2019/02/11/The%20Market%20Forces%20of%20Supply%20and%20Demand/</loc>
     
-    <lastmod>2019-02-11T10:34:46.022Z</lastmod>
+    <lastmod>2019-04-12T03:28:23.994Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.52coding.com.cn/2018/12/04/RS%20-%20Recognizing%20Image%20Features%20and%20Patterns/</loc>
+    <loc>http://www.52coding.com.cn/2019/04/10/The%20Costs%20of%20Production/</loc>
     
-    <lastmod>2018-12-09T12:53:59.731Z</lastmod>
+    <lastmod>2019-04-12T03:28:21.731Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/03/03/Support%20Vector%20Machines%20(SVMs)/</loc>
+    
+    <lastmod>2019-04-12T03:28:17.854Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/09/13/Support%20Vector%20Machine/</loc>
+    
+    <lastmod>2019-04-12T03:28:14.603Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2017/08/15/SAN%20for%20Image%20QA/</loc>
+    
+    <lastmod>2019-04-12T03:28:08.569Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://www.52coding.com.cn/2018/12/09/RS%20-%20Recognizing%20Vehicles/</loc>
     
-    <lastmod>2018-12-09T12:03:10.632Z</lastmod>
+    <lastmod>2019-04-12T03:28:03.249Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://www.52coding.com.cn/2018/12/08/RS%20-%20Recognizing%20License%20Plates/</loc>
     
-    <lastmod>2018-12-08T11:59:02.501Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2018/12/07/RS%20-%20Recognizing%20Fingerprints/</loc>
-    
-    <lastmod>2018-12-07T14:03:37.997Z</lastmod>
+    <lastmod>2019-04-12T03:28:00.362Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://www.52coding.com.cn/2018/12/05/RS%20-%20Recognizing%20Irises/</loc>
     
-    <lastmod>2018-12-07T13:21:47.965Z</lastmod>
+    <lastmod>2019-04-12T03:27:57.922Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2018/12/04/RS%20-%20Recognizing%20Image%20Features%20and%20Patterns/</loc>
+    
+    <lastmod>2019-04-12T03:27:54.554Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2018/12/07/RS%20-%20Recognizing%20Fingerprints/</loc>
+    
+    <lastmod>2019-04-12T03:27:51.914Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://www.52coding.com.cn/2018/12/06/RS%20-%20Recognizing%20Faces/</loc>
     
-    <lastmod>2018-12-07T13:21:27.734Z</lastmod>
+    <lastmod>2019-04-12T03:27:49.612Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2018/01/03/RL%20-%20Value%20Function%20Approximation/</loc>
+    
+    <lastmod>2019-04-12T03:27:44.827Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2018/11/22/RL%20-%20TRPO/</loc>
+    
+    <lastmod>2019-04-12T03:27:40.560Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://www.52coding.com.cn/2018/11/25/RL%20-%20PPO/</loc>
     
-    <lastmod>2018-12-03T07:45:03.755Z</lastmod>
+    <lastmod>2019-04-12T03:27:35.929Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2018/01/06/RL%20-%20Policy%20Gradient/</loc>
+    
+    <lastmod>2019-04-12T03:27:31.092Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2017/12/07/RL%20-%20Planning%20by%20Dynamic%20Programming/</loc>
+    
+    <lastmod>2019-04-12T03:27:28.009Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2017/12/16/RL%20-%20Model-Free%20Prediction/</loc>
+    
+    <lastmod>2019-04-12T03:27:25.322Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2017/12/21/RL%20-%20Model-Free%20Control/</loc>
+    
+    <lastmod>2019-04-12T03:27:22.282Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2017/08/18/RL%20-%20Markov%20Decision%20Processes/</loc>
+    
+    <lastmod>2019-04-12T03:27:20.051Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2017/08/15/RL%20-%20Introduction%20to%20Reinforcement%20Learning/</loc>
+    
+    <lastmod>2019-04-12T03:27:17.203Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2018/01/09/RL%20-%20Integrating%20Learning%20and%20Planning/</loc>
+    
+    <lastmod>2019-04-12T03:27:10.149Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2018/11/16/RL%20-%20DQN%20and%20A3C/</loc>
+    
+    <lastmod>2019-04-12T03:26:58.075Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2018/11/30/RL%20-%20Deep%20Deterministic%20Policy%20Gradient/</loc>
+    
+    <lastmod>2019-04-12T03:26:48.527Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2017/01/08/RFID/</loc>
+    
+    <lastmod>2019-04-12T03:26:42.039Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2017/07/13/Regularization%20for%20Deep%20Learning/</loc>
+    
+    <lastmod>2019-04-12T03:26:37.276Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/10/15/ransac/</loc>
+    
+    <lastmod>2019-04-12T03:26:33.897Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/02/01/Octave%20Tutorial/</loc>
+    
+    <lastmod>2019-04-12T03:26:24.534Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2017/08/14/Neural%20Machine%20Translation%20In%20Linear%20Time%20(ByteNet)/</loc>
+    
+    <lastmod>2019-04-12T03:26:19.160Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2015/12/19/Mysqli%20%E4%BD%BF%E7%94%A8/</loc>
+    
+    <lastmod>2019-04-12T03:26:02.022Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2015/12/17/MySQL%20%E7%AC%94%E8%AE%B0/</loc>
+    
+    <lastmod>2019-04-12T03:25:59.383Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/02/29/Machine%20Learning%20System%20Design/</loc>
+    
+    <lastmod>2019-04-12T03:25:56.693Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/02/03/Logistic%20Regression/</loc>
+    
+    <lastmod>2019-04-12T03:25:53.672Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2015/12/15/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93(%E4%BA%8C)_%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/</loc>
+    
+    <lastmod>2019-04-12T03:25:51.029Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2015/12/17/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93(%E4%B8%89)_%E7%BD%91%E7%BB%9C%E4%B8%8E%E8%BF%9B%E7%A8%8B/</loc>
+    
+    <lastmod>2019-04-12T03:25:48.721Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2015/12/15/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93(%E4%B8%80)_%E5%B8%B8%E8%A7%84/</loc>
+    
+    <lastmod>2019-04-12T03:25:45.647Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/01/30/Linear%20Regression%20with%20One%20Variable/</loc>
+    
+    <lastmod>2019-04-12T03:25:42.779Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/01/31/Linear%20Regression%20with%20Multiple%20Variables/</loc>
+    
+    <lastmod>2019-04-12T03:25:39.945Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/03/24/Large%20Scale%20Machine%20Learning/</loc>
+    
+    <lastmod>2019-04-12T03:25:36.397Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/01/10/IP%20%E6%B5%85%E6%9E%90/</loc>
+    
+    <lastmod>2019-04-12T03:25:33.680Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/01/29/Introduction%20to%20machine%20learning/</loc>
+    
+    <lastmod>2019-04-12T03:25:26.315Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2018/11/03/Interdependence%20and%20the%20Gains%20from%20Trade/</loc>
+    
+    <lastmod>2019-04-12T03:25:23.008Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2015/12/18/GIT%20%E7%AC%94%E8%AE%B0/</loc>
+    
+    <lastmod>2019-04-12T03:25:18.209Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2015/12/17/gdb%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/</loc>
+    
+    <lastmod>2019-04-12T03:25:10.688Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2019/02/22/Elasticity%20and%20Its%20Application/</loc>
+    
+    <lastmod>2019-04-12T03:25:07.754Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/03/13/Dimensionality%20Reduction/</loc>
+    
+    <lastmod>2019-04-12T03:25:04.936Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2017/08/05/DeepNLP-Word%20Level%20Semantics/</loc>
+    
+    <lastmod>2019-04-12T03:24:54.034Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2017/08/07/Deep%20NLP%20-%20Text%20Classification/</loc>
+    
+    <lastmod>2019-04-12T03:24:50.945Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2017/08/10/Deep%20NLP%20-%20Speech%20Recognition/</loc>
+    
+    <lastmod>2019-04-12T03:24:48.227Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2017/08/06/Deep%20NLP%20-%20RNNs%20and%20Language%20Modelling/</loc>
+    
+    <lastmod>2019-04-12T03:24:34.277Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2017/08/12/Deep%20NLP%20-%20Question%20Answering/</loc>
+    
+    <lastmod>2019-04-12T03:24:31.895Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2017/08/08/Deep%20NLP%20-%20Conditional%20Language%20Modeling/</loc>
+    
+    <lastmod>2019-04-12T03:24:29.532Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2017/08/09/Deep%20NLP%20-%20Conditional%20Language%20Model%20with%20Attention/</loc>
+    
+    <lastmod>2019-04-12T03:24:19.719Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/10/23/Context%20Encoder/</loc>
+    
+    <lastmod>2019-04-12T03:24:13.710Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2019/03/20/Consumers,%20Producers,%20and%20the%20Efficiency%20of%20Markets/</loc>
+    
+    <lastmod>2019-04-12T03:23:54.609Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2017/04/19/Combined%20Multi-dimension%20Bloom%20Filter/</loc>
+    
+    <lastmod>2019-04-12T03:23:51.232Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2018/09/16/Chapter%201-%20Ten%20Principles%20of%20Economics/</loc>
+    
+    <lastmod>2019-04-12T03:23:48.290Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2018/11/07/CCZero/</loc>
+    
+    <lastmod>2019-04-12T03:23:44.922Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2015/12/28/C++%E5%85%B3%E4%BA%8E%E5%AF%B9%E8%B1%A1%E4%BC%A0%E5%80%BC%E4%B8%8E%E4%BC%A0%E5%BC%95%E7%94%A8%E7%9A%84%E6%80%BB%E7%BB%93/</loc>
+    
+    <lastmod>2019-04-12T03:23:30.657Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2017/08/13/Attention%20Is%20All%20You%20Need/</loc>
+    
+    <lastmod>2019-04-12T03:23:24.595Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2016/03/19/Anomaly%20Detection/</loc>
+    
+    <lastmod>2019-04-12T03:23:13.427Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.52coding.com.cn/2018/05/15/AlphaGo%20and%20AlphaGo%20Zero/</loc>
+    
+    <lastmod>2019-04-12T03:23:08.557Z</lastmod>
     
   </url>
   
@@ -86,34 +695,6 @@
   </url>
   
   <url>
-    <loc>http://www.52coding.com.cn/2018/11/30/RL%20-%20Deep%20Deterministic%20Policy%20Gradient/</loc>
-    
-    <lastmod>2018-11-30T06:03:01.740Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2018/11/22/RL%20-%20TRPO/</loc>
-    
-    <lastmod>2018-11-26T05:23:49.419Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2018/11/06/%E5%8D%9A%E5%AE%A2%E8%BF%81%E7%A7%BB%E8%AE%B0%E5%BD%95/</loc>
-    
-    <lastmod>2018-11-26T02:17:57.092Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2018/11/07/CCZero/</loc>
-    
-    <lastmod>2018-11-24T05:27:14.761Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://www.52coding.com.cn/search/index.html</loc>
     
     <lastmod>2018-11-23T06:44:16.693Z</lastmod>
@@ -121,590 +702,9 @@
   </url>
   
   <url>
-    <loc>http://www.52coding.com.cn/2018/11/16/RL%20-%20DQN%20and%20A3C/</loc>
-    
-    <lastmod>2018-11-23T06:19:03.882Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2018/01/06/RL%20-%20Policy%20Gradient/</loc>
-    
-    <lastmod>2018-11-19T04:24:04.939Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2018/05/15/AlphaGo%20and%20AlphaGo%20Zero/</loc>
-    
-    <lastmod>2018-11-16T07:54:21.150Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://www.52coding.com.cn/baidu_verify_25glERGpH4.html</loc>
     
     <lastmod>2018-11-06T12:07:07.847Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2018/11/03/Interdependence%20and%20the%20Gains%20from%20Trade/</loc>
-    
-    <lastmod>2018-11-06T07:10:39.499Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2018/10/03/Thinking%20Like%20an%20Economist/</loc>
-    
-    <lastmod>2018-11-06T06:39:17.839Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2018/09/16/Chapter%201-%20Ten%20Principles%20of%20Economics/</loc>
-    
-    <lastmod>2018-11-06T06:23:18.037Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2017/01/06/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</loc>
-    
-    <lastmod>2018-11-06T06:07:05.674Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2017/01/08/RFID/</loc>
-    
-    <lastmod>2018-11-06T05:58:48.779Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2017/01/05/%E7%89%A9%E8%81%94%E7%BD%91%E5%AD%98%E5%82%A8%E6%8A%80%E6%9C%AF/</loc>
-    
-    <lastmod>2018-11-06T05:50:59.851Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2017/06/25/%E7%89%A9%E8%81%94%E7%BD%91%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%8A%80%E6%9C%AF/</loc>
-    
-    <lastmod>2018-11-06T05:43:13.011Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2017/06/29/%E7%89%A9%E8%81%94%E7%BD%91%E9%80%9A%E4%BF%A1%E6%8A%80%E6%9C%AF/</loc>
-    
-    <lastmod>2018-11-06T05:34:33.649Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2017/06/30/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</loc>
-    
-    <lastmod>2018-11-06T05:25:38.370Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2017/07/06/%E7%89%A9%E8%81%94%E7%BD%91%E5%AE%89%E5%85%A8%E6%A6%82%E8%AE%BA/</loc>
-    
-    <lastmod>2018-11-06T05:12:19.197Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2018/11/01/Unity%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
-    
-    <lastmod>2018-11-06T04:01:05.679Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/10/02/%E9%9A%90%E9%A9%AC%E5%B0%94%E7%A7%91%E5%A4%AB%E6%A8%A1%E5%9E%8B%EF%BC%88HMM%EF%BC%89/</loc>
-    
-    <lastmod>2018-11-06T03:51:26.233Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/07/22/%E9%98%BF%E9%87%8C%E9%9F%B3%E4%B9%90%E6%B5%81%E8%A1%8C%E8%B6%8B%E5%8A%BF%E9%A2%84%E6%B5%8B%E5%A4%A7%E8%B5%9B%E6%80%BB%E7%BB%93/</loc>
-    
-    <lastmod>2018-11-06T03:51:17.546Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2015/12/21/%E8%AE%B0%E5%BD%95%EF%BC%9A%E7%94%A8PHP%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95web%E6%A1%86%E6%9E%B6/</loc>
-    
-    <lastmod>2018-11-06T03:51:01.794Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2015/12/26/%E8%AE%B0%E5%BD%95%EF%BC%9A%E5%BE%AE%E4%BF%A1%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/</loc>
-    
-    <lastmod>2018-11-06T03:50:44.033Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/01/17/%E8%AE%B0%E5%BD%95%EF%BC%9A%E5%9C%A8%20Docker%20%E4%B8%8A%E9%85%8D%E7%BD%AE%20PHP%20%E5%BA%94%E7%94%A8/</loc>
-    
-    <lastmod>2018-11-06T03:50:39.984Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2015/12/18/%E8%AE%B0%E5%BD%95%EF%BC%9AArchlinux%E6%90%AD%E5%BB%BAphp%EF%BC%8Cnginx%EF%BC%8Cmysql%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</loc>
-    
-    <lastmod>2018-11-06T03:50:35.872Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/03/10/%E8%81%9A%E7%B1%BB%EF%BC%88Clustering%EF%BC%89/</loc>
-    
-    <lastmod>2018-11-06T03:50:28.475Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/08/30/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E5%85%AC%E5%BC%8F%E6%8E%A8%E5%AF%BC/</loc>
-    
-    <lastmod>2018-11-06T03:50:24.689Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/02/22/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C(Neural%20Network)(%E4%B8%8B)/</loc>
-    
-    <lastmod>2018-11-06T03:50:20.654Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/02/18/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C(Neural%20Network)(%E4%B8%8A)/</loc>
-    
-    <lastmod>2018-11-06T03:50:16.636Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/09/19/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%81%9A%E7%B1%BB%E7%AE%97%E6%B3%95/</loc>
-    
-    <lastmod>2018-11-06T03:50:11.548Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/09/22/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3EM%E7%AE%97%E6%B3%95/</loc>
-    
-    <lastmod>2018-11-06T03:50:07.562Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2015/12/27/%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%EF%BC%88%E4%BA%8C%EF%BC%89%EF%BC%9ALink%20Analysis%20and%20PageRank/</loc>
-    
-    <lastmod>2018-11-06T03:50:00.818Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/01/04/%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AFinding%20Similar%20Sets/</loc>
-    
-    <lastmod>2018-11-06T03:49:56.145Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2015/12/22/%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%EF%BC%88%E4%B8%80%EF%BC%89%EF%BC%9AMapReduce/</loc>
-    
-    <lastmod>2018-11-06T03:49:49.768Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/02/07/%E6%AD%A3%E5%88%99%E5%8C%96%E8%A7%A3%E5%86%B3%E8%BF%87%E5%BA%A6%E6%8B%9F%E5%90%88%E9%97%AE%E9%A2%98/</loc>
-    
-    <lastmod>2018-11-06T03:49:45.870Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/11/14/%E6%8F%AD%E7%A7%98%E4%BA%8C%E7%BB%B4%E7%A0%81%E2%80%94%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5/</loc>
-    
-    <lastmod>2018-11-06T03:49:36.471Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/09/08/%E6%8F%90%E5%8D%87%E6%96%B9%E6%B3%95%EF%BC%9AGBDT%20,%20XGBOOST,%20AdaBoost/</loc>
-    
-    <lastmod>2018-11-06T03:49:29.113Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/03/19/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%20%EF%BC%88Recommender%20Systems%EF%BC%89/</loc>
-    
-    <lastmod>2018-11-06T03:49:24.230Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/02/27/%E5%BA%94%E7%94%A8%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%BB%BA%E8%AE%AE/</loc>
-    
-    <lastmod>2018-11-06T03:49:19.199Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2015/12/24/%E5%AE%89%E8%A3%85Memcache/</loc>
-    
-    <lastmod>2018-11-06T03:49:08.355Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2018/03/10/%E5%9C%A8%E6%B2%A1%E6%9C%89%E4%BA%BA%E7%B1%BB%E7%9F%A5%E8%AF%86%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%8B%E6%8E%8C%E6%8F%A1%E5%9B%B4%E6%A3%8B/</loc>
-    
-    <lastmod>2018-11-06T03:48:59.304Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2015/12/17/%E5%9C%A8PHP%E8%AF%AD%E8%A8%80%E4%B8%AD%E4%BD%BF%E7%94%A8JSON/</loc>
-    
-    <lastmod>2018-11-06T03:48:52.864Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/03/08/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C(CNN)/</loc>
-    
-    <lastmod>2018-11-06T03:48:38.680Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/09/02/%E5%86%B3%E7%AD%96%E6%A0%91%E5%92%8C%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97%E4%B8%AD%E7%9A%84%E5%85%AC%E5%BC%8F%E6%8E%A8%E5%AF%BC/</loc>
-    
-    <lastmod>2018-11-06T03:48:30.358Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/07/16/%E5%86%B3%E7%AD%96%E6%A0%91%E4%B9%8BID3%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/</loc>
-    
-    <lastmod>2018-11-06T03:48:26.321Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/01/02/Wireshark%20%E6%8A%93%E5%8C%85%E6%8C%87%E5%8D%97/</loc>
-    
-    <lastmod>2018-11-06T03:48:22.127Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/06/23/Understanding%20RNN%20LSTM%20Networks/</loc>
-    
-    <lastmod>2018-11-06T03:48:17.756Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/03/03/Support%20Vector%20Machines%20(SVMs)/</loc>
-    
-    <lastmod>2018-11-06T03:48:13.424Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/09/13/Support%20Vector%20Machine/</loc>
-    
-    <lastmod>2018-11-06T03:48:09.411Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2017/08/15/SAN%20for%20Image%20QA/</loc>
-    
-    <lastmod>2018-11-06T03:48:03.977Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2018/01/03/RL%20-%20Value%20Function%20Approximation/</loc>
-    
-    <lastmod>2018-11-06T03:47:58.984Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2017/12/07/RL%20-%20Planning%20by%20Dynamic%20Programming/</loc>
-    
-    <lastmod>2018-11-06T03:47:48.747Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2017/12/16/RL%20-%20Model-Free%20Prediction/</loc>
-    
-    <lastmod>2018-11-06T03:47:43.363Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2017/12/21/RL%20-%20Model-Free%20Control/</loc>
-    
-    <lastmod>2018-11-06T03:47:38.964Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2017/08/18/RL%20-%20Markov%20Decision%20Processes/</loc>
-    
-    <lastmod>2018-11-06T03:47:34.671Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2017/08/15/RL%20-%20Introduction%20to%20Reinforcement%20Learning/</loc>
-    
-    <lastmod>2018-11-06T03:47:27.932Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2018/01/09/RL%20-%20Integrating%20Learning%20and%20Planning/</loc>
-    
-    <lastmod>2018-11-06T03:47:24.502Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2017/07/13/Regularization%20for%20Deep%20Learning/</loc>
-    
-    <lastmod>2018-11-06T03:47:07.667Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/10/15/ransac/</loc>
-    
-    <lastmod>2018-11-06T03:47:03.503Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/02/01/Octave%20Tutorial/</loc>
-    
-    <lastmod>2018-11-06T03:46:59.127Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2017/08/14/Neural%20Machine%20Translation%20In%20Linear%20Time%20(ByteNet)/</loc>
-    
-    <lastmod>2018-11-06T03:46:52.613Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2015/12/19/Mysqli%20%E4%BD%BF%E7%94%A8/</loc>
-    
-    <lastmod>2018-11-06T03:46:48.531Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2015/12/17/MySQL%20%E7%AC%94%E8%AE%B0/</loc>
-    
-    <lastmod>2018-11-06T03:46:44.367Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/02/29/Machine%20Learning%20System%20Design/</loc>
-    
-    <lastmod>2018-11-06T03:46:40.396Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/02/03/Logistic%20Regression/</loc>
-    
-    <lastmod>2018-11-06T03:46:35.246Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2015/12/15/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93(%E4%BA%8C)_%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/</loc>
-    
-    <lastmod>2018-11-06T03:46:30.887Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2015/12/17/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93(%E4%B8%89)_%E7%BD%91%E7%BB%9C%E4%B8%8E%E8%BF%9B%E7%A8%8B/</loc>
-    
-    <lastmod>2018-11-06T03:46:25.949Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2015/12/15/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93(%E4%B8%80)_%E5%B8%B8%E8%A7%84/</loc>
-    
-    <lastmod>2018-11-06T03:46:21.109Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/01/30/Linear%20Regression%20with%20One%20Variable/</loc>
-    
-    <lastmod>2018-11-06T03:46:15.616Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/01/31/Linear%20Regression%20with%20Multiple%20Variables/</loc>
-    
-    <lastmod>2018-11-06T03:46:10.851Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/03/24/Large%20Scale%20Machine%20Learning/</loc>
-    
-    <lastmod>2018-11-06T03:46:05.192Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/01/10/IP%20%E6%B5%85%E6%9E%90/</loc>
-    
-    <lastmod>2018-11-06T03:46:00.215Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/01/29/Introduction%20to%20machine%20learning/</loc>
-    
-    <lastmod>2018-11-06T03:45:55.467Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2015/12/18/GIT%20%E7%AC%94%E8%AE%B0/</loc>
-    
-    <lastmod>2018-11-06T03:45:51.073Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2015/12/17/gdb%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/</loc>
-    
-    <lastmod>2018-11-06T03:45:46.503Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/03/13/Dimensionality%20Reduction/</loc>
-    
-    <lastmod>2018-11-06T03:45:41.341Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2017/08/05/DeepNLP-Word%20Level%20Semantics/</loc>
-    
-    <lastmod>2018-11-06T03:45:36.041Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2017/08/07/Deep%20NLP%20-%20Text%20Classification/</loc>
-    
-    <lastmod>2018-11-06T03:45:32.448Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2017/08/10/Deep%20NLP%20-%20Speech%20Recognition/</loc>
-    
-    <lastmod>2018-11-06T03:45:27.825Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2017/08/06/Deep%20NLP%20-%20RNNs%20and%20Language%20Modelling/</loc>
-    
-    <lastmod>2018-11-06T03:45:23.574Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2017/08/12/Deep%20NLP%20-%20Question%20Answering/</loc>
-    
-    <lastmod>2018-11-06T03:45:15.601Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2017/08/08/Deep%20NLP%20-%20Conditional%20Language%20Modeling/</loc>
-    
-    <lastmod>2018-11-06T03:45:11.601Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2017/08/09/Deep%20NLP%20-%20Conditional%20Language%20Model%20with%20Attention/</loc>
-    
-    <lastmod>2018-11-06T03:45:07.335Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/10/23/Context%20Encoder/</loc>
-    
-    <lastmod>2018-11-06T03:45:01.872Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2017/04/19/Combined%20Multi-dimension%20Bloom%20Filter/</loc>
-    
-    <lastmod>2018-11-06T03:44:56.907Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2015/12/28/C++%E5%85%B3%E4%BA%8E%E5%AF%B9%E8%B1%A1%E4%BC%A0%E5%80%BC%E4%B8%8E%E4%BC%A0%E5%BC%95%E7%94%A8%E7%9A%84%E6%80%BB%E7%BB%93/</loc>
-    
-    <lastmod>2018-11-06T03:44:42.234Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2017/08/13/Attention%20Is%20All%20You%20Need/</loc>
-    
-    <lastmod>2018-11-06T03:44:27.227Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2016/03/19/Anomaly%20Detection/</loc>
-    
-    <lastmod>2018-11-06T03:44:19.020Z</lastmod>
     
   </url>
   
