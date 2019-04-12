@@ -1,0 +1,840 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-71540601-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-71540601-1');
+</script>
+
+  <meta charset="utf-8">
+  
+  <!-- if (config.subtitle) {
+    title.push(config.subtitle);
+  } -->
+  <title>
+    Page 9 | NIUHE
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE的博客">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script>
+  <script type="text/javascript" src="/js/search.js"></script>
+  <script type="text/javascript" src="/js/jquery.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">日々私たちが过ごしている日常というのは、実は奇迹の连続なのかもしれんな</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">博客</a></li>
+      
+        <li><a href="/categories">笔记</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+        <li><a href="/search">搜索</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        
+
+<p></p>
+<article>
+
+    
+    
+    <h3 class="article-title"><a href="/2016/01/10/IP 浅析/"><span>
+                TCP/IP 浅析</span></a></h3>
+    
+    
+
+    <div class="article-top-meta">
+        <span class="posted-on">
+            <a href="/2016/01/10/IP 浅析/" rel="bookmark">
+                <time class="entry-date published" datetime="2016-01-10T15:46:06.000Z">
+                    2016-01-10
+                </time>
+            </a>
+        </span>
+    </div>
+
+
+    
+
+    <div class="article-content">
+        <div class="entry">
+            
+            <!-- toc -->
+<ul>
+<li><a href="#建立tcp连接的过程">建立TCP连接的过程</a></li>
+<li><a href="#tcp传输的过程">TCP传输的过程</a></li>
+<li><a href="#结束连接">结束连接</a></li>
+<li><a href="#tcp数据传输不同于udp之处">TCP数据传输不同于UDP之处</a></li>
+<li><a href="#tcp连接的各种状态">tcp连接的各种状态</a></li>
+<li><a href="#实践部分">实践部分</a>
+<ul>
+<li><a href="#抓包">抓包</a></li>
+<li><a href="#socket-服务器">Socket 服务器</a></li>
+</ul></li>
+</ul>
+<!-- tocstop -->
+            
+        </div>
+
+    </div>
+
+    <div class="article-footer">
+        <div class="article-meta pull-left">
+
+            
+            
+
+            <span class="post-categories">
+                <i class="icon-categories"></i>
+                <a href="/categories/笔记/">笔记</a>
+            </span>
+            
+
+            
+            
+
+            <span class="post-tags">
+                <i class="icon-tags"></i>
+                <a href="/tags/TCP-IP/">TCP/IP</a><a href="/tags/计算机网络/">计算机网络</a><a href="/tags/后台开发/">后台开发</a>
+            </span>
+            
+
+        </div>
+
+        
+    </div>
+</article>
+
+
+
+
+<p></p>
+<article>
+
+    
+    
+    <h3 class="article-title"><a href="/2016/01/04/海量数据挖掘（三）：Finding Similar Sets/"><span>
+                海量数据挖掘（三）：Finding Similar Sets</span></a></h3>
+    
+    
+
+    <div class="article-top-meta">
+        <span class="posted-on">
+            <a href="/2016/01/04/海量数据挖掘（三）：Finding Similar Sets/" rel="bookmark">
+                <time class="entry-date published" datetime="2016-01-04T14:41:06.000Z">
+                    2016-01-04
+                </time>
+            </a>
+        </span>
+    </div>
+
+
+    
+
+    <div class="article-content">
+        <div class="entry">
+            
+            <blockquote>
+<p>此系列为Cousera上Standford的<a href="https://class.coursera.org/mmds-002" target="_blank" rel="noopener">Mining Massive Datasets</a>课程学习笔记。 这是该系列的第三篇笔记：<strong>Finding Similar Sets</strong></p>
+</blockquote>
+            
+        </div>
+
+    </div>
+
+    <div class="article-footer">
+        <div class="article-meta pull-left">
+
+            
+            
+
+            <span class="post-categories">
+                <i class="icon-categories"></i>
+                <a href="/categories/笔记/">笔记</a>
+            </span>
+            
+
+            
+            
+
+            <span class="post-tags">
+                <i class="icon-tags"></i>
+                <a href="/tags/数据挖掘/">数据挖掘</a>
+            </span>
+            
+
+        </div>
+
+        
+    </div>
+</article>
+
+
+
+
+<p></p>
+<article>
+
+    
+    
+    <h3 class="article-title"><a href="/2016/01/02/Wireshark 抓包指南/"><span>
+                Wireshark 抓包指南</span></a></h3>
+    
+    
+
+    <div class="article-top-meta">
+        <span class="posted-on">
+            <a href="/2016/01/02/Wireshark 抓包指南/" rel="bookmark">
+                <time class="entry-date published" datetime="2016-01-02T11:42:06.000Z">
+                    2016-01-02
+                </time>
+            </a>
+        </span>
+    </div>
+
+
+    
+
+    <div class="article-content">
+        <div class="entry">
+            
+            <!-- toc -->
+<ul>
+<li><a href="#wireshark-介绍">Wireshark 介绍</a></li>
+<li><a href="#wireshark-开始抓包">Wireshark 开始抓包</a></li>
+<li><a href="#wireshark-窗口介绍">Wireshark 窗口介绍</a></li>
+<li><a href="#wireshark-过滤器">Wireshark 过滤器</a>
+<ul>
+<li><a href="#捕捉过滤器">捕捉过滤器</a></li>
+<li><a href="#显示过滤器">显示过滤器</a></li>
+</ul></li>
+<li><a href="#封包列表">封包列表</a></li>
+<li><a href="#tcp-包解析">TCP 包解析</a></li>
+<li><a href="#tcp-三路握手分析">TCP 三路握手分析</a></li>
+<li><a href="#参考">参考</a></li>
+</ul>
+<!-- tocstop -->
+            
+        </div>
+
+    </div>
+
+    <div class="article-footer">
+        <div class="article-meta pull-left">
+
+            
+            
+
+            <span class="post-categories">
+                <i class="icon-categories"></i>
+                <a href="/categories/笔记/">笔记</a>
+            </span>
+            
+
+            
+            
+
+            <span class="post-tags">
+                <i class="icon-tags"></i>
+                <a href="/tags/计算机网络/">计算机网络</a><a href="/tags/后台开发/">后台开发</a><a href="/tags/Wireshark/">Wireshark</a>
+            </span>
+            
+
+        </div>
+
+        
+    </div>
+</article>
+
+
+
+
+<p></p>
+<article>
+
+    
+    
+    <h3 class="article-title"><a href="/2015/12/28/C++关于对象传值与传引用的总结/"><span>
+                C++关于对象传值与传引用的总结</span></a></h3>
+    
+    
+
+    <div class="article-top-meta">
+        <span class="posted-on">
+            <a href="/2015/12/28/C++关于对象传值与传引用的总结/" rel="bookmark">
+                <time class="entry-date published" datetime="2015-12-28T08:05:40.000Z">
+                    2015-12-28
+                </time>
+            </a>
+        </span>
+    </div>
+
+
+    
+
+    <div class="article-content">
+        <div class="entry">
+            
+            <h2 id="传值vs传引用">传值VS传引用</h2>
+<p>C++在传递<strong>对象类型</strong>的参数时候有两种情况：</p>
+<ul>
+<li>如果是引用就相当于直接把这个对象本身传递过去了</li>
+<li>若是传值则需在进入函数之前通过<strong>拷贝构造函数</strong>建立一个临时对象（如果没有自己写拷贝构造函数则是<strong>浅拷贝</strong>），然后再离开函数之后这个临时对象会自动销毁（调用了<strong>析构函数</strong>）</li>
+</ul>
+            
+        </div>
+
+    </div>
+
+    <div class="article-footer">
+        <div class="article-meta pull-left">
+
+            
+            
+
+            <span class="post-categories">
+                <i class="icon-categories"></i>
+                <a href="/categories/博客/">博客</a>
+            </span>
+            
+
+            
+            
+
+            <span class="post-tags">
+                <i class="icon-tags"></i>
+                <a href="/tags/C/">C++</a>
+            </span>
+            
+
+        </div>
+
+        
+    </div>
+</article>
+
+
+
+
+<p></p>
+<article>
+
+    
+    
+    <h3 class="article-title"><a href="/2015/12/27/海量数据挖掘（二）：Link Analysis and PageRank/"><span>
+                海量数据挖掘（二）：Link Analysis and PageRank</span></a></h3>
+    
+    
+
+    <div class="article-top-meta">
+        <span class="posted-on">
+            <a href="/2015/12/27/海量数据挖掘（二）：Link Analysis and PageRank/" rel="bookmark">
+                <time class="entry-date published" datetime="2015-12-27T08:05:40.000Z">
+                    2015-12-27
+                </time>
+            </a>
+        </span>
+    </div>
+
+
+    
+
+    <div class="article-content">
+        <div class="entry">
+            
+            <blockquote>
+<p>此系列为Cousera上Standford的<a href="https://class.coursera.org/mmds-002" target="_blank" rel="noopener">Mining Massive Datasets</a>课程学习笔记。 这是该系列的第二篇笔记：<strong>Link Analysis and PageRank</strong></p>
+</blockquote>
+            
+        </div>
+
+    </div>
+
+    <div class="article-footer">
+        <div class="article-meta pull-left">
+
+            
+            
+
+            <span class="post-categories">
+                <i class="icon-categories"></i>
+                <a href="/categories/笔记/">笔记</a>
+            </span>
+            
+
+            
+            
+
+            <span class="post-tags">
+                <i class="icon-tags"></i>
+                <a href="/tags/数据挖掘/">数据挖掘</a>
+            </span>
+            
+
+        </div>
+
+        
+    </div>
+</article>
+
+
+
+
+<p></p>
+<article>
+
+    
+    
+    <h3 class="article-title"><a href="/2015/12/26/记录：微信后台开发/"><span>
+                记录：微信后台开发</span></a></h3>
+    
+    
+
+    <div class="article-top-meta">
+        <span class="posted-on">
+            <a href="/2015/12/26/记录：微信后台开发/" rel="bookmark">
+                <time class="entry-date published" datetime="2015-12-26T03:11:40.000Z">
+                    2015-12-26
+                </time>
+            </a>
+        </span>
+    </div>
+
+
+    
+
+    <div class="article-content">
+        <div class="entry">
+            
+            <p>微信接口文档 http://mp.weixin.qq.com/wiki/home/index.html 测试号 http://mp.weixin.qq.com/debug/cgi-bin/sandbox?t=sandbox/login</p>
+            
+        </div>
+
+    </div>
+
+    <div class="article-footer">
+        <div class="article-meta pull-left">
+
+            
+            
+
+            <span class="post-categories">
+                <i class="icon-categories"></i>
+                <a href="/categories/博客/">博客</a>
+            </span>
+            
+
+            
+            
+
+            <span class="post-tags">
+                <i class="icon-tags"></i>
+                <a href="/tags/后台开发/">后台开发</a><a href="/tags/PHP/">PHP</a><a href="/tags/Wechat/">Wechat</a>
+            </span>
+            
+
+        </div>
+
+        
+    </div>
+</article>
+
+
+
+
+<p></p>
+<article>
+
+    
+    
+    <h3 class="article-title"><a href="/2015/12/24/安装Memcache/"><span>
+                安装Memcache</span></a></h3>
+    
+    
+
+    <div class="article-top-meta">
+        <span class="posted-on">
+            <a href="/2015/12/24/安装Memcache/" rel="bookmark">
+                <time class="entry-date published" datetime="2015-12-24T01:14:40.000Z">
+                    2015-12-24
+                </time>
+            </a>
+        </span>
+    </div>
+
+
+    
+
+    <div class="article-content">
+        <div class="entry">
+            
+            <p>http://php.net/manual/zh/book.memcache.php</p>
+            
+        </div>
+
+    </div>
+
+    <div class="article-footer">
+        <div class="article-meta pull-left">
+
+            
+            
+
+            <span class="post-categories">
+                <i class="icon-categories"></i>
+                <a href="/categories/笔记/">笔记</a>
+            </span>
+            
+
+            
+            
+
+            <span class="post-tags">
+                <i class="icon-tags"></i>
+                <a href="/tags/后台开发/">后台开发</a><a href="/tags/Linux/">Linux</a><a href="/tags/Memcache/">Memcache</a>
+            </span>
+            
+
+        </div>
+
+        
+    </div>
+</article>
+
+
+
+
+<p></p>
+<article>
+
+    
+    
+    <h3 class="article-title"><a href="/2015/12/22/海量数据挖掘（一）：MapReduce/"><span>
+                海量数据挖掘（一）：MapReduce</span></a></h3>
+    
+    
+
+    <div class="article-top-meta">
+        <span class="posted-on">
+            <a href="/2015/12/22/海量数据挖掘（一）：MapReduce/" rel="bookmark">
+                <time class="entry-date published" datetime="2015-12-22T07:09:40.000Z">
+                    2015-12-22
+                </time>
+            </a>
+        </span>
+    </div>
+
+
+    
+
+    <div class="article-content">
+        <div class="entry">
+            
+            <blockquote>
+<p>此系列为Cousera上Standford的<a href="https://class.coursera.org/mmds-002" target="_blank" rel="noopener">Mining Massive Datasets</a>课程学习笔记。 这是该系列的第一篇笔记：<strong>MapReduce</strong></p>
+</blockquote>
+            
+        </div>
+
+    </div>
+
+    <div class="article-footer">
+        <div class="article-meta pull-left">
+
+            
+            
+
+            <span class="post-categories">
+                <i class="icon-categories"></i>
+                <a href="/categories/笔记/">笔记</a>
+            </span>
+            
+
+            
+            
+
+            <span class="post-tags">
+                <i class="icon-tags"></i>
+                <a href="/tags/数据挖掘/">数据挖掘</a>
+            </span>
+            
+
+        </div>
+
+        
+    </div>
+</article>
+
+
+
+
+<p></p>
+<article>
+
+    
+    
+    <h3 class="article-title"><a href="/2015/12/21/记录：用PHP实现简单web框架/"><span>
+                记录：用PHP实现简单web框架</span></a></h3>
+    
+    
+
+    <div class="article-top-meta">
+        <span class="posted-on">
+            <a href="/2015/12/21/记录：用PHP实现简单web框架/" rel="bookmark">
+                <time class="entry-date published" datetime="2015-12-21T04:46:40.000Z">
+                    2015-12-21
+                </time>
+            </a>
+        </span>
+    </div>
+
+
+    
+
+    <div class="article-content">
+        <div class="entry">
+            
+            <blockquote>
+<p>这个框架功能比较简单，只有url拦截及自定义、加载静态模板两个功能，之前的博客也是基于这个框架实现的。第一部分是记录实现这个框架所需的php基础知识，第二部分是这两个功能的实现方法。最后还有实现自动登录的最佳实践。</p>
+</blockquote>
+            
+        </div>
+
+    </div>
+
+    <div class="article-footer">
+        <div class="article-meta pull-left">
+
+            
+            
+
+            <span class="post-categories">
+                <i class="icon-categories"></i>
+                <a href="/categories/博客/">博客</a>
+            </span>
+            
+
+            
+            
+
+            <span class="post-tags">
+                <i class="icon-tags"></i>
+                <a href="/tags/后台开发/">后台开发</a><a href="/tags/PHP/">PHP</a>
+            </span>
+            
+
+        </div>
+
+        
+    </div>
+</article>
+
+
+
+
+<p></p>
+<article>
+
+    
+    
+    <h3 class="article-title"><a href="/2015/12/19/Mysqli 使用/"><span>
+                Mysqli 使用</span></a></h3>
+    
+    
+
+    <div class="article-top-meta">
+        <span class="posted-on">
+            <a href="/2015/12/19/Mysqli 使用/" rel="bookmark">
+                <time class="entry-date published" datetime="2015-12-19T10:35:40.000Z">
+                    2015-12-19
+                </time>
+            </a>
+        </span>
+    </div>
+
+
+    
+
+    <div class="article-content">
+        <div class="entry">
+            
+            <h3 id="连接数据库并获取相关信息">连接数据库并获取相关信息</h3>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">$mysqli=@<span class="keyword">new</span> mysqli(<span class="string">"localhost"</span>, <span class="string">"root"</span>, <span class="string">""</span>, <span class="string">"mysql"</span>);</span><br><span class="line"><span class="comment">//如果连接错误</span></span><br><span class="line"><span class="keyword">if</span>(mysqli_connect_errno())&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"连接数据库失败："</span>.mysqli_connect_error();</span><br><span class="line">    $mysqli=<span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">exit</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//获取当前字符集</span></span><br><span class="line"><span class="keyword">echo</span> $mysqli-&gt;character_set_name().<span class="string">"&lt;br&gt;"</span>;</span><br><span class="line"><span class="comment">//获取客户端信息</span></span><br><span class="line"><span class="keyword">echo</span> $mysqli-&gt;get_client_info().<span class="string">"&lt;br&gt;"</span>;</span><br><span class="line"><span class="comment">//获取mysql主机信息</span></span><br><span class="line"><span class="keyword">echo</span> $mysqli-&gt;host_info.<span class="string">"&lt;br&gt;"</span>;</span><br><span class="line"><span class="comment">//获取服务器信息</span></span><br><span class="line"><span class="keyword">echo</span> $mysqli-&gt;server_info.<span class="string">"&lt;br&gt;"</span>;</span><br><span class="line"><span class="comment">//获取服务器版本</span></span><br><span class="line"><span class="keyword">echo</span> $mysqli-&gt;server_version.<span class="string">"&lt;br&gt;"</span>;</span><br><span class="line"><span class="comment">//关闭数据库连接</span></span><br><span class="line">$mysqli-&gt;close();</span><br></pre></td></tr></table></figure>
+            
+        </div>
+
+    </div>
+
+    <div class="article-footer">
+        <div class="article-meta pull-left">
+
+            
+            
+
+            <span class="post-categories">
+                <i class="icon-categories"></i>
+                <a href="/categories/笔记/">笔记</a>
+            </span>
+            
+
+            
+            
+
+            <span class="post-tags">
+                <i class="icon-tags"></i>
+                <a href="/tags/后台开发/">后台开发</a><a href="/tags/MySQL/">MySQL</a><a href="/tags/PHP/">PHP</a>
+            </span>
+            
+
+        </div>
+
+        
+    </div>
+</article>
+
+
+
+
+<nav class="pagination">
+  
+  <a href="/page/8/" class="pagination-prev">Prev</a>
+  
+  
+  <a href="/page/10/" class="pagination-next">Next</a>
+  
+</nav>
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2019
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+      <script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

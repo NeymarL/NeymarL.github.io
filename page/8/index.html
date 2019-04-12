@@ -1,0 +1,876 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-71540601-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-71540601-1');
+</script>
+
+  <meta charset="utf-8">
+  
+  <!-- if (config.subtitle) {
+    title.push(config.subtitle);
+  } -->
+  <title>
+    Page 8 | NIUHE
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE的博客">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script>
+  <script type="text/javascript" src="/js/search.js"></script>
+  <script type="text/javascript" src="/js/jquery.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">日々私たちが过ごしている日常というのは、実は奇迹の连続なのかもしれんな</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">博客</a></li>
+      
+        <li><a href="/categories">笔记</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+        <li><a href="/search">搜索</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        
+
+<p></p>
+<article>
+
+    
+    
+    <h3 class="article-title"><a href="/2016/02/27/应用机器学习的一些建议/"><span>
+                应用机器学习的一些建议</span></a></h3>
+    
+    
+
+    <div class="article-top-meta">
+        <span class="posted-on">
+            <a href="/2016/02/27/应用机器学习的一些建议/" rel="bookmark">
+                <time class="entry-date published" datetime="2016-02-27T02:32:00.000Z">
+                    2016-02-27
+                </time>
+            </a>
+        </span>
+    </div>
+
+
+    
+
+    <div class="article-content">
+        <div class="entry">
+            
+            <!-- toc -->
+<ul>
+<li><a href="#deciding-what-to-try-next">Deciding What to Try Next</a></li>
+<li><a href="#evaluating-a-hypothesis">Evaluating a Hypothesis</a></li>
+<li><a href="#the-test-set-error">The test set error</a></li>
+<li><a href="#model-selection-and-trainvalidationtest-sets">Model Selection and Train/Validation/Test Sets</a></li>
+<li><a href="#diagnosing-bias-vs-variance">Diagnosing Bias vs. Variance</a></li>
+<li><a href="#regularization-and-biasvariance">Regularization and Bias/Variance</a></li>
+<li><a href="#learning-curves">Learning Curves</a></li>
+<li><a href="#deciding-what-to-do-next-revisited">Deciding What to Do Next Revisited</a>
+<ul>
+<li><a href="#diagnosing-neural-networks">Diagnosing Neural Networks</a></li>
+</ul></li>
+<li><a href="#model-selection">Model Selection:</a></li>
+</ul>
+<!-- tocstop -->
+            
+        </div>
+
+    </div>
+
+    <div class="article-footer">
+        <div class="article-meta pull-left">
+
+            
+            
+
+            <span class="post-categories">
+                <i class="icon-categories"></i>
+                <a href="/categories/笔记/">笔记</a>
+            </span>
+            
+
+            
+            
+
+            <span class="post-tags">
+                <i class="icon-tags"></i>
+                <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Bias/">Bias</a><a href="/tags/Variance/">Variance</a><a href="/tags/Overfitting/">Overfitting</a>
+            </span>
+            
+
+        </div>
+
+        
+    </div>
+</article>
+
+
+
+
+<p></p>
+<article>
+
+    
+    
+    <h3 class="article-title"><a href="/2016/02/22/神经网络(Neural Network)(下)/"><span>
+                神经网络(Neural Network)(下)</span></a></h3>
+    
+    
+
+    <div class="article-top-meta">
+        <span class="posted-on">
+            <a href="/2016/02/22/神经网络(Neural Network)(下)/" rel="bookmark">
+                <time class="entry-date published" datetime="2016-02-22T15:10:00.000Z">
+                    2016-02-22
+                </time>
+            </a>
+        </span>
+    </div>
+
+
+    
+
+    <div class="article-content">
+        <div class="entry">
+            
+            <!-- toc -->
+<ul>
+<li><a href="#cost-function">Cost Function</a></li>
+<li><a href="#backpropagation-algorithm">Backpropagation Algorithm</a></li>
+<li><a href="#backpropagation-intuition">Backpropagation Intuition</a></li>
+<li><a href="#implementation-note-unrolling-parameters">Implementation Note: Unrolling Parameters</a></li>
+<li><a href="#gradient-checking">Gradient Checking</a></li>
+<li><a href="#putting-it-together">Putting it Together</a></li>
+<li><a href="#nn-for-linear-systems">NN for linear systems</a>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#testing-your-linear-nn">Testing your linear NN</a></li>
+</ul></li>
+<li><a href="#reference">Reference</a></li>
+</ul>
+<!-- tocstop -->
+            
+        </div>
+
+    </div>
+
+    <div class="article-footer">
+        <div class="article-meta pull-left">
+
+            
+            
+
+            <span class="post-categories">
+                <i class="icon-categories"></i>
+                <a href="/categories/笔记/">笔记</a>
+            </span>
+            
+
+            
+            
+
+            <span class="post-tags">
+                <i class="icon-tags"></i>
+                <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Neural-Network/">Neural Network</a><a href="/tags/Dense/">Dense</a>
+            </span>
+            
+
+        </div>
+
+        
+    </div>
+</article>
+
+
+
+
+<p></p>
+<article>
+
+    
+    
+    <h3 class="article-title"><a href="/2016/02/18/神经网络(Neural Network)(上)/"><span>
+                神经网络(Neural Network)(上)</span></a></h3>
+    
+    
+
+    <div class="article-top-meta">
+        <span class="posted-on">
+            <a href="/2016/02/18/神经网络(Neural Network)(上)/" rel="bookmark">
+                <time class="entry-date published" datetime="2016-02-18T02:10:00.000Z">
+                    2016-02-18
+                </time>
+            </a>
+        </span>
+    </div>
+
+
+    
+
+    <div class="article-content">
+        <div class="entry">
+            
+            <!-- toc -->
+<ul>
+<li><a href="#非线性假想函数">非线性假想函数</a></li>
+<li><a href="#神经和大脑">神经和大脑</a></li>
+<li><a href="#模型解释">模型解释</a>
+<ul>
+<li><a href="#vectorized-implementation">Vectorized implementation</a></li>
+</ul></li>
+<li><a href="#举例说明">举例说明</a>
+<ul>
+<li><a href="#x_1-and-x_2"><span class="math inline">\(x_1\)</span> AND <span class="math inline">\(x_2\)</span></a></li>
+<li><a href="#nor-or-xnor">NOR、OR、XNOR</a></li>
+</ul></li>
+<li><a href="#multiclass-classification">Multiclass Classification</a></li>
+</ul>
+<!-- tocstop -->
+            
+        </div>
+
+    </div>
+
+    <div class="article-footer">
+        <div class="article-meta pull-left">
+
+            
+            
+
+            <span class="post-categories">
+                <i class="icon-categories"></i>
+                <a href="/categories/笔记/">笔记</a>
+            </span>
+            
+
+            
+            
+
+            <span class="post-tags">
+                <i class="icon-tags"></i>
+                <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Neural-Network/">Neural Network</a><a href="/tags/Dense/">Dense</a>
+            </span>
+            
+
+        </div>
+
+        
+    </div>
+</article>
+
+
+
+
+<p></p>
+<article>
+
+    
+    
+    <h3 class="article-title"><a href="/2016/02/07/正则化解决过度拟合问题/"><span>
+                正则化解决过度拟合问题</span></a></h3>
+    
+    
+
+    <div class="article-top-meta">
+        <span class="posted-on">
+            <a href="/2016/02/07/正则化解决过度拟合问题/" rel="bookmark">
+                <time class="entry-date published" datetime="2016-02-07T02:10:00.000Z">
+                    2016-02-07
+                </time>
+            </a>
+        </span>
+    </div>
+
+
+    
+
+    <div class="article-content">
+        <div class="entry">
+            
+            <blockquote>
+<p>前言：通常一个学习演算法是借由训练范例来训练的。亦即预期结果的范例是可知的。而学习者则被认为须达到可以预测出其它范例的正确的结果，因此，应适用于一般化的情况而非只是训练时所使用的现有资料（根据它的归纳偏向）。然而，学习者却会去适应训练资料中太特化但又随机的特征，特别是在当学习过程太久或范例太少时。在过适的过程中，当预测训练范例结果的表现增加时，应用在未知资料的表现则变更差。——From <a href="https://zh.wikipedia.org/zh-hans/%E9%81%8E%E9%81%A9?oldformat=true" target="_blank" rel="noopener">WikiPedia</a></p>
+</blockquote>
+            
+        </div>
+
+    </div>
+
+    <div class="article-footer">
+        <div class="article-meta pull-left">
+
+            
+            
+
+            <span class="post-categories">
+                <i class="icon-categories"></i>
+                <a href="/categories/笔记/">笔记</a>
+            </span>
+            
+
+            
+            
+
+            <span class="post-tags">
+                <i class="icon-tags"></i>
+                <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Regularization/">Regularization</a>
+            </span>
+            
+
+        </div>
+
+        
+    </div>
+</article>
+
+
+
+
+<p></p>
+<article>
+
+    
+    
+    <h3 class="article-title"><a href="/2016/02/03/Logistic Regression/"><span>
+                Logistic Regression</span></a></h3>
+    
+    
+
+    <div class="article-top-meta">
+        <span class="posted-on">
+            <a href="/2016/02/03/Logistic Regression/" rel="bookmark">
+                <time class="entry-date published" datetime="2016-02-03T10:14:06.000Z">
+                    2016-02-03
+                </time>
+            </a>
+        </span>
+    </div>
+
+
+    
+
+    <div class="article-content">
+        <div class="entry">
+            
+            <p>Now we are switching from regression problems to <strong>classification problems</strong>. Don't be confused by the name &quot;Logistic Regression&quot;; it is named that way for historical reasons and is actually an approach to <strong>classification</strong> problems, <strong>not regression</strong> problems.</p>
+            
+        </div>
+
+    </div>
+
+    <div class="article-footer">
+        <div class="article-meta pull-left">
+
+            
+            
+
+            <span class="post-categories">
+                <i class="icon-categories"></i>
+                <a href="/categories/笔记/">笔记</a>
+            </span>
+            
+
+            
+            
+
+            <span class="post-tags">
+                <i class="icon-tags"></i>
+                <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Logistic-Regression/">Logistic Regression</a>
+            </span>
+            
+
+        </div>
+
+        
+    </div>
+</article>
+
+
+
+
+<p></p>
+<article>
+
+    
+    
+    <h3 class="article-title"><a href="/2016/02/01/Octave Tutorial/"><span>
+                Octave Tutorial</span></a></h3>
+    
+    
+
+    <div class="article-top-meta">
+        <span class="posted-on">
+            <a href="/2016/02/01/Octave Tutorial/" rel="bookmark">
+                <time class="entry-date published" datetime="2016-02-01T10:14:06.000Z">
+                    2016-02-01
+                </time>
+            </a>
+        </span>
+    </div>
+
+
+    
+
+    <div class="article-content">
+        <div class="entry">
+            
+            <!-- toc -->
+<ul>
+<li><a href="#basic-operations">Basic Operations</a></li>
+<li><a href="#moving-data-around">Moving Data Around</a>
+<ul>
+<li><a href="#dimensions">Dimensions</a></li>
+<li><a href="#loading-data">Loading data</a></li>
+<li><a href="#indexing">Indexing</a></li>
+</ul></li>
+<li><a href="#computing-on-data">Computing on Data</a>
+<ul>
+<li><a href="#matrix-operation">Matrix operation</a></li>
+<li><a href="#useful-functions">Useful functions</a></li>
+</ul></li>
+<li><a href="#plotting-data">Plotting Data</a></li>
+<li><a href="#control-statements-for-while-if-statements">Control statements: <code>for</code>, <code>while</code>, <code>if</code> statements</a></li>
+<li><a href="#functions">Functions</a></li>
+<li><a href="#vectorization">Vectorization</a></li>
+<li><a href="#working-on-and-submitting-programming-exercises">Working on and Submitting Programming Exercises</a></li>
+</ul>
+<!-- tocstop -->
+            
+        </div>
+
+    </div>
+
+    <div class="article-footer">
+        <div class="article-meta pull-left">
+
+            
+            
+
+            <span class="post-categories">
+                <i class="icon-categories"></i>
+                <a href="/categories/笔记/">笔记</a>
+            </span>
+            
+
+            
+            
+
+            <span class="post-tags">
+                <i class="icon-tags"></i>
+                <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Octave/">Octave</a><a href="/tags/Matlab/">Matlab</a>
+            </span>
+            
+
+        </div>
+
+        
+    </div>
+</article>
+
+
+
+
+<p></p>
+<article>
+
+    
+    
+    <h3 class="article-title"><a href="/2016/01/31/Linear Regression with Multiple Variables/"><span>
+                Linear Regression with Multiple Variables</span></a></h3>
+    
+    
+
+    <div class="article-top-meta">
+        <span class="posted-on">
+            <a href="/2016/01/31/Linear Regression with Multiple Variables/" rel="bookmark">
+                <time class="entry-date published" datetime="2016-01-31T10:14:06.000Z">
+                    2016-01-31
+                </time>
+            </a>
+        </span>
+    </div>
+
+
+    
+
+    <div class="article-content">
+        <div class="entry">
+            
+            <h2 id="multiple-features">Multiple Features</h2>
+<p>Linear regression with multiple variables is also known as &quot;<strong>multivariate linear regression</strong>&quot;.</p>
+<p>We now introduce notation for equations where we can have any number of input variables.</p>
+            
+        </div>
+
+    </div>
+
+    <div class="article-footer">
+        <div class="article-meta pull-left">
+
+            
+            
+
+            <span class="post-categories">
+                <i class="icon-categories"></i>
+                <a href="/categories/笔记/">笔记</a>
+            </span>
+            
+
+            
+            
+
+            <span class="post-tags">
+                <i class="icon-tags"></i>
+                <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Linear-Regression/">Linear Regression</a>
+            </span>
+            
+
+        </div>
+
+        
+    </div>
+</article>
+
+
+
+
+<p></p>
+<article>
+
+    
+    
+    <h3 class="article-title"><a href="/2016/01/30/Linear Regression with One Variable/"><span>
+                Linear Regression with One Variable</span></a></h3>
+    
+    
+
+    <div class="article-top-meta">
+        <span class="posted-on">
+            <a href="/2016/01/30/Linear Regression with One Variable/" rel="bookmark">
+                <time class="entry-date published" datetime="2016-01-30T07:27:06.000Z">
+                    2016-01-30
+                </time>
+            </a>
+        </span>
+    </div>
+
+
+    
+
+    <div class="article-content">
+        <div class="entry">
+            
+            <h2 id="model-representation">Model Representation</h2>
+<p>Recall that in <em>regression problems</em>, we are taking input variables and trying to map the output onto a <em>continuous</em> expected result function.</p>
+<p>Linear regression with one variable is also known as &quot;<strong>univariate linear regression</strong>.&quot;</p>
+<p>Univariate linear regression is used when you want to predict a <strong>single output</strong> value from a <strong>single input</strong> value. We're doing <strong>supervised learning</strong> here, so that means we already have an idea what the input/output cause and effect should be.</p>
+            
+        </div>
+
+    </div>
+
+    <div class="article-footer">
+        <div class="article-meta pull-left">
+
+            
+            
+
+            <span class="post-categories">
+                <i class="icon-categories"></i>
+                <a href="/categories/笔记/">笔记</a>
+            </span>
+            
+
+            
+            
+
+            <span class="post-tags">
+                <i class="icon-tags"></i>
+                <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/Linear-Regression/">Linear Regression</a>
+            </span>
+            
+
+        </div>
+
+        
+    </div>
+</article>
+
+
+
+
+<p></p>
+<article>
+
+    
+    
+    <h3 class="article-title"><a href="/2016/01/29/Introduction to machine learning/"><span>
+                Introduction to machine learning</span></a></h3>
+    
+    
+
+    <div class="article-top-meta">
+        <span class="posted-on">
+            <a href="/2016/01/29/Introduction to machine learning/" rel="bookmark">
+                <time class="entry-date published" datetime="2016-01-29T03:27:06.000Z">
+                    2016-01-29
+                </time>
+            </a>
+        </span>
+    </div>
+
+
+    
+
+    <div class="article-content">
+        <div class="entry">
+            
+            <h2 id="what-is-machine-learning">What is Machine Learning?</h2>
+<p>Two definitions of Machine Learning are offered. Arthur Samuel described it as: &quot;the field of study that gives computers the ability to learn without being explicitly programmed.&quot; This is an older, informal definition.</p>
+<blockquote>
+<p>Tom Mitchell provides a more modern definition: &quot;A computer program is said to learn from experience E with respect to some class of tasks T and performance measure P, if its performance at tasks in T, as measured by P, improves with experience E.&quot;</p>
+</blockquote>
+            
+        </div>
+
+    </div>
+
+    <div class="article-footer">
+        <div class="article-meta pull-left">
+
+            
+            
+
+            <span class="post-categories">
+                <i class="icon-categories"></i>
+                <a href="/categories/笔记/">笔记</a>
+            </span>
+            
+
+            
+            
+
+            <span class="post-tags">
+                <i class="icon-tags"></i>
+                <a href="/tags/Machine-Learning/">Machine Learning</a>
+            </span>
+            
+
+        </div>
+
+        
+    </div>
+</article>
+
+
+
+
+<p></p>
+<article>
+
+    
+    
+    <h3 class="article-title"><a href="/2016/01/17/记录：在 Docker 上配置 PHP 应用/"><span>
+                记录：在 Docker 上配置 PHP 应用</span></a></h3>
+    
+    
+
+    <div class="article-top-meta">
+        <span class="posted-on">
+            <a href="/2016/01/17/记录：在 Docker 上配置 PHP 应用/" rel="bookmark">
+                <time class="entry-date published" datetime="2016-01-16T16:16:06.000Z">
+                    2016-01-17
+                </time>
+            </a>
+        </span>
+    </div>
+
+
+    
+
+    <div class="article-content">
+        <div class="entry">
+            
+            <blockquote>
+<p><strong>什么是Docker</strong> docker的英文本意是码头工人，也就是搬运工，这种搬运工搬运的是集装箱（Container），集装箱里面装的可不是商品货物，而是任意类型的App，Docker把App（叫Payload）装在Container内，通过Linux Container技术的包装将App变成一种标准化的、可移植的、自管理的组件，这种组件可以在你的latop上开发、调试、运行，最终非常方便和一致地运行在production环境下。</p>
+</blockquote>
+            
+        </div>
+
+    </div>
+
+    <div class="article-footer">
+        <div class="article-meta pull-left">
+
+            
+            
+
+            <span class="post-categories">
+                <i class="icon-categories"></i>
+                <a href="/categories/博客/">博客</a>
+            </span>
+            
+
+            
+            
+
+            <span class="post-tags">
+                <i class="icon-tags"></i>
+                <a href="/tags/后台开发/">后台开发</a><a href="/tags/PHP/">PHP</a><a href="/tags/Docker/">Docker</a>
+            </span>
+            
+
+        </div>
+
+        
+    </div>
+</article>
+
+
+
+
+<nav class="pagination">
+  
+  <a href="/page/7/" class="pagination-prev">Prev</a>
+  
+  
+  <a href="/page/9/" class="pagination-next">Next</a>
+  
+</nav>
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2019
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+      <script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>
