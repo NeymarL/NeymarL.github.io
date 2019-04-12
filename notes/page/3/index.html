@@ -1,0 +1,825 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-71540601-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-71540601-1');
+</script>
+
+  <meta charset="utf-8">
+  
+  <!-- if (config.subtitle) {
+    title.push(config.subtitle);
+  } -->
+  <title>
+    Page 3 | NIUHE
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE的博客">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script>
+  <script type="text/javascript" src="/js/search.js"></script>
+  <script type="text/javascript" src="/js/jquery.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">日々私たちが过ごしている日常というのは、実は奇迹の连続なのかもしれんな</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">博客</a></li>
+      
+        <li><a href="/notes">笔记</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+        <li><a href="/search">搜索</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2017/12/16/RL - Model-Free Prediction/"><span>
+        RL - Model-Free Prediction</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/12/16/RL - Model-Free Prediction/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-12-16T07:00:09.000Z">
+          2017-12-16
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <h2 id="introduction">Introduction</h2>
+<p>Last lecture, David taught us how to solve a <em>known</em> MDP, which is <em>planning by dynamic programming</em>. In this lecture, we will learn how to estimate the value function of an <strong>unknown</strong> MDP, which is <em>model-free prediction</em>. And in the next lecture, we will <em>optimise</em> the value function of an unknown MDP.</p>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/笔记/">笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Reinforcement-Learning/">Reinforcement Learning</a><a href="/tags/增强学习/">增强学习</a><a href="/tags/Model-Free/">Model-Free</a><a href="/tags/Monte-Carlo-Learning/">Monte-Carlo Learning</a><a href="/tags/TD/">TD</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2017/12/07/RL - Planning by Dynamic Programming/"><span>
+        RL - Planning by Dynamic Programming</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/12/07/RL - Planning by Dynamic Programming/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-12-07T07:48:19.000Z">
+          2017-12-07
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p><strong>Table of Contents</strong></p>
+<!-- toc -->
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#policy-evaluation">Policy Evaluation</a></li>
+<li><a href="#policy-iteration">Policy Iteration</a></li>
+<li><a href="#value-iteration">Value Iteration</a></li>
+<li><a href="#extentions-to-dynamic-programming">Extentions to Dynamic Programming</a></li>
+<li><a href="#contraction-mapping">Contraction Mapping</a></li>
+</ul>
+<!-- tocstop -->
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/笔记/">笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Reinforcement-Learning/">Reinforcement Learning</a><a href="/tags/增强学习/">增强学习</a><a href="/tags/MDP/">MDP</a><a href="/tags/Dynamic-Programming/">Dynamic Programming</a><a href="/tags/Policy-Iteration/">Policy Iteration</a><a href="/tags/Value-Iteration/">Value Iteration</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2017/08/18/RL - Markov Decision Processes/"><span>
+        RL - Markov Decision Processes</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/08/18/RL - Markov Decision Processes/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-08-18T07:02:19.000Z">
+          2017-08-18
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p><strong>Table of Contents</strong></p>
+<!-- toc -->
+<ul>
+<li><a href="#markov-processes">Markov Processes</a></li>
+<li><a href="#markov-reward-process">Markov Reward Process</a></li>
+<li><a href="#markov-decision-process">Markov Decision Process</a></li>
+</ul>
+<!-- tocstop -->
+<h2 id="markov-processes">Markov Processes</h2>
+<p>Basically, <strong>Markov decision processes</strong> formally describe an environment for reinforcement learning, where the environment is <strong>fully observable</strong>, which means the current state completely characterises the process.</p>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/笔记/">笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Reinforcement-Learning/">Reinforcement Learning</a><a href="/tags/增强学习/">增强学习</a><a href="/tags/MDP/">MDP</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2017/08/15/RL - Introduction to Reinforcement Learning/"><span>
+        RL - Introduction to Reinforcement Learning</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/08/15/RL - Introduction to Reinforcement Learning/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-08-15T07:55:19.000Z">
+          2017-08-15
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>RL, especially DRL (Deep Reinforcement Learning) has been an fervent research area during these years. One of the most famous RL work would be AlphaGo, who has beat <a href="https://www.wikiwand.com/en/Lee_Sedol" target="_blank" rel="noopener">Lee Sedol</a>, one of the best players at Go, last year. And in this year (2017), AlphaGo won three games with Ke Jie, the world No.1 ranked player. Not only in Go, AI has defeated best human play in many games, which illustrates the powerful of the combination of Deep Learning and Reinfocement Learning. However, despite AI plays better games than human, AI takes more time, data and energy to train which cannot be said to be very intelligent. Still, there are numerous unexplored and unsolved problems in RL research, that's also why we want to learn RL.</p>
+<p>This is the first note of David Silver's <a href="http://www0.cs.ucl.ac.uk/staff/D.Silver/web/Teaching.html" target="_blank" rel="noopener">RL course</a>.</p>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/笔记/">笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Reinforcement-Learning/">Reinforcement Learning</a><a href="/tags/AlphaGo/">AlphaGo</a><a href="/tags/增强学习/">增强学习</a><a href="/tags/DRL/">DRL</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2017/08/12/Deep NLP - Question Answering/"><span>
+        Deep NLP - Question Answering</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/08/12/Deep NLP - Question Answering/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-08-12T13:30:19.000Z">
+          2017-08-12
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>Question answering (QA) is a computer science discipline within the fields of information retrieval and natural language processing (NLP), which is concerned with building systems that automatically answer questions posed by humans in a natural language.</p>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/笔记/">笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Deep-NLP/">Deep NLP</a><a href="/tags/NLP/">NLP</a><a href="/tags/Attention/">Attention</a><a href="/tags/QA/">QA</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2017/08/10/Deep NLP - Speech Recognition/"><span>
+        Deep NLP - Speech Recognition</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/08/10/Deep NLP - Speech Recognition/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-08-10T13:30:19.000Z">
+          2017-08-10
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>Speech recognition (SR) is the inter-disciplinary sub-field of computational linguistics that develops methodologies and technologies that enables the recognition and translation of spoken language into text by computers.
+      
+    </p></div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/笔记/">笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Deep-NLP/">Deep NLP</a><a href="/tags/NLP/">NLP</a><a href="/tags/Speech-Recognition/">Speech Recognition</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2017/08/09/Deep NLP - Conditional Language Model with Attention/"><span>
+        Deep NLP - Conditional Language Model with Attention</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/08/09/Deep NLP - Conditional Language Model with Attention/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-08-09T14:30:19.000Z">
+          2017-08-09
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <!-- toc -->
+<ul>
+<li><a href="#machine-translation-with-attention">Machine translation with attention</a>
+<ul>
+<li><a href="#with-concatenation">With Concatenation</a></li>
+<li><a href="#with-convolutional-nets">With Convolutional Nets</a></li>
+<li><a href="#with-bidirectional-rnns">With Bidirectional RNNS</a></li>
+<li><a href="#attention">Attention</a></li>
+</ul></li>
+<li><a href="#image-caption-generation-with-attention">Image caption generation with attention</a></li>
+</ul>
+<!-- tocstop -->
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/笔记/">笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Deep-NLP/">Deep NLP</a><a href="/tags/NLP/">NLP</a><a href="/tags/Attention/">Attention</a><a href="/tags/Machine-Translation/">Machine Translation</a><a href="/tags/NMT/">NMT</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2017/08/08/Deep NLP - Conditional Language Modeling/"><span>
+        Deep NLP - Conditional Language Model</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/08/08/Deep NLP - Conditional Language Modeling/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-08-08T13:30:19.000Z">
+          2017-08-08
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <!-- toc -->
+<ul>
+<li><a href="#kalchbrenner-and-blunsom-2013">Kalchbrenner and Blunsom 2013</a></li>
+<li><a href="#sutskever-et-al-2014">Sutskever et al. (2014)</a></li>
+<li><a href="#kiros-et-al2013">Kiros et al.(2013)</a></li>
+</ul>
+<!-- tocstop -->
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/笔记/">笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Deep-NLP/">Deep NLP</a><a href="/tags/NLP/">NLP</a><a href="/tags/Machine-Translation/">Machine Translation</a><a href="/tags/NMT/">NMT</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2017/08/07/Deep NLP - Text Classification/"><span>
+        Deep NLP - Text Classification</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/08/07/Deep NLP - Text Classification/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-08-07T13:30:19.000Z">
+          2017-08-07
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <!-- toc -->
+<ul>
+<li><a href="#generative-and-discriminative-models">Generative and discriminative models</a></li>
+<li><a href="#naive-bayes-classifier">Naive Bayes classifier</a></li>
+<li><a href="#feature-representations">Feature Representations</a></li>
+<li><a href="#logistic-regression">Logistic Regression</a></li>
+<li><a href="#representing-text-with-a-rnn">Representing Text with a RNN</a></li>
+<li><a href="#convolutional-neural-network">Convolutional Neural Network</a></li>
+</ul>
+<!-- tocstop -->
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/笔记/">笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Deep-NLP/">Deep NLP</a><a href="/tags/NLP/">NLP</a><a href="/tags/LSTM/">LSTM</a><a href="/tags/Naive-Bayes/">Naive Bayes</a><a href="/tags/Text-Classification/">Text Classification</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2017/08/06/Deep NLP - RNNs and Language Modelling/"><span>
+        Deep NLP - Recurrent Neural Networks and Language Modelling</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/08/06/Deep NLP - RNNs and Language Modelling/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-08-06T12:30:19.000Z">
+          2017-08-06
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <!-- toc -->
+<ul>
+<li><a href="#count-based-n-gram-language-models">Count based N-Gram Language Models</a></li>
+<li><a href="#neural-n-gram-language-models">Neural N-Gram Language Models</a></li>
+<li><a href="#recurrent-neural-network-language-models">Recurrent Neural Network Language Models</a>
+<ul>
+<li><a href="#long-short-term-memory-lstm">Long Short Term Memory (LSTM)</a></li>
+<li><a href="#deep-rnn-lms">Deep RNN LMs</a></li>
+</ul></li>
+</ul>
+<!-- tocstop -->
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/笔记/">笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Deep-NLP/">Deep NLP</a><a href="/tags/NLP/">NLP</a><a href="/tags/LSTM/">LSTM</a><a href="/tags/RNN/">RNN</a><a href="/tags/Language-Model/">Language Model</a><a href="/tags/N-Gram/">N-Gram</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+<nav class="pagination">
+  
+  <a href="/notes/page/2/" class="pagination-prev">Prev</a>
+  
+  
+  <a href="/notes/page/4/" class="pagination-next">Next</a>
+  
+</nav>
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2019
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+      <script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>

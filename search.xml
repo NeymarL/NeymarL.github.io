@@ -3,7 +3,7 @@
   
     
     <entry>
-      <title>The Costs of Production</title>
+      <title>Microeconomics - The Costs of Production</title>
       <link href="/2019/04/10/The%20Costs%20of%20Production/"/>
       <url>/2019/04/10/The%20Costs%20of%20Production/</url>
       
@@ -30,7 +30,7 @@
     </entry>
     
     <entry>
-      <title>Consumers, Producers, and the Efficiency of Markets</title>
+      <title>Microeconomics - Consumers, Producers, and the Efficiency of Markets</title>
       <link href="/2019/03/20/Consumers,%20Producers,%20and%20the%20Efficiency%20of%20Markets/"/>
       <url>/2019/03/20/Consumers,%20Producers,%20and%20the%20Efficiency%20of%20Markets/</url>
       
@@ -59,7 +59,7 @@
     </entry>
     
     <entry>
-      <title>Elasticity and Its Application</title>
+      <title>Microeconomics - Elasticity and Its Application</title>
       <link href="/2019/02/22/Elasticity%20and%20Its%20Application/"/>
       <url>/2019/02/22/Elasticity%20and%20Its%20Application/</url>
       
@@ -86,7 +86,7 @@
     </entry>
     
     <entry>
-      <title>The Market Forces of Supply and Demand</title>
+      <title>Microeconomics - The Market Forces of Supply and Demand</title>
       <link href="/2019/02/11/The%20Market%20Forces%20of%20Supply%20and%20Demand/"/>
       <url>/2019/02/11/The%20Market%20Forces%20of%20Supply%20and%20Demand/</url>
       
@@ -323,13 +323,13 @@
             
             <tag> 增强学习 </tag>
             
-            <tag> DQN </tag>
-            
             <tag> Policy Gradient </tag>
             
             <tag> DPG </tag>
             
             <tag> DDPG </tag>
+            
+            <tag> DQN </tag>
             
         </tags>
       
@@ -412,9 +412,9 @@
             
             <tag> Reinforcement Learning </tag>
             
-            <tag> Q-learning </tag>
-            
             <tag> DQN </tag>
+            
+            <tag> Q-learning </tag>
             
             <tag> A3C </tag>
             
@@ -489,7 +489,7 @@
     </entry>
     
     <entry>
-      <title>Interdependence and the Gains from Trade</title>
+      <title>Microeconomics - Interdependence and the Gains from Trade</title>
       <link href="/2018/11/03/Interdependence%20and%20the%20Gains%20from%20Trade/"/>
       <url>/2018/11/03/Interdependence%20and%20the%20Gains%20from%20Trade/</url>
       
@@ -543,7 +543,7 @@
     </entry>
     
     <entry>
-      <title>Thinking Like an Economist</title>
+      <title>Microeconomics - Thinking Like an Economist</title>
       <link href="/2018/10/03/Thinking%20Like%20an%20Economist/"/>
       <url>/2018/10/03/Thinking%20Like%20an%20Economist/</url>
       
@@ -568,7 +568,7 @@
     </entry>
     
     <entry>
-      <title>Ten Principles of Economics</title>
+      <title>Microeconomics - Ten Principles of Economics</title>
       <link href="/2018/09/16/Chapter%201-%20Ten%20Principles%20of%20Economics/"/>
       <url>/2018/09/16/Chapter%201-%20Ten%20Principles%20of%20Economics/</url>
       
@@ -611,9 +611,9 @@
       
         <tags>
             
-            <tag> Deep Learning </tag>
-            
             <tag> Reinforcement Learning </tag>
+            
+            <tag> Deep Learning </tag>
             
             <tag> AlphaGo </tag>
             
@@ -642,9 +642,9 @@
       
         <tags>
             
-            <tag> Deep Learning </tag>
-            
             <tag> Reinforcement Learning </tag>
+            
+            <tag> Deep Learning </tag>
             
             <tag> AlphaGo </tag>
             
@@ -737,9 +737,9 @@
       
         <tags>
             
-            <tag> Deep Learning </tag>
-            
             <tag> Reinforcement Learning </tag>
+            
+            <tag> Deep Learning </tag>
             
             <tag> 增强学习 </tag>
             
@@ -952,11 +952,11 @@
             
             <tag> Deep Learning </tag>
             
+            <tag> Deep NLP </tag>
+            
             <tag> NLP </tag>
             
             <tag> NMT </tag>
-            
-            <tag> Deep NLP </tag>
             
             <tag> CNN </tag>
             
@@ -985,13 +985,13 @@
             
             <tag> Deep Learning </tag>
             
-            <tag> NLP </tag>
+            <tag> Deep NLP </tag>
             
-            <tag> NMT </tag>
+            <tag> NLP </tag>
             
             <tag> Attention </tag>
             
-            <tag> Deep NLP </tag>
+            <tag> NMT </tag>
             
         </tags>
       
@@ -1016,11 +1016,11 @@
             
             <tag> Deep Learning </tag>
             
+            <tag> Deep NLP </tag>
+            
             <tag> NLP </tag>
             
             <tag> Attention </tag>
-            
-            <tag> Deep NLP </tag>
             
             <tag> QA </tag>
             
@@ -1047,9 +1047,9 @@
             
             <tag> Deep Learning </tag>
             
-            <tag> NLP </tag>
-            
             <tag> Deep NLP </tag>
+            
+            <tag> NLP </tag>
             
             <tag> Speech Recognition </tag>
             
@@ -1076,15 +1076,15 @@
             
             <tag> Deep Learning </tag>
             
-            <tag> NLP </tag>
+            <tag> Deep NLP </tag>
             
-            <tag> NMT </tag>
+            <tag> NLP </tag>
             
             <tag> Attention </tag>
             
-            <tag> Deep NLP </tag>
-            
             <tag> Machine Translation </tag>
+            
+            <tag> NMT </tag>
             
         </tags>
       
@@ -1109,13 +1109,13 @@
             
             <tag> Deep Learning </tag>
             
-            <tag> NLP </tag>
-            
-            <tag> NMT </tag>
-            
             <tag> Deep NLP </tag>
             
+            <tag> NLP </tag>
+            
             <tag> Machine Translation </tag>
+            
+            <tag> NMT </tag>
             
         </tags>
       
@@ -1140,9 +1140,9 @@
             
             <tag> Deep Learning </tag>
             
-            <tag> NLP </tag>
-            
             <tag> Deep NLP </tag>
+            
+            <tag> NLP </tag>
             
             <tag> LSTM </tag>
             
@@ -1173,13 +1173,13 @@
             
             <tag> Deep Learning </tag>
             
-            <tag> NLP </tag>
-            
             <tag> Deep NLP </tag>
             
-            <tag> RNN </tag>
+            <tag> NLP </tag>
             
             <tag> LSTM </tag>
+            
+            <tag> RNN </tag>
             
             <tag> Language Model </tag>
             
@@ -1208,9 +1208,9 @@
             
             <tag> Deep Learning </tag>
             
-            <tag> NLP </tag>
-            
             <tag> Deep NLP </tag>
+            
+            <tag> NLP </tag>
             
             <tag> Word2Vec </tag>
             
@@ -1305,9 +1305,9 @@
       
         <tags>
             
-            <tag> TCP/IP </tag>
-            
             <tag> 计算机网络 </tag>
+            
+            <tag> TCP/IP </tag>
             
             <tag> 本科课程 </tag>
             
@@ -1340,9 +1340,9 @@
             
             <tag> 本科课程 </tag>
             
-            <tag> 物联网 </tag>
-            
             <tag> TinyOS </tag>
+            
+            <tag> 物联网 </tag>
             
             <tag> ZigBee </tag>
             
@@ -1595,9 +1595,9 @@
       
         <tags>
             
-            <tag> NLP </tag>
-            
             <tag> Machine Learning </tag>
+            
+            <tag> NLP </tag>
             
             <tag> HMM </tag>
             
@@ -1852,9 +1852,9 @@
             
             <tag> Deep Learning </tag>
             
-            <tag> RNN </tag>
-            
             <tag> LSTM </tag>
+            
+            <tag> RNN </tag>
             
         </tags>
       
@@ -2341,11 +2341,11 @@
       
         <tags>
             
-            <tag> TCP/IP </tag>
+            <tag> 后台开发 </tag>
             
             <tag> 计算机网络 </tag>
             
-            <tag> 后台开发 </tag>
+            <tag> TCP/IP </tag>
             
         </tags>
       
@@ -2391,9 +2391,9 @@
       
         <tags>
             
-            <tag> 计算机网络 </tag>
-            
             <tag> 后台开发 </tag>
+            
+            <tag> 计算机网络 </tag>
             
             <tag> Wireshark </tag>
             
@@ -2491,9 +2491,9 @@
       
         <tags>
             
-            <tag> 后台开发 </tag>
-            
             <tag> Linux </tag>
+            
+            <tag> 后台开发 </tag>
             
             <tag> Memcache </tag>
             
@@ -2566,9 +2566,9 @@
       
         <tags>
             
-            <tag> 后台开发 </tag>
-            
             <tag> MySQL </tag>
+            
+            <tag> 后台开发 </tag>
             
             <tag> PHP </tag>
             
@@ -2616,11 +2616,11 @@
       
         <tags>
             
-            <tag> 后台开发 </tag>
-            
             <tag> Linux </tag>
             
             <tag> MySQL </tag>
+            
+            <tag> 后台开发 </tag>
             
             <tag> PHP </tag>
             
@@ -2699,9 +2699,9 @@
       
         <tags>
             
-            <tag> 后台开发 </tag>
-            
             <tag> MySQL </tag>
+            
+            <tag> 后台开发 </tag>
             
         </tags>
       
