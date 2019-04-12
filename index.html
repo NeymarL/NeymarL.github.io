@@ -149,10 +149,1654 @@
 
 
 
+
+博客
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2018/11/30/RL - Deep Deterministic Policy Gradient/"><span>
+        RL - Deep Deterministic Policy Gradient (DDPG)</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2018/11/30/RL - Deep Deterministic Policy Gradient/" rel="bookmark">
+        <time class="entry-date published" datetime="2018-11-30T05:53:09.000Z">
+          2018-11-30
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p><a href="https://arxiv.org/abs/1509.02971" target="_blank" rel="noopener">Deep Deterministic Policy Gradient (DDPG)</a> 是由 DeepMind 的 Lillicrap 等人于2015年提出的算法，发表在ICLR 2016上。DDPG 是基于 <a href="http://proceedings.mlr.press/v32/silver14.pdf" target="_blank" rel="noopener">DPG</a> 算法的改进，可以看作是 Actor-critic 和 <a href="https://www.52coding.com.cn/2018/11/16/RL%20-%20DQN%20and%20A3C/">DQN</a> 的结合，它同时学习一个 Q-function 和一个策略（policy）：用 Q-learning 的方法学习 Q-function，然后用 Q-function 更新策略。</p>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/博客/">博客</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Reinforcement-Learning/">Reinforcement Learning</a><a href="/tags/增强学习/">增强学习</a><a href="/tags/DQN/">DQN</a><a href="/tags/Policy-Gradient/">Policy Gradient</a><a href="/tags/DPG/">DPG</a><a href="/tags/DDPG/">DDPG</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+
+
+
+博客
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2018/11/25/RL - PPO/"><span>
+        RL - Proximal Policy Optimization (PPO)</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2018/11/25/RL - PPO/" rel="bookmark">
+        <time class="entry-date published" datetime="2018-11-25T14:00:09.000Z">
+          2018-11-25
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p><a href="https://arxiv.org/abs/1707.06347" target="_blank" rel="noopener">Proximal Policy Optimization (PPO, PPO-Clip, PPO-Penalty)</a> 是由<a href="https://www.52coding.com.cn/2018/11/22/RL%20-%20TRPO/">TRPO</a>的作者Schulman等人于2017年提出的策略梯度类算法。PPO算法的思路和TRPO一致，都是想在优化时采取尽可能大的步幅但又不能太大以至于产生崩坏。相比于比TRPO，PPO实现起来更简单，泛化能力更强，可以使用随机梯度下降（SGD）进行优化。</p>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/博客/">博客</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Reinforcement-Learning/">Reinforcement Learning</a><a href="/tags/增强学习/">增强学习</a><a href="/tags/Policy-Gradient/">Policy Gradient</a><a href="/tags/PPO/">PPO</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+
+
+
+博客
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2018/11/22/RL - TRPO/"><span>
+        RL - Trust Region Policy Optimization (TRPO)</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2018/11/22/RL - TRPO/" rel="bookmark">
+        <time class="entry-date published" datetime="2018-11-22T09:10:09.000Z">
+          2018-11-22
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p><a href="https://arxiv.org/abs/1502.05477" target="_blank" rel="noopener">Trust Region Policy Optimization (TRPO)</a>算法是由伯克利大学的Schulman等人于2015年提出的策略梯度（Policy Gradients）算法。TRPO通过最大化新策略相对于当前策略的优势来保证每次更新都是单调递增的（稳定），同时找到尽可能大的更新步幅。算法推导出的最终结果是在KL约束下最大化替代优势函数。</p>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/博客/">博客</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Reinforcement-Learning/">Reinforcement Learning</a><a href="/tags/增强学习/">增强学习</a><a href="/tags/Policy-Gradient/">Policy Gradient</a><a href="/tags/TRPO/">TRPO</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+
+
+
+博客
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2018/11/16/RL - DQN and A3C/"><span>
+        RL - DQN &amp; A3C &amp; GAE</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2018/11/16/RL - DQN and A3C/" rel="bookmark">
+        <time class="entry-date published" datetime="2018-11-16T06:24:32.000Z">
+          2018-11-16
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <h2 id="deep-q-network">Deep Q-Network</h2>
+<p>Deep Q-Network (<a href="https://www.cs.toronto.edu/~vmnih/docs/dqn.pdf" target="_blank" rel="noopener">DQN</a>) 是由DeepMind的Mnih等人于2013年提出的算法，该算法成功把深度学习应用到了RL领域，并（一定程度上）解决了训练不稳定的问题，在玩Atari游戏中取得了非常好的结果。</p>
+<p>文章指出使用非线性函数拟合 Q-value 的RL算法不稳定主要因为：</p>
+<ol type="1">
+<li>同一个观测序列中的数据相关性较大</li>
+<li>当 Q-value 发生了很小的改变，可能导致整个策略（policy）发生较大变化，从而导致 Q-value 和目标 <span class="math inline">\(r + \gamma * \max_{a&#39;}Q(s&#39; ,a&#39;)\)</span> 的差距不稳定</li>
+</ol>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/博客/">博客</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Reinforcement-Learning/">Reinforcement Learning</a><a href="/tags/Q-learning/">Q-learning</a><a href="/tags/DQN/">DQN</a><a href="/tags/A3C/">A3C</a><a href="/tags/GAE/">GAE</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+
+
+
+博客
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2018/11/07/CCZero/"><span>
+        中国象棋Zero技术详解</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2018/11/07/CCZero/" rel="bookmark">
+        <time class="entry-date published" datetime="2018-11-07T09:27:47.000Z">
+          2018-11-07
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p><a href="https://cczero.org/" target="_blank" rel="noopener">中国象棋Zero（CCZero）</a>是一个开源项目，把<a href="https://arxiv.org/abs/1712.01815" target="_blank" rel="noopener">AlphaZero</a>的算法应用到了中国象棋上，旨在借助广大象棋爱好者之力一起训练出一个可以打败旋风名手的“象棋之神”。因为种种原因吧，这个目标到目前（2018/11/07）为止未能实现，或者说还差得远，而跑谱的人也越来越少了，很可能坚持不了多久了。</p>
+<p>虽然未能实现目标，但在技术上还是有一定意义的，<a href="https://github.com/NeymarL/ChineseChess-AlphaZero" target="_blank" rel="noopener">GitHub</a>上也时不时有人询问技术细节，在此总结一下，记录一些坑以后不要再踩。</p>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/博客/">博客</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Reinforcement-Learning/">Reinforcement Learning</a><a href="/tags/AlphaZero/">AlphaZero</a><a href="/tags/增强学习/">增强学习</a><a href="/tags/CCZero/">CCZero</a><a href="/tags/MCTS/">MCTS</a><a href="/tags/中国象棋/">中国象棋</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+
+
+
+博客
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2018/11/06/博客迁移记录/"><span>
+        Hexo 搭建博客踩坑记录</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2018/11/06/博客迁移记录/" rel="bookmark">
+        <time class="entry-date published" datetime="2018-11-06T02:41:47.000Z">
+          2018-11-06
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>博客迁移这个事早就想做了，但到现在才有时间和精力来完成。以前太年轻，写的博客系统并不方便维护，迁移的动力主要有以下几个：</p>
+<ol type="1">
+<li>原博客更新、维护较麻烦。以前的博客是用<a href="https://www.52coding.com.cn/2015/12/21/%E8%AE%B0%E5%BD%95%EF%BC%9A%E7%94%A8PHP%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95web%E6%A1%86%E6%9E%B6/">PHP</a>写的，之前的写作方式是用Markdown写好导出HTML，再修改HTML代码使得静态资源（图片等）加载正确，这就使得修改博客很麻烦；更换主题也很麻烦，博客的主题和Markdown的主题通常会有冲突，所以想换个样式就要改半天CSS。</li>
+<li>觉得UI有些难看，想要简洁一些；</li>
+<li>安全问题。</li>
+</ol>
+<p>现在的解决方案是<a href="https://pages.github.com/" target="_blank" rel="noopener">Github Pages</a> + <a href="https://hexo.io/zh-cn/index.html" target="_blank" rel="noopener">Hexo</a>，主题选的是<a href="https://github.com/CodeDaraW/Hacker" target="_blank" rel="noopener">Hacker</a>，迁移了两天终于搞完了，在此简单记录一下遇到的坑。</p>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/博客/">博客</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Mathjax/">Mathjax</a><a href="/tags/Hexo/">Hexo</a><a href="/tags/Disqus/">Disqus</a><a href="/tags/Gitment/">Gitment</a><a href="/tags/Github-Pages/">Github Pages</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+博客
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2017/08/15/SAN for Image QA/"><span>
+        Paper Reading - Stacked Attention Networks for Image QA</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/08/15/SAN for Image QA/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-08-15T01:30:19.000Z">
+          2017-08-15
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <blockquote>
+<p>Zichao Yang, Xiaodong He, Jianfeng Gao , Li Deng , Alex Smola <a href="https://arxiv.org/abs/1511.02274" target="_blank" rel="noopener">Stacked Attention Networks for Image Question Answering</a></p>
+</blockquote>
+<p>这篇文章发表在CVPR2016，作者把 attention 机制应用在 Visual QA，不但能理解神经网络生成答案的 multiple resoning，而且获得了当时最好的效果。</p>
+<p>SAN总共由三部分组成：</p>
+<ul>
+<li>Image Model：用来编码图片信息</li>
+<li>Question Moel：用来编码问题信息</li>
+<li>Stacked Attention Networks：通过多层 attention layer 不断优化对问题的编码</li>
+</ul>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/博客/">博客</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Attention/">Attention</a><a href="/tags/CV/">CV</a><a href="/tags/CNN/">CNN</a><a href="/tags/VQA/">VQA</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+
+
+
+博客
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2017/08/14/Neural Machine Translation In Linear Time (ByteNet)/"><span>
+        Paper Reading - Neural Machine Translation In Linear Time (ByteNet)</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/08/14/Neural Machine Translation In Linear Time (ByteNet)/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-08-14T01:30:19.000Z">
+          2017-08-14
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>ByteNet 可用于<strong>字符级</strong>的机器翻译模型并且有着很好的表现，它的特点在于可以在线性时间 (linear time) 完成翻译而且能够处理长距离依赖。它也采用编码器-解码器架构，并且编码器和解码器都由CNN组成。</p>
+<p>ByteNet 之所以有上述的这些特性，是因为使用了如下一些技术：</p>
+<ul>
+<li>Dynamic Unfolding
+<ul>
+<li>解决了生成不同长度翻译的问题</li>
+</ul></li>
+<li>Dilated Convolution
+<ul>
+<li>缩短了依赖传播的距离</li>
+</ul></li>
+<li>Masked 1D Convolution
+<ul>
+<li>保证训练时只用过去的信息生成当前字符</li>
+</ul></li>
+<li>Residual Blocks
+<ul>
+<li>解决梯度消失问题</li>
+</ul></li>
+</ul>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/博客/">博客</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/NLP/">NLP</a><a href="/tags/NMT/">NMT</a><a href="/tags/Deep-NLP/">Deep NLP</a><a href="/tags/CNN/">CNN</a><a href="/tags/ByteBet/">ByteBet</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+
+
+
+博客
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2017/08/13/Attention Is All You Need/"><span>
+        Paper Reading - Attention Is All You Need</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/08/13/Attention Is All You Need/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-08-13T01:30:19.000Z">
+          2017-08-13
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>Google的<a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">这篇论文</a>提出了一个只使用Attention机制的神经翻译模型，该模型依旧采用编码器-解码器（Encoder-Decoder）架构，但未使用RNN和CNN。文章的主要目的是在减少计算量和提高并行效率的同时不损害最终的实验结果，创新之处在于提出了两个新的Attention机制，分别叫做 Scaled Dot-Product Attention 和 Multi-Head Attention.</p>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/博客/">博客</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/NLP/">NLP</a><a href="/tags/NMT/">NMT</a><a href="/tags/Attention/">Attention</a><a href="/tags/Deep-NLP/">Deep NLP</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+博客
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2016/11/14/揭秘二维码—原理与实践/"><span>
+        揭秘二维码—原理与实践</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/11/14/揭秘二维码—原理与实践/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-11-13T16:11:06.000Z">
+          2016-11-14
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <h2 id="什么是二维码">什么是二维码</h2>
+<p>二维码，英文：<strong>Quick Response Code</strong>， 简称 <strong>QR</strong> 码。二维码最初由日本一家公司发明，后由国际标准化组织ISO批准进行标准化。现在二维码在我们生活中广泛使用，它具有比条形码更强的数据表示能力和更强的纠错能力。</p>
+<p>我认为，<strong>二维码就是一种编码，把我们要传递的数据进行编码并转换成另外一种形式呈现出来</strong>。</p>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/博客/">博客</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Python/">Python</a><a href="/tags/QR-Code/">QR Code</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+
+
+
+博客
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2016/10/23/Context Encoder/"><span>
+        Paper Reading - Context Encoder</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/10/23/Context Encoder/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-10-22T16:12:06.000Z">
+          2016-10-23
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>前两天看了一下Context Encoder的相关论文，这个东西可以用于理解图片的语义，比如<strong>填补图片的缺失区域</strong>。我只研究出了它大概怎么做的，有些细节还没搞懂，以此记录一下。</p>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/博客/">博客</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/CV/">CV</a><a href="/tags/CNN/">CNN</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+
+
+
+博客
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2016/10/15/ransac/"><span>
+        Random sample consensus</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/10/15/ransac/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-10-15T07:42:06.000Z">
+          2016-10-15
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>随机抽样一致（<strong>Random sample consensus</strong> ，<strong>RANSAC</strong>）是一种迭代方法，用来排除异常数据（outliers）对模型的影响。</p>
+<p>这个算法基于一个基本假设：数据集中正常的样本（inliers）可以很好地拟合给定模型，异常数据则不行，比如异常样本代入模型损失会很大。</p>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/博客/">博客</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Statistics/">Statistics</a><a href="/tags/RANSAC/">RANSAC</a><a href="/tags/Python/">Python</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+博客
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2016/07/22/阿里音乐流行趋势预测大赛总结/"><span>
+        阿里音乐流行趋势预测大赛总结</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/07/22/阿里音乐流行趋势预测大赛总结/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-07-22T11:42:06.000Z">
+          2016-07-22
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <h2 id="赛题分析">赛题分析</h2>
+<p>题目要求根据用户过去六个月的交互纪录来预测未来两个月歌手的播放量。</p>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/博客/">博客</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/数据挖掘/">数据挖掘</a><a href="/tags/天池/">天池</a><a href="/tags/大数据竞赛/">大数据竞赛</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+博客
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2016/01/17/记录：在 Docker 上配置 PHP 应用/"><span>
+        记录：在 Docker 上配置 PHP 应用</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2016/01/17/记录：在 Docker 上配置 PHP 应用/" rel="bookmark">
+        <time class="entry-date published" datetime="2016-01-16T16:16:06.000Z">
+          2016-01-17
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <blockquote>
+<p><strong>什么是Docker</strong> docker的英文本意是码头工人，也就是搬运工，这种搬运工搬运的是集装箱（Container），集装箱里面装的可不是商品货物，而是任意类型的App，Docker把App（叫Payload）装在Container内，通过Linux Container技术的包装将App变成一种标准化的、可移植的、自管理的组件，这种组件可以在你的latop上开发、调试、运行，最终非常方便和一致地运行在production环境下。</p>
+</blockquote>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/博客/">博客</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/后台开发/">后台开发</a><a href="/tags/PHP/">PHP</a><a href="/tags/Docker/">Docker</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+博客
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2015/12/28/C++关于对象传值与传引用的总结/"><span>
+        C++关于对象传值与传引用的总结</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2015/12/28/C++关于对象传值与传引用的总结/" rel="bookmark">
+        <time class="entry-date published" datetime="2015-12-28T08:05:40.000Z">
+          2015-12-28
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <h2 id="传值vs传引用">传值VS传引用</h2>
+<p>C++在传递<strong>对象类型</strong>的参数时候有两种情况：</p>
+<ul>
+<li>如果是引用就相当于直接把这个对象本身传递过去了</li>
+<li>若是传值则需在进入函数之前通过<strong>拷贝构造函数</strong>建立一个临时对象（如果没有自己写拷贝构造函数则是<strong>浅拷贝</strong>），然后再离开函数之后这个临时对象会自动销毁（调用了<strong>析构函数</strong>）</li>
+</ul>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/博客/">博客</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/C/">C++</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+
+
+
+笔记
+
+
+
+
+
+博客
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2015/12/26/记录：微信后台开发/"><span>
+        记录：微信后台开发</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2015/12/26/记录：微信后台开发/" rel="bookmark">
+        <time class="entry-date published" datetime="2015-12-26T03:11:40.000Z">
+          2015-12-26
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>微信接口文档 http://mp.weixin.qq.com/wiki/home/index.html 测试号 http://mp.weixin.qq.com/debug/cgi-bin/sandbox?t=sandbox/login</p>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/博客/">博客</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/后台开发/">后台开发</a><a href="/tags/PHP/">PHP</a><a href="/tags/Wechat/">Wechat</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+博客
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2015/12/21/记录：用PHP实现简单web框架/"><span>
+        记录：用PHP实现简单web框架</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2015/12/21/记录：用PHP实现简单web框架/" rel="bookmark">
+        <time class="entry-date published" datetime="2015-12-21T04:46:40.000Z">
+          2015-12-21
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <blockquote>
+<p>这个框架功能比较简单，只有url拦截及自定义、加载静态模板两个功能，之前的博客也是基于这个框架实现的。第一部分是记录实现这个框架所需的php基础知识，第二部分是这两个功能的实现方法。最后还有实现自动登录的最佳实践。</p>
+</blockquote>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/博客/">博客</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/后台开发/">后台开发</a><a href="/tags/PHP/">PHP</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+博客
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2015/12/18/记录：Archlinux搭建php，nginx，mysql开发环境/"><span>
+        记录：Archlinux搭建php，nginx，mysql开发环境</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2015/12/18/记录：Archlinux搭建php，nginx，mysql开发环境/" rel="bookmark">
+        <time class="entry-date published" datetime="2015-12-18T10:13:40.000Z">
+          2015-12-18
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <h2 id="installation">Installation</h2>
+<h3 id="安装php">安装php</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S php</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/博客/">博客</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/后台开发/">后台开发</a><a href="/tags/Linux/">Linux</a><a href="/tags/MySQL/">MySQL</a><a href="/tags/PHP/">PHP</a><a href="/tags/Arch/">Arch</a><a href="/tags/Nginx/">Nginx</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
+
+笔记
+
+
+
+
 <nav class="pagination">
   
-  
-  <a href="/page/2/" class="pagination-next">Next</a>
   
 </nav>
       </main>
