@@ -316,9 +316,9 @@ P(O|\lambda) = \sum_I P(O, I|\lambda) = \sum_{i_1, i_2, ..., i_T}\pi_{i_1}b_{i_1
 \hat{\pi_i} = \frac{|q_i|}{\sum_i|q_i|}
 \]</span> 转移概率 <span class="math display">\[
 \hat{a_{ij}} = \frac{|q_{ij}|}{\sum_{j=1}^N|q_{ij}|}
-\]</span> 观测概率 $$</p>
-<p> = </p>
-<p>$$</p>
+\]</span> 观测概率 <span class="math display">\[
+\hat{b_{ik}} = \frac{|s_{ik|}}{\sum_{k=1}^M|s_{ik}|}
+\]</span></p>
 <h4><span id="baum-welch-算法">Baum-Welch 算法</span></h4>
 <p>若训练数据只有观测序列，则HMM的学习需要使用<a href="https://neymarl.github.io/2016/09/22/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3EM%E7%AE%97%E6%B3%95/" target="_blank" rel="noopener">EM算法</a>，是非监督学习。</p>
 <p><img src="/images/1475389008451.png"></p>
