@@ -143,11 +143,11 @@
 <blockquote>
 <p>注 <strong>host和device</strong>：在CUDA编程中，<em>host</em> 指的是CPU和它的内存，而 <em>device</em> 指GPU及其显存。在 <em>host</em> 上运行的代码可以操控内存和显存，还可以启动 <em>kernels</em> 在GPU上计算。因为CUDA编程的这些特性，一个典型CUDA程序的执行过程为：</p>
 <ol type="1">
-<li>分配内存和显存空间</li>
-<li>初始化内存数据（host）</li>
-<li>把数据从内存 (host) 传送到显存 (device)</li>
-<li>执行 kernels</li>
-<li>把结果从显存 (device) 传回内存 (host)</li>
+<li><p>分配内存和显存空间</p></li>
+<li><p>初始化内存数据（host）</p></li>
+<li><p>把数据从内存 (host) 传送到显存 (device)</p></li>
+<li><p>执行 kernels</p></li>
+<li><p>把结果从显存 (device) 传回内存 (host)</p></li>
 </ol>
 </blockquote>
 <h2><span id="thcallocator">THCAllocator</span></h2>
