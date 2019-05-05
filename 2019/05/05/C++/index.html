@@ -1,0 +1,326 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-71540601-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-71540601-1');
+</script>
+
+  <meta charset="utf-8">
+  
+  <!-- if (config.subtitle) {
+    title.push(config.subtitle);
+  } -->
+  <title>
+    C++笔记 | NIUHE
+  </title>
+
+  
+  <meta name="author" content="NIUHE">
+  
+
+  
+  <meta name="description" content="NIUHE的博客">
+  
+
+  
+  <meta name="keywords" content="编程,读书,学习笔记">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+  <meta property="og:title" content="C++笔记">
+  
+
+  <meta property="og:site_name" content="NIUHE">
+
+  
+  <meta property="og:image" content="/favicon.ico">
+  
+
+  <link href="/icon.png" type="image/png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="NIUHE" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <script type="text/javascript" src="/js/social-share.min.js"></script>
+  <script type="text/javascript" src="/js/search.js"></script>
+  <script type="text/javascript" src="/js/jquery.min.js"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="blog">
+    <div class="content">
+
+      <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">NIUHE</a>
+    </h1>
+    <p class="site-description">日々私たちが过ごしている日常というのは、実は奇迹の连続なのかもしれんな</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">博客</a></li>
+      
+        <li><a href="/notes">笔记</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+        <li><a href="/tags">标签</a></li>
+      
+        <li><a href="/search">搜索</a></li>
+      
+        <li><a href="/about">关于</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+      <main class="site-main posts-loop">
+        <article>
+
+  
+  
+  <h3 class="article-title"><span>
+      C++笔记</span></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2019/05/05/C++/" rel="bookmark">
+        <time class="entry-date published" datetime="2019-05-05T07:40:01.000Z">
+          2019-05-05
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>C++这门语言真的是博大精深，在阅读PyTorch源码的时候感触尤为深刻，在此记录一些我认为很好的编程实践以及一些C++的“新”特性。</p>
+<a id="more"></a>
+<h3><span id="条件检查">条件检查</span></h3>
+<p>在程序需要判断一些条件才能执行某些操作的时候，我们通常会写如下代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (cond == <span class="literal">true</span>) &#123;</span><br><span class="line">    <span class="comment">// error, or throw exception</span></span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">do</span> something ...</span><br></pre></td></tr></table></figure>
+<p>这些<code>if</code>语句可以简洁为一行代码，如使用<code>assert</code>语句，但如果你不希望程序就此终止的话，也可以自定义相应的处理函数或宏，如果需要检查的条件很多的话，这样进行替换就会使代码整洁许多。下面是在<code>pytorch/c10</code>中的条件判断处理宏（仅供参考）：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> AT_ERROR(...) \</span></span><br><span class="line">  <span class="keyword">throw</span> ::c10::Error(&#123;__func__, __FILE__, <span class="keyword">static_cast</span>&lt;<span class="keyword">uint32_t</span>&gt;(__LINE__)&#125;, ::c10::str(__VA_ARGS__))</span><br><span class="line"></span><br><span class="line">#define AT_CHECK(cond, ...)            \</span><br><span class="line">  <span class="keyword">if</span> (!(cond)) &#123;                       \</span><br><span class="line">    AT_ERROR(::c10::str(__VA_ARGS__)); \</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<h3><span id="特性测试">特性测试</span></h3>
+<p>宏定义的运用在C/C++中至关重要，宏可以用来解决一些兼容性的问题，并且使代码保持统一。如<code>constexpr</code>关键字在不同版本的C++中范围不同，那么已知一个函数可以在C++14及以上的版本中声明<code>constexpr</code>但在之前的版本中不行，该怎么办呢？一个既能兼容不同编译器又能保持代码整洁统一的方法就是使用宏定义，如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">AT_CPP14_CONSTEXPR <span class="keyword">const</span> T&amp; <span class="title">front</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123;</span><br><span class="line">    AT_CHECK(!empty(), <span class="string">"ArrayRef: attempted to access front() of empty list"</span>);</span><br><span class="line">    <span class="keyword">return</span> Data[<span class="number">0</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>AT_CPP14_CONSTEXPR</code>的定义为：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">if</span> defined(__cpp_constexpr) &amp;&amp; __cpp_constexpr &gt;= 201304</span></span><br><span class="line"><span class="meta">#  <span class="meta-keyword">define</span> AT_CPP14_CONSTEXPR constexpr</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="meta">#  <span class="meta-keyword">define</span> AT_CPP14_CONSTEXPR</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<p>通过<a href="https://zh.cppreference.com/w/cpp/feature_test" target="_blank" rel="noopener">特性测试</a>检查特性的指定版本来判断能否使用该关键字，如果版本大于我们的要求，则把宏定义为该关键字，否则定义为空。</p>
+<h3><span id="使用-nullptr-而不是-null">使用 nullptr 而不是 NULL</span></h3>
+<p>在C++中，宏<code>NULL</code>只是字面量0，而<code>nullptr</code>才是字面量空指针。</p>
+<h3><span id="函数不要太长">函数不要太长</span></h3>
+<p>在PyTorch中，函数都很短，一般不超过30行，尽量把函数变得精简。</p>
+<h3><span id="ampamp">&amp;&amp;</span></h3>
+<p>当 <code>&amp;&amp;</code> 出现在参数列表中或函数返回值处时表示<strong>右值引用</strong>(RValue-Reference)。所谓右值引用就是对右值的引用，而右值就是只能出现在等号右边的值，也可以理解为没有内存地址的值。如数字字面量，<code>a+1</code>(<code>int a;</code>) 等都是右值。下面是一个<code>&amp;&amp;</code>用法的例子：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">foo</span><span class="params">(<span class="keyword">int</span>&amp;&amp; a)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//Some magical code...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> b;</span><br><span class="line">    foo(b); <span class="comment">//Error. An rValue reference cannot be pointed to a lValue.</span></span><br><span class="line">    foo(<span class="number">5</span>); <span class="comment">//Compiles with no error.</span></span><br><span class="line">    foo(b+<span class="number">3</span>); <span class="comment">//Compiles with no error.</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span>&amp;&amp; c = b; <span class="comment">//Error. An rValue reference cannot be pointed to a lValue.</span></span><br><span class="line">    <span class="keyword">int</span>&amp;&amp; d = <span class="number">5</span>; <span class="comment">//Compiles with no error.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><span id="default-和-delete">=default 和 = delete</span></h3>
+<p>详见：https://www.ibm.com/developerworks/cn/aix/library/1212_lufang_c11new/index.html</p>
+<p>简单来说，构造函数、析构函数等特殊函数可以用 <code>=default</code> 来让编译器为其提供默认构造函数或默认析构函数。而 <code>=delete</code> 可以禁用某个函数，如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">X</span>&#123;</span>            </span><br><span class="line">  <span class="keyword">public</span>: </span><br><span class="line">	X(); </span><br><span class="line">	X(<span class="keyword">const</span> X&amp;) = <span class="keyword">delete</span>;  <span class="comment">// 声明拷贝构造函数为 deleted 函数</span></span><br><span class="line">  <span class="comment">// 声明拷贝赋值操作符为 deleted 函数</span></span><br><span class="line">	X&amp; <span class="keyword">operator</span> = (<span class="keyword">const</span> X &amp;) = <span class="keyword">delete</span>; </span><br><span class="line">&#125;; </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123; </span><br><span class="line">	X x1; </span><br><span class="line">  X x2=x1;   <span class="comment">// 错误，拷贝构造函数被禁用</span></span><br><span class="line">	X x3; </span><br><span class="line">	x3=x1;     <span class="comment">// 错误，拷贝赋值操作符被禁用</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><span id="智能指针">智能指针</span></h3>
+<h4><span id="unique_ptr">Unique_Ptr</span></h4>
+<p>同时只能有一个智能指针对象指向某块内存。</p>
+<p>特性：</p>
+<ol type="1">
+<li><p>无法进行复制构造与赋值操作</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">unique_ptr</span>&lt;<span class="keyword">int</span>&gt; ap(<span class="keyword">new</span> <span class="keyword">int</span>(<span class="number">88</span> );</span><br><span class="line"><span class="built_in">unique_ptr</span>&lt;<span class="keyword">int</span>&gt; one (ap) ; <span class="comment">// error</span></span><br><span class="line"><span class="built_in">unique_ptr</span>&lt;<span class="keyword">int</span>&gt; two = one; <span class="comment">// error</span></span><br></pre></td></tr></table></figure></li>
+<li><p>可以进行移动构造和移动赋值</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">unique_ptr</span>&lt;<span class="keyword">int</span>&gt; GetVal() &#123;</span><br><span class="line">	<span class="built_in">unique_ptr</span>&lt;<span class="keyword">int</span>&gt; up(<span class="keyword">new</span> <span class="keyword">int</span>(<span class="number">88</span>));</span><br><span class="line">	<span class="keyword">return</span> up;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">unique_ptr</span>&lt;<span class="keyword">int</span>&gt; uPtr = GetVal();   		<span class="comment">//ok</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">unique_ptr</span>&lt;<span class="keyword">int</span>&gt; up(<span class="keyword">new</span> <span class="keyword">int</span>(<span class="number">88</span>));</span><br><span class="line"><span class="built_in">unique_ptr</span>&lt;<span class="keyword">int</span>&gt; uPtr2 = <span class="built_in">std</span>:move(up); <span class="comment">// ok</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h4><span id="shared_ptr">Shared_Ptr</span></h4>
+<p><code>shared_ptr</code>是自带引用计数的智能指针，每一个`<code>shared_ptr</code>的拷贝都指向相同的内存。每使用他一次，内部的引用计数加1，每析构一次，内部的引用计数减1，减为0时，删除所指向的堆内存。<code>shared_ptr</code>内部的引用计数是安全的，但是对象的读取需要加锁，<a href="https://www.cnblogs.com/jiayayao/p/6128877.html" target="_blank" rel="noopener">阅读更多</a>。</p>
+<h4><span id="weak_ptr">Weak_Ptr</span></h4>
+<p><code>weak_ptr</code> 用来表达临时所有权的概念：当某个对象只有存在时才需要被访问，而且随时可能被他人删除时，可以使用 <code>weak_ptr</code> 来跟踪该对象。需要获得临时所有权时，则将其转换为 <code>shared_ptr</code>，此时如果原来的 <code>shared_ptr</code> 被销毁，则该对象的生命期将被延长至这个临时的 <code>shared_ptr</code> 同样被销毁为止。</p>
+<p><code>weak_ptr</code>是为了配合<code>shared_ptr</code>而引入的一种智能指针，它指向一个由<code>shared_ptr</code>管理的对象而不影响所指对象的生命周期，也就是将一个<code>weak_ptr</code>绑定到一个<code>shared_ptr</code>不会改变<code>shared_ptr</code>的引用计数。不论是否有<code>weak_ptr</code>指向，一旦最后一个指向对象的<code>shared_ptr</code>被销毁，对象就会被释放。从这个角度看，<code>weak_ptr</code>更像是<code>shared_ptr</code>的一个助手而不是智能指针。C++中提供了<code>lock</code>函数来实现访问功能。如果对象存在，<code>lock()</code>函数返回一个指向共享对象的<code>shared_ptr</code>，否则返回一个空<code>shared_ptr</code>：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    A() : a(<span class="number">3</span>) &#123; <span class="built_in">cout</span> &lt;&lt; <span class="string">"A Constructor..."</span> &lt;&lt; <span class="built_in">endl</span>; &#125;</span><br><span class="line">    ~A() &#123; <span class="built_in">cout</span> &lt;&lt; <span class="string">"A Destructor..."</span> &lt;&lt; <span class="built_in">endl</span>; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> a;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">shared_ptr</span>&lt;A&gt; sp(<span class="keyword">new</span> A());</span><br><span class="line">    weak_ptr&lt;A&gt; wp(sp);</span><br><span class="line">    <span class="comment">//sp.reset();</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">shared_ptr</span>&lt;A&gt; pa = wp.lock())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; pa-&gt;a &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"wp指向对象为空"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a href="https://blog.csdn.net/Xiejingfa/article/details/50772571" target="_blank" rel="noopener">阅读更多</a>。</p>
+<h3><span id="变参模板">变参模板</span></h3>
+<p>变参模板声明：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span>... <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">void</span> <span class="title">f</span>(<span class="title">T</span>... <span class="title">args</span>);</span></span><br></pre></td></tr></table></figure>
+<p>省略号的作用有两个：</p>
+<ol type="1">
+<li>声明一个参数包 <code>T… args</code>，这个参数包中可以包含0到任意个模板参数；</li>
+<li>在模板定义的右边，可以将参数包展开成一个一个独立的参数。</li>
+</ol>
+<p><strong>基本用法</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span>... <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">void</span> <span class="title">f</span>(<span class="title">T</span>... <span class="title">args</span>)</span></span><br><span class="line"><span class="class">&#123;</span>    </span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="keyword">sizeof</span>...(args) &lt;&lt; <span class="built_in">endl</span>; <span class="comment">//打印变参的个数</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">f();        			<span class="comment">//0</span></span><br><span class="line">f(<span class="number">1</span>, <span class="number">2</span>);    			<span class="comment">//2</span></span><br><span class="line">f(<span class="number">1</span>, <span class="number">2.5</span>, <span class="string">""</span>);    <span class="comment">//3</span></span><br></pre></td></tr></table></figure>
+<p><strong>递归展开</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function">T <span class="title">sum</span><span class="params">(T t)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> t;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> ... Types&gt;</span><br><span class="line"><span class="function">T <span class="title">sum</span> <span class="params">(T first, Types ... rest)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> first + sum&lt;T&gt;(rest...);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">sum(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>); <span class="comment">//10</span></span><br></pre></td></tr></table></figure>
+<p><strong>初始化列表+逗号表达式展开</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">void</span> <span class="title">printarg</span>(<span class="title">T</span> <span class="title">t</span>)</span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">   <span class="built_in">cout</span> &lt;&lt; t &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> ...<span class="title">Args</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">void</span> <span class="title">expand</span>(<span class="title">Args</span>... <span class="title">args</span>)</span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">   <span class="keyword">int</span> arr[] = &#123;(printarg(args), <span class="number">0</span>)...&#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">expand(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>);</span><br></pre></td></tr></table></figure>
+<p>这个例子将分别打印出1,2,3,4四个数字。这种展开参数包的方式，不需要通过递归终止函数，是直接在<code>expand</code>函数体中展开的, <code>printarg</code>不是一个递归终止函数，只是一个处理参数包中每一个参数的函数。</p>
+<p><code>expand</code>函数中的逗号表达式：<code>(printarg(args), 0)</code>，先执行<code>printarg(args)</code>，再得到逗号表达式的结果<code>0</code>。同时还用到了C++11的另外一个特性——初始化列表，通过初始化列表来初始化一个变长数组, <code>{(printarg(args), 0)…}</code>将会展开成<code>((printarg(arg1),0), (printarg(arg2),0), (printarg(arg3),0), ...)</code>，最终会创建一个元素值都为<code>0</code>的数组<code>int arr[sizeof...(Args)]</code>。由于是逗号表达式，在创建数组的过程中会先执行逗号表达式前面的部分<code>printarg(args)</code>打印出参数，也就是说在构造int数组的过程中就将参数包展开了，这个数组的目的纯粹是为了在数组构造的过程展开参数包。</p>
+<p><strong>完美转发</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">F</span>, <span class="title">class</span>... <span class="title">Args</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">void</span> <span class="title">expand</span>(<span class="title">const</span> <span class="title">F</span>&amp; <span class="title">f</span>, <span class="title">Args</span>&amp;&amp;...<span class="title">args</span>) </span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">  <span class="built_in">initializer_list</span>&lt;<span class="keyword">int</span>&gt;&#123;(f(<span class="built_in">std</span>::forward&lt;Args&gt;(args)), <span class="number">0</span>)...&#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 范型Lambda表达式</span></span><br><span class="line">expand([](<span class="keyword">auto</span> i)&#123;<span class="built_in">cout</span> &lt;&lt; i &lt;&lt; <span class="built_in">endl</span>;&#125;, <span class="number">1</span>, <span class="number">2.0</span>, ”test”);</span><br></pre></td></tr></table></figure>
+<p><code>std::forward</code>可以保持参数的左值或右值性质，所以叫完美转发。</p>
+<h3><span id="函数返回值类型后置">函数返回值类型后置</span></h3>
+<p>例子：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> ReadyQueue::push(FunctionTask item) -&gt; <span class="keyword">void</span> &#123;</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">std</span>::lock_guard&lt;<span class="built_in">std</span>::mutex&gt; lock(mutex);</span><br><span class="line">    ++item.base-&gt;outstanding_tasks;</span><br><span class="line">    heap.push(<span class="built_in">std</span>::move(item));</span><br><span class="line">  &#125;</span><br><span class="line">  not_empty.notify_one();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>解析：https://blog.csdn.net/fjb2080/article/details/7527349</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/笔记/">笔记</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/C/">C++</a><a href="/tags/template/">template</a><a href="/tags/智能指针/">智能指针</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+<div class="social-share"></div>
+<script type="text/javascript">
+  var $config = {
+    image: "icon.png",
+  };
+  socialShare('.social-share-cs', $config);
+</script>
+
+
+
+<!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC80MTI4MC8xNzgyOA==">
+	<script type="text/javascript">
+		(function (d, s) {
+			var j, e = d.getElementsByTagName(s)[0];
+
+			if (typeof LivereTower === 'function') {
+				return;
+			}
+
+			j = d.createElement(s);
+			j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+			j.async = true;
+
+			e.parentNode.insertBefore(j, e);
+		})(document, 'script');
+	</script>
+	<noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+
+
+      </main>
+
+      <footer class="site-footer">
+  <p class="site-info">
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    <br>
+    
+    &copy;
+    2019
+    NIUHE <a href="https://github.com/NeymarL" target="_blank"><i class="fab fa-github"></i></a>
+    
+  </p>
+</footer>
+      
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+    });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+  </script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+  </script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+      <script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>
