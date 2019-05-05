@@ -138,12 +138,12 @@
 <h3><span id="扩展模块">扩展模块</span></h3>
 <p>对于简单的C代码，构建一个自定义扩展模块是很容易的。<code>C/C++</code>部分基本上只需要做以下几件事：</p>
 <ul>
-<li><p>包含头文件 <code>Python.h</code></p></li>
+<li><p>包含头文件<code>Python.h</code></p></li>
 <li><p>正确的声明函数，即</p>
 <ul>
-<li><p>函数必须是 <code>static</code></p></li>
-<li><p>返回类型必须是 <code>PyObject *</code></p></li>
-<li><p>参数列表必须是 <code>PyObject *self, PyObject *args</code></p></li>
+<li><p>函数必须是<code>static</code></p></li>
+<li><p>返回类型必须是<code>PyObject *</code></p></li>
+<li><p>参数列表必须是<code>PyObject *self, PyObject *args</code></p></li>
 </ul></li>
 <li><p>定义一个Method Table，把模块需要包括的函数都放进去</p></li>
 <li><p>定义模块和初始化函数</p></li>
