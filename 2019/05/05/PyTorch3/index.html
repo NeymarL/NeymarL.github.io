@@ -136,7 +136,7 @@
 <h2><span id="thnn-amp-thcunn">THNN &amp; THCUNN</span></h2>
 <p>我们通过几个例子具体看一下几种模块是怎么实现的。</p>
 <h3><span id="tanh">Tanh</span></h3>
-<p>首先从最简单的激活层开始看，以 <span class="math inline">\(\tanh​\)</span> 为代表，代码在 <code>THNN/generic/Tanh.c</code>。这个模块只有两个函数，分别是 <code>THNN_(Tanh_updateOutput)()</code> 和 <code>THNN_(Tanh_updateGradInput)()</code>，其中前者实现了前向传播，后者实现了反向传播。注意到函数的命名方式，依旧是使用宏实现范式，<code>THNN_</code> 是宏定义，<code>Tanh_</code>是具体模块名，<code>updateOutput</code> 表示前向传播，<code>updateGradInput</code>表示反向传播，与之前不同的是，这里只需生成浮点类型（<code>float</code>和<code>double</code>）的实现即可。</p>
+<p>首先从最简单的激活层开始看，以 <span class="math inline">\(\tanh​\)</span> 为代表，代码在<code>THNN/generic/Tanh.c</code>。这个模块只有两个函数，分别是<code>THNN_(Tanh_updateOutput)()</code>和<code>THNN_(Tanh_updateGradInput)()</code>，其中前者实现了前向传播，后者实现了反向传播。注意到函数的命名方式，依旧是使用宏实现范式，<code>THNN_</code>是宏定义，<code>Tanh_</code>是具体模块名，<code>updateOutput</code>表示前向传播，<code>updateGradInput</code>表示反向传播，与之前不同的是，这里只需生成浮点类型（<code>float</code>和<code>double</code>）的实现即可。</p>
 <p>前向传播的实现很简单，直接调用之前实现的tanh函数就行了：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">THNN_</span><span class="params">(Tanh_updateOutput)</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">          THNNState *state,</span></span></span><br><span class="line"><span class="function"><span class="params">          THTensor *input,</span></span></span><br><span class="line"><span class="function"><span class="params">          THTensor *output)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  THTensor_(<span class="built_in">tanh</span>)(output, input);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>它有三个参数，分别是THNN状态（暂不知有何用），本层的输入（<code>input</code>）和本层的输出（<code>output</code>），输出存储在<code>output</code>参数中。</p>
@@ -146,9 +146,9 @@
 <p><span class="math inline">\(\tanh\)</span> 的导数为： <span class="math display">\[
 f(z) = \tanh(z)\\
 f&#39;(z) = 1 - (f(z))^2
-\]</span> 其中，<span class="math inline">\(f(z)​\)</span> 就是前向传播时本层的输出，也就是 <code>output</code> 参数（循环里的<code>z</code>），根据链式法则，再乘以后面层传回来的梯度（<code>gradOutput</code>）就是本层应该往回传的梯度了（相对于本层输入的梯度），所以循环里的代码为：</p>
+\]</span> 其中，<span class="math inline">\(f(z)​\)</span> 就是前向传播时本层的输出，也就是<code>output</code>参数（循环里的<code>z</code>），根据链式法则，再乘以后面层传回来的梯度（<code>gradOutput</code>）就是本层应该往回传的梯度了（相对于本层输入的梯度），所以循环里的代码为：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*gradInput_data = *gradOutput_data * (<span class="number">1.</span> - z*z);</span><br></pre></td></tr></table></figure>
-<p>注：<code>_data</code> 后缀表示数据指针，具体可以看<a href="https://www.52coding.com.cn/2019/05/05/PyTorch1/#tensor-apply-dynamic-dispatch">Apply宏</a>的实现。</p>
+<p>注：<code>_data</code>后缀表示数据指针，具体可以看<a href="https://www.52coding.com.cn/2019/05/05/PyTorch1/#tensor-apply-dynamic-dispatch">Apply宏</a>的实现。</p>
 <h3><span id="2d-convolution">2D Convolution</span></h3>
 <p>最普通的2D卷积，CPU实现在<code>THNN/generic/SpatialConvolutionMM.c</code>，CUDA实现在<code>THCUNN/generic/SpatialConvolutionMM.cu</code>，大体的算法是把输入展开成一个特殊的矩阵，然后把卷积转化为矩阵相乘（MM = Matrix Multiplication）。模块里主要包含三个函数，前向传播（<code>THNN_(SpatialConvolutionMM_updateOutput)()</code>），反向传播（<code>THNN_(SpatialConvolutionMM_updateGradInput)()</code>），和更新层内参数（<code>THNN_(SpatialConvolutionMM_accGradParameters)()</code>）。</p>
 <h4><span id="前向传播">前向传播</span></h4>
@@ -157,21 +157,21 @@ f&#39;(z) = 1 - (f(z))^2
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">THNN_</span><span class="params">(SpatialConvolutionMM_updateOutput)</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">           THCState *state,</span></span></span><br><span class="line"><span class="function"><span class="params">           THCTensor *input,</span></span></span><br><span class="line"><span class="function"><span class="params">           THCTensor *output,</span></span></span><br><span class="line"><span class="function"><span class="params">           THCTensor *weight,</span></span></span><br><span class="line"><span class="function"><span class="params">           THCTensor *bias,</span></span></span><br><span class="line"><span class="function"><span class="params">           THCTensor *columns,</span></span></span><br><span class="line"><span class="function"><span class="params">           THCTensor *ones,</span></span></span><br><span class="line"><span class="function"><span class="params">           <span class="keyword">int</span> kW, <span class="keyword">int</span> kH,</span></span></span><br><span class="line"><span class="function"><span class="params">           <span class="keyword">int</span> dW, <span class="keyword">int</span> dH,</span></span></span><br><span class="line"><span class="function"><span class="params">           <span class="keyword">int</span> padW, <span class="keyword">int</span> padH)</span></span>;</span><br></pre></td></tr></table></figure>
 <p>其中，</p>
 <ul>
-<li><code>input</code> 是输入的4D Tensor，大小为 <span class="math inline">\(\text{batch}\times\text{nInputPlane}\times\text{inputHeight}\times\text{inputWidth}\)</span>，batch维也可以没有，就变为3D Tensor；</li>
-<li><code>output</code> 是输出的4D或3D Tensor，大小为 <span class="math inline">\(\text{batch}\times\text{nOutputPlane}\times\text{outputHeight}\times\text{outputWidth}\)</span>，其中，</li>
+<li><code>input</code>是输入的4D Tensor，大小为 <span class="math inline">\(\text{batch}\times\text{nInputPlane}\times\text{inputHeight}\times\text{inputWidth}\)</span>，batch维也可以没有，就变为3D Tensor；</li>
+<li><code>output</code>是输出的4D或3D Tensor，大小为 <span class="math inline">\(\text{batch}\times\text{nOutputPlane}\times\text{outputHeight}\times\text{outputWidth}\)</span>，其中，</li>
 </ul>
 <p><span class="math display">\[
 \text{outputHeight}=\frac{\text{inputHeight}+2\ast\text{padH}-\text{kH}}{\text{dH}}+1\\
 \text{outputWidth}=\frac{\text{inputWidth}+2\ast\text{padW}-\text{kW}}{\text{dW}}+1
 \]</span></p>
 <ul>
-<li><code>weight</code> 是权重，也就是卷积核，大小为 <span class="math inline">\(\text{nOutputPlane}\times\text{nInputPlane}\times\text{kH}\times\text{kW}\)</span>；</li>
-<li><code>bias</code> 是偏置，大小为 <span class="math inline">\(\text{nOutputPlane}\times1\times1\times1\)</span>；</li>
-<li><code>columns</code> 用于存储im2col的结果；</li>
-<li><code>ones</code> 是一个值全为1的矩阵，大小为 <span class="math inline">\(\text{outputHeight}\times\text{outputWidth}\)</span>，用于计算偏置；</li>
-<li><code>kW</code> 和 <code>kH</code> 是卷积核（kernel）的宽和高；</li>
-<li><code>dW</code> 和 <code>dH</code> 是步长（stride）；</li>
-<li><code>padW</code> 和 <code>padH</code> 是补零的宽和高。</li>
+<li><code>weight</code>是权重，也就是卷积核，大小为 <span class="math inline">\(\text{nOutputPlane}\times\text{nInputPlane}\times\text{kH}\times\text{kW}\)</span>；</li>
+<li><code>bias</code>是偏置，大小为 <span class="math inline">\(\text{nOutputPlane}\times1\times1\times1\)</span>；</li>
+<li><code>columns</code>用于存储im2col的结果；</li>
+<li><code>ones</code>是一个值全为1的矩阵，大小为 <span class="math inline">\(\text{outputHeight}\times\text{outputWidth}\)</span>，用于计算偏置；</li>
+<li><code>kW</code>和<code>kH</code>是卷积核（kernel）的宽和高；</li>
+<li><code>dW</code>和<code>dH</code>是步长（stride）；</li>
+<li><code>padW</code>和<code>padH</code>是补零的宽和高。</li>
 </ul>
 <p>定义好了符号之后来看一下卷积是怎么转化为一个矩阵乘法的。首先来看卷积是怎么做的，下图是一个简单的例子，其中输入和输出深度 <span class="math inline">\(\text{nInputPlane}=\text{nOutputPlane}=1​\)</span>，卷积核大小 <span class="math inline">\(\text{kH}=\text{kW}=3​\)</span>，输入大小 <span class="math inline">\(\text{inputHeight}=\text{inputWidth}=7​\)</span>，步长 <span class="math inline">\(\text{dW}=\text{dH}=2​\)</span>，补零 <span class="math inline">\(\text{padW}=\text{padH}=1​\)</span>，可以算出 <span class="math inline">\(\text{outputHeight}=\text{outputWidth}=3​\)</span>。</p>
 <p><img src="/images/pytorch/conv.png"></p>
@@ -225,11 +225,11 @@ f&#39;(z) = 1 - (f(z))^2
 <p>看了<code>THNN.h</code>的读者可能会发现，THNN和THCUNN只定义了少量的神经网络相关的函数，其实大部分都定义在ATen中，这个ATen是指<code>pytorch/aten/src/ATen</code>文件夹（下同）。说到底，TH系列库都是torch lua时代留下的产物，是用C语言实现的，后来PyTorch开发者觉得cpp大法好，就用C++写了ATen，把TH里的接口都封装了，同时新的API直接在ATen里实现。</p>
 <p>这个ATen有点意思，它大概干了这么几件事情：</p>
 <ul>
-<li>在<code>ATen/core/Tensor.h</code>定义了 <code>at::Tensor</code> 类型，这个是C++前端以及更上层的API都在用的Tensor类型，它的成员内有一个<code>TensorImpl impl_</code>，提供底层实现；</li>
+<li>在<code>ATen/core/Tensor.h</code>定义了<code>at::Tensor</code>类型，这个是C++前端以及更上层的API都在用的Tensor类型，它的成员内有一个<code>TensorImpl impl_</code>，提供底层实现；</li>
 <li>实现和封装了有关Tensor的所有操作，并根据数据类型和设备进行自动派发；</li>
 <li>使用Python脚本生成ATen API。</li>
 </ul>
-<p>其中从TH（包括THC、THNN等）里封装的函数叫做 legacy函数，而在ATen直接实现的函数叫 native函数。native函数的实现全在 <code>ATen/native</code> 文件夹中，实现了THNN里没有的神经网络和Tensor操作，比如RNN什么的，API列表在<code>ATen/native/native_functions.yaml</code>里，感兴趣的童鞋可以自己阅读。</p>
+<p>其中从TH（包括THC、THNN等）里封装的函数叫做 legacy函数，而在ATen直接实现的函数叫 native函数。native函数的实现全在<code>ATen/native</code>文件夹中，实现了THNN里没有的神经网络和Tensor操作，比如RNN什么的，API列表在<code>ATen/native/native_functions.yaml</code>里，感兴趣的童鞋可以自己阅读。</p>
 <p>了解了神经网络每一层的前向传播和反向传播的实现之后，下一步就是控制执行顺序了，也就是自动微分（Autograd），下一章将介绍PyTorch自动微分的实现。</p>
 <p>つづく</p>
 <table>
