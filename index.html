@@ -94,6 +94,360 @@
 
   
   
+  <h3 class="article-title"><a href="/2019/05/05/PyTorch5/"><span>
+        PyTorch源码浅析(5)：Python扩展</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2019/05/05/PyTorch5/" rel="bookmark">
+        <time class="entry-date published" datetime="2019-05-05T07:58:01.000Z">
+          2019-05-05
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>这篇是本系列最后一篇博客了，介绍一下前面的C++代码怎么与Python交互，或者说Python里怎么调用C++代码进行高效的计算。首先简单介绍一下预备知识，既Python的C扩展通常怎么写；然后以比较核心的数据结构 Tensor 和 Storage 为例看一下它们怎么转换为Python类型的；最后稍带点儿Python自微分函数的实现。</p>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/博客/">博客</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/C/">C++</a><a href="/tags/PyTorch/">PyTorch</a><a href="/tags/Python扩展/">Python扩展</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2019/05/05/PyTorch4/"><span>
+        PyTorch源码浅析(4)：Autograd</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2019/05/05/PyTorch4/" rel="bookmark">
+        <time class="entry-date published" datetime="2019-05-05T07:57:01.000Z">
+          2019-05-05
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>这篇博客介绍 PyTorch 中自动微分引擎的实现，主要分为三部分：首先简要介绍一下计算图的原理；然后介绍 PyTorch 中与 autograd 的相关数据结构和 <code>backward()</code> 函数的实现，数据结构包括 <code>torch::autograd::Variable</code>, <code>torch::autograd::Function</code> 等；最后讲一下动态建立计算图的实现，这部分代码涉及到动态派发机制，而且都是用脚本生成的，不太容易理解。</p>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/博客/">博客</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/PyTorch/">PyTorch</a><a href="/tags/Autograd/">Autograd</a><a href="/tags/自动微分引擎/">自动微分引擎</a><a href="/tags/Variable/">Variable</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2019/05/05/PyTorch3/"><span>
+        PyTorch源码浅析(3)：NN</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2019/05/05/PyTorch3/" rel="bookmark">
+        <time class="entry-date published" datetime="2019-05-05T07:55:01.000Z">
+          2019-05-05
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>THNN是一个用C语言实现的神经网络模块的库，提供的功能非常底层。它实现了许多基础的神经网络模块，包括线性层，卷积层，Sigmoid等各种激活层，一些基本的loss函数，这些API都声明在<code>THNN/generic/THNN.h</code>中。每个模块都实现了前向传导（forward）和后向传导（backward）的功能。THCUNN则是对应模块的CUDA实现。</p>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/博客/">博客</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Neural-Network/">Neural Network</a><a href="/tags/PyTorch/">PyTorch</a><a href="/tags/THNN/">THNN</a><a href="/tags/CONV/">CONV</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2019/05/05/PyTorch2/"><span>
+        PyTorch源码浅析(2)：THC</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2019/05/05/PyTorch2/" rel="bookmark">
+        <time class="entry-date published" datetime="2019-05-05T07:53:01.000Z">
+          2019-05-05
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>这篇主要看 Torch CUDA 部分，对应源码目录 <code>aten/src/THC</code>，里面包含了许多C++和CUDA代码。这部分实现了操作 THCTensor 和 THCStorage 的接口，不过底层用的数据结构还是 <code>TensorImpl</code> 和 <code>StorageImpl</code>。THC里的接口也是通过C语言范式实现的，但是Apply系列操作不再由宏来实现，而是使用了C++模板。其他的区别还有allocator不同，以及多了 THCState 结构。</p>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/博客/">博客</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/PyTorch/">PyTorch</a><a href="/tags/Tensor/">Tensor</a><a href="/tags/CUDA/">CUDA</a><a href="/tags/THC/">THC</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2019/05/05/PyTorch1/"><span>
+        PyTorch源码浅析(1)：THTensor</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2019/05/05/PyTorch1/" rel="bookmark">
+        <time class="entry-date published" datetime="2019-05-05T07:51:01.000Z">
+          2019-05-05
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>PyTorch中Tensor的存储和表示分开，多个THTensor可能共享一个THStorage，每个THTensor可能拥有不同的view（e.g. size, stride）。这样设计的好处是，有时看起来不一样的数据底层是共享的，比如矩阵与矩阵的转置、二维矩阵与二维矩阵变成一维时的矩阵。这部分的主力实现在 <code>pytorch/aten</code> 文件夹中，这里面既实现了底层的Tensor操作库，也封装了名为 <strong>ATen</strong> 的 C++11接口。</p>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/博客/">博客</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/PyTorch/">PyTorch</a><a href="/tags/Tensor/">Tensor</a><a href="/tags/THTensor/">THTensor</a><a href="/tags/THStorage/">THStorage</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+<article>
+
+  
+  
+  <h3 class="article-title"><a href="/2019/05/05/PyTorch0/"><span>
+        PyTorch源码浅析：简介</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2019/05/05/PyTorch0/" rel="bookmark">
+        <time class="entry-date published" datetime="2019-05-05T07:49:01.000Z">
+          2019-05-05
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <p>这个系列文章自底向上针对PyTorch核心源码进行浅析，从Tensor库$\rightarrow​$神经网络$\rightarrow​$自动微分$\rightarrow​$Python扩展，一共五篇。</p>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/博客/">博客</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/PyTorch/">PyTorch</a><a href="/tags/Tensor/">Tensor</a><a href="/tags/NN/">NN</a><a href="/tags/Autograd/">Autograd</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+<article>
+
+  
+  
   <h3 class="article-title"><a href="/2018/11/30/RL - Deep Deterministic Policy Gradient/"><span>
         RL - Deep Deterministic Policy Gradient (DDPG)</span></a></h3>
   
@@ -322,397 +676,6 @@
       <span class="post-tags">
         <i class="icon-tags"></i>
         <a href="/tags/Reinforcement-Learning/">Reinforcement Learning</a><a href="/tags/DQN/">DQN</a><a href="/tags/Q-learning/">Q-learning</a><a href="/tags/A3C/">A3C</a><a href="/tags/GAE/">GAE</a>
-      </span>
-      
-
-    </div>
-
-    
-  </div>
-</article>
-
-
-<article>
-
-  
-  
-  <h3 class="article-title"><a href="/2018/11/07/CCZero/"><span>
-        中国象棋Zero技术详解</span></a></h3>
-  
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2018/11/07/CCZero/" rel="bookmark">
-        <time class="entry-date published" datetime="2018-11-07T09:27:47.000Z">
-          2018-11-07
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-      <p><a href="https://cczero.org/" target="_blank" rel="noopener">中国象棋Zero（CCZero）</a>是一个开源项目，把<a href="https://arxiv.org/abs/1712.01815" target="_blank" rel="noopener">AlphaZero</a>的算法应用到了中国象棋上，旨在借助广大象棋爱好者之力一起训练出一个可以打败旋风名手的“象棋之神”。因为种种原因吧，这个目标到目前（2018/11/07）为止未能实现，或者说还差得远，而跑谱的人也越来越少了，很可能坚持不了多久了。</p>
-<p>虽然未能实现目标，但在技术上还是有一定意义的，<a href="https://github.com/NeymarL/ChineseChess-AlphaZero" target="_blank" rel="noopener">GitHub</a>上也时不时有人询问技术细节，在此总结一下，记录一些坑以后不要再踩。</p>
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-      
-      
-
-      <span class="post-categories">
-        <i class="icon-categories"></i>
-        <a href="/categories/博客/">博客</a>
-      </span>
-      
-
-      
-      
-
-      <span class="post-tags">
-        <i class="icon-tags"></i>
-        <a href="/tags/Reinforcement-Learning/">Reinforcement Learning</a><a href="/tags/AlphaZero/">AlphaZero</a><a href="/tags/增强学习/">增强学习</a><a href="/tags/CCZero/">CCZero</a><a href="/tags/MCTS/">MCTS</a><a href="/tags/中国象棋/">中国象棋</a>
-      </span>
-      
-
-    </div>
-
-    
-  </div>
-</article>
-
-
-<article>
-
-  
-  
-  <h3 class="article-title"><a href="/2018/11/06/博客迁移记录/"><span>
-        Hexo 搭建博客踩坑记录</span></a></h3>
-  
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2018/11/06/博客迁移记录/" rel="bookmark">
-        <time class="entry-date published" datetime="2018-11-06T02:41:47.000Z">
-          2018-11-06
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-      <p>博客迁移这个事早就想做了，但到现在才有时间和精力来完成。以前太年轻，写的博客系统并不方便维护，迁移的动力主要有以下几个：</p>
-<ol type="1">
-<li>原博客更新、维护较麻烦。以前的博客是用<a href="https://www.52coding.com.cn/2015/12/21/%E8%AE%B0%E5%BD%95%EF%BC%9A%E7%94%A8PHP%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95web%E6%A1%86%E6%9E%B6/">PHP</a>写的，之前的写作方式是用Markdown写好导出HTML，再修改HTML代码使得静态资源（图片等）加载正确，这就使得修改博客很麻烦；更换主题也很麻烦，博客的主题和Markdown的主题通常会有冲突，所以想换个样式就要改半天CSS。</li>
-<li>觉得UI有些难看，想要简洁一些；</li>
-<li>安全问题。</li>
-</ol>
-<p>现在的解决方案是<a href="https://pages.github.com/" target="_blank" rel="noopener">Github Pages</a> + <a href="https://hexo.io/zh-cn/index.html" target="_blank" rel="noopener">Hexo</a>，主题选的是<a href="https://github.com/CodeDaraW/Hacker" target="_blank" rel="noopener">Hacker</a>，迁移了两天终于搞完了，在此简单记录一下遇到的坑。</p>
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-      
-      
-
-      <span class="post-categories">
-        <i class="icon-categories"></i>
-        <a href="/categories/博客/">博客</a>
-      </span>
-      
-
-      
-      
-
-      <span class="post-tags">
-        <i class="icon-tags"></i>
-        <a href="/tags/Mathjax/">Mathjax</a><a href="/tags/Hexo/">Hexo</a><a href="/tags/Disqus/">Disqus</a><a href="/tags/Gitment/">Gitment</a><a href="/tags/Github-Pages/">Github Pages</a>
-      </span>
-      
-
-    </div>
-
-    
-  </div>
-</article>
-
-
-<article>
-
-  
-  
-  <h3 class="article-title"><a href="/2017/08/15/SAN for Image QA/"><span>
-        Paper Reading - Stacked Attention Networks for Image QA</span></a></h3>
-  
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2017/08/15/SAN for Image QA/" rel="bookmark">
-        <time class="entry-date published" datetime="2017-08-15T01:30:19.000Z">
-          2017-08-15
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-      <blockquote>
-<p>Zichao Yang, Xiaodong He, Jianfeng Gao , Li Deng , Alex Smola <a href="https://arxiv.org/abs/1511.02274" target="_blank" rel="noopener">Stacked Attention Networks for Image Question Answering</a></p>
-</blockquote>
-<p>这篇文章发表在CVPR2016，作者把 attention 机制应用在 Visual QA，不但能理解神经网络生成答案的 multiple resoning，而且获得了当时最好的效果。</p>
-<p>SAN总共由三部分组成：</p>
-<ul>
-<li>Image Model：用来编码图片信息</li>
-<li>Question Moel：用来编码问题信息</li>
-<li>Stacked Attention Networks：通过多层 attention layer 不断优化对问题的编码</li>
-</ul>
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-      
-      
-
-      <span class="post-categories">
-        <i class="icon-categories"></i>
-        <a href="/categories/博客/">博客</a>
-      </span>
-      
-
-      
-      
-
-      <span class="post-tags">
-        <i class="icon-tags"></i>
-        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Attention/">Attention</a><a href="/tags/CV/">CV</a><a href="/tags/CNN/">CNN</a><a href="/tags/VQA/">VQA</a>
-      </span>
-      
-
-    </div>
-
-    
-  </div>
-</article>
-
-
-<article>
-
-  
-  
-  <h3 class="article-title"><a href="/2017/08/14/Neural Machine Translation In Linear Time (ByteNet)/"><span>
-        Paper Reading - Neural Machine Translation In Linear Time (ByteNet)</span></a></h3>
-  
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2017/08/14/Neural Machine Translation In Linear Time (ByteNet)/" rel="bookmark">
-        <time class="entry-date published" datetime="2017-08-14T01:30:19.000Z">
-          2017-08-14
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-      <p>ByteNet 可用于<strong>字符级</strong>的机器翻译模型并且有着很好的表现，它的特点在于可以在线性时间 (linear time) 完成翻译而且能够处理长距离依赖。它也采用编码器-解码器架构，并且编码器和解码器都由CNN组成。</p>
-<p>ByteNet 之所以有上述的这些特性，是因为使用了如下一些技术：</p>
-<ul>
-<li>Dynamic Unfolding
-<ul>
-<li>解决了生成不同长度翻译的问题</li>
-</ul></li>
-<li>Dilated Convolution
-<ul>
-<li>缩短了依赖传播的距离</li>
-</ul></li>
-<li>Masked 1D Convolution
-<ul>
-<li>保证训练时只用过去的信息生成当前字符</li>
-</ul></li>
-<li>Residual Blocks
-<ul>
-<li>解决梯度消失问题</li>
-</ul></li>
-</ul>
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-      
-      
-
-      <span class="post-categories">
-        <i class="icon-categories"></i>
-        <a href="/categories/博客/">博客</a>
-      </span>
-      
-
-      
-      
-
-      <span class="post-tags">
-        <i class="icon-tags"></i>
-        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Deep-NLP/">Deep NLP</a><a href="/tags/NLP/">NLP</a><a href="/tags/NMT/">NMT</a><a href="/tags/CNN/">CNN</a><a href="/tags/ByteBet/">ByteBet</a>
-      </span>
-      
-
-    </div>
-
-    
-  </div>
-</article>
-
-
-<article>
-
-  
-  
-  <h3 class="article-title"><a href="/2017/08/13/Attention Is All You Need/"><span>
-        Paper Reading - Attention Is All You Need</span></a></h3>
-  
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2017/08/13/Attention Is All You Need/" rel="bookmark">
-        <time class="entry-date published" datetime="2017-08-13T01:30:19.000Z">
-          2017-08-13
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-      <p>Google的<a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">这篇论文</a>提出了一个只使用Attention机制的神经翻译模型，该模型依旧采用编码器-解码器（Encoder-Decoder）架构，但未使用RNN和CNN。文章的主要目的是在减少计算量和提高并行效率的同时不损害最终的实验结果，创新之处在于提出了两个新的Attention机制，分别叫做 Scaled Dot-Product Attention 和 Multi-Head Attention.</p>
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-      
-      
-
-      <span class="post-categories">
-        <i class="icon-categories"></i>
-        <a href="/categories/博客/">博客</a>
-      </span>
-      
-
-      
-      
-
-      <span class="post-tags">
-        <i class="icon-tags"></i>
-        <a href="/tags/Deep-Learning/">Deep Learning</a><a href="/tags/Deep-NLP/">Deep NLP</a><a href="/tags/NLP/">NLP</a><a href="/tags/Attention/">Attention</a><a href="/tags/NMT/">NMT</a>
-      </span>
-      
-
-    </div>
-
-    
-  </div>
-</article>
-
-
-<article>
-
-  
-  
-  <h3 class="article-title"><a href="/2016/11/14/揭秘二维码—原理与实践/"><span>
-        揭秘二维码—原理与实践</span></a></h3>
-  
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2016/11/14/揭秘二维码—原理与实践/" rel="bookmark">
-        <time class="entry-date published" datetime="2016-11-13T16:11:06.000Z">
-          2016-11-14
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-      <h2 id="什么是二维码">什么是二维码</h2>
-<p>二维码，英文：<strong>Quick Response Code</strong>， 简称 <strong>QR</strong> 码。二维码最初由日本一家公司发明，后由国际标准化组织ISO批准进行标准化。现在二维码在我们生活中广泛使用，它具有比条形码更强的数据表示能力和更强的纠错能力。</p>
-<p>我认为，<strong>二维码就是一种编码，把我们要传递的数据进行编码并转换成另外一种形式呈现出来</strong>。</p>
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-      
-      
-
-      <span class="post-categories">
-        <i class="icon-categories"></i>
-        <a href="/categories/博客/">博客</a>
-      </span>
-      
-
-      
-      
-
-      <span class="post-tags">
-        <i class="icon-tags"></i>
-        <a href="/tags/Python/">Python</a><a href="/tags/QR-Code/">QR Code</a>
       </span>
       
 
