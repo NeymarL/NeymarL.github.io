@@ -124,19 +124,19 @@
 <p>PyTorch中Tensor的存储和表示分开，多个THTensor可能共享一个THStorage，每个THTensor可能拥有不同的view（e.g. size, stride）。这样设计的好处是，有时看起来不一样的数据底层是共享的，比如矩阵与矩阵的转置、二维矩阵与二维矩阵变成一维时的矩阵。这部分的主力实现在<code>pytorch/aten</code>文件夹中，这里面既实现了底层的Tensor操作库，也封装了名为 <strong>ATen</strong> 的 C++11接口。</p>
 </blockquote>
 <blockquote>
-<h3><span id="2-thc"></span></h3>
+<p><a href="https://www.52coding.com.cn/2019/05/05/PyTorch2/">2. THC</a></p>
 <p>这篇主要看 Torch CUDA 部分，对应源码目录<code>aten/src/THC</code>，里面包含了许多C++和CUDA代码。这部分实现了操作 THCTensor 和 THCStorage 的接口，不过底层用的数据结构还是<code>TensorImpl</code>和<code>StorageImpl</code>。THC里的接口也是通过C语言范式实现的，但是Apply系列操作不再由宏来实现，而是使用了C++模板。其他的区别还有allocator不同，以及多了 THCState 结构。</p>
 </blockquote>
 <blockquote>
-<h3><span id="3-nn"></span></h3>
+<p><a href="https://www.52coding.com.cn/2019/05/05/PyTorch3/">3. NN</a></p>
 <p>THNN是一个用C语言实现的神经网络模块的库，提供的功能非常底层。它实现了许多基础的神经网络模块，包括线性层，卷积层，Sigmoid等各种激活层，一些基本的loss函数，这些API都声明在<code>THNN/generic/THNN.h</code>中。每个模块都实现了前向传导（forward）和后向传导（backward）的功能。THCUNN则是对应模块的CUDA实现。</p>
 </blockquote>
 <blockquote>
-<h3><span id="4-autograd"></span></h3>
+<p><a href="https://www.52coding.com.cn/2019/05/05/PyTorch4/">4. Autograd</a></p>
 <p>这篇博客介绍 PyTorch 中自动微分引擎的实现，主要分为三部分：首先简要介绍一下计算图的原理；然后介绍 PyTorch 中与 autograd 的相关数据结构和<code>backward()</code>函数的实现，数据结构包括<code>torch::autograd::Variable</code>,<code>torch::autograd::Function</code>等；最后讲一下动态建立计算图的实现，这部分代码涉及到动态派发机制，而且都是用脚本生成的，不太容易理解。</p>
 </blockquote>
 <blockquote>
-<h3><span id="5-python扩展"></span></h3>
+<p><a href="https://www.52coding.com.cn/2019/05/05/PyTorch5/">5. Python扩展</a></p>
 <p>这篇是本系列最后一篇博客了，介绍一下前面的C++代码怎么与Python交互，或者说Python里怎么调用C++代码进行高效的计算。首先简单介绍一下预备知识，既Python的C扩展通常怎么写；然后以比较核心的数据结构 Tensor 和 Storage 为例看一下它们怎么转换为Python类型的；最后稍带点儿Python自微分函数的实现。</p>
 </blockquote>
 <h2><span id="源码目录结构">源码目录结构</span></h2>
