@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.52coding.com.cn/2019/05/05/PyTorch3/</loc>
+    
+    <lastmod>2019-05-05T08:27:39.821Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://www.52coding.com.cn/2019/05/05/PyTorch2/</loc>
     
     <lastmod>2019-05-05T08:22:31.765Z</lastmod>
@@ -33,13 +40,6 @@
     <loc>http://www.52coding.com.cn/2019/05/05/PyTorch4/</loc>
     
     <lastmod>2019-05-05T08:07:27.766Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.52coding.com.cn/2019/05/05/PyTorch3/</loc>
-    
-    <lastmod>2019-05-05T08:07:04.555Z</lastmod>
     
   </url>
   

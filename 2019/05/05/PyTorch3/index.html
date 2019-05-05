@@ -118,6 +118,7 @@
       
       <p>THNN是一个用C语言实现的神经网络模块的库，提供的功能非常底层。它实现了许多基础的神经网络模块，包括线性层，卷积层，Sigmoid等各种激活层，一些基本的loss函数，这些API都声明在<code>THNN/generic/THNN.h</code>中。每个模块都实现了前向传导（forward）和后向传导（backward）的功能。THCUNN则是对应模块的CUDA实现。</p>
 <a id="more"></a>
+<p><strong>目录</strong></p>
 <!-- toc -->
 <ul>
 <li><a href="#thnn-thcunn">THNN &amp; THCUNN</a>
@@ -135,7 +136,7 @@
 <h2><span id="thnn-amp-thcunn">THNN &amp; THCUNN</span></h2>
 <p>我们通过几个例子具体看一下几种模块是怎么实现的。</p>
 <h3><span id="tanh">Tanh</span></h3>
-<p>首先从最简单的激活层开始看，以 <span class="math inline">\(\tanh​\)</span> 为代表，代码在 <code>THNN/generic/Tanh.c</code>。这个模块只有两个函数，分别是 <code>THNN_(Tanh_updateOutput)()</code> 和 <code>THNN_(Tanh_updateGradInput)()</code>，其中前者实现了前向传播，后者实现了反向传播。注意到函数的命名方式，依旧是使用宏实现范式，<code>THNN_</code> 是宏定义，<code>Tanh_</code>是具体模块名，<code>updateOutput</code> 表示前向传播，<code>updateGradInput</code>表示反向传播，与之前不同的是，这里只需生成浮点类型（ <code>float</code> 和 <code>double</code> ）的实现即可。</p>
+<p>首先从最简单的激活层开始看，以 <span class="math inline">\(\tanh​\)</span> 为代表，代码在 <code>THNN/generic/Tanh.c</code>。这个模块只有两个函数，分别是 <code>THNN_(Tanh_updateOutput)()</code> 和 <code>THNN_(Tanh_updateGradInput)()</code>，其中前者实现了前向传播，后者实现了反向传播。注意到函数的命名方式，依旧是使用宏实现范式，<code>THNN_</code> 是宏定义，<code>Tanh_</code>是具体模块名，<code>updateOutput</code> 表示前向传播，<code>updateGradInput</code>表示反向传播，与之前不同的是，这里只需生成浮点类型（<code>float</code>和<code>double</code>）的实现即可。</p>
 <p>前向传播的实现很简单，直接调用之前实现的tanh函数就行了：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">THNN_</span><span class="params">(Tanh_updateOutput)</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">          THNNState *state,</span></span></span><br><span class="line"><span class="function"><span class="params">          THTensor *input,</span></span></span><br><span class="line"><span class="function"><span class="params">          THTensor *output)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  THTensor_(<span class="built_in">tanh</span>)(output, input);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>它有三个参数，分别是THNN状态（暂不知有何用），本层的输入（<code>input</code>）和本层的输出（<code>output</code>），输出存储在<code>output</code>参数中。</p>
@@ -147,7 +148,7 @@ f(z) = \tanh(z)\\
 f&#39;(z) = 1 - (f(z))^2
 \]</span> 其中，<span class="math inline">\(f(z)​\)</span> 就是前向传播时本层的输出，也就是 <code>output</code> 参数（循环里的<code>z</code>），根据链式法则，再乘以后面层传回来的梯度（<code>gradOutput</code>）就是本层应该往回传的梯度了（相对于本层输入的梯度），所以循环里的代码为：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*gradInput_data = *gradOutput_data * (<span class="number">1.</span> - z*z);</span><br></pre></td></tr></table></figure>
-<p>注：<code>_data</code> 后缀表示数据指针，具体可以看<a href="此处应该加第一篇的链接">Apply宏</a>的实现。</p>
+<p>注：<code>_data</code> 后缀表示数据指针，具体可以看<a href="https://www.52coding.com.cn/2019/05/05/PyTorch1/#tensor-apply-dynamic-dispatch">Apply宏</a>的实现。</p>
 <h3><span id="2d-convolution">2D Convolution</span></h3>
 <p>最普通的2D卷积，CPU实现在<code>THNN/generic/SpatialConvolutionMM.c</code>，CUDA实现在<code>THCUNN/generic/SpatialConvolutionMM.cu</code>，大体的算法是把输入展开成一个特殊的矩阵，然后把卷积转化为矩阵相乘（MM = Matrix Multiplication）。模块里主要包含三个函数，前向传播（<code>THNN_(SpatialConvolutionMM_updateOutput)()</code>），反向传播（<code>THNN_(SpatialConvolutionMM_updateGradInput)()</code>），和更新层内参数（<code>THNN_(SpatialConvolutionMM_accGradParameters)()</code>）。</p>
 <h4><span id="前向传播">前向传播</span></h4>
@@ -160,8 +161,8 @@ f&#39;(z) = 1 - (f(z))^2
 <li><code>output</code> 是输出的4D或3D Tensor，大小为 <span class="math inline">\(\text{batch}\times\text{nOutputPlane}\times\text{outputHeight}\times\text{outputWidth}\)</span>，其中，</li>
 </ul>
 <p><span class="math display">\[
-\text{outputHeight}=\frac{\text{inputHeight}+2*\text{padH}-\text{kH}}{\text{dH}}+1\\
-\text{outputWidth}=\frac{\text{inputWidth}+2*\text{padW}-\text{kW}}{\text{dW}}+1
+\text{outputHeight}=\frac{\text{inputHeight}+2\ast\text{padH}-\text{kH}}{\text{dH}}+1\\
+\text{outputWidth}=\frac{\text{inputWidth}+2\ast\text{padW}-\text{kW}}{\text{dW}}+1
 \]</span></p>
 <ul>
 <li><code>weight</code> 是权重，也就是卷积核，大小为 <span class="math inline">\(\text{nOutputPlane}\times\text{nInputPlane}\times\text{kH}\times\text{kW}\)</span>；</li>
