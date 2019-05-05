@@ -176,11 +176,11 @@
 <li>warp：调度和运行的基本单元，包含多个线程。每个线程执行相同指令，但是数据不同（SIMT）。一个warp需要占用一个SM运行，多个warps需要轮流进入SM。</li>
 <li>stream：一个GPU操作队列，该队列中的操作将以添加到流中的先后顺序而依次执行。</li>
 </ul>
-<p><img src="/images/pytorch/%E6%9D%82%E4%B8%83%E6%9D%82%E5%85%AB/cuda.png"></p>
+<p><img src="/images/pytorch/cuda.png"></p>
 </blockquote>
 <h3><span id="thccachinghostallocator">THCCachingHostAllocator</span></h3>
 <p><code>THCState</code>中还有一个内存分配器<code>cudaHostAllocator</code>用来分配main memory，这个分配器指针指向<code>HostAllocator</code>，实现在<code>aten/src/THC/THCCachingHostAllocator.cpp</code>中。这个分配器的实现和上面的类似，也提供了缓存功能。值得注意的是，它向系统分配内存是用的<code>cudaHostAlloc()</code>函数，这是cuda库函数，它与<code>malloc()</code>不同。<code>malloc()</code>分配的标准的、可分页的主机内存，而<code>cudaHostAlloc()</code>分配的是页锁定的主机内存，也称作固定内存 (pinned memory)。它的一个重要特点是操作系统将不会对这块内存分页并交换到磁盘上，从而保证了内存始终驻留在物理内存中。由于GPU知道内存的物理地址，因此就可以使用DMA技术来在GPU和CPU之间复制数据，加快复制速度。</p>
-<p><img src="/images/pytorch/%E6%9D%82%E4%B8%83%E6%9D%82%E5%85%AB/cpugpu.png"></p>
+<p><img src="/images/pytorch/cpugpu.png"></p>
 <h2><span id="thcapply">THCApply</span></h2>
 <p>和TH中一样，THC也有Apply系列函数，不同的是THC中的Apply不再用宏实现，而是用C++模板函数实现，代码在<code>src/THC/THCApply.cuh</code>。</p>
 <p>首先来看直接运行在GPU上的kernel的实现：</p>
