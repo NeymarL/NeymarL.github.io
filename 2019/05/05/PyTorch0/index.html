@@ -121,7 +121,7 @@
 <h2><span id="目录">目录</span></h2>
 <blockquote>
 <p><a href="https://www.52coding.com.cn/2019/05/05/PyTorch1/">1. THTensor</a></p>
-<p>PyTorch中Tensor的存储和表示分开，多个THTensor可能共享一个THStorage，每个THTensor可能拥有不同的view（e.g. size, stride）。这样设计的好处是，有时看起来不一样的数据底层是共享的，比如矩阵与矩阵的转置、二维矩阵与二维矩阵变成一维时的矩阵。这部分的主力实现在<code>pytorch/aten</code>文件夹中，这里面既实现了底层的Tensor操作库，也封装了名为 <strong>ATen</strong> 的 C++11接口。</p>
+<p>PyTorch中Tensor的存储和表示分开，多个THTensor可能共享一个THStorage，每个THTensor可能拥有不同的view（e.g. size, stride）。这样设计的好处是，有时看起来不一样的数据底层是共享的，比如矩阵与矩阵的转置、二维矩阵与二维矩阵变成一维时的矩阵。这部分的主要实现在<code>pytorch/aten</code>文件夹中，这里面既实现了底层的Tensor操作库，也封装了名为 <strong>ATen</strong> 的 C++11接口。</p>
 </blockquote>
 <blockquote>
 <p><a href="https://www.52coding.com.cn/2019/05/05/PyTorch2/">2. THC</a></p>
