@@ -292,7 +292,7 @@
   <div class="article-content">
     <div class="entry">
       
-      <p>这篇主要看 Torch CUDA 部分，对应源码目录 <code>aten/src/THC</code>，里面包含了许多C++和CUDA代码。这部分实现了操作 THCTensor 和 THCStorage 的接口，不过底层用的数据结构还是 <code>TensorImpl</code> 和 <code>StorageImpl</code>。THC里的接口也是通过C语言范式实现的，但是Apply系列操作不再由宏来实现，而是使用了C++模板。其他的区别还有allocator不同，以及多了 THCState 结构。</p>
+      <p>这篇主要看 Torch CUDA 部分，对应源码目录<code>aten/src/THC</code>，里面包含了许多C++和CUDA代码。这部分实现了操作 THCTensor 和 THCStorage 的接口，不过底层用的数据结构还是<code>TensorImpl</code>和<code>StorageImpl</code>。THC里的接口也是通过C语言范式实现的，但是Apply系列操作不再由宏来实现，而是使用了C++模板。其他的区别还有allocator不同，以及多了 THCState 结构。</p>
       
     </div>
 

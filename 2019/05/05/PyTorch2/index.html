@@ -116,7 +116,7 @@
   <div class="article-content">
     <div class="entry">
       
-      <p>这篇主要看 Torch CUDA 部分，对应源码目录 <code>aten/src/THC</code>，里面包含了许多C++和CUDA代码。这部分实现了操作 THCTensor 和 THCStorage 的接口，不过底层用的数据结构还是 <code>TensorImpl</code> 和 <code>StorageImpl</code>。THC里的接口也是通过C语言范式实现的，但是Apply系列操作不再由宏来实现，而是使用了C++模板。其他的区别还有allocator不同，以及多了 THCState 结构。</p>
+      <p>这篇主要看 Torch CUDA 部分，对应源码目录<code>aten/src/THC</code>，里面包含了许多C++和CUDA代码。这部分实现了操作 THCTensor 和 THCStorage 的接口，不过底层用的数据结构还是<code>TensorImpl</code>和<code>StorageImpl</code>。THC里的接口也是通过C语言范式实现的，但是Apply系列操作不再由宏来实现，而是使用了C++模板。其他的区别还有allocator不同，以及多了 THCState 结构。</p>
 <a id="more"></a>
 <p>记号：</p>
 <ul>
@@ -137,7 +137,7 @@
 </ul>
 <!-- tocstop -->
 <h2><span id="thcstate">THCState</span></h2>
-<p>通过观察THC里面实现的接口不难发现，几乎每个接口都需要传入一个 <code>THCState*</code> 参数，而这是在TH中没有的，这个THCState的声明在<code>THCGeneral.hpp</code>中：</p>
+<p>通过观察THC里面实现的接口不难发现，几乎每个接口都需要传入一个<code>THCState*</code>参数，而这是在TH中没有的，这个THCState的声明在<code>THCGeneral.hpp</code>中：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">THCState</span> &#123;</span></span><br><span class="line">  <span class="comment">// 貌似是用来生成随机数的</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">THCRNGState</span>* <span class="title">rngState</span>;</span></span><br><span class="line">  <span class="comment">// 记录每个CUDA设备的cuBLAS句柄和cuSparse句柄</span></span><br><span class="line">  THCCudaResourcesPerDevice* resourcesPerDevice;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// cuda设备个数</span></span><br><span class="line">  <span class="keyword">int</span> numDevices; 	</span><br><span class="line"></span><br><span class="line">  at::Allocator* cudaHostAllocator;     <span class="comment">// 内存分配器</span></span><br><span class="line">  at::Allocator* cudaDeviceAllocator;   <span class="comment">// 显存分配器</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 二维数组，大小为 numDevices * numDevices</span></span><br><span class="line">  <span class="comment">// 数组中的每一项 i, j 记录了 CUDA_i 能否直接从 CUDA_j 复制数据</span></span><br><span class="line">  <span class="comment">// 如果值为 1 代表允许拷贝，0 代表不允许，-1 代表不知道（默认值）</span></span><br><span class="line">  <span class="keyword">int</span>** p2pAccessEnabled;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <p>THCState是一个全局CUDA状态，记录了CUDA设备的所有有用的信息，它的初始化在<code>THCGeneral.cpp</code>中，代码并不难理解。</p>
 <blockquote>
