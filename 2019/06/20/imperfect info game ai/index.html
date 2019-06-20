@@ -118,6 +118,7 @@
       
       <p>不完全信息的博弈是一种玩家对正在玩的游戏没有共同知识的博弈，也就是说，不能只通过子游戏的信息解决子游戏，这样通常达不到全局最优。在相关研究中，通常的做法是逼近游戏中的纳什均衡策略，也就是每个玩家都无法通过只改变自己的策略来提高自己的收益。在零和游戏中，如果每个玩家都选择对对手的最优策略，那么游戏整体就达到了纳什均衡，每个玩家的策略就是最优策略（纳什均衡策略）。</p>
 <p>这几年有明显突破的领域是双人不限注德州扑克，阿尔伯塔大学的DeepStack和CMU的Libratus都取得了明显的突破，尤其是Libratus，已经完胜了顶级人类玩家和其他AI。顺便说一下，限注的德州扑克的决策点的数量是<span class="math inline">\(10^{14}\)</span>，已经可以被完全搜索；不限注的德扑的决策点数量是<span class="math inline">\(10^{161}\)</span>，和围棋的<span class="math inline">\(10^{170}\)</span>很接近。而在其他领域，尤其是多人游戏，如麻将（<span class="math inline">\(10^{150}\)</span>），AI还没有显著成果。这篇文章主要介绍DeepStack和Libratus的算法。</p>
+<a id="more"></a>
 <h2><span id="deepstack">DeepStack</span></h2>
 <p>论文：<a href="https://spencer-murray-zfht.squarespace.com/s/DeepStack.pdf" target="_blank" rel="noopener">DeepStack: Expert-Level Artificial Intelligence in Heads-Up No-Limit Poker</a></p>
 <p>同样的，DeepStack的目标也是逼近纳什均衡策略，而纳什均衡本身就是最优策略，文章原文：</p>
