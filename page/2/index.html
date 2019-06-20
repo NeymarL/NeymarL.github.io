@@ -94,6 +94,71 @@
 
   
   
+  <h3 class="article-title"><a href="/2018/11/16/RL - DQN and A3C/"><span>
+        RL - DQN &amp; A3C &amp; GAE</span></a></h3>
+  
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2018/11/16/RL - DQN and A3C/" rel="bookmark">
+        <time class="entry-date published" datetime="2018-11-16T06:24:32.000Z">
+          2018-11-16
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+      <h2 id="deep-q-network">Deep Q-Network</h2>
+<p>Deep Q-Network (<a href="https://www.cs.toronto.edu/~vmnih/docs/dqn.pdf" target="_blank" rel="noopener">DQN</a>) 是由DeepMind的Mnih等人于2013年提出的算法，该算法成功把深度学习应用到了RL领域，并（一定程度上）解决了训练不稳定的问题，在玩Atari游戏中取得了非常好的结果。</p>
+<p>文章指出使用非线性函数拟合 Q-value 的RL算法不稳定主要因为：</p>
+<ol type="1">
+<li>同一个观测序列中的数据相关性较大</li>
+<li>当 Q-value 发生了很小的改变，可能导致整个策略（policy）发生较大变化，从而导致 Q-value 和目标 <span class="math inline">\(r + \gamma * \max_{a&#39;}Q(s&#39; ,a&#39;)\)</span> 的差距不稳定</li>
+</ol>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+      
+      
+
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="/categories/博客/">博客</a>
+      </span>
+      
+
+      
+      
+
+      <span class="post-tags">
+        <i class="icon-tags"></i>
+        <a href="/tags/Reinforcement-Learning/">Reinforcement Learning</a><a href="/tags/DQN/">DQN</a><a href="/tags/Q-learning/">Q-learning</a><a href="/tags/A3C/">A3C</a><a href="/tags/GAE/">GAE</a>
+      </span>
+      
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+<article>
+
+  
+  
   <h3 class="article-title"><a href="/2018/11/07/CCZero/"><span>
         中国象棋Zero技术详解</span></a></h3>
   
@@ -650,67 +715,6 @@
       <span class="post-tags">
         <i class="icon-tags"></i>
         <a href="/tags/Machine-Learning/">Machine Learning</a><a href="/tags/数据挖掘/">数据挖掘</a><a href="/tags/天池/">天池</a><a href="/tags/大数据竞赛/">大数据竞赛</a>
-      </span>
-      
-
-    </div>
-
-    
-  </div>
-</article>
-
-
-<article>
-
-  
-  
-  <h3 class="article-title"><a href="/2016/01/17/记录：在 Docker 上配置 PHP 应用/"><span>
-        记录：在 Docker 上配置 PHP 应用</span></a></h3>
-  
-  
-
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2016/01/17/记录：在 Docker 上配置 PHP 应用/" rel="bookmark">
-        <time class="entry-date published" datetime="2016-01-16T16:16:06.000Z">
-          2016-01-17
-        </time>
-      </a>
-    </span>
-  </div>
-
-
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-      <blockquote>
-<p><strong>什么是Docker</strong> docker的英文本意是码头工人，也就是搬运工，这种搬运工搬运的是集装箱（Container），集装箱里面装的可不是商品货物，而是任意类型的App，Docker把App（叫Payload）装在Container内，通过Linux Container技术的包装将App变成一种标准化的、可移植的、自管理的组件，这种组件可以在你的latop上开发、调试、运行，最终非常方便和一致地运行在production环境下。</p>
-</blockquote>
-      
-    </div>
-
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
-      
-      
-
-      <span class="post-categories">
-        <i class="icon-categories"></i>
-        <a href="/categories/博客/">博客</a>
-      </span>
-      
-
-      
-      
-
-      <span class="post-tags">
-        <i class="icon-tags"></i>
-        <a href="/tags/后台开发/">后台开发</a><a href="/tags/PHP/">PHP</a><a href="/tags/Docker/">Docker</a>
       </span>
       
 
